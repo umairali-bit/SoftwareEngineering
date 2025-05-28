@@ -1,4 +1,4 @@
-package com.dev.Week1.IntroductionToSpringBoot;
+package com.dev.Week.IntroductionToSpringBoot;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
