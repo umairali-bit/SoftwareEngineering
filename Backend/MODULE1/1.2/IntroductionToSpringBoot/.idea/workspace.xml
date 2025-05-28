@@ -4,9 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b7bc1c62-d833-41cf-9ead-ca36a5d1d958" name="Changes" comment="">
+    <list default="true" id="c61e7e94-abf7-4c37-81f5-19c59b13048b" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/dev/Week/IntroductionToSpringBoot/IntroductionToSpringBootApplication.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/dev/Week/IntroductionToSpringBoot/IntroductionToSpringBootApplicationTests.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../IntroductionToSpringBoot 3/.gitattributes" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../IntroductionToSpringBoot 3/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../IntroductionToSpringBoot 3/.idea/workspace.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../IntroductionToSpringBoot 3/.mvn/wrapper/maven-wrapper.properties" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../IntroductionToSpringBoot 3/mvnw" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../IntroductionToSpringBoot 3/mvnw.cmd" beforeDir="false" />
@@ -16,6 +19,10 @@
       <change beforePath="$PROJECT_DIR$/../IntroductionToSpringBoot 3/src/test/java/com/dev/Week1/IntroductionToSpringBoot/IntroductionToSpringBootApplicationTests.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../IntroductionToSpringBoot.iml" beforeDir="false" afterPath="$PROJECT_DIR$/../IntroductionToSpringBoot.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/dev/Week1/IntroductionToSpringBoot/IntroductionToSpringBootApplication.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/dev/Week1/IntroductionToSpringBoot/IntroductionToSpringBootApplicationTests.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../../Introduction to Spring &amp; Spring Boot.docx" beforeDir="false" afterPath="$PROJECT_DIR$/../../Introduction to Spring &amp; Spring Boot.docx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../../../README.md" beforeDir="false" />
     </list>
@@ -27,9 +34,6 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../../../.." />
   </component>
-  <component name="MarkdownSettingsMigration">
-    <option name="stateVersion" value="1" />
-  </component>
   <component name="MavenImportPreferences">
     <option name="generalSettings">
       <MavenGeneralSettings>
@@ -38,7 +42,7 @@
       </MavenGeneralSettings>
     </option>
   </component>
-  <component name="ProjectId" id="2xiPXkf2kT9sfHH0UqORvxo586R" />
+  <component name="ProjectId" id="2xihgwpSsJidtVPtalsQjqqmA7C" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="showLibraryContents" value="true" />
@@ -51,11 +55,11 @@
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="b7bc1c62-d833-41cf-9ead-ca36a5d1d958" name="Changes" comment="" />
-      <created>1748417965118</created>
+      <changelist id="c61e7e94-abf7-4c37-81f5-19c59b13048b" name="Changes" comment="" />
+      <created>1748426916626</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1748417965118</updated>
+      <updated>1748426916626</updated>
     </task>
     <servers />
   </component>
