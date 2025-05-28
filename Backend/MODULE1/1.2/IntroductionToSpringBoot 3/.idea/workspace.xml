@@ -4,18 +4,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b7bc1c62-d833-41cf-9ead-ca36a5d1d958" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/../IntroductionToSpringBoot 3/.gitattributes" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../IntroductionToSpringBoot 3/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../IntroductionToSpringBoot 3/.mvn/wrapper/maven-wrapper.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../IntroductionToSpringBoot 3/mvnw" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../IntroductionToSpringBoot 3/mvnw.cmd" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../IntroductionToSpringBoot 3/pom.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../IntroductionToSpringBoot 3/src/main/java/com/dev/Week1/IntroductionToSpringBoot/IntroductionToSpringBootApplication.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../IntroductionToSpringBoot 3/src/main/resources/application.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../IntroductionToSpringBoot 3/src/test/java/com/dev/Week1/IntroductionToSpringBoot/IntroductionToSpringBootApplicationTests.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../IntroductionToSpringBoot.iml" beforeDir="false" afterPath="$PROJECT_DIR$/../IntroductionToSpringBoot.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    <list default="true" id="6499bea6-6aac-424c-81cd-7c5fa2189aa0" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.gitattributes" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.mvn/wrapper/maven-wrapper.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/mvnw" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/mvnw.cmd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/dev/Week1/IntroductionToSpringBoot/IntroductionToSpringBootApplication.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/dev/Week1/IntroductionToSpringBoot/IntroductionToSpringBootApplicationTests.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../../Introduction to Spring &amp; Spring Boot.docx" beforeDir="false" afterPath="$PROJECT_DIR$/../../Introduction to Spring &amp; Spring Boot.docx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../../../README.md" beforeDir="false" />
     </list>
@@ -38,7 +36,7 @@
       </MavenGeneralSettings>
     </option>
   </component>
-  <component name="ProjectId" id="2xiPXkf2kT9sfHH0UqORvxo586R" />
+  <component name="ProjectId" id="2xiNgBro0Rg4wJL76Qu5S2BOyB0" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="showLibraryContents" value="true" />
@@ -51,11 +49,11 @@
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="b7bc1c62-d833-41cf-9ead-ca36a5d1d958" name="Changes" comment="" />
-      <created>1748417965118</created>
+      <changelist id="6499bea6-6aac-424c-81cd-7c5fa2189aa0" name="Changes" comment="" />
+      <created>1748417043530</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1748417965118</updated>
+      <updated>1748417043530</updated>
     </task>
     <servers />
   </component>
