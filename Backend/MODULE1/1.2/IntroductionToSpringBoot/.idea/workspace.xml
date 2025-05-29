@@ -4,26 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c61e7e94-abf7-4c37-81f5-19c59b13048b" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/dev/Week/IntroductionToSpringBoot/IntroductionToSpringBootApplication.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/com/dev/Week/IntroductionToSpringBoot/IntroductionToSpringBootApplicationTests.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../IntroductionToSpringBoot 3/.gitattributes" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../IntroductionToSpringBoot 3/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../IntroductionToSpringBoot 3/.idea/workspace.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../IntroductionToSpringBoot 3/.mvn/wrapper/maven-wrapper.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../IntroductionToSpringBoot 3/mvnw" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../IntroductionToSpringBoot 3/mvnw.cmd" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../IntroductionToSpringBoot 3/pom.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../IntroductionToSpringBoot 3/src/main/java/com/dev/Week1/IntroductionToSpringBoot/IntroductionToSpringBootApplication.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../IntroductionToSpringBoot 3/src/main/resources/application.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../IntroductionToSpringBoot 3/src/test/java/com/dev/Week1/IntroductionToSpringBoot/IntroductionToSpringBootApplicationTests.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../IntroductionToSpringBoot.iml" beforeDir="false" afterPath="$PROJECT_DIR$/../IntroductionToSpringBoot.iml" afterDir="false" />
+    <list default="true" id="0a6ceda5-ab5f-4bf4-8452-2f0d5fb62b35" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/../IntroductionToSpringBoot.iml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/dev/Week1/IntroductionToSpringBoot/IntroductionToSpringBootApplication.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/dev/Week/IntroductionToSpringBoot/IntroductionToSpringBootApplication.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/dev/Week1/IntroductionToSpringBoot/IntroductionToSpringBootApplicationTests.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/dev/Week/IntroductionToSpringBoot/IntroductionToSpringBootApplicationTests.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../../Introduction to Spring &amp; Spring Boot.docx" beforeDir="false" afterPath="$PROJECT_DIR$/../../Introduction to Spring &amp; Spring Boot.docx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../~$troduction to Spring &amp; Spring Boot.docx" beforeDir="false" afterPath="$PROJECT_DIR$/../../~$troduction to Spring &amp; Spring Boot.docx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../../../README.md" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -34,15 +23,17 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../../../.." />
   </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
   <component name="MavenImportPreferences">
     <option name="generalSettings">
       <MavenGeneralSettings>
-        <option name="mavenHome" value="Use Maven wrapper" />
         <option name="useMavenConfig" value="true" />
       </MavenGeneralSettings>
     </option>
   </component>
-  <component name="ProjectId" id="2xihgwpSsJidtVPtalsQjqqmA7C" />
+  <component name="ProjectId" id="2xlDCvsdmNkctssMd8LBRi34cfr" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="showLibraryContents" value="true" />
@@ -51,16 +42,49 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="project.structure.last.edited" value="Project" />
+    <property name="project.structure.proportion" value="0.15" />
+    <property name="project.structure.side.proportion" value="0.0" />
+    <property name="settings.editor.selected.configurable" value="MavenSettings" />
+  </component>
+  <component name="RunManager">
+    <configuration name="IntroductionToSpringBoot" type="MavenRunConfiguration" factoryName="Maven" nameIsGenerated="true">
+      <MavenSettings>
+        <option name="myGeneralSettings" />
+        <option name="myRunnerSettings" />
+        <option name="myRunnerParameters">
+          <MavenRunnerParameters>
+            <option name="profiles">
+              <set />
+            </option>
+            <option name="goals">
+              <list />
+            </option>
+            <option name="pomFileName" />
+            <option name="profilesMap">
+              <map />
+            </option>
+            <option name="resolveToWorkspace" value="false" />
+            <option name="workingDirPath" value="$PROJECT_DIR$" />
+          </MavenRunnerParameters>
+        </option>
+      </MavenSettings>
+      <method v="2" />
+    </configuration>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="c61e7e94-abf7-4c37-81f5-19c59b13048b" name="Changes" comment="" />
-      <created>1748426916626</created>
+      <changelist id="0a6ceda5-ab5f-4bf4-8452-2f0d5fb62b35" name="Changes" comment="" />
+      <created>1748503643987</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1748426916626</updated>
+      <updated>1748503643987</updated>
     </task>
     <servers />
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
   </component>
 </project>
