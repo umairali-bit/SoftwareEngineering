@@ -5,7 +5,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0a6ceda5-ab5f-4bf4-8452-2f0d5fb62b35" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/devShuttle/umair/Week1Introduction/IntroductionToSpringBoot/Apple.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../IntroductionToSpringBoot.iml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/devShuttle/umair/Week1Introduction/IntroductionToSpringBoot/IntroductionToSpringBootApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/devShuttle/umair/Week1Introduction/IntroductionToSpringBoot/IntroductionToSpringBootApplication.java" afterDir="false" />
