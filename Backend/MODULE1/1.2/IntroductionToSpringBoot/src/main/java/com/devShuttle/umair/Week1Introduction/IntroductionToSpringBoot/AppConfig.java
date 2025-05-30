@@ -1,6 +1,7 @@
 package com.devShuttle.umair.Week1Introduction.IntroductionToSpringBoot;
 
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /*
@@ -9,4 +10,9 @@ In Spring Boot (and Spring in general), a configuration class is a special class
  */
 @Configuration
 public class AppConfig {
+
+    @Bean
+    Apple getApple() {
+        return new Apple();
+    }
 }
