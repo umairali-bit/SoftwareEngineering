@@ -7,6 +7,7 @@
     <list default="true" id="0a6ceda5-ab5f-4bf4-8452-2f0d5fb62b35" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/../IntroductionToSpringBoot.iml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/devShuttle/umair/Week1Introduction/IntroductionToSpringBoot/Apple.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/devShuttle/umair/Week1Introduction/IntroductionToSpringBoot/Apple.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../ResourceBundleInJava/.idea/vcs.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../ResourceBundleInJava/resources/BasicText.properties" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../ResourceBundleInJava/resources/BasicText_en_CA.properties" beforeDir="false" />
@@ -130,7 +131,7 @@
     <select />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/IntroductionToSpringBoot$IntroductionToSpringBootApplication.ic" NAME="IntroductionToSpringBootApplication Coverage Results" MODIFIED="1748588045768" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+    <SUITE FILE_PATH="coverage/IntroductionToSpringBoot$IntroductionToSpringBootApplication.ic" NAME="IntroductionToSpringBootApplication Coverage Results" MODIFIED="1748589563564" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
       <FILTER>com.devShuttle.umair.Week1Introduction.IntroductionToSpringBoot.*</FILTER>
     </SUITE>
   </component>
