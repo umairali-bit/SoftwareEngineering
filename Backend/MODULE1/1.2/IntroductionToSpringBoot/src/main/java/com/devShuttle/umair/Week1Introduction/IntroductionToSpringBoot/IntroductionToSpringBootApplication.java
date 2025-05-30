@@ -30,5 +30,8 @@ public class IntroductionToSpringBootApplication implements CommandLineRunner {
 		obj.eatApple();// without @autowired this i=will give us an error
 		obj2.eatApple();
 
+		System.out.println(obj.hashCode());
+		System.out.println(obj2.hashCode());
+
 	}
 }
