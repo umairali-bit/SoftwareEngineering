@@ -2,7 +2,7 @@ package com.devShuttle.umair.Week1Introduction.IntroductionToSpringBoot;
 
 import org.springframework.stereotype.Component;
 
-@Component //@Component in Spring is a stereotype annotation that marks a class as a Spring-managed bean
+//@Component //@Component in Spring is a stereotype annotation that marks a class as a Spring-managed bean
 public class Apple {
 
 
