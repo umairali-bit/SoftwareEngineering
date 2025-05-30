@@ -13,7 +13,7 @@ In Spring Boot (and Spring in general), a configuration class is a special class
 public class AppConfig {
 
     @Bean
-    @Scope("prototype")
+    @Scope("singleton")
     Apple getApple() {
         return new Apple();
     }
