@@ -3,9 +3,9 @@ package DependencyInjection;
 import org.springframework.stereotype.Component;
 
 @Component
-public class DevDB {
+public class DevDB implements DB{
 
-    String getData() {
+   public String getData() {
         return "DEV DATA";
     }
 }

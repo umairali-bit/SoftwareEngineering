@@ -3,12 +3,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ProdDB {
+public class ProdDB implements DB {
 
     @Autowired
     private DevDB db;
 
-    String getData() {
+    public  String getData() {
         return db.getData();
 
     }
