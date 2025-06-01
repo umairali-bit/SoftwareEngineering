@@ -94,8 +94,8 @@
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="Maven.IntroductionToSpringBoot" />
       <item itemvalue="Application.IntroductionToSpringBootApplication" />
+      <item itemvalue="Maven.IntroductionToSpringBoot" />
     </list>
     <recent_temporary>
       <list>
