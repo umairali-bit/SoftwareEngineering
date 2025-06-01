@@ -5,6 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="be73c7a3-c715-4971-9637-e5a2db6aade9" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../1.2/IntroductionToSpringBoot.iml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../../1.2/IntroductionToSpringBoot/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../1.2/IntroductionToSpringBoot/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../1.2/IntroductionToSpringBoot/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../1.2/IntroductionToSpringBoot/pom.xml" afterDir="false" />
@@ -15,7 +16,8 @@
       <change beforePath="$PROJECT_DIR$/../../1.2/ResourceBundleInJava/resources/BasicText_fr_CA.properties" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../DependencyInjection.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/DependencyInjection/DBService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/DependencyInjection/DBService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/DependencyInjection/DevDB.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/DependencyInjection/DevDB.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/DependencyInjection/ProdDB.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/DependencyInjection/ProdDB.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../Introduction to Spring &amp; Spring Boot.docx" beforeDir="false" afterPath="$PROJECT_DIR$/../../Introduction to Spring &amp; Spring Boot.docx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../~$troduction to Spring &amp; Spring Boot.docx" beforeDir="false" afterPath="$PROJECT_DIR$/../../~$troduction to Spring &amp; Spring Boot.docx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../../../README.md" beforeDir="false" />
