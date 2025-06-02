@@ -18,16 +18,22 @@ public class IntroductionToSpringBootApplication implements CommandLineRunner {
 	@Autowired
 	Apple obj2;
 
+
+
 	public static void main(String[] args) {
 		SpringApplication.run(IntroductionToSpringBootApplication.class, args);
 
-//		Apple obj = new Apple();
-//		obj.eatApple();
+		Apple obj = new Apple();
+		obj.eatApple();
 	}
 
 	@Override
 	public void run(String... args) throws Exception {
-		obj.eatApple();// without @autowired this i=will give us an error
+
+
+
+
+		obj.eatApple();// without @autowired this will give us an error
 		obj2.eatApple();
 
 		System.out.println(obj.hashCode());

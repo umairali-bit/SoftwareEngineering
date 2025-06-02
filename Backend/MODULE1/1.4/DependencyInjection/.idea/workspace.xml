@@ -5,6 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="be73c7a3-c715-4971-9637-e5a2db6aade9" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/../../1.5/SpringBootvsSpringFramework/src/main/java/SpringBootvsSpringFramework/Main.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../1.5/SpringBootvsSpringFramework/src/main/resources/application.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../1.2/IntroductionToSpringBoot.iml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../../1.2/IntroductionToSpringBoot/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../1.2/IntroductionToSpringBoot/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../1.2/IntroductionToSpringBoot/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../1.2/IntroductionToSpringBoot/pom.xml" afterDir="false" />
@@ -15,7 +17,8 @@
       <change beforePath="$PROJECT_DIR$/../../1.2/ResourceBundleInJava/resources/BasicText_fr_CA.properties" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../DependencyInjection.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/DependencyInjection/DBService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/DependencyInjection/DBService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/DependencyInjection/DBService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/DependencyInjection/DBService.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../Introduction to Spring &amp; Spring Boot.docx" beforeDir="false" afterPath="$PROJECT_DIR$/../../Introduction to Spring &amp; Spring Boot.docx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../~$troduction to Spring &amp; Spring Boot.docx" beforeDir="false" afterPath="$PROJECT_DIR$/../../~$troduction to Spring &amp; Spring Boot.docx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../../../README.md" beforeDir="false" />
@@ -40,11 +43,14 @@
     <option name="stateVersion" value="1" />
   </component>
   <component name="ProjectId" id="2xuMZuvRCO0910BSvR2r0dJGVWy" />
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
   </component>
@@ -87,5 +93,8 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
   </component>
 </project>
