@@ -5,8 +5,25 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0a6ceda5-ab5f-4bf4-8452-2f0d5fb62b35" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/../../1.4/.idea/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../1.4/.idea/1.4.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../1.4/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../1.4/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../1.4/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../1.4/DependencyInjection/.idea/compiler.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../1.4/DependencyInjection/.idea/jarRepositories.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../1.4/DependencyInjection/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../1.4/DependencyInjection/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../1.4/DependencyInjection/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../1.4/DependencyInjection/pom.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../1.4/DependencyInjection/src/main/java/DependencyInjection/DBService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../1.4/DependencyInjection/src/main/java/DependencyInjection/DevDB.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../1.4/DependencyInjection/src/main/java/DependencyInjection/Main.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../1.4/DependencyInjection/src/main/java/DependencyInjection/ProdDB.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../IntroductionToSpringBoot.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/devShuttle/umair/Week1Introduction/IntroductionToSpringBoot/AppConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/devShuttle/umair/Week1Introduction/IntroductionToSpringBoot/AppConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/devShuttle/umair/Week1Introduction/IntroductionToSpringBoot/IntroductionToSpringBootApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/devShuttle/umair/Week1Introduction/IntroductionToSpringBoot/IntroductionToSpringBootApplication.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../ResourceBundleInJava/.idea/vcs.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../ResourceBundleInJava/resources/BasicText.properties" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../ResourceBundleInJava/resources/BasicText_en_CA.properties" beforeDir="false" />
@@ -57,7 +74,7 @@
     <property name="settings.editor.selected.configurable" value="MavenSettings" />
   </component>
   <component name="RunManager" selected="Application.IntroductionToSpringBootApplication">
-    <configuration name="IntroductionToSpringBootApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+    <configuration name="IntroductionToSpringBootApplication" type="Application" factoryName="Application" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.devShuttle.umair.Week1Introduction.IntroductionToSpringBoot.IntroductionToSpringBootApplication" />
       <module name="IntroductionToSpringBoot" />
       <extension name="coverage">
@@ -97,11 +114,6 @@
       <item itemvalue="Application.IntroductionToSpringBootApplication" />
       <item itemvalue="Maven.IntroductionToSpringBoot" />
     </list>
-    <recent_temporary>
-      <list>
-        <item itemvalue="Application.IntroductionToSpringBootApplication" />
-      </list>
-    </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
