@@ -15,8 +15,7 @@
       <change beforePath="$PROJECT_DIR$/../../1.2/ResourceBundleInJava/resources/BasicText_fr_CA.properties" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../DependencyInjection.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/DependencyInjection/DBService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/DependencyInjection/DBService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../Introduction to Spring &amp; Spring Boot.docx" beforeDir="false" afterPath="$PROJECT_DIR$/../../Introduction to Spring &amp; Spring Boot.docx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../~$troduction to Spring &amp; Spring Boot.docx" beforeDir="false" afterPath="$PROJECT_DIR$/../../~$troduction to Spring &amp; Spring Boot.docx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../../../README.md" beforeDir="false" />
