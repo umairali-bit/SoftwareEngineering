@@ -1,111 +1,243 @@
 # Introduction to Spring & Spring Boot
 
-- Spring Boot is built on the Spring Framework.  
-- The Spring Framework was first introduced in 2003 by Rod Johnson.  
-- Before 2003, developers created Java applications using Java Enterprise Edition (JEE).  
-- The problem with JEE was that developers had to configure a lot before writing a single piece of business logic.  
-- Configurations included server, database, and logging setup.  
-- The Spring Framework helped developers by managing these configurations.  
-- The part of the Spring Framework responsible for these configurations is the IoC container. It manages the lifecycle and dependencies of objects in a Spring application.  
-- IoC initially used XML files for configuration.  
-- However, IoC containers still required a lot of configuration time.  
-- In 2009, Rod Johnson sold Spring to VMware.  
-- In 2014, through VMware, Spring Boot was introduced, which came pre-configured with starter dependencies and was ready for business logic.  
+Spring Boot is built on top of the Spring Framework. The Spring Framework was first introduced in 2003 by Rod Johnson as a solution to the complexity of Java Enterprise Edition (JEE), which required extensive configuration before writing business logic. These configurations involved setting up servers, databases, logging, and more.
+
+The Spring Framework introduced the Inversion of Control (IoC) container to manage such configurations. Initially, configuration was done using XML, which still required significant setup.
+
+In 2009, Spring was sold to VMware. By 2014, VMware introduced **Spring Boot**, a streamlined, production-ready version of Spring with auto-configurations and pre-built dependencies, allowing developers to focus on business logic right away.
+
+---
 
 ## Spring Framework
 
-- Spring is a Dependency Injection framework that makes Java applications loosely coupled.  
-- Spring simplifies the development process for JavaEE applications.  
-- Spring enables building applications from “plain old Java objects” (POJOs) and applying enterprise services non-invasively to POJOs.  
-- Important components:  
-  - Core Container  
-  - AOP (Aspect-Oriented Programming)  
-  - JDBC  
-  - Web  
-  - Testing  
+- **Spring** is a dependency injection framework that promotes loose coupling in Java applications.
+- It simplifies the development of Java EE applications.
+- Enables development using **Plain Old Java Objects (POJOs)** with enterprise-level features applied non-invasively.
+
+### Key Components
+- Core Container  
+- AOP (Aspect-Oriented Programming)  
+- JDBC  
+- Web  
+- Testing  
+
+---
 
 ## IoC Container
 
-- In the Spring Framework, the IoC container is responsible for managing application components and injecting dependencies. The container creates objects (beans), wires them together, configures them, and manages their complete lifecycle.  
-- IoC handles event-driven programming (EDP), Dependency Injection (DI), and Aspect-Oriented Programming (AOP).  
-- IoC Container:  
-  - The Inversion of Control (IoC) container instantiates, configures, and assembles beans.  
-  - It starts working as soon as the application context is loaded, either via XML configuration, annotations, or Java-based config.  
-- Dependency Injection (DI):  
-  - The process where the IoC container injects dependencies into beans based on configuration (e.g., via XML).  
-  - DI happens during the container's initialization phase, not before.  
-- POJOs (Business Objects):  
-  - These are the actual beans managed by the IoC container.  
-  - They are instantiated and injected by the container as it processes the configuration.  
+The **IoC Container** in Spring is responsible for:
+
+- Creating and managing **beans** (Java objects)
+- Injecting **dependencies** into those beans
+- Managing their lifecycle
+
+### Responsibilities
+
+- **Dependency Injection (DI):** Injecting dependencies into beans during initialization.
+- **Event-Driven Programming (EDP):** Handling events and listeners.
+- **Aspect-Oriented Programming (AOP):** Adding cross-cutting concerns like logging or security.
+
+### Types of Configuration
+
+- **XML-based**
+- **Annotation-based**
+- **Java-based**
+
+---
 
 ## Gradle, Maven, and Artifact
 
-- In the Spring Framework, Gradle and Maven are build automation tools used to manage dependencies, build projects, and automate tasks like testing, packaging, and deployment.  
-- An artifact is the name of the build output (e.g., myapp.jar).  
-- It also sets the name of your project directory, application class, and sometimes the package structure.  
-- It is part of the Maven coordinate system (groupId:artifactId:version).  
+Spring projects typically use **Gradle** or **Maven** as build automation tools to manage:
 
-## What Are Gradle and Maven?
+- Project dependencies
+- Builds
+- Testing
+- Packaging
 
-| Feature               | Maven                   | Gradle                                |
-|-----------------------|-------------------------|-------------------------------------|
-| Language              | Uses XML (pom.xml)       | Uses Groovy/Kotlin DSL (build.gradle or build.gradle.kts) |
-| Performance           | Slower builds due to XML parsing | Faster with incremental builds and daemon process |
-| Popularity            | Very mature and widely used | Newer, but increasingly popular    |
-| Configuration         | More rigid and convention-based | More flexible and scriptable       |
-| Dependency Management | Based on a centralized repository model | Also uses Maven Central, but with more customization |
+### Artifact
+An artifact is the final build output (e.g., `myapp.jar`). It also defines the application name, base directory, main class, and possibly the package structure.
 
-- POM stands for Project Object Model file.  
+Maven artifacts follow this coordinate structure:  
+`groupId:artifactId:version`
 
-## Beans
+---
 
-- Beans build up Spring applications.  
-- Beans are classes whose lifecycle and dependencies are managed by the Spring Framework.  
-- Beans are managed objects that are instantiated, assembled, and managed by the Spring IoC container.  
-- Beans are the backbone of any Spring application and are the core building blocks wired together to create an application.  
-- They are used to manage dependencies.  
+## Gradle vs Maven
+
+| Feature               | Maven                          | Gradle                                      |
+|----------------------|--------------------------------|---------------------------------------------|
+| Language              | XML (`pom.xml`)               | Groovy/Kotlin DSL (`build.gradle`)          |
+| Performance           | Slower due to XML parsing      | Faster with incremental builds & daemons    |
+| Popularity            | Mature and widely adopted      | Newer but increasingly popular              |
+| Configuration Style   | Convention-based (rigid)       | Script-based (flexible)                     |
+| Dependency Management | Centralized                    | Flexible with support for Maven Central     |
+
+---
+
+## Beans in Spring
+
+- Beans are core components of a Spring application.
+- Managed by the IoC container.
+- Their lifecycle includes creation, dependency injection, initialization, usage, and destruction.
+
+---
 
 ## Spring Annotations
 
-- Traditionally, Spring allows developers to manage bean dependencies using XML-based configuration.  
-- With Spring Boot, these beans are managed by Spring Annotations.  
-- Spring Annotations provide an alternative way to define beans and their dependencies using Java-based configuration.  
-- Unlike the XML approach, Java-based configuration allows you to manage bean components programmatically. That is why Spring annotations were introduced.  
+Spring annotations offer a modern, Java-based way to configure beans without relying on verbose XML files.
+
+### Common Annotations
+- `@Component`
+- `@Service`
+- `@Repository`
+- `@Controller`
+- `@SpringBootApplication`
+
+---
 
 ## Defining Beans
 
-Two ways to define beans:  
-1. Using Stereotype Annotations  
-   - Annotate your class with one of the stereotype annotations (@Component, @Service, @Repository, @Controller). These annotations tell Spring that the class should be managed as a bean.  
-   - @SpringBootApplication is the starting point of any Spring Boot application.  
-2. Explicit Bean Declaration in the Configuration Class  
-   - Create a configuration class annotated with @Configuration. This class contains methods to define and configure beans manually.  
+1. **Stereotype Annotations**  
+   Annotate your class with `@Component`, `@Service`, `@Repository`, or `@Controller`.  
+   - `@SpringBootApplication` is the main entry point for Spring Boot apps.
+
+2. **Configuration Class**  
+   - Annotate the class with `@Configuration`.
+   - Define beans manually using `@Bean` annotated methods.
+
+---
 
 ## Bean Lifecycle
 
-1. Bean Created  
-   a. The bean instance is created by invoking a static factory method (when defining a bean in the configuration class) or an instance factory method (@Component).  
-2. Dependency Injected  
-   a. After the bean is created, Spring sets the bean’s properties and dependencies, either through setter injection, constructor injection, or field injection.  
-3. Bean Initialized  
-   a. If a bean implements the InitializingBean interface or defines a custom initialization method annotated with @PostConstruct, Spring invokes this initialization method after configuring the bean.  
-4. Bean Used  
-   a. The bean is now fully initialized and ready to be used by the application.  
-5. Bean Destroyed  
-   a. Spring invokes the destruction method when the bean is no longer needed or when the application context shuts down.  
+1. **Creation** – Instance is created by the IoC container.  
+2. **Dependency Injection** – Dependencies are injected via constructor, field, or setter.  
+3. **Initialization** – Spring invokes initialization methods like those annotated with `@PostConstruct`.  
+4. **Usage** – The bean is available for use in the application.  
+5. **Destruction** – Spring calls `@PreDestroy` methods when shutting down.
+
+---
 
 ## Bean Lifecycle Hooks
 
-1. The @PostConstruct annotation marks a method that should be invoked immediately after a bean has been constructed and all dependencies have been injected.  
-2. The @PreDestroy annotation marks a method that should be invoked just before a bean is destroyed by the container. This method can perform necessary cleanup or resource release tasks.  
+- `@PostConstruct`: Called immediately after dependency injection.
+- `@PreDestroy`: Called just before the bean is removed from the container.
 
-## Scope of Beans
+---
 
-Beans are stored in heap memory.  
+## Bean Scopes
 
-| Scope     | Description                                                                                  |
-|-----------|----------------------------------------------------------------------------------------------|
-| Singleton | (Default) Scopes a single bean definition to a single object instance per Spring IoC container. |
-| Prototype | Scopes a single bean definition to any number of object instances.                          |
-| request   | Scopes a single bean definition to the lifecycle of a single HTTP request. That is, each HTTP request has its own instance of a bean created from a single bean definition. Only valid in the context of a web-aware Spring Application context. |
-| WebSocket | Scopes a single bean definition to the lifecycle of a WebSocket. Only valid in the context of a web-aware Spring Application context. |
+Beans are stored in heap memory.
+
+| Scope     | Description                                                                                       |
+|-----------|---------------------------------------------------------------------------------------------------|
+| Singleton | (Default) A single instance per Spring IoC container.                                              |
+| Prototype | A new instance is created each time the bean is requested.                                        |
+| Request   | One bean instance per HTTP request (Web-aware context only).                                      |
+| WebSocket | One bean instance per WebSocket lifecycle (Web-aware context only).                               |
+
+---
+
+## Dependency Injection (DI)
+
+### Smoothie Analogy 🧃
+
+**Without DI:**  
+You (the class) go shopping for ingredients (dependencies) yourself.  
+- Tightly coupled  
+- Harder to change or test
+
+**With DI:**  
+Ingredients are provided to you.  
+- Loosely coupled  
+- Easier to manage and test
+
+### Why Use DI?
+
+- **Loose Coupling**: Components are independent and maintainable  
+- **Flexibility**: Swap dependencies easily  
+- **Testability**: Mock dependencies during unit testing
+
+### DI Methods
+
+1. **Constructor Injection**  
+   - Dependencies passed via constructor  
+   - Promotes immutability and testability  
+
+2. **Field Injection**  
+   - Uses `@Autowired` to inject directly into fields  
+
+---
+
+## Spring Boot vs Spring Framework
+
+| Feature                       | Spring Framework | Spring Boot                              |
+|------------------------------|------------------|-------------------------------------------|
+| Dependencies Management      | Manual           | Uses pre-configured starter dependencies |
+| Configuration                | Manual           | Auto-configuration out of the box        |
+| Server Setup                 | External         | Embedded Tomcat, Jetty, etc.             |
+| Health & Metrics             | Manual           | Built-in Actuator support                |
+| External Configuration Files | Limited          | Flexible via `.properties`, `.yaml`, etc.|
+
+---
+
+## `pom.xml` in Spring Boot
+
+- Spring Boot uses **Maven** to manage dependencies defined in `pom.xml`.
+- The `spring-boot-starter-parent` includes default libraries and configurations.
+- Spring Boot uses `spring-boot-dependencies` for managing library versions via `dependencyManagement`.
+
+---
+
+## What is Auto-Configuration?
+
+**Auto-configuration** automatically configures Spring applications based on the dependencies on the classpath and application properties.
+
+### How It Works
+
+1. **Classpath Scanning**  
+   Spring Boot looks for classes/libraries in the classpath and applies configuration accordingly.
+
+2. **Configuration Classes**  
+   Spring Boot includes predefined configuration classes for common components (DataSource, JPA, etc.).
+
+3. **Conditional Beans**  
+   Spring uses annotations like `@ConditionalOnClass`, `@ConditionalOnBean`, `@ConditionalOnProperty` to apply configurations selectively.
+
+### Example Conditional Annotations
+
+- `@ConditionalOnClass(DataSource.class)` – Only configure if the class is present  
+- `@ConditionalOnBean(DataSource.class)` – Only configure if a bean exists  
+- `@ConditionalOnProperty("my.property")` – Only configure if property is set
+
+---
+
+## Auto-Configuration Features
+
+- **@PropertySources**: Automatically loads common property sources.  
+- **META-INF**: The magic of auto-configuration is powered by `spring-boot-autoconfigure` JAR.  
+- **Enhanced Conditional Support**: Spring Boot extends the conditional system to cover common patterns.
+
+---
+
+## Spring Boot Internal Flow
+
+1. **Initialization**  
+   Application starts from a class annotated with `@SpringBootApplication`.
+
+2. **Component Scanning**  
+   Automatically detects and loads components, beans, and configurations.
+
+3. **Auto-Configuration**  
+   Applies default settings for available libraries on the classpath.
+
+4. **External Configuration**  
+   Loads `.properties`, `.yaml`, environment variables, or CLI arguments.
+
+5. **Embedded Server**  
+   Launches a pre-configured web server (e.g., Tomcat).
+
+6. **Lifecycle Callbacks**  
+   Executes `@PostConstruct` methods and initialization logic.
+
+7. **Application Ready**  
+   App is fully initialized and ready to handle requests.
