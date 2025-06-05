@@ -8,6 +8,7 @@ class MainTest {
 
     @Test
     void contextLoads() {
+        System.out.println("Umair is running a test");
 
     }
 }
