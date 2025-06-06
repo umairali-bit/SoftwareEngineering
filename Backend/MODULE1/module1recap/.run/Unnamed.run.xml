@@ -1,0 +1,9 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="module1recap" type="Application" factoryName="Application">
+    <module name="module1recap" />
+    <option name="PROGRAM_PARAMETERS" value="$MAVEN_REPOSITORY$$MAVEN_REPOSITORY$" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
