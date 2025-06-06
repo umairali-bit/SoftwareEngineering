@@ -241,3 +241,136 @@ Ingredients are provided to you.
 
 7. **Application Ready**  
    App is fully initialized and ready to handle requests.
+
+
+   # 🚗 Spring Boot Annotations Explained (With a Toy Car Analogy)
+
+Imagine you're building a **smart toy car**, and Spring is your **smart assistant**. You just label parts, and Spring assembles and connects everything for you.
+
+---
+
+## 🔧 Core Annotations and What They Do
+
+### 1. `@SpringBootApplication`  
+**🛠 Main switch to start the project**  
+Starts the whole Spring Boot app by combining:
+- `@Configuration`
+- `@EnableAutoConfiguration`
+- `@ComponentScan`
+
+> Think of this as **pressing the ON button** for the toy car factory.
+
+---
+
+### 2. `@Service`  
+**⚙️ Business logic class**  
+Marks a class that does core work like controlling speed or direction.
+
+> Like labeling the **Engine**.
+
+---
+
+### 3. `@Component`  
+**📦 Generic Spring-managed part**  
+Marks a class as something Spring should manage.
+
+> Like labeling a **GPS sensor or horn** — important but not "core logic".
+
+---
+
+### 4. `@Configuration`  
+**📘 Custom build instructions**  
+Tells Spring: "This class contains instructions (methods) to build beans manually."
+
+> Acts like the **manual for building parts**.
+
+---
+
+### 5. `@Autowired`  
+**🔌 Auto-plug required parts**  
+Tells Spring to **auto-connect dependencies**.
+
+---
+``` java
+@Autowired
+Battery battery;
+Like saying: “Put a battery here, please.”
+````
+
+6. @Bean
+🧪 Create a custom part manually
+Used inside @Configuration to build and return a Spring-managed object.
+
+```java
+@Bean
+public Battery battery() {
+    return new Battery("Rechargeable");
+}
+```
+Like writing: “Here’s how to build a custom battery.”
+
+
+7. @Scope
+📦 How many parts to build?
+Defines lifecycle and count of the bean.
+
+* singleton = one shared part
+
+* prototype = new part every time
+
+Example: Use 1 battery for all cars or 1 per car?
+
+8. @PostConstruct
+   
+🔧 Run setup after creation
+
+Runs a method after the part is made.
+
+```java
+@PostConstruct
+public void init() {
+    System.out.println("Wheels are spinning!");
+}
+Like testing parts after installing them.
+```
+
+9. @PreDestroy
+    
+🧹 Cleanup before shutdown
+
+Runs a method just before the part is removed or app shuts down.
+
+```java
+@PreDestroy
+public void cleanup() {
+    System.out.println("Car is shutting down...");
+}
+Like unplugging the battery before storing the car.
+```
+
+10. @ConditionalOnProperty
+    
+🕹 Only build if switch is ON
+
+Activates a bean only if a setting is true in application.properties.
+
+```java
+@ConditionalOnProperty(name = "car.gps.enabled", havingValue = "true")
+Like: “Only add GPS if the user enables it.”
+```
+
+| Annotation               | Description                                                  |
+| ------------------------ | ------------------------------------------------------------ |
+| `@SpringBootApplication` | Starts the whole Spring Boot factory                         |
+| `@Service`               | Marks business logic class (Engine)                          |
+| `@Component`             | General-purpose part (like a horn)                           |
+| `@Configuration`         | Manual to create parts                                       |
+| `@Autowired`             | Auto-attach needed part (like battery)                       |
+| `@Bean`                  | Create a custom part (manually coded battery)                |
+| `@Scope`                 | Defines how often to make the part (one or many)             |
+| `@PostConstruct`         | Setup logic after part creation (test wheels)                |
+| `@PreDestroy`            | Cleanup logic before part is removed (unplug battery)        |
+| `@ConditionalOnProperty` | Create part only if config switch is ON (add GPS if enabled) |
+
+
+
