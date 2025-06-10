@@ -8,6 +8,8 @@ public class ThepresentationlayerApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(ThepresentationlayerApplication.class, args);
+
+		mismfnjs
 	}
 
 }
