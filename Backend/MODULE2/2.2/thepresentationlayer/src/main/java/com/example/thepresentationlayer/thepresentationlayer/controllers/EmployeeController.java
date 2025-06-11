@@ -27,9 +27,13 @@ public class EmployeeController {
         public String getAllEmployees(Integer age) {
 
             return "Hi age " + age;
+    }
 
+    @PostMapping
+    public String testingPost() {
+        return "Hello from post";
 
-        }
+    }
 }
 
 
