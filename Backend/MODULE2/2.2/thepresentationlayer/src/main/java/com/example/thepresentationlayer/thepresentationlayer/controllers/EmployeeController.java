@@ -24,15 +24,32 @@ public class EmployeeController {
     }
 
     @GetMapping
-        public String getAllEmployees(Integer age) {
+        public String getAllEmployees(@RequestParam Integer age) {
 
             return "Hi age " + age;
     }
 
-    @PostMapping
+    @PostMapping (path = "/greeting")
     public String testingPost() {
-        return "Hello from post";
+        return "Hello from Post";
+    }
 
+    @PostMapping(path = "/createJava")
+    public EmployeeDTO createNewEmployeeJ(@RequestBody EmployeeDTO inputEmployee) {
+
+        return new EmployeeDTO(100L,"Anuj Sharma","Dummy@gmail",27,LocalDate.now(),true);
+//        inputEmployee.setId(100L);
+//        return inputEmployee;
+    }
+
+    @PostMapping(path = "/createPostman")
+    public EmployeeDTO createNewEmployeeP(@RequestBody EmployeeDTO inputEmployee) {
+        inputEmployee.setId(100L);
+        return inputEmployee;
+    }
+
+    @PutMapping String testingPut() {
+        return "Hello from Put";
     }
 }
 
