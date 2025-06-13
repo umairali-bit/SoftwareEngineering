@@ -1,7 +1,8 @@
 package com.jpa.thepersistencelayerandjpa.ThePersistenceLayer.controllers;
 
 
-import com.example.thepresentationlayer.thepresentationlayer.dto.EmployeeDTO;
+import com.jpa.thepersistencelayerandjpa.ThePersistenceLayer.dto.EmployeeDTO;
+import com.jpa.thepersistencelayerandjpa.ThePersistenceLayer.repositories.EmployeeRepository;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -14,6 +15,13 @@ public class EmployeeController {
 //    public String getMySuperSecretMessage() {
 //        return "Secret Message: asdfal@#$DASD";
 //    }
+
+    private final EmployeeRepository employeeRepository;
+
+    public EmployeeController(EmployeeRepository employeeRepository) {
+        this.employeeRepository = employeeRepository;
+    }
+
 
     @GetMapping(path = "/{employeeId}")
     public EmployeeDTO getEmployeeById(@PathVariable(name = "employeeId") Long id) {
