@@ -2,10 +2,12 @@ package com.jpa.thepersistencelayerandjpa.ThePersistenceLayer.controllers;
 
 
 import com.jpa.thepersistencelayerandjpa.ThePersistenceLayer.dto.EmployeeDTO;
+import com.jpa.thepersistencelayerandjpa.ThePersistenceLayer.entities.EmployeeEntity;
 import com.jpa.thepersistencelayerandjpa.ThePersistenceLayer.repositories.EmployeeRepository;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @RestController
 @RequestMapping(path = "/employees")
@@ -24,16 +26,14 @@ public class EmployeeController {
 
 
     @GetMapping(path = "/{employeeId}")
-    public EmployeeDTO getEmployeeById(@PathVariable(name = "employeeId") Long id) {
-        return new EmployeeDTO(id, "Umair Ali", "umairmamoor@gmail.com", 27,
-                LocalDate.of(2024, 1, 2), true);
-
+    public EmployeeEntity getEmployeeById(@PathVariable(name = "employeeId") Long id) {
+        return employeeRepository.findById(id).orElse(null);
     }
 
     @GetMapping
-        public String getAllEmployees(@RequestParam Integer age) {
+        public List<EmployeeEntity> getAllEmployees(@RequestParam Integer age) {
 
-            return "Hi age " + age;
+            return employeeRepository.findAll();
     }
 
     @PostMapping (path = "/greeting")
@@ -50,9 +50,12 @@ public class EmployeeController {
     }
 
     @PostMapping(path = "/createPostman")
-    public EmployeeDTO createNewEmployeeP(@RequestBody EmployeeDTO inputEmployee) {
-        inputEmployee.setId(100L);
-        return inputEmployee;
+    public EmployeeEntity createNewEmployeeP(@RequestBody EmployeeEntity inputEmployee) {
+
+
+
+        return employeeRepository.save(inputEmployee);
+
     }
 
     @PutMapping String testingPut() {
