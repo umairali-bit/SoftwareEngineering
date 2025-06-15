@@ -2,7 +2,7 @@ package com.example.theservicelayer.theservicelayer.controllers;
 
 import com.example.theservicelayer.theservicelayer.dto.EmployeeDTO;
 import com.example.theservicelayer.theservicelayer.entities.EmployeeEntity;
-import com.example.theservicelayer.theservicelayer.repositories.EmployeeRepository;
+import com.example.theservicelayer.theservicelayer.services.EmployeeService;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -12,56 +12,32 @@ import java.util.List;
 @RequestMapping(path = "/employees")
 public class EmployeeController {
 
-//    @GetMapping(path = "/getSecretMessage")
-//    public String getMySuperSecretMessage() {
-//        return "Secret Message: asdfal@#$DASD";
-//    }
+    private final EmployeeService employeeService;
 
-    private final EmployeeRepository employeeRepository;
-
-    public EmployeeController(EmployeeRepository employeeRepository) {
-        this.employeeRepository = employeeRepository;
+    public EmployeeController(EmployeeService employeeService) {
+        this.employeeService = employeeService;
     }
 
-
-    @GetMapping(path = "/{employeeId}")
-    public EmployeeEntity getEmployeeById(@PathVariable(name = "employeeId") Long id) {
-        return employeeRepository.findById(id).orElse(null);
+    @GetMapping("/{employeeId}")
+    public EmployeeDTO getEmployeeById(@PathVariable Long employeeId) {
+        return employeeService.getEmployeeById(employeeId);
     }
 
     @GetMapping
-        public List<EmployeeEntity> getAllEmployees(@RequestParam Integer age) {
-
-            return employeeRepository.findAll();
+    public List<EmployeeDTO> getAllEmployees() {
+        return employeeService.getAllEmployees();
     }
 
-    @PostMapping (path = "/greeting")
-    public String testingPost() {
-        return "Hello from Post";
+    @PostMapping("/createPostman")
+    public EmployeeDTO createEmployee(@RequestBody EmployeeDTO employee) {
+        return employeeService.createEmployee(employee);
     }
 
-    @PostMapping(path = "/createJava")
-    public EmployeeDTO createNewEmployeeJ(@RequestBody EmployeeDTO inputEmployee) {
-
-        return new EmployeeDTO(100L,"Anuj Sharma","Dummy@gmail",27,LocalDate.now(),true);
-//        inputEmployee.setId(100L);
-//        return inputEmployee;
-    }
-
-    @PostMapping(path = "/createPostman")
-    public EmployeeEntity createNewEmployeeP(@RequestBody EmployeeEntity inputEmployee) {
-
-
-
-        return employeeRepository.save(inputEmployee);
-
-    }
-
-    @PutMapping String testingPut() {
+    @PutMapping
+    public String testingPut() {
         return "Hello from Put";
     }
 }
-
 
 
 
