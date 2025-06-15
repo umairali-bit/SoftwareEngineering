@@ -58,4 +58,10 @@ public class EmployeeService {
 
 
     }
+
+    public void deleteEmployeeById(Long employeeId) {
+        employeeRepository.deleteById(employeeId);
+
+
+    }
 }
