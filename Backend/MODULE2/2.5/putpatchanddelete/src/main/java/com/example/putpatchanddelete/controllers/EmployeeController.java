@@ -4,7 +4,6 @@ import com.example.putpatchanddelete.dto.EmployeeDTO;
 import com.example.putpatchanddelete.services.EmployeeService;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -41,10 +40,13 @@ public class EmployeeController {
     EmployeeDTO updateEmployeeById(@RequestBody EmployeeDTO employeeDTO, @PathVariable Long employeeId) {
 
         return employeeService.updateEmployeeById(employeeId, employeeDTO);
-
-
-
     }
+
+    @DeleteMapping (path = "/{employeeId}")
+    public void deleteEmployeeById(@PathVariable Long employeeId) {
+        employeeService.deleteEmployeeById(employeeId);
+    }
+
 }
 
 
