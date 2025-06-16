@@ -18,12 +18,14 @@ public class EmployeeDTO {
 
     private Long id;
    // @NotNull(message = "Required field in Employee: name")
-    @Size(min = 3, max = 10, message = "number of characters in name employee should be [3,10]")
+    @Size(min = 3, max = 10, message = "number of characters in name employee should be: [3,10]")
     private String name;
   //  @NotEmpty(message = "email of the employee cannot be empty")
     @NotBlank(message = "email of the employee cannot be blank")
     @Email(message = "Should be a valid email")
     private String email;
+    @Max(value = 80, message = "Age cannot be greater than 80")
+    @Min(value = 18, message = "age cannot be less than 18")
     private Integer age;
     private LocalDate dateOfJoining;
     private Boolean isActive;
