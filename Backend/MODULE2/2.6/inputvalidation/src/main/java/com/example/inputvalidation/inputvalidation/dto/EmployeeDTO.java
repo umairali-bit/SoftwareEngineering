@@ -24,12 +24,16 @@ public class EmployeeDTO {
     @NotBlank(message = "email of the employee cannot be blank")
     @Email(message = "Should be a valid email")
     private String email;
+
     @Max(value = 80, message = "Age cannot be greater than 80")
     @Min(value = 18, message = "age cannot be less than 18")
     private Integer age;
 
+    @NotBlank(message = "The role of the employee cannot be blank")
     @Pattern(regexp = "^(ADMIN|USER)$")
     private String role;
+
+    @PastOrPresent(message = "Date of joining cannot be in the future")
     private LocalDate dateOfJoining;
     private Boolean isActive;
 
