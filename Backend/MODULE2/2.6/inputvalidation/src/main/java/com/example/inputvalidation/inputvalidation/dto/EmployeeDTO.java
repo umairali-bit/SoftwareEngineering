@@ -3,6 +3,7 @@ package com.example.inputvalidation.inputvalidation.dto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,7 +20,8 @@ import java.time.LocalDate;
 public class EmployeeDTO {
 
     private Long id;
-    @NotNull(message = "Required field in Employee: name")
+   // @NotNull(message = "Required field in Employee: name")
+    @Size(min = 3, max = 10, message = "number of characters in name employee should be [3,10]")
     private String name;
   //  @NotEmpty(message = "email of the employee cannot be empty")
     @NotBlank(message = "email of the employee cannot be blank")
