@@ -27,6 +27,9 @@ public class EmployeeDTO {
     @Max(value = 80, message = "Age cannot be greater than 80")
     @Min(value = 18, message = "age cannot be less than 18")
     private Integer age;
+
+    @Pattern(regexp = "^(ADMIN|USER)$")
+    private String role;
     private LocalDate dateOfJoining;
     private Boolean isActive;
 
