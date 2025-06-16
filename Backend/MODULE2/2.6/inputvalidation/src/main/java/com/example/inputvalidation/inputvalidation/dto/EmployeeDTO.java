@@ -1,5 +1,6 @@
 package com.example.inputvalidation.inputvalidation.dto;
 
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -19,6 +20,7 @@ public class EmployeeDTO {
     private Long id;
     @NotNull(message = "Required field in Employee: name")
     private String name;
+    @NotEmpty(message = "email of the employee cannot be empty")
     private String email;
     private Integer age;
     private LocalDate dateOfJoining;
