@@ -1,5 +1,6 @@
 package com.example.inputvalidation.inputvalidation.dto;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,6 +17,7 @@ import java.time.LocalDate;
 public class EmployeeDTO {
 
     private Long id;
+    @NotNull(message = "Required field in Employee: name")
     private String name;
     private String email;
     private Integer age;

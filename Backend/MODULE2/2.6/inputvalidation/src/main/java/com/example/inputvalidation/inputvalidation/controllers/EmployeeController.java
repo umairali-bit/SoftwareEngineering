@@ -1,7 +1,7 @@
 package com.example.inputvalidation.inputvalidation.controllers;
-
-import com.example.putpatchanddelete.dto.EmployeeDTO;
-import com.example.putpatchanddelete.services.EmployeeService;
+import com.example.inputvalidation.inputvalidation.dto.EmployeeDTO;
+import com.example.inputvalidation.inputvalidation.services.EmployeeService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +22,7 @@ public class EmployeeController {
 
     @GetMapping("/{employeeId}")
     public ResponseEntity<EmployeeDTO> getEmployeeById(@PathVariable Long employeeId) {
-       Optional <EmployeeDTO> employeeDTO = employeeService.getEmployeeById(employeeId);
+       Optional<EmployeeDTO> employeeDTO = employeeService.getEmployeeById(employeeId);
        return employeeDTO
                .map(employeeDTO1 -> ResponseEntity.ok(employeeDTO1))
                .orElse(ResponseEntity.notFound().build());
@@ -34,7 +34,7 @@ public class EmployeeController {
     }
 
     @PostMapping("/createPostman")
-    public ResponseEntity<EmployeeDTO> createEmployee(@RequestBody EmployeeDTO employee) {
+    public ResponseEntity<EmployeeDTO> createEmployee(@RequestBody @Valid EmployeeDTO employee) {
         EmployeeDTO savedEmployee = employeeService.createEmployee(employee);
         return new ResponseEntity<>(savedEmployee, HttpStatus.CREATED);
     }
