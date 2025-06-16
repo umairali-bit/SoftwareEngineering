@@ -2,10 +2,13 @@ package com.example.putpatchanddelete.controllers;
 
 import com.example.putpatchanddelete.dto.EmployeeDTO;
 import com.example.putpatchanddelete.services.EmployeeService;
+import org.apache.coyote.Response;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping(path = "/employees")
@@ -18,8 +21,11 @@ public class EmployeeController {
     }
 
     @GetMapping("/{employeeId}")
-    public EmployeeDTO getEmployeeById(@PathVariable Long employeeId) {
-        return employeeService.getEmployeeById(employeeId);
+    public ResponseEntity<EmployeeDTO> getEmployeeById(@PathVariable Long employeeId) {
+       Optional <EmployeeDTO> employeeDTO = employeeService.getEmployeeById(employeeId);
+       return employeeDTO
+               .map(employeeDTO1 -> ResponseEntity.ok(employeeDTO1))
+               .orElse(ResponseEntity.notFound().build());
     }
 
     @GetMapping
