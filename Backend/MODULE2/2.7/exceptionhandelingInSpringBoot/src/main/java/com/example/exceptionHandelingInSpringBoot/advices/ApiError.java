@@ -1,11 +1,10 @@
-package com.example.exceptionHandelingInSpringBoot.apiResponse;
+package com.example.exceptionHandelingInSpringBoot.advices;
 
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.http.HttpStatus;
 
 import java.util.List;
-
 
 @Data
 @Builder
