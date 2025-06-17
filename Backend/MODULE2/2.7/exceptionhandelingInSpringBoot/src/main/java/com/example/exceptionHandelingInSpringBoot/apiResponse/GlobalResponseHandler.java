@@ -1,4 +1,4 @@
-package com.example.exceptionHandelingInSpringBoot.advices;
+package com.example.exceptionHandelingInSpringBoot.apiResponse;
 
 
 import org.springframework.core.MethodParameter;
