@@ -1,7 +1,9 @@
-package com.example.exceptionHandelingInSpringBoot.apiResponse;
+package com.example.exceptionHandelingInSpringBoot.advices;
 
 
 import lombok.Data;
+import com.example.exceptionHandelingInSpringBoot.advices.ApiError;
+
 
 import java.time.LocalDateTime;
 

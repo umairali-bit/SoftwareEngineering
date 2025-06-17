@@ -6,37 +6,37 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import com.example.exceptionHandelingInSpringBoot.advices.ApiError;
+
 
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
     @ExceptionHandler(ResourceNotFound.class)
-    public ResponseEntity<APIError> exceptionResourceNotFound(ResourceNotFound exception) {
-        APIError apierror = APIError.builder()
+    public ResponseEntity<ApiResponse<?>> exceptionResourceNotFound(ResourceNotFound exception) {
+        ApiError apierror = ApiError.builder()
                 .status(HttpStatus.NOT_FOUND)
                 .message(exception.getMessage())
                 .build();
-        return new ResponseEntity<>(apierror, HttpStatus.NOT_FOUND);
+        return buildErrorResponseEntity(apierror);
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<APIError> handleInternalServerError(Exception exception) {
-        APIError apierror = APIError.builder()
+    public ResponseEntity<ApiResponse<?>> handleInternalServerError(Exception exception) {
+        ApiError apierror = ApiError.builder()
                 .status(HttpStatus.NOT_FOUND)
                 .message(exception.getMessage())
                 .build();
-        return new ResponseEntity<>(apierror, HttpStatus.INTERNAL_SERVER_ERROR);
+        return buildErrorResponseEntity(apierror);
 
     }
 
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-        public ResponseEntity<APIError> inputValidationErrors (MethodArgumentNotValidException exception) {
+        public ResponseEntity<ApiResponse<?>> inputValidationErrors (MethodArgumentNotValidException exception) {
         List<String> errors = exception
                 .getBindingResult()
                 .getAllErrors()
@@ -45,15 +45,17 @@ public class GlobalExceptionHandler {
                 .collect(Collectors.toList());
 
 
-        APIError apierror = APIError.builder()
+        ApiError apierror = ApiError.builder()
                 .status(HttpStatus.BAD_REQUEST)
                 .message("Input validation failed")
                 .subErrors(errors)
                 .build();
-        return new ResponseEntity<>(apierror, HttpStatus.NOT_FOUND);
+        return buildErrorResponseEntity(apierror);
 
+    }
 
-
+    private ResponseEntity<ApiResponse<?>> buildErrorResponseEntity(ApiError apierror) {
+        return new ResponseEntity<>(new ApiResponse<>(apierror),apierror.getStatus());
     }
 
 }

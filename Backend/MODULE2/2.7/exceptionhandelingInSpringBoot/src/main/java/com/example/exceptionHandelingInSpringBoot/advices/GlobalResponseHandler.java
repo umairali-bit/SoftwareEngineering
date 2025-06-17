@@ -1,6 +1,7 @@
-package com.example.exceptionHandelingInSpringBoot.apiResponse;
+package com.example.exceptionHandelingInSpringBoot.advices;
 
 
+import com.example.exceptionHandelingInSpringBoot.advices.ApiError;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
 import org.springframework.http.server.ServerHttpRequest;
