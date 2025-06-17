@@ -1,5 +1,6 @@
 package com.example.exceptionHandelingInSpringBoot.services;
 
+import com.example.exceptionHandelingInSpringBoot.exceptions.ResourceNotFound;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ReflectionUtils;
@@ -47,6 +48,8 @@ public class EmployeeService {
 
 
     public EmployeeDTO updateEmployeeById(Long employeeId, EmployeeDTO employeeDTO) {
+        boolean exists = existsByEmployeeId(employeeId);
+        if (!exists) throw new ResourceNotFound("Employee not found by the id: " + employeeId);
         EmployeeEntity existingEntity = employeeRepository.findById(employeeId).orElseThrow(() -> new RuntimeException(
                 "Employee not found"));
 
@@ -69,7 +72,7 @@ public class EmployeeService {
     public boolean deleteEmployeeById(Long employeeId) {
 
         boolean exist = existsByEmployeeId(employeeId);
-        if(!exist) return false;
+        if(!exist) throw new ResourceNotFound("Employee not found by the id: " + employeeId);
         employeeRepository.deleteById(employeeId);
         return true;
 
