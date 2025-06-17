@@ -1,5 +1,6 @@
 package com.example.inputvalidation.inputvalidation.dto;
 
+import com.example.inputvalidation.inputvalidation.annotations.EmployeeRoleValidation;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -30,7 +31,8 @@ public class EmployeeDTO {
     private Integer age;
 
     @NotBlank(message = "The role of the employee cannot be blank")
-    @Pattern(regexp = "^(ADMIN|USER)$")
+    @EmployeeRoleValidation
+//    @Pattern(regexp = "^(ADMIN|USER)$")
     private String role;
 
     @PastOrPresent(message = "Date of joining cannot be in the future")
