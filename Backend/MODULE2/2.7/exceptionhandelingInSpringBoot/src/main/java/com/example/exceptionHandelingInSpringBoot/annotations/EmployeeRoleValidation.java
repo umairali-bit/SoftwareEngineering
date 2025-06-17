@@ -13,7 +13,7 @@ import java.lang.annotation.Target;
 @Constraint(validatedBy = {EmployeeRoleValidator.class})
 public @interface EmployeeRoleValidation {
 
-    String message() default "Role of an Employee can either be User and ADMIN";
+    String message() default "Role of an Employee can either be USER or ADMIN";
 
     Class<?>[] groups() default {};
 
