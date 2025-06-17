@@ -25,6 +25,11 @@ public class EmployeeService {
         this.modelMapper = modelMapper;
     }
 
+    public void existsByEmployeeId(Long employeeId) {
+        boolean exist = employeeRepository.existsById(employeeId);
+        if(!exist) throw new ResourceNotFound("Employee not found by the id: " + employeeId);
+    }
+
 
     public Optional<EmployeeDTO> getEmployeeById(Long employeeId) {
         return employeeRepository.findById(employeeId)
@@ -48,8 +53,7 @@ public class EmployeeService {
 
 
     public EmployeeDTO updateEmployeeById(Long employeeId, EmployeeDTO employeeDTO) {
-        boolean exists = existsByEmployeeId(employeeId);
-        if (!exists) throw new ResourceNotFound("Employee not found by the id: " + employeeId);
+       existsByEmployeeId(employeeId);
         EmployeeEntity existingEntity = employeeRepository.findById(employeeId).orElseThrow(() -> new RuntimeException(
                 "Employee not found"));
 
@@ -65,14 +69,8 @@ public class EmployeeService {
 
     }
 
-    public boolean existsByEmployeeId(Long employeeId) {
-        return employeeRepository.existsById(employeeId);
-    }
-
     public boolean deleteEmployeeById(Long employeeId) {
-
-        boolean exist = existsByEmployeeId(employeeId);
-        if(!exist) throw new ResourceNotFound("Employee not found by the id: " + employeeId);
+        existsByEmployeeId(employeeId);
         employeeRepository.deleteById(employeeId);
         return true;
 
@@ -80,8 +78,7 @@ public class EmployeeService {
     }
 
     public EmployeeDTO updatePartialEmployeeById(Long employeeId, Map<String, Object> updates) {
-        boolean exist = existsByEmployeeId(employeeId);
-        if(!exist) return null;
+       existsByEmployeeId(employeeId);
         EmployeeEntity employeeEntity = employeeRepository.findById(employeeId).orElseThrow(() -> new RuntimeException(
                 "Employee not found"));
 
