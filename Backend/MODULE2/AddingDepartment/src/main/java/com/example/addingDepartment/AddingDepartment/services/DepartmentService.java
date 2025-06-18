@@ -67,7 +67,7 @@ public List<DepartmentDTO> createDepartments(List<DepartmentDTO> inputDepartment
             Long id = dto.getId();
             DepartmentEntity existingEntity = departmentRepository.findById(id)
                     .orElseThrow(() -> new RuntimeException("Department NOT found"));
-            modelMapper.map(departmentDTOs, existingEntity);
+            modelMapper.map(dto, existingEntity);
 
             DepartmentEntity updatedEntity = departmentRepository.save(existingEntity);
 
