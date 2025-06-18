@@ -8,6 +8,7 @@ import com.example.addingDepartment.AddingDepartment.repositories.DepartmentRepo
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -46,17 +47,28 @@ public class DepartmentService {
         return modelMapper.map(savedDepartment, DepartmentDTO.class);
     }
 
-    public DepartmentDTO updateDepartment(Long departmentId, DepartmentDTO departmentDTO) {
+    public List<DepartmentDTO> updateDepartments(List<DepartmentDTO> departmentDTOs, Long departmentId) {
 
-        DepartmentEntity existingEntity = departmentRepository.findById(departmentId)
-                .orElseThrow(() -> new RuntimeException("Department NOT found"));
+        List<DepartmentDTO> updatedDepartments = new ArrayList<>();
 
-        modelMapper.map(departmentDTO, existingEntity);
+        for (DepartmentDTO dto : departmentDTOs) {
+            Long id = dto.getId();
+            DepartmentEntity existingEntity = departmentRepository.findById(departmentId)
+                    .orElseThrow(() -> new RuntimeException("Department NOT found"));
+            modelMapper.map(departmentDTOs, existingEntity);
 
-        DepartmentEntity updatedEntity = departmentRepository.save(existingEntity);
+            DepartmentEntity updatedEntity = departmentRepository.save(existingEntity);
 
-        return modelMapper.map(updatedEntity, DepartmentDTO.class);
+            DepartmentDTO updatedDTO = modelMapper.map(updatedEntity, DepartmentDTO.class);
+            updatedDepartments.add(updatedDTO);
+        }
+        return updatedDepartments;
 
+    }
+
+    public boolean deleteDepartment () {
+        departmentRepository.deleteAll();
+        return true;
     }
 
 
