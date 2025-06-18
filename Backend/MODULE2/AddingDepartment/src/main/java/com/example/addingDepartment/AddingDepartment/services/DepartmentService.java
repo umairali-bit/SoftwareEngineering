@@ -1,6 +1,7 @@
 package com.example.addingDepartment.AddingDepartment.services;
 
 import com.example.addingDepartment.AddingDepartment.dto.DepartmentDTO;
+import com.example.addingDepartment.AddingDepartment.dto.EmployeeDTO;
 import com.example.addingDepartment.AddingDepartment.entities.DepartmentEntity;
 import com.example.addingDepartment.AddingDepartment.repositories.DepartmentRepository;
 
@@ -43,6 +44,19 @@ public class DepartmentService {
         DepartmentEntity savedDepartment = departmentRepository.save(toSaveEntity);
 
         return modelMapper.map(savedDepartment, DepartmentDTO.class);
+    }
+
+    public DepartmentDTO updateDepartment(Long departmentId, DepartmentDTO departmentDTO) {
+
+        DepartmentEntity existingEntity = departmentRepository.findById(departmentId)
+                .orElseThrow(() -> new RuntimeException("Department NOT found"));
+
+        modelMapper.map(departmentDTO, existingEntity);
+
+        DepartmentEntity updatedEntity = departmentRepository.save(existingEntity);
+
+        return modelMapper.map(updatedEntity, DepartmentDTO.class);
+
     }
 
 
