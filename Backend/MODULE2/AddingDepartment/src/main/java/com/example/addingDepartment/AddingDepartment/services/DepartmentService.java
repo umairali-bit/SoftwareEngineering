@@ -1,13 +1,13 @@
 package com.example.addingDepartment.AddingDepartment.services;
 
 import com.example.addingDepartment.AddingDepartment.dto.DepartmentDTO;
-import com.example.addingDepartment.AddingDepartment.dto.EmployeeDTO;
 import com.example.addingDepartment.AddingDepartment.entities.DepartmentEntity;
 import com.example.addingDepartment.AddingDepartment.repositories.DepartmentRepository;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -42,21 +42,30 @@ public class DepartmentService {
     }
 
 //creating departments (POST)
-    public DepartmentDTO createDepartment(DepartmentDTO inputDepartment) {
-        DepartmentEntity toSaveEntity = modelMapper.map(inputDepartment, DepartmentEntity.class);
-        DepartmentEntity savedDepartment = departmentRepository.save(toSaveEntity);
+public List<DepartmentDTO> createDepartments(List<DepartmentDTO> inputDepartments) {
+    List<DepartmentDTO> savedDepartments = new ArrayList<>();
 
-        return modelMapper.map(savedDepartment, DepartmentDTO.class);
+    for (DepartmentDTO inputDepartment : inputDepartments) {
+        DepartmentEntity toSaveEntity = modelMapper.map(inputDepartment, DepartmentEntity.class);
+
+        DepartmentEntity savedDepartment = departmentRepository.save(toSaveEntity);
+        DepartmentDTO savedDTO = modelMapper.map(savedDepartment, DepartmentDTO.class);
+        savedDepartments.add(savedDTO);
     }
 
+    return savedDepartments;
+}
+
+
+
 //updating departments (PUT)
-    public List<DepartmentDTO> updateDepartments(List<DepartmentDTO> departmentDTOs, Long departmentId) {
+    public List<DepartmentDTO> updateDepartments(List<DepartmentDTO> departmentDTOs) {
 
         List<DepartmentDTO> updatedDepartments = new ArrayList<>();
 
         for (DepartmentDTO dto : departmentDTOs) {
             Long id = dto.getId();
-            DepartmentEntity existingEntity = departmentRepository.findById(departmentId)
+            DepartmentEntity existingEntity = departmentRepository.findById(id)
                     .orElseThrow(() -> new RuntimeException("Department NOT found"));
             modelMapper.map(departmentDTOs, existingEntity);
 
@@ -70,7 +79,7 @@ public class DepartmentService {
     }
 
 //deleting departments (DELETE)
-    public boolean deleteDepartment () {
+    public boolean deleteAllDepartments () {
         departmentRepository.deleteAll();
         return true;
     }

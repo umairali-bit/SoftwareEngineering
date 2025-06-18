@@ -4,6 +4,7 @@ package com.example.addingDepartment.AddingDepartment.controllers;
 import com.example.addingDepartment.AddingDepartment.dto.DepartmentDTO;
 import com.example.addingDepartment.AddingDepartment.exceptions.ResourceNotFound;
 import com.example.addingDepartment.AddingDepartment.services.DepartmentService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -35,16 +36,24 @@ public class DepartmentController {
     }
 
     @PostMapping
-    public ResponseEntity<DepartmentDTO> createDepartments(@RequestBody DepartmentDTO departmentDTO) {
-        DepartmentDTO savedDepartment = departmentService.createDepartment(departmentDTO);
-        return new ResponseEntity<>(savedDepartment, HttpStatus.CREATED);
+    public ResponseEntity<List<DepartmentDTO>> createDepartments(@Valid @RequestBody List<DepartmentDTO> departmentDTO) {
+        List<DepartmentDTO> savedDepartment = departmentService.createDepartments(departmentDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedDepartment);
     }
 
     @PutMapping
-    public ResponseEntity<List<DepartmentDTO>> updatedDepartment (@RequestBody List<DepartmentDTO> departmentDTO) {
-        List<DepartmentDTO> updatedList = departmentService.updateDepartments(departmentDTO);
-        return ResponseEntity.ok(updatedList);
+    public ResponseEntity<List<DepartmentDTO>> updateDepartments(@RequestBody List<DepartmentDTO> dtos) {
+        List<DepartmentDTO> updated = departmentService.updateDepartments(dtos);
+        return ResponseEntity.ok(updated);
     }
+
+
+    @DeleteMapping
+    public ResponseEntity<String> deleteAllDepartments() {
+        departmentService.deleteAllDepartments();
+        return ResponseEntity.ok("All departments deleted");
+    }
+
 
 
 
