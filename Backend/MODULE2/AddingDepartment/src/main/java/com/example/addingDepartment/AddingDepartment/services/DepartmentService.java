@@ -25,13 +25,14 @@ public class DepartmentService {
         this.modelMapper = modelMapper;
     }
 
-
+//getting departments by ID (GET/{ID})
     public Optional<DepartmentDTO> getDepartmentById(Long departmentId){
         return  departmentRepository.findById(departmentId)
                 .map(departmentEntity -> modelMapper.map(departmentEntity, DepartmentDTO.class));
 
     }
 
+//getting all departments (GET)
     public List<DepartmentDTO> getAllDepartments() {
         List<DepartmentEntity> departmentEntities = departmentRepository.findAll();
         return departmentEntities
@@ -40,6 +41,7 @@ public class DepartmentService {
                 .collect(Collectors.toList());
     }
 
+//creating departments (POST)
     public DepartmentDTO createDepartment(DepartmentDTO inputDepartment) {
         DepartmentEntity toSaveEntity = modelMapper.map(inputDepartment, DepartmentEntity.class);
         DepartmentEntity savedDepartment = departmentRepository.save(toSaveEntity);
@@ -47,6 +49,7 @@ public class DepartmentService {
         return modelMapper.map(savedDepartment, DepartmentDTO.class);
     }
 
+//updating departments (PUT)
     public List<DepartmentDTO> updateDepartments(List<DepartmentDTO> departmentDTOs, Long departmentId) {
 
         List<DepartmentDTO> updatedDepartments = new ArrayList<>();
@@ -66,13 +69,10 @@ public class DepartmentService {
 
     }
 
+//deleting departments (DELETE)
     public boolean deleteDepartment () {
         departmentRepository.deleteAll();
         return true;
     }
-
-
-
-
 
 }
