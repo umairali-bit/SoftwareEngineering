@@ -15,7 +15,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(ResourceNotFound.class)
     public ResponseEntity<ApiResponse<?>> exceptionResourceNotFound(ResourceNotFound exception) {
         ApiError apierror = ApiError.builder()
-                .status(HttpStatus.NOT_FOUND)
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .message(exception.getMessage())
                 .build();
         return buildErrorResponseEntity(apierror);
