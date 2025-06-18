@@ -40,6 +40,12 @@ public class DepartmentController {
         return new ResponseEntity<>(savedDepartment, HttpStatus.CREATED);
     }
 
+    @PutMapping
+    public ResponseEntity<List<DepartmentDTO>> updatedDepartment (@RequestBody List<DepartmentDTO> departmentDTO) {
+        List<DepartmentDTO> updatedList = departmentService.updateDepartments(departmentDTO);
+        return ResponseEntity.ok(updatedList);
+    }
+
 
 
 
