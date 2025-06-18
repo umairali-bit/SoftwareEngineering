@@ -1,6 +1,7 @@
 package com.example.addingDepartment.AddingDepartment.controllers;
 
 
+import com.example.addingDepartment.AddingDepartment.advices.ApiResponse;
 import com.example.addingDepartment.AddingDepartment.dto.DepartmentDTO;
 import com.example.addingDepartment.AddingDepartment.exceptions.ResourceNotFound;
 import com.example.addingDepartment.AddingDepartment.services.DepartmentService;
@@ -49,9 +50,10 @@ public class DepartmentController {
 
 
     @DeleteMapping
-    public ResponseEntity<String> deleteAllDepartments() {
+    public ResponseEntity<ApiResponse<String>> deleteAllDepartments() {
         departmentService.deleteAllDepartments();
-        return ResponseEntity.ok("All departments deleted");
+        ApiResponse<String> response = new ApiResponse<>("All departments deleted");
+        return ResponseEntity.ok(response);
     }
 
 
