@@ -38,6 +38,13 @@ public class DepartmentService {
                 .collect(Collectors.toList());
     }
 
+    public DepartmentDTO createDepartment(DepartmentDTO inputDepartment) {
+        DepartmentEntity toSaveEntity = modelMapper.map(inputDepartment, DepartmentEntity.class);
+        DepartmentEntity savedDepartment = departmentRepository.save(toSaveEntity);
+
+        return modelMapper.map(savedDepartment, DepartmentDTO.class);
+    }
+
 
 
 
