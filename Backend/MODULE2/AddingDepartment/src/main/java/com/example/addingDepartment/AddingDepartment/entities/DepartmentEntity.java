@@ -1,5 +1,6 @@
 package com.example.addingDepartment.AddingDepartment.entities;
 
+import com.example.addingDepartment.AddingDepartment.annotations.PrimeNumberInput;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
@@ -38,5 +39,9 @@ public class DepartmentEntity {
 
     @PastOrPresent(message = "Created date must be in the past or today")
     private LocalDate createdAt;
+
+    @NotNull
+    @PrimeNumberInput(message = "Please enter a prime number for tokenId")
+    private Integer tokenId;
 
 }

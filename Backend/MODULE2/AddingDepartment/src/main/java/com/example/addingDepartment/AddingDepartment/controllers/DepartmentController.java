@@ -8,6 +8,7 @@ import com.example.addingDepartment.AddingDepartment.services.DepartmentService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,6 +16,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping(path = "/departments")
+@Validated
 public class DepartmentController {
 
     private final DepartmentService departmentService;
@@ -37,7 +39,7 @@ public class DepartmentController {
     }
 
     @PostMapping
-    public ResponseEntity<List<DepartmentDTO>> createDepartments(@Valid @RequestBody List<DepartmentDTO> departmentDTO) {
+    public ResponseEntity<List<DepartmentDTO>> createDepartments(@RequestBody List<@Valid DepartmentDTO> departmentDTO) {
         List<DepartmentDTO> savedDepartment = departmentService.createDepartments(departmentDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedDepartment);
     }
