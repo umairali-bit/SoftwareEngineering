@@ -1,5 +1,7 @@
 package com.example.addingDepartment.AddingDepartment.dto;
 
+import com.example.addingDepartment.AddingDepartment.annotations.PrimeNumberInput;
+import com.example.addingDepartment.AddingDepartment.annotations.ValidPassword;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -32,5 +34,13 @@ public class DepartmentDTO {
     @PastOrPresent(message = "Created date must be in the past or today")
     private LocalDate createdAt;
 
-    // getters/setters
+    @NotNull
+    @PrimeNumberInput(message = "Please enter a prime number for tokenId")
+    private Integer tokenId;
+
+    @NotBlank(message = "Password is required")
+    @ValidPassword
+    private String passwords;
+
+
 }
