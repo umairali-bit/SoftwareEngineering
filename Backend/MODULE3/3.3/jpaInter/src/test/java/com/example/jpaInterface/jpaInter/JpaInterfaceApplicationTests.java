@@ -45,11 +45,18 @@ class JpaInterfaceApplicationTests {
 		List<ProductEntity> entities1 = productRepository.findByCreatedAtAfter(
 				LocalDateTime.of(2024,1, 1,0,0,0 ));
 
-		List<ProductEntity> entities2 = productRepository.findByQuantityAndPrice(4,BigDecimal.valueOf(23.45));
+		List<ProductEntity> entities2 = productRepository.findByQuantityAndPrice(
+				4,BigDecimal.valueOf(23.45));
+		List<ProductEntity> entities3 = productRepository.findByQuantityGreaterThanAndPriceLessThan(
+				4,BigDecimal.valueOf(23.45));
+		List<ProductEntity> entities4 = productRepository.findByQuantityGreaterThanOrPriceLessThan(
+				4,BigDecimal.valueOf(23.45));
 
 		System.out.println(entities);
 		System.out.println(entities1);
 		System.out.println(entities2);
+		System.out.println(entities3);
+		System.out.println(entities4);
 
 	}
 
