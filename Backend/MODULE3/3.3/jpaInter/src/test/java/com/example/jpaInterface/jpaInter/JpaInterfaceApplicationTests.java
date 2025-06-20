@@ -5,12 +5,14 @@ import com.example.jpaInterface.jpaInter.repositories.ProductRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import lombok.Data;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+@Data
 @SpringBootTest
 class JpaInterfaceApplicationTests {
 
@@ -73,7 +75,10 @@ class JpaInterfaceApplicationTests {
 		Optional <ProductEntity> productEntity = productRepository.findByTitleAndPrice
 				("Pepsi", BigDecimal.valueOf(14.4));
 
-		productEntity.ifPresent(System.out::println);
+		productEntity.ifPresentOrElse(
+				p -> System.out.println("Found: " + p),
+				() -> System.out.println("Product not found.")
+		);
 	}
 
 }
