@@ -38,4 +38,11 @@ class JpaInterfaceApplicationTests {
 		System.out.println(entities);
 	}
 
+	@Test
+	void getTitle() {
+		List<ProductEntity> entities = productRepository.findByTitle("Soft Drink");
+		System.out.println(entities);
+
+	}
+
 }
