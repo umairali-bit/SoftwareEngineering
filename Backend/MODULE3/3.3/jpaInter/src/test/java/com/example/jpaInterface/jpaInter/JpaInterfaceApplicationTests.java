@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @SpringBootTest
@@ -41,7 +42,11 @@ class JpaInterfaceApplicationTests {
 	@Test
 	void getTitle() {
 		List<ProductEntity> entities = productRepository.findByTitle("Soft Drink");
+		List<ProductEntity> entities1 = productRepository.findByCreatedAtAfter(
+				LocalDateTime.of(2024,1, 1,0,0,0 ));
+
 		System.out.println(entities);
+		System.out.println(entities1);
 
 	}
 
