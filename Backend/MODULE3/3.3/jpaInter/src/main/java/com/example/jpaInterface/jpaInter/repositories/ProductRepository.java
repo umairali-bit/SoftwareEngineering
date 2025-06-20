@@ -21,4 +21,5 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Long> {
     List<ProductEntity> findByTitleLike(String title);
 
     List<ProductEntity> findByTitleContaining(String title);
+    List<ProductEntity> findByTitleContainingIgnoreCase(String title);
 }

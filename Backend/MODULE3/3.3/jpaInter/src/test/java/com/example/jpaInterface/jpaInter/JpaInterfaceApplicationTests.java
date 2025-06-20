@@ -53,6 +53,7 @@ class JpaInterfaceApplicationTests {
 				4,BigDecimal.valueOf(23.45));
 		List<ProductEntity> entities5 = productRepository.findByTitleLike("%S%");
 		List<ProductEntity> entities6 = productRepository.findByTitleContaining("P");
+		List<ProductEntity> entities7 = productRepository.findByTitleContainingIgnoreCase("p");
 
 
 		System.out.println(entities);
@@ -62,6 +63,7 @@ class JpaInterfaceApplicationTests {
 		System.out.println(entities4);
 		System.out.println(entities5);
 		System.out.println(entities6);
+		System.out.println(entities7);
 
 	}
 
