@@ -16,7 +16,7 @@ import java.util.Optional;
 public interface ProductRepository extends JpaRepository<ProductEntity, Long> {
 
 
-    List<ProductEntity> findByTitle(String soft_drink);
+    List<ProductEntity> findByTitle(String title);
     List<ProductEntity> findByCreatedAtAfter(LocalDateTime after);
     List<ProductEntity> findByQuantityAndPrice(int quantity, BigDecimal price);
 
@@ -31,6 +31,10 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Long> {
 
     @Query("select e from ProductEntity e where e.title = :title and e.price = :price")
     Optional<ProductEntity> findByTitleAndPrice(@Param("title") String title, @Param("price") BigDecimal price);
+
+    //sorting
+    List<ProductEntity> findByTitleOrderByPrice(String title);
+
 
 
 
