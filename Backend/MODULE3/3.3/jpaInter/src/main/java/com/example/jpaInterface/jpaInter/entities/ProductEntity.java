@@ -35,7 +35,7 @@ public class ProductEntity {
     private String sku;
 
     @Column(name = "title_x")
-    private String tile;
+    private String title;
 
     private BigDecimal price;
 
