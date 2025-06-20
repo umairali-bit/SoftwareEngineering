@@ -18,4 +18,7 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Long> {
 
     List<ProductEntity> findByQuantityGreaterThanAndPriceLessThan(int quantity, BigDecimal price);
     List<ProductEntity> findByQuantityGreaterThanOrPriceLessThan(int quantity, BigDecimal price);
+    List<ProductEntity> findByTitleLike(String title);
+
+    List<ProductEntity> findByTitleContaining(String title);
 }
