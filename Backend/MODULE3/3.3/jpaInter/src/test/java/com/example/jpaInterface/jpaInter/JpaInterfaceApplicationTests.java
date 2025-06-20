@@ -51,12 +51,17 @@ class JpaInterfaceApplicationTests {
 				4,BigDecimal.valueOf(23.45));
 		List<ProductEntity> entities4 = productRepository.findByQuantityGreaterThanOrPriceLessThan(
 				4,BigDecimal.valueOf(23.45));
+		List<ProductEntity> entities5 = productRepository.findByTitleLike("%S%");
+		List<ProductEntity> entities6 = productRepository.findByTitleContaining("P");
+
 
 		System.out.println(entities);
 		System.out.println(entities1);
 		System.out.println(entities2);
 		System.out.println(entities3);
 		System.out.println(entities4);
+		System.out.println(entities5);
+		System.out.println(entities6);
 
 	}
 
