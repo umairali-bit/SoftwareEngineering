@@ -20,8 +20,14 @@ public class ProductController {
     }
 
     @GetMapping
-    public List<ProductEntity> getAllProducts() {
+    public List<ProductEntity> getAllProductsByTitle() {
         return productRepository.findByTitleOrderByPrice("coca cola");
+    }
+
+    @GetMapping(path = "/")
+    public List<ProductEntity> getAllProducts() {
+        return productRepository.findByOrderByPrice();
+
     }
 
 
