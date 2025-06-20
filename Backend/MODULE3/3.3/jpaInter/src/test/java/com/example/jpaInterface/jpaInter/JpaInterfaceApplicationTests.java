@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @SpringBootTest
 class JpaInterfaceApplicationTests {
@@ -29,6 +30,12 @@ class JpaInterfaceApplicationTests {
 
 		ProductEntity savedEntity = productRepository.save(productEntity);
 		System.out.println(savedEntity);
+	}
+
+	@Test
+	void getRepository() {
+		List<ProductEntity> entities = productRepository.findAll();
+		System.out.println(entities);
 	}
 
 }
