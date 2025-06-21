@@ -36,6 +36,12 @@ public class ProductController {
     @GetMapping(path = "/sort")
     public List<ProductEntity> getSortedProducts(@RequestParam(defaultValue = "id") String sortBy) {
         return productRepository.findBy(Sort.by(sortBy));
+        //desc, sort by price property if they are the same
+        //return productRepository.findBy(Sort.by(Direction.DESC, sortBy, "price", "quantity));
+
+        //return productRepository.findBy(Sort.by(
+        // Sort.Order.desc(sortBy))),
+        // Sort.Order.asc("price")
     }
 
 
