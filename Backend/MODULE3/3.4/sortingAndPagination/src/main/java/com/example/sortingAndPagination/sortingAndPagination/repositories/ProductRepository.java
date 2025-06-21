@@ -2,6 +2,7 @@ package com.example.sortingAndPagination.sortingAndPagination.repositories;
 
 
 import com.example.sortingAndPagination.sortingAndPagination.entities.ProductEntity;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -35,6 +36,9 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Long> {
     //sorting
     List<ProductEntity> findByTitleOrderByPrice(String title);
     List<ProductEntity> findByOrderByPrice();
+
+    //sorting by the Sort class
+    List<ProductEntity> findBy(Sort sort);
 
 
 
