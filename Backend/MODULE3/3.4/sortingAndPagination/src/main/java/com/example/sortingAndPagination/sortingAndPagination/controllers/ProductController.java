@@ -42,6 +42,14 @@ public class ProductController {
         //return productRepository.findBy(Sort.by(
         // Sort.Order.desc(sortBy))),
         // Sort.Order.asc("price")
+
+
+
+    }
+
+    @GetMapping(path = "/pagination")
+    public List<ProductEntity> getProducts() {
+        return productRepository.findAll();
     }
 
 
