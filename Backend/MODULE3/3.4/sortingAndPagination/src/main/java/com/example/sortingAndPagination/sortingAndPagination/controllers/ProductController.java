@@ -63,5 +63,18 @@ public class ProductController {
         return productRepository.findAll(pageable).getContent();
     }
 
+    @GetMapping(path = "/pagination_title")
+    public List<ProductEntity> getProductsByTitle(
+            @RequestParam(defaultValue = "") String title,
+            @RequestParam(defaultValue = "id") String sortBy,
+            @RequestParam(defaultValue = "0") Integer pageNumber) {
+
+        return productRepository.findByTitleContainingIgnoreCase(
+                title,
+                PageRequest.of(pageNumber, PAGE_SIZE, Sort.by(sortBy))
+        );
+    }
+
+
 
 }

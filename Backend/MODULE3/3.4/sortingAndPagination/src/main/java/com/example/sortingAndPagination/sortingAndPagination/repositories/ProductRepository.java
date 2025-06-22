@@ -2,6 +2,7 @@ package com.example.sortingAndPagination.sortingAndPagination.repositories;
 
 
 import com.example.sortingAndPagination.sortingAndPagination.entities.ProductEntity;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -26,7 +27,7 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Long> {
     List<ProductEntity> findByTitleLike(String title);
 
     List<ProductEntity> findByTitleContaining(String title);
-    List<ProductEntity> findByTitleContainingIgnoreCase(String title);
+    List<ProductEntity> findByTitleContainingIgnoreCase(String title, Pageable pageable);
 
     //   Optional<ProductEntity> findByTitleAndPrice(String title, BigDecimal price);
 
