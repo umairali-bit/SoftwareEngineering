@@ -27,6 +27,7 @@ public class EmployeeEntity {
 
 
     @OneToOne(mappedBy = "manager")
+    @JsonIgnore
     private DepartmentEntity managedDepartment;
 
 
