@@ -27,5 +27,8 @@ public class DepartmentEntity {
     @JoinColumn(name = "department_manager")
     private EmployeeEntity manager;
 
+    @OneToMany(mappedBy = "workerDepartment")
+    private Set<EmployeeEntity> workers;
+
 
 }

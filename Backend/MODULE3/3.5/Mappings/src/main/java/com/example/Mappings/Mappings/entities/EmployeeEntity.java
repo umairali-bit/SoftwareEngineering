@@ -30,6 +30,8 @@ public class EmployeeEntity {
     @JsonIgnore
     private DepartmentEntity managedDepartment;
 
-
+    @ManyToOne
+    @JoinColumn(name = "worker_department_id", referencedColumnName = "id")
+    private DepartmentEntity workerDepartment;
 
 }
