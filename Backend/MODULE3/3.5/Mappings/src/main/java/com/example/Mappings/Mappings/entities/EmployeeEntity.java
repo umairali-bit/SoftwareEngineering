@@ -29,7 +29,7 @@ public class EmployeeEntity {
     @JsonIgnore
     private DepartmentEntity managedDepartment;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "worker_department_id", referencedColumnName = "id")
     @JsonIgnore
     private DepartmentEntity workerDepartment;
