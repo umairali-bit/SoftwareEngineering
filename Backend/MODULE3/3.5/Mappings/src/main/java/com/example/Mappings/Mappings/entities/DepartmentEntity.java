@@ -32,4 +32,22 @@ public class DepartmentEntity {
     @OneToMany(mappedBy = "workerDepartment", fetch = FetchType.EAGER)
     private Set<EmployeeEntity> workers;
 
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof DepartmentEntity)) return false;
+
+        DepartmentEntity that = (DepartmentEntity) o;
+
+        if (!getId().equals(that.getId())) return false;
+        return getTitle().equals(that.getTitle());
+    }
+
+    @Override
+    public int hashCode() {
+        int result = getId().hashCode();
+        result = 31 * result + getTitle().hashCode();
+        return result;
+    }
 }

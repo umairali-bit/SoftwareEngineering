@@ -1,7 +1,9 @@
 package com.example.Mappings.Mappings.entities;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -29,7 +31,25 @@ public class EmployeeEntity {
 
     @ManyToOne
     @JoinColumn(name = "worker_department_id", referencedColumnName = "id")
+    @JsonIgnore
     private DepartmentEntity workerDepartment;
 
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof EmployeeEntity)) return false;
+
+        EmployeeEntity that = (EmployeeEntity) o;
+
+        if (!getId().equals(that.getId())) return false;
+        return getName().equals(that.getName());
+    }
+
+    @Override
+    public int hashCode() {
+        int result = getId().hashCode();
+        result = 31 * result + getName().hashCode();
+        return result;
+    }
 }
