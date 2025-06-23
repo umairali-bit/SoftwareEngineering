@@ -32,6 +32,9 @@ public class DepartmentEntity {
     @OneToMany(mappedBy = "workerDepartment", fetch = FetchType.LAZY)
     private Set<EmployeeEntity> workers;
 
+    @ManyToMany(mappedBy = "freelanceDepartment")
+    private Set<EmployeeEntity> freeLancers;
+
 
     @Override
     public boolean equals(Object o) {
