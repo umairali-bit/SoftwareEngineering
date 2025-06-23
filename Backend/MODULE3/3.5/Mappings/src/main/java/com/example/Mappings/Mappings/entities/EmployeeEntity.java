@@ -1,7 +1,6 @@
 package com.example.Mappings.Mappings.entities;
 
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
@@ -17,8 +16,6 @@ import java.util.Set;
 @Entity
 @Table(name = "employees")
 public class EmployeeEntity {
-    // fields
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -26,14 +23,13 @@ public class EmployeeEntity {
     @Column(nullable = false)
     private String name;
 
-
     @OneToOne(mappedBy = "manager")
     @JsonIgnore
     private DepartmentEntity managedDepartment;
 
     @ManyToOne
     @JoinColumn(name = "worker_department_id", referencedColumnName = "id")
-    @JsonBackReference
     private DepartmentEntity workerDepartment;
+
 
 }
