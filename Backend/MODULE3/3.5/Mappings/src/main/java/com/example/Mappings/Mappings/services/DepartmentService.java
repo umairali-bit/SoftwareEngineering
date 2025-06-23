@@ -49,11 +49,13 @@ public class DepartmentService {
 
     }
 
-    public DepartmentEntity getAssignedManager(Long employeeID) {
-        Optional<EmployeeEntity> employeeEntity = employeeRepository.findById(employeeID);
-        return employeeEntity
-                .map(employee -> employee.getManagedDepartment())
-                .orElse(null);
+    public DepartmentEntity getAssignedManager(Long employeeId) {
+//        Optional<EmployeeEntity> employeeEntity = employeeRepository.findById(employeeId);
+//        return employeeEntity
+//                .map(employee -> employee.getManagedDepartment())
+//                .orElse(null);
+        EmployeeEntity employeeEntity = EmployeeEntity.builder().id(employeeId).build();
+        return departmentRepository.findByManager(employeeEntity);
 
     }
 
