@@ -37,15 +37,26 @@ public class DepartmentService {
         Optional<DepartmentEntity> departmentEntity = departmentRepository.findById(departmentId);
         Optional<EmployeeEntity> employeeEntity = employeeRepository.findById(employeeId);
 
-        return departmentEntity.flatMap(department ->
-                employeeEntity.map(employee -> {
-                    department.setManager(employee);
-                    return departmentRepository.save(department);
-                })
-        ).orElse(null);
+        return departmentEntity
+                .flatMap(department ->
+                        employeeEntity.map(employee -> {
+                            department.setManager(employee);
+                            return departmentRepository.save(department);
+                        })
+                )
+                .orElse(null);
 
 
     }
+
+    public DepartmentEntity getAssignedManager(Long employeeID) {
+        Optional<EmployeeEntity> employeeEntity = employeeRepository.findById(employeeID);
+        return employeeEntity
+                .map(employee -> employee.getManagedDepartment())
+                .orElse(null);
+
+    }
+
 }
 
 
