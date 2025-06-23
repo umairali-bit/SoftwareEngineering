@@ -28,8 +28,4 @@ public class DepartmentEntity {
     private EmployeeEntity manager;
 
 
-
-
-
-
 }
