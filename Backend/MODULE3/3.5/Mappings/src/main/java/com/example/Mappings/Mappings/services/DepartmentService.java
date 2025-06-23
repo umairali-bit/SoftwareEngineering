@@ -59,6 +59,23 @@ public class DepartmentService {
 
     }
 
+    public DepartmentEntity assignWorker(Long departmentId, Long employeeId) {
+        Optional<DepartmentEntity> departmentEntity = departmentRepository.findById(departmentId);
+        Optional<EmployeeEntity> employeeEntity = employeeRepository.findById(employeeId);
+
+        return departmentEntity
+                .flatMap(department ->
+                        employeeEntity.map(employee -> {
+                           employee.setWorkerDepartment(department);
+                           employeeRepository.save(employee);
+
+                           department.getWorkers().add(employee);
+                           return department;
+                        })
+                )
+                .orElse(null);
+
+    }
 }
 
 
