@@ -4,10 +4,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class MappingsOneToOneApplication {
+public class mappings {
 
 	public static void main(String[] args) {
-		SpringApplication.run(MappingsOneToOneApplication.class, args);
+		SpringApplication.run(mappings.class, args);
 	}
 
 }
