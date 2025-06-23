@@ -76,6 +76,27 @@ public class DepartmentService {
                 .orElse(null);
 
     }
+
+    public DepartmentEntity assignFreeLancer(Long departmentId, Long employeeId) {
+        Optional<DepartmentEntity> departmentEntity = departmentRepository.findById(departmentId);
+        Optional<EmployeeEntity> employeeEntity = employeeRepository.findById(employeeId);
+
+        return departmentEntity
+                .flatMap(department ->
+                        employeeEntity.map(employee -> {
+
+                        employee.getFreelanceDepartment().add(department);
+                        employeeRepository.save(employee);
+                        department.getFreeLancers().add(employee);
+
+
+                        return department;
+                        })
+                )
+                .orElse(null);
+
+
+    }
 }
 
 

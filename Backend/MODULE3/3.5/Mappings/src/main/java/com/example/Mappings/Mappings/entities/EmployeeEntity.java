@@ -39,6 +39,7 @@ public class EmployeeEntity {
     @JoinTable(name = "freeLancer_department_mapping",
                joinColumns = @JoinColumn(name = "employee_id"),
                inverseJoinColumns = @JoinColumn(name = "department_id"))
+    @JsonIgnore
     private Set<DepartmentEntity> freelanceDepartment;
 
 
