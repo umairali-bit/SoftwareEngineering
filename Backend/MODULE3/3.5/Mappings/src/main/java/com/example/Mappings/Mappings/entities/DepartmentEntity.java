@@ -2,6 +2,8 @@ package com.example.Mappings.Mappings.entities;
 
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -28,7 +30,24 @@ public class DepartmentEntity {
     private EmployeeEntity manager;
 
     @OneToMany(mappedBy = "workerDepartment")
+    @JsonManagedReference
     private Set<EmployeeEntity> workers;
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof DepartmentEntity)) return false;
 
+        DepartmentEntity that = (DepartmentEntity) o;
+
+        if (!getId().equals(that.getId())) return false;
+        return getTitle().equals(that.getTitle());
+    }
+
+    @Override
+    public int hashCode() {
+        int result = getId().hashCode();
+        result = 31 * result + getTitle().hashCode();
+        return result;
+    }
 }

@@ -1,6 +1,7 @@
 package com.example.Mappings.Mappings.entities;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
@@ -32,6 +33,7 @@ public class EmployeeEntity {
 
     @ManyToOne
     @JoinColumn(name = "worker_department_id", referencedColumnName = "id")
+    @JsonBackReference
     private DepartmentEntity workerDepartment;
 
 }
