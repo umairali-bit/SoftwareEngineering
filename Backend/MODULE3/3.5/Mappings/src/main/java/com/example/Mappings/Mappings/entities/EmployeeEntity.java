@@ -26,5 +26,9 @@ public class EmployeeEntity {
     private String name;
 
 
+    @OneToOne(mappedBy = "manager")
+    private DepartmentEntity managedDepartment;
+
+
 
 }
