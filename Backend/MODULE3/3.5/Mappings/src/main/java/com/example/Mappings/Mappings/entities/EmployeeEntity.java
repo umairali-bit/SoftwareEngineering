@@ -35,6 +35,13 @@ public class EmployeeEntity {
     private DepartmentEntity workerDepartment;
 
 
+    @ManyToMany
+    @JoinTable(name = "freeLancer_department_mapping",
+               joinColumns = @JoinColumn(name = "employee_id"),
+               inverseJoinColumns = @JoinColumn(name = "department_id"))
+    private Set<DepartmentEntity> freelanceDepartment;
+
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
