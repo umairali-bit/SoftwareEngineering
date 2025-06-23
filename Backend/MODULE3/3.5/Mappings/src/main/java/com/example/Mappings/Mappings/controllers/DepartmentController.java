@@ -5,6 +5,7 @@ import com.example.Mappings.Mappings.entities.DepartmentEntity;
 import com.example.Mappings.Mappings.services.DepartmentService;
 import org.springframework.web.bind.annotation.*;
 
+import java.nio.file.Path;
 import java.util.List;
 
 @RestController
@@ -26,12 +27,14 @@ public class DepartmentController {
     @PostMapping
     public DepartmentEntity createNewDepartment (@RequestBody DepartmentEntity departmentEntity) {
         return departmentService.createNewDepartment(departmentEntity);
+    }
 
+    @PutMapping(path = "/{departmentId}/manager/{employeeId}")
+    public DepartmentEntity assignManager (@PathVariable Long departmentId,
+                                           @PathVariable Long employeeId) {
+        return departmentService.assignManager(departmentId,employeeId);
 
-
-
-
-}
+    }
 
 
 
