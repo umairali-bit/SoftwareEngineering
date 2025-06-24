@@ -2,9 +2,17 @@ package com.collegeManagementSystem.collegeManagementSystem.entities;
 
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "student_record")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class AdmissionRecordEntity {
 
 
