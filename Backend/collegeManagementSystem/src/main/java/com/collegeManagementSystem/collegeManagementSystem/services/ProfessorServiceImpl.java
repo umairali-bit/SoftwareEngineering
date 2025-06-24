@@ -1,6 +1,8 @@
 package com.collegeManagementSystem.collegeManagementSystem.services;
 
 import com.collegeManagementSystem.collegeManagementSystem.dto.ProfessorDTO;
+import com.collegeManagementSystem.collegeManagementSystem.dto.StudentDTO;
+import com.collegeManagementSystem.collegeManagementSystem.dto.SubjectDTO;
 import com.collegeManagementSystem.collegeManagementSystem.entities.ProfessorEntity;
 import com.collegeManagementSystem.collegeManagementSystem.repositories.ProfessorRepository;
 import org.modelmapper.ModelMapper;
@@ -55,6 +57,28 @@ public class ProfessorServiceImpl implements ProfessorService{
             return modelMapper.map(updated, ProfessorDTO.class);
 
         }).orElseThrow(() -> new RuntimeException());
+    }
+
+    @Override
+    public List<StudentDTO> countStudentsByProfessorId(Long professorId) {
+        return professorRepository.findById(professorId)
+                .map(professor -> professor.getStudents()
+                        .stream()
+                        .map(student -> new StudentDTO(student.getId()))
+                        .toList())
+
+                        .orElse(List.of());
+    }
+
+    @Override
+    public List<SubjectDTO> getSubjectsByProfessorId(Long professorId) {
+        return professorRepository.findById(professorId)
+                .map(professor -> professor.getSubjects()
+                        .stream()
+                        .map(subject -> new SubjectDTO(subject.getId(), subject.getTitle()))
+                        .toList())
+
+                .orElse(List.of());
     }
 
     @Override

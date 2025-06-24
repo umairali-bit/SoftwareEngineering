@@ -1,6 +1,8 @@
 package com.collegeManagementSystem.collegeManagementSystem.services;
 
 import com.collegeManagementSystem.collegeManagementSystem.dto.ProfessorDTO;
+import com.collegeManagementSystem.collegeManagementSystem.dto.StudentDTO;
+import com.collegeManagementSystem.collegeManagementSystem.dto.SubjectDTO;
 import com.collegeManagementSystem.collegeManagementSystem.entities.ProfessorEntity;
 
 import java.util.List;
@@ -15,6 +17,10 @@ public interface ProfessorService {
     ProfessorDTO createProfessor(ProfessorDTO professorDTO);
 
     ProfessorDTO updateProfessor(Long id, ProfessorDTO professorDTO);
+
+    List<StudentDTO> countStudentsByProfessorId (Long professorId);
+
+    List<SubjectDTO> getSubjectsByProfessorId(Long professorId);
 
     boolean deleteProfessor(Long id);
 }

@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import javax.security.auth.Subject;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -31,7 +32,7 @@ public class ProfessorEntity {
             joinColumns = @JoinColumn(name = "professor_id"),
             inverseJoinColumns = @JoinColumn(name = "student_id")
     )
-    private List<StudentEntity> students;
+    private List<StudentEntity> students = new ArrayList<>();
 
 
 
