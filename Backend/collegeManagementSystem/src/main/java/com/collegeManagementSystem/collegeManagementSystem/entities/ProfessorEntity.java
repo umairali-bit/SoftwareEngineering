@@ -20,8 +20,8 @@ public class ProfessorEntity {
 
 
     private String title;
-    private List<Subject> subjects;
-    private List<Student> students;
+    private List<SubjectEntity> subjects;
+    private List<StudentEntity> students;
 
 
 }
