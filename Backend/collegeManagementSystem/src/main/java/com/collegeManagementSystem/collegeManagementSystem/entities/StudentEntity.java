@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -23,7 +24,7 @@ public class StudentEntity {
     private String name;
 
     @ManyToMany(mappedBy = "students")
-    private List<ProfessorEntity> professor;
+    private List<ProfessorEntity> professors;
 
     @ManyToMany
     @JoinTable(
@@ -31,7 +32,7 @@ public class StudentEntity {
             joinColumns = @JoinColumn(name = "student_id"),
             inverseJoinColumns = @JoinColumn(name = "subject_id")
     )
-    private List<SubjectEntity> subjects;
+    private List<SubjectEntity> subjects = new ArrayList<>();
 
 
 

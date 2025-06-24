@@ -10,6 +10,8 @@ import java.util.Optional;
 
 public interface ProfessorService {
 
+    void professorExistsById(Long id);
+
     List<ProfessorDTO> getAllProfessors();
 
     Optional<ProfessorDTO> getProfessorById(Long id);
@@ -18,7 +20,7 @@ public interface ProfessorService {
 
     ProfessorDTO updateProfessor(Long id, ProfessorDTO professorDTO);
 
-    List<StudentDTO> countStudentsByProfessorId (Long professorId);
+    List<StudentDTO> getStudentsByProfessorId (Long professorId);
 
     List<SubjectDTO> getSubjectsByProfessorId(Long professorId);
 
