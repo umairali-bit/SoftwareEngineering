@@ -1,7 +1,9 @@
 package com.collegeManagementSystem.collegeManagementSystem.dto;
 
-import java.util.List;
+import lombok.Data;
 
+import java.util.List;
+@Data
 public class StudentDTO {
 
     private Long id;
