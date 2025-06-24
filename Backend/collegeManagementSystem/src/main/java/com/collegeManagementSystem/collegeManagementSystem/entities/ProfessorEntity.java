@@ -1,6 +1,7 @@
 package com.collegeManagementSystem.collegeManagementSystem.entities;
 
 import jakarta.persistence.*;
+import lombok.*;
 
 import javax.security.auth.Subject;
 import java.util.List;
@@ -8,6 +9,10 @@ import java.util.List;
 
 @Entity
 @Table(name = "professor")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class ProfessorEntity {
 
     @Id
@@ -27,6 +32,7 @@ public class ProfessorEntity {
             inverseJoinColumns = @JoinColumn(name = "student_id")
     )
     private List<StudentEntity> students;
+
 
 
 }
