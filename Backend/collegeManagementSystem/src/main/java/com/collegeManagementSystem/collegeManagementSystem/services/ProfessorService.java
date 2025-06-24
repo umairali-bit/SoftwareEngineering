@@ -10,7 +10,6 @@ import java.util.Optional;
 
 public interface ProfessorService {
 
-    void professorExistsById(Long id);
 
     List<ProfessorDTO> getAllProfessors();
 

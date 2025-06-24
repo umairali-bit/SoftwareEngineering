@@ -11,7 +11,8 @@ public class StudentDTO {
     private List<ProfessorDTO> professors;
     private List<SubjectDTO> subjects;
 
-    public StudentDTO(Long id) {
+    public StudentDTO(Long id, String name) {
         this.id = id;
+        this.name = name;
     }
 }

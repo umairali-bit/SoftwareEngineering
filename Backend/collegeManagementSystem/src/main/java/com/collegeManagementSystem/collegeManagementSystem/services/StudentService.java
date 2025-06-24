@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public interface StudentService {
 
-    void studentExistsById(Long id);
+
     List<StudentDTO> getAllStudents();
     StudentDTO getStudentById(Long id);
 
@@ -17,7 +17,7 @@ public interface StudentService {
     StudentDTO updateStudent(Long id, StudentDTO studentDTO);
 
     List<SubjectDTO> getSubjectsByStudentId(Long studentId);
-    List<ProfessorDTO> getProfessorBySubjectId(Long subjectId);
+
 
     boolean deleteStudent(Long id);
 
