@@ -6,7 +6,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 
-
+import javax.security.auth.Subject;
+import java.util.List;
 
 
 @Entity
@@ -17,11 +18,12 @@ public class ProfessorEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // Example additional fields
-    private String name;
-    private String department;
 
-    // Getters and Setters (optional if using Lombok)
+    private String title;
+    private List<Subject> subjects;
+    private List<Student> students;
+
+
 }
 
 
