@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -27,8 +28,8 @@ public class SubjectEntity {
     @JoinColumn(name = "professor_id")
     private ProfessorEntity professor;
 
-    @ManyToMany(mappedBy = "subjects")
-    private List<StudentEntity> students;
+    @ManyToMany(mappedBy = "subjects", cascade = CascadeType.ALL)
+    private List<StudentEntity> students = new ArrayList<>();
 
 
 

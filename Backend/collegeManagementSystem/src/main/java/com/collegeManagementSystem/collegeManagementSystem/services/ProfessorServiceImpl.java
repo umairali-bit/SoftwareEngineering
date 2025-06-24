@@ -6,9 +6,11 @@ import com.collegeManagementSystem.collegeManagementSystem.dto.SubjectDTO;
 import com.collegeManagementSystem.collegeManagementSystem.entities.ProfessorEntity;
 import com.collegeManagementSystem.collegeManagementSystem.repositories.ProfessorRepository;
 import org.modelmapper.ModelMapper;
+import org.springframework.boot.context.config.ConfigDataResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -21,6 +23,12 @@ public class ProfessorServiceImpl implements ProfessorService{
     public ProfessorServiceImpl(ProfessorRepository professorRepository, ModelMapper modelMapper) {
         this.professorRepository = professorRepository;
         this.modelMapper = modelMapper;
+    }
+
+    public void professorExistsById(Long id) {
+        if (!professorRepository.existsById(id)) {
+            throw new NoSuchElementException("Professor not found by the id: " + id);
+        }
     }
 
 
@@ -50,17 +58,18 @@ public class ProfessorServiceImpl implements ProfessorService{
 
     @Override
     public ProfessorDTO updateProfessor(Long id, ProfessorDTO professorDTO) {
-        return professorRepository.findById(id).map(professor -> {
-            professor.setTitle(professorDTO.getTitle());
+        professorExistsById(id);
+        ProfessorEntity professor = professorRepository.findById(id).get(); // safe because of above check
+        professor.setTitle(professorDTO.getTitle());
 
-            ProfessorEntity updated = professorRepository.save(professor);
-            return modelMapper.map(updated, ProfessorDTO.class);
-
-        }).orElseThrow(() -> new RuntimeException());
+        ProfessorEntity updated = professorRepository.save(professor);
+        return modelMapper.map(updated, ProfessorDTO.class);
     }
 
+
     @Override
-    public List<StudentDTO> countStudentsByProfessorId(Long professorId) {
+    public List<StudentDTO> getStudentsByProfessorId(Long professorId) {
+        professorExistsById(professorId);
         return professorRepository.findById(professorId)
                 .map(professor -> professor.getStudents()
                         .stream()
@@ -72,17 +81,16 @@ public class ProfessorServiceImpl implements ProfessorService{
 
     @Override
     public List<SubjectDTO> getSubjectsByProfessorId(Long professorId) {
-        return professorRepository.findById(professorId)
-                .map(professor -> professor.getSubjects()
-                        .stream()
-                        .map(subject -> new SubjectDTO(subject.getId(), subject.getTitle()))
-                        .toList())
-
-                .orElse(List.of());
+        professorExistsById(professorId);
+        ProfessorEntity professor = professorRepository.findById(professorId).get();
+        return professor.getSubjects().stream()
+                .map(subject -> new SubjectDTO(subject.getId(), subject.getTitle()))
+                .toList();
     }
 
     @Override
     public boolean deleteProfessor(Long id) {
+        professorExistsById(id);
         professorRepository.deleteById(id);
         return true;
 

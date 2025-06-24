@@ -10,6 +10,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -20,9 +21,17 @@ public class StudentServiceImpl implements StudentService {
     private final StudentRepository studentRepository;
     private final ModelMapper modelMapper;
 
+
     public StudentServiceImpl(StudentRepository studentRepository, ModelMapper modelMapper) {
         this.studentRepository = studentRepository;
         this.modelMapper = modelMapper;
+
+    }
+
+    public void studentExistsById(Long id) {
+        if (!studentRepository.existsById(id)) {
+            throw new NoSuchElementException("Student not found by the id: " + id);
+        }
     }
 
 
@@ -35,10 +44,10 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public Optional<StudentDTO> getStudentById(Long id) {
-        return studentRepository.findById(id)
-                .map(studentEntity -> modelMapper.map(studentEntity, StudentDTO.class
-                ));
+    public StudentDTO getStudentById(Long id) {
+        studentExistsById(id);
+        StudentEntity student = studentRepository.findById(id).get();
+        return modelMapper.map(student,StudentDTO.class);
     }
 
     @Override
@@ -52,6 +61,7 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public StudentDTO updateStudent(Long id, StudentDTO studentDTO) {
+        studentExistsById(id);
         return studentRepository.findById(id).map(student -> {
             student.setName(studentDTO.getName());
 
@@ -62,6 +72,7 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public List<SubjectDTO> getSubjectsByStudentId(Long studentId) {
+        studentExistsById(studentId);
         return studentRepository.findById(studentId)
                 .map(student -> student.getSubjects()
                         .stream()
@@ -72,6 +83,7 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public List<ProfessorDTO> getProfessorBySubjectId(Long subjectId) {
+
         return studentRepository.findAll().stream()
                 .flatMap(student -> student.getSubjects().stream()
                         .filter(subject -> subject.getId().equals(subjectId))
@@ -84,6 +96,7 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public boolean deleteStudent(Long id) {
+        studentExistsById(id);
         studentRepository.deleteById(id);
         return true;
     }

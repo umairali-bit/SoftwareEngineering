@@ -9,8 +9,9 @@ import java.util.Optional;
 
 public interface StudentService {
 
+    void studentExistsById(Long id);
     List<StudentDTO> getAllStudents();
-    Optional<StudentDTO> getStudentById(Long id);
+    StudentDTO getStudentById(Long id);
 
     StudentDTO createStudent(StudentDTO studentDTO);
     StudentDTO updateStudent(Long id, StudentDTO studentDTO);
