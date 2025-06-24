@@ -55,16 +55,17 @@ public class ProfessorServiceImpl implements ProfessorService{
         return modelMapper.map(saved, ProfessorDTO.class);
 
     }
-
+//efficient way
     @Override
     public ProfessorDTO updateProfessor(Long id, ProfessorDTO professorDTO) {
-        professorExistsById(id);
-        ProfessorEntity professor = professorRepository.findById(id).get(); // safe because of above check
-        professor.setTitle(professorDTO.getTitle());
+        ProfessorEntity professor = professorRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Professor not found by id: " + id));
 
+        professor.setTitle(professorDTO.getTitle());
         ProfessorEntity updated = professorRepository.save(professor);
         return modelMapper.map(updated, ProfessorDTO.class);
     }
+
 
 
     @Override
@@ -73,7 +74,7 @@ public class ProfessorServiceImpl implements ProfessorService{
         return professorRepository.findById(professorId)
                 .map(professor -> professor.getStudents()
                         .stream()
-                        .map(student -> new StudentDTO(student.getId()))
+                        .map(student -> new StudentDTO(student.getId(), student.getName()))
                         .toList())
 
                         .orElse(List.of());

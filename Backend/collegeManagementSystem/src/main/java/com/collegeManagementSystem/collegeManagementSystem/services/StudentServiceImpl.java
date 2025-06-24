@@ -81,18 +81,6 @@ public class StudentServiceImpl implements StudentService {
                 .orElse(List.of());
     }
 
-    @Override
-    public List<ProfessorDTO> getProfessorBySubjectId(Long subjectId) {
-
-        return studentRepository.findAll().stream()
-                .flatMap(student -> student.getSubjects().stream()
-                        .filter(subject -> subject.getId().equals(subjectId))
-                        .map(subject -> subject.getProfessor()))
-                .distinct()
-                .map(professor -> modelMapper.map(professor, ProfessorDTO.class))
-                .toList();
-
-    }
 
     @Override
     public boolean deleteStudent(Long id) {
