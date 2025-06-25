@@ -44,10 +44,20 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public StudentDTO getStudentById(Long id) {
+    public Optional<StudentDTO> getStudentById(Long id) {
         studentExistsById(id);
-        StudentEntity student = studentRepository.findById(id).get();
-        return modelMapper.map(student,StudentDTO.class);
+        Optional<StudentEntity> studentEntity = studentRepository.findById(id);
+        return studentEntity.map(
+                studentEntity1 -> {
+                    StudentDTO dto = modelMapper.map(studentEntity1, StudentDTO.class);
+                    dto.setProfessorCount(studentEntity1.getProfessors() == null ?
+                            0 : studentEntity1.getProfessors().size());
+                    dto.setSubjectCount(studentEntity1.getSubjects() == null ? 0 :
+                            studentEntity1.getSubjects().size());
+                    return dto;
+                }
+
+        );
     }
 
     @Override
@@ -72,13 +82,12 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public List<SubjectDTO> getSubjectsByStudentId(Long studentId) {
-        studentExistsById(studentId);
-        return studentRepository.findById(studentId)
-                .map(student -> student.getSubjects()
-                        .stream()
-                        .map(subject -> new SubjectDTO(subject.getId(), subject.getTitle()))
-                        .toList())
-                .orElse(List.of());
+        StudentEntity student = studentRepository.findById(studentId)
+                .orElseThrow(() -> new NoSuchElementException("Student not found with ID: " + studentId));
+
+        return student.getSubjects().stream()
+                .map(subject -> new SubjectDTO(subject.getId(), subject.getTitle()))
+                .toList();
     }
 
 

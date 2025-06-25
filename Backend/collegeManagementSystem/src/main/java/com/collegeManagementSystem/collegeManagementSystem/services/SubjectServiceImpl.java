@@ -76,7 +76,7 @@ public class SubjectServiceImpl implements SubjectService{
         SubjectDTO resultDTO = modelMapper.map(saved, SubjectDTO.class);
 
         // Set the studentCount explicitly because it's not a direct field on SubjectEntity
-        resultDTO.setStudentCount(saved.getStudents().size());
+        resultDTO.setStudentCount(saved.getStudents() == null? 0 : saved.getStudents().size());
 
         return resultDTO;
     }
@@ -89,9 +89,21 @@ public class SubjectServiceImpl implements SubjectService{
         return subjectRepository.findById(id).map(subject -> {
             subject.setTitle(subjectDTO.getTitle());
 
+            if (subjectDTO.getProfessor() != null && subjectDTO.getProfessor().getId() != null) {
+                ProfessorEntity professorEntity = professorRepository.findById(subjectDTO.getProfessor().getId())
+                        .orElseThrow(() -> new NoSuchElementException("Professor not found by id: " + subjectDTO.getProfessor().getId()));
+                subject.setProfessor(professorEntity);
+            } else {
+                subject.setProfessor(null);
+            }
+
             SubjectEntity updated = subjectRepository.save(subject);
-            return modelMapper.map(updated,SubjectDTO.class);
-        }).orElseThrow(() -> new RuntimeException());
+
+            SubjectDTO resultDTO = modelMapper.map(updated, SubjectDTO.class);
+            resultDTO.setStudentCount(updated.getStudents() == null ? 0 : updated.getStudents().size());
+
+            return resultDTO;
+        }).orElseThrow(() -> new NoSuchElementException("Subject not found with id: " + id));
     }
 
 

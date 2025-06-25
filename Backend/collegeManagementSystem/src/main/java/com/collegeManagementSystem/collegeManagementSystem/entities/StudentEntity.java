@@ -35,5 +35,8 @@ public class StudentEntity {
     private List<SubjectEntity> subjects = new ArrayList<>();
 
 
-
+    public StudentEntity(List<ProfessorEntity> professors, List<SubjectEntity> subjects) {
+        this.professors = professors;
+        this.subjects = subjects;
+    }
 }
