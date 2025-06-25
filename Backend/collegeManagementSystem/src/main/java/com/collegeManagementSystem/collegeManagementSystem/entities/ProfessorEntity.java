@@ -3,13 +3,12 @@ package com.collegeManagementSystem.collegeManagementSystem.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
-import javax.security.auth.Subject;
 import java.util.ArrayList;
 import java.util.List;
 
 
 @Entity
-@Table(name = "professor")
+@Table(name = "professors")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -24,7 +23,7 @@ public class ProfessorEntity {
     private String title;
 
     @OneToMany(mappedBy = "professor", cascade = CascadeType.ALL)
-    private List<SubjectEntity> subjects;
+    private List<SubjectEntity> subjects = new ArrayList<>();
 
     @ManyToMany
     @JoinTable(
