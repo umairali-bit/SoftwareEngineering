@@ -141,10 +141,11 @@ public class ProfessorServiceImpl implements ProfessorService{
 
     @Override
     public boolean deleteProfessor(Long id) {
-        professorExistsById(id);
+        if (!professorRepository.existsById(id)) {
+            throw new NoSuchElementException("Professor not found by id: " + id);
+        }
         professorRepository.deleteById(id);
         return true;
-
     }
 
 
