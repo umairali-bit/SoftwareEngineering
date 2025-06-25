@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -47,13 +48,13 @@ public class SubjectServiceImpl implements SubjectService{
 
 
     @Override
-    public SubjectDTO getSubjectById(Long id) {
-        subjectExistsById(id);
-        SubjectEntity subject = subjectRepository.findById(id).get();
-
-        SubjectDTO dto = modelMapper.map(subject, SubjectDTO.class);
-        dto.setStudentCount(subject.getStudents().size());
-        return dto;
+    public Optional<SubjectDTO> getSubjectById(Long id) {
+        Optional<SubjectEntity> subjectEntityOpt = subjectRepository.findById(id);
+        return subjectEntityOpt.map(subject -> {
+            SubjectDTO dto = modelMapper.map(subject, SubjectDTO.class);
+            dto.setStudentCount(subject.getStudents().size());
+            return dto;
+        });
     }
 
     @Override

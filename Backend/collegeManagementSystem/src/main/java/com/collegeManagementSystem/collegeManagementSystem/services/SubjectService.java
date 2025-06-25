@@ -4,13 +4,15 @@ import com.collegeManagementSystem.collegeManagementSystem.dto.ProfessorDTO;
 import com.collegeManagementSystem.collegeManagementSystem.dto.StudentDTO;
 import com.collegeManagementSystem.collegeManagementSystem.dto.SubjectDTO;
 
+
 import java.util.List;
+import java.util.Optional;
 
 public interface SubjectService {
 
 
     List<SubjectDTO> getAllSubjects();
-    SubjectDTO getSubjectById(Long id);
+    Optional<SubjectDTO> getSubjectById(Long id);
 
     SubjectDTO createSubject(SubjectDTO subjectDTO);
     SubjectDTO updateSubject(Long id, SubjectDTO subjectDTO);
