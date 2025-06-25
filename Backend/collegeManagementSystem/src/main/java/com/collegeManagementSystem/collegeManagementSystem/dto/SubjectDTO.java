@@ -1,5 +1,6 @@
 package com.collegeManagementSystem.collegeManagementSystem.dto;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -12,11 +13,12 @@ public class SubjectDTO {
 
     private Long id;
     private String title;
+    @JsonBackReference
     private ProfessorDTO professor;
     private List<StudentDTO> students;
+    private int studentCount;
 
-    public SubjectDTO() {
-    }
+    public SubjectDTO() {}
 
     public SubjectDTO(Long id, String title) {
         this.id = id;

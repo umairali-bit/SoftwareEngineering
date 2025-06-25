@@ -4,11 +4,14 @@ import com.collegeManagementSystem.collegeManagementSystem.dto.ProfessorDTO;
 import com.collegeManagementSystem.collegeManagementSystem.dto.StudentDTO;
 import com.collegeManagementSystem.collegeManagementSystem.dto.SubjectDTO;
 import com.collegeManagementSystem.collegeManagementSystem.entities.ProfessorEntity;
+import com.collegeManagementSystem.collegeManagementSystem.entities.SubjectEntity;
 import com.collegeManagementSystem.collegeManagementSystem.repositories.ProfessorRepository;
+import com.collegeManagementSystem.collegeManagementSystem.repositories.SubjectRepository;
 import org.modelmapper.ModelMapper;
-import org.springframework.boot.context.config.ConfigDataResourceNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -18,10 +21,12 @@ import java.util.stream.Collectors;
 public class ProfessorServiceImpl implements ProfessorService{
 
     private final ProfessorRepository professorRepository;
+    private final SubjectRepository subjectRepository;
     private final ModelMapper modelMapper;
 
-    public ProfessorServiceImpl(ProfessorRepository professorRepository, ModelMapper modelMapper) {
+    public ProfessorServiceImpl(ProfessorRepository professorRepository, SubjectRepository subjectRepository, ModelMapper modelMapper) {
         this.professorRepository = professorRepository;
+        this.subjectRepository = subjectRepository;
         this.modelMapper = modelMapper;
     }
 
@@ -33,12 +38,44 @@ public class ProfessorServiceImpl implements ProfessorService{
 
 
     @Override
+    @Transactional(readOnly = true)
     public List<ProfessorDTO> getAllProfessors() {
         List<ProfessorEntity> professors = professorRepository.findAll();
-        return professors.stream()
-                .map(professor -> modelMapper.map(professor, ProfessorDTO.class))
-                .collect(Collectors.toList());
+
+        return professors.stream().map(professor -> {
+            ProfessorDTO dto = new ProfessorDTO();
+            dto.setId(professor.getId());
+            dto.setName(professor.getName());
+            dto.setTitle(professor.getTitle());
+
+            // Map subjects with studentCount and professor info
+            List<SubjectDTO> subjectDTOs = professor.getSubjects().stream().map(subject -> {
+                SubjectDTO subjectDTO = new SubjectDTO();
+                subjectDTO.setId(subject.getId());
+                subjectDTO.setTitle(subject.getTitle());
+                subjectDTO.setStudentCount(subject.getStudents().size());
+
+                // Set minimal professor info to avoid recursion
+                subjectDTO.setProfessor(new ProfessorDTO(
+                        professor.getId(),
+                        professor.getTitle(),
+                        professor.getName()
+                ));
+
+                return subjectDTO;
+            }).collect(Collectors.toList());
+            dto.setSubjects(subjectDTOs);
+
+            // Map students (students directly linked to the professor)
+            List<StudentDTO> studentDTOs = professor.getStudents().stream().map(student -> {
+                return new StudentDTO(student.getId(), student.getName());
+            }).collect(Collectors.toList());
+            dto.setStudents(studentDTOs);
+
+            return dto;
+        }).collect(Collectors.toList());
     }
+
 
     @Override
     public Optional<ProfessorDTO> getProfessorById(Long id) {
@@ -49,12 +86,25 @@ public class ProfessorServiceImpl implements ProfessorService{
 
     @Override
     public ProfessorDTO createProfessor(ProfessorDTO inputProfessor) {
+        ProfessorEntity professorEntity = new ProfessorEntity();
+        professorEntity.setName(inputProfessor.getName());
+        professorEntity.setTitle(inputProfessor.getTitle());
 
-        ProfessorEntity professorEntity = modelMapper.map(inputProfessor, ProfessorEntity.class);
+        // Subjects are optional
+        if (inputProfessor.getSubjects() != null) {
+            for (SubjectDTO subjectDTO : inputProfessor.getSubjects()) {
+                SubjectEntity subjectEntity = new SubjectEntity();
+                subjectEntity.setTitle(subjectDTO.getTitle());
+                subjectEntity.setProfessor(professorEntity); // IMPORTANT: set owning side
+                professorEntity.getSubjects().add(subjectEntity);
+            }
+        }
+
         ProfessorEntity saved = professorRepository.save(professorEntity);
         return modelMapper.map(saved, ProfessorDTO.class);
-
     }
+
+
 //efficient way
     @Override
     public ProfessorDTO updateProfessor(Long id, ProfessorDTO professorDTO) {
@@ -96,4 +146,6 @@ public class ProfessorServiceImpl implements ProfessorService{
         return true;
 
     }
+
+
 }
