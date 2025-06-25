@@ -1,3 +1,4 @@
+
 package com.collegeManagementSystem.collegeManagementSystem.entities;
 
 import jakarta.persistence.*;
@@ -22,7 +23,9 @@ public class ProfessorEntity {
 
     private String title;
 
-    @OneToMany(mappedBy = "professor", cascade = CascadeType.ALL)
+    private String name;
+
+    @OneToMany(mappedBy = "professor", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<SubjectEntity> subjects = new ArrayList<>();
 
     @ManyToMany
@@ -36,5 +39,3 @@ public class ProfessorEntity {
 
 
 }
-
-

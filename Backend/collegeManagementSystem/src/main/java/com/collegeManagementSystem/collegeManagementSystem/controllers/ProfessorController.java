@@ -13,7 +13,8 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @RestController
-@RequestMapping(path = "/professor")
+@RequestMapping("/professors")  // plural, consistent with your URL
+
 public class ProfessorController {
 
     private final ProfessorService professorService;
@@ -27,12 +28,11 @@ public class ProfessorController {
         return ResponseEntity.ok(professorService.getAllProfessors());
     }
 
-    @GetMapping(path ={"/{employeeId}"})
+    @GetMapping("/{id}")
     public ResponseEntity<ProfessorDTO> getProfessorById(@PathVariable Long id) {
         return professorService.getProfessorById(id)
-                .map(professor -> ResponseEntity.ok(professor))
+                .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
-
     }
 
     @PostMapping
@@ -41,29 +41,27 @@ public class ProfessorController {
         return ResponseEntity.ok(created);
     }
 
-    @PutMapping("/{professorId}")
-    public ResponseEntity<ProfessorDTO> updateProfessor (@PathVariable Long id,
-                                                         @RequestBody ProfessorDTO professorDTO) {
+    @PutMapping("/{id}")
+    public ResponseEntity<ProfessorDTO> updateProfessor(@PathVariable Long id,
+                                                        @RequestBody ProfessorDTO professorDTO) {
         ProfessorDTO updated = professorService.updateProfessor(id, professorDTO);
         return ResponseEntity.ok(updated);
     }
 
-    @GetMapping("/{professorId}/students")
+    @GetMapping("/{id}/students")
     public ResponseEntity<List<StudentDTO>> getStudentsByProfessorId(@PathVariable Long id) {
         return ResponseEntity.ok(professorService.getStudentsByProfessorId(id));
     }
 
-    @GetMapping("/{professorId}/subjects")
+    @GetMapping("/{id}/subjects")
     public ResponseEntity<List<SubjectDTO>> getSubjectsByProfessorId(@PathVariable Long id) {
         return ResponseEntity.ok(professorService.getSubjectsByProfessorId(id));
     }
 
-    @DeleteMapping("/{professorId}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteProfessor(@PathVariable Long id) {
         boolean deleted = professorService.deleteProfessor(id);
         return deleted ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
     }
-
-
 
 }

@@ -3,8 +3,9 @@ package com.collegeManagementSystem.collegeManagementSystem.services;
 import com.collegeManagementSystem.collegeManagementSystem.dto.ProfessorDTO;
 import com.collegeManagementSystem.collegeManagementSystem.dto.StudentDTO;
 import com.collegeManagementSystem.collegeManagementSystem.dto.SubjectDTO;
-import com.collegeManagementSystem.collegeManagementSystem.entities.StudentEntity;
+import com.collegeManagementSystem.collegeManagementSystem.entities.ProfessorEntity;
 import com.collegeManagementSystem.collegeManagementSystem.entities.SubjectEntity;
+import com.collegeManagementSystem.collegeManagementSystem.repositories.ProfessorRepository;
 import com.collegeManagementSystem.collegeManagementSystem.repositories.SubjectRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -17,10 +18,12 @@ import java.util.stream.Collectors;
 public class SubjectServiceImpl implements SubjectService{
 
     private SubjectRepository subjectRepository;
+    private final ProfessorRepository professorRepository;
     private final ModelMapper modelMapper;
 
-    public SubjectServiceImpl(SubjectRepository subjectRepository, ModelMapper modelMapper) {
+    public SubjectServiceImpl(SubjectRepository subjectRepository, ProfessorRepository professorRepository, ModelMapper modelMapper) {
         this.subjectRepository = subjectRepository;
+        this.professorRepository = professorRepository;
         this.modelMapper = modelMapper;
     }
 
@@ -34,26 +37,49 @@ public class SubjectServiceImpl implements SubjectService{
     public List<SubjectDTO> getAllSubjects() {
         List<SubjectEntity> subjects = subjectRepository.findAll();
         return subjects.stream()
-                .map(subject -> modelMapper.map(subject,SubjectDTO.class))
+                .map(subject -> {
+                    SubjectDTO dto = modelMapper.map(subject, SubjectDTO.class);
+                    dto.setStudentCount(subject.getStudents().size());
+                    return dto;
+                })
                 .collect(Collectors.toList());
-
     }
+
 
     @Override
     public SubjectDTO getSubjectById(Long id) {
         subjectExistsById(id);
         SubjectEntity subject = subjectRepository.findById(id).get();
-        return modelMapper.map(subject,SubjectDTO.class);
+
+        SubjectDTO dto = modelMapper.map(subject, SubjectDTO.class);
+        dto.setStudentCount(subject.getStudents().size());
+        return dto;
     }
 
     @Override
     public SubjectDTO createSubject(SubjectDTO subjectDTO) {
-
         SubjectEntity subjectEntity = modelMapper.map(subjectDTO, SubjectEntity.class);
+
+        // Fetch professor by id (assuming subjectDTO.professor has an id)
+        if (subjectDTO.getProfessor() != null && subjectDTO.getProfessor().getId() != null) {
+            ProfessorEntity professorEntity = professorRepository.findById(subjectDTO.getProfessor().getId())
+                    .orElseThrow(() -> new NoSuchElementException("Professor not found by id: " + subjectDTO.getProfessor().getId()));
+            subjectEntity.setProfessor(professorEntity);
+        } else {
+            subjectEntity.setProfessor(null);
+        }
+
         SubjectEntity saved = subjectRepository.save(subjectEntity);
 
-        return modelMapper.map(saved,SubjectDTO.class);
+        // Map back to DTO
+        SubjectDTO resultDTO = modelMapper.map(saved, SubjectDTO.class);
+
+        // Set the studentCount explicitly because it's not a direct field on SubjectEntity
+        resultDTO.setStudentCount(saved.getStudents().size());
+
+        return resultDTO;
     }
+
 
     @Override
     public SubjectDTO updateSubject(Long id, SubjectDTO subjectDTO) {
