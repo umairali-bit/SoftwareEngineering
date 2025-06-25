@@ -4,11 +4,10 @@ package com.collegeManagementSystem.collegeManagementSystem.controllers;
 import com.collegeManagementSystem.collegeManagementSystem.dto.SubjectDTO;
 import com.collegeManagementSystem.collegeManagementSystem.repositories.SubjectRepository;
 import com.collegeManagementSystem.collegeManagementSystem.services.SubjectService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -36,6 +35,29 @@ public class SubjectController {
                 .map(ResponseEntity::ok)
                 .orElseThrow(() -> new NoSuchElementException("Subject NOT found with ID: " + id));
     }
+
+
+    @PostMapping
+    public ResponseEntity<SubjectDTO> createSubject(@RequestBody SubjectDTO subjectDTO) {
+        SubjectDTO savedSubject = subjectService.createSubject(subjectDTO);
+        return new ResponseEntity<>(savedSubject, HttpStatus.CREATED);
+
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<SubjectDTO> updateSubject (@RequestBody SubjectDTO subjectDTO,
+                                                     @PathVariable Long id) {
+        return ResponseEntity.ok(subjectService.updateSubject(id,subjectDTO));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Boolean> deleteSubject(@PathVariable Long id) {
+        boolean deleted = subjectService.deleteSubject(id);
+        if(deleted) return ResponseEntity.ok(true);
+        return ResponseEntity.notFound().build();
+    }
+
+
 
 
 
