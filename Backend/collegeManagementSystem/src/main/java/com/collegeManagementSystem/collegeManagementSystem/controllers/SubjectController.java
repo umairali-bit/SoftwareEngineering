@@ -1,6 +1,8 @@
 package com.collegeManagementSystem.collegeManagementSystem.controllers;
 
 
+import com.collegeManagementSystem.collegeManagementSystem.dto.ProfessorDTO;
+import com.collegeManagementSystem.collegeManagementSystem.dto.StudentDTO;
 import com.collegeManagementSystem.collegeManagementSystem.dto.SubjectDTO;
 import com.collegeManagementSystem.collegeManagementSystem.repositories.SubjectRepository;
 import com.collegeManagementSystem.collegeManagementSystem.services.SubjectService;
@@ -35,6 +37,21 @@ public class SubjectController {
                 .map(ResponseEntity::ok)
                 .orElseThrow(() -> new NoSuchElementException("Subject NOT found with ID: " + id));
     }
+
+    // Get all students enrolled in a subject by subject ID
+    @GetMapping("/{id}/students")
+    public ResponseEntity<List<StudentDTO>> getStudentsBySubjectId(@PathVariable Long id) {
+        List<StudentDTO> students = subjectService.getStudentBySubjectId(id);
+        return ResponseEntity.ok(students);
+    }
+
+    // Get the professor teaching a subject by subject ID
+    @GetMapping("/{id}/professor")
+    public ResponseEntity<List<ProfessorDTO>> getProfessorBySubjectId(@PathVariable Long id) {
+        List<ProfessorDTO> professors = subjectService.getProfessorBySubjectId(id);
+        return ResponseEntity.ok(professors);
+    }
+
 
 
     @PostMapping

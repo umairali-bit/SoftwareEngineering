@@ -11,7 +11,7 @@ public interface StudentService {
 
 
     List<StudentDTO> getAllStudents();
-    StudentDTO getStudentById(Long id);
+   Optional<StudentDTO> getStudentById(Long id);
 
     StudentDTO createStudent(StudentDTO studentDTO);
     StudentDTO updateStudent(Long id, StudentDTO studentDTO);
