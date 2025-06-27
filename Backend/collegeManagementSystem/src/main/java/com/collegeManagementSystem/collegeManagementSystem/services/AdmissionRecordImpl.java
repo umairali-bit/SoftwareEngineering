@@ -45,16 +45,19 @@ public class AdmissionRecordImpl implements AdmissionRecordService{
     }
 
     @Override
-    public AdmissionRecordDTO createAdmissionRecord(AdmissionRecordDTO admissionRecordDTO) {
-        AdmissionRecordEntity entity = modelMapper.map(admissionRecordDTO, AdmissionRecordEntity.class);
+    public AdmissionRecordDTO createAdmissionRecord(AdmissionRecordDTO dto) {
+        Long studentId = dto.getStudent().getId();
 
-        Long studentId = admissionRecordDTO.getStudent().getId();
+        if (admissionRecordRepository.findByStudent_id(studentId).isPresent()) {
+            throw new IllegalStateException("Admission already exists for student ID: " + studentId);
+        }
+
+        AdmissionRecordEntity entity = modelMapper.map(dto, AdmissionRecordEntity.class);
+
         StudentEntity studentEntity = studentRepository.findById(studentId)
                 .orElseThrow(() -> new NoSuchElementException("Student not found with id: " + studentId));
 
         entity.setStudent(studentEntity);
-
-        // Optionally, set current time if null
         if (entity.getAdmissionDateTime() == null) {
             entity.setAdmissionDateTime(LocalDateTime.now());
         }
