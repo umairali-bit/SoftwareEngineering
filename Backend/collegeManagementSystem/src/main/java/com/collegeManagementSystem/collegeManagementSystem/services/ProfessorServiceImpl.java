@@ -4,8 +4,10 @@ import com.collegeManagementSystem.collegeManagementSystem.dto.ProfessorDTO;
 import com.collegeManagementSystem.collegeManagementSystem.dto.StudentDTO;
 import com.collegeManagementSystem.collegeManagementSystem.dto.SubjectDTO;
 import com.collegeManagementSystem.collegeManagementSystem.entities.ProfessorEntity;
+import com.collegeManagementSystem.collegeManagementSystem.entities.StudentEntity;
 import com.collegeManagementSystem.collegeManagementSystem.entities.SubjectEntity;
 import com.collegeManagementSystem.collegeManagementSystem.repositories.ProfessorRepository;
+import com.collegeManagementSystem.collegeManagementSystem.repositories.StudentRepository;
 import com.collegeManagementSystem.collegeManagementSystem.repositories.SubjectRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -18,24 +20,28 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-public class ProfessorServiceImpl implements ProfessorService{
+public class ProfessorServiceImpl implements ProfessorService {
 
     private final ProfessorRepository professorRepository;
     private final SubjectRepository subjectRepository;
+    private final StudentRepository studentRepository;
     private final ModelMapper modelMapper;
 
-    public ProfessorServiceImpl(ProfessorRepository professorRepository, SubjectRepository subjectRepository, ModelMapper modelMapper) {
+    public ProfessorServiceImpl(ProfessorRepository professorRepository,
+                                SubjectRepository subjectRepository,
+                                StudentRepository studentRepository,
+                                ModelMapper modelMapper) {
         this.professorRepository = professorRepository;
         this.subjectRepository = subjectRepository;
+        this.studentRepository = studentRepository;
         this.modelMapper = modelMapper;
     }
 
-    public void professorExistsById(Long id) {
+    private void professorExistsById(Long id) {
         if (!professorRepository.existsById(id)) {
-            throw new NoSuchElementException("Professor not found by the id: " + id);
+            throw new NoSuchElementException("Professor not found by id: " + id);
         }
     }
-
 
     @Override
     @Transactional(readOnly = true)
@@ -48,34 +54,28 @@ public class ProfessorServiceImpl implements ProfessorService{
             dto.setName(professor.getName());
             dto.setTitle(professor.getTitle());
 
-            // Map subjects with studentCount and professor info
+            // Map subjects with studentCount and professor info (avoid recursion carefully)
             List<SubjectDTO> subjectDTOs = professor.getSubjects().stream().map(subject -> {
                 SubjectDTO subjectDTO = new SubjectDTO();
                 subjectDTO.setId(subject.getId());
                 subjectDTO.setTitle(subject.getTitle());
-                subjectDTO.setStudentCount(subject.getStudents().size());
+                subjectDTO.setStudentCount(subject.getStudents() != null ? subject.getStudents().size() : 0);
 
-                // Set minimal professor info to avoid recursion
-                subjectDTO.setProfessor(new ProfessorDTO(
-                        professor.getId(),
-                        professor.getTitle(),
-                        professor.getName()
-                ));
+                subjectDTO.setProfessor(new ProfessorDTO(professor.getId(), professor.getTitle(), professor.getName()));
 
                 return subjectDTO;
             }).collect(Collectors.toList());
             dto.setSubjects(subjectDTOs);
 
-            // Map students (students directly linked to the professor)
-            List<StudentDTO> studentDTOs = professor.getStudents().stream().map(student -> {
-                return new StudentDTO(student.getId(), student.getName());
-            }).collect(Collectors.toList());
+            // Map students linked to professor
+            List<StudentDTO> studentDTOs = professor.getStudents().stream()
+                    .map(student -> new StudentDTO(student.getId(), student.getName()))
+                    .collect(Collectors.toList());
             dto.setStudents(studentDTOs);
 
             return dto;
         }).collect(Collectors.toList());
     }
-
 
     @Override
     public Optional<ProfessorDTO> getProfessorById(Long id) {
@@ -83,19 +83,18 @@ public class ProfessorServiceImpl implements ProfessorService{
                 .map(professorEntity -> modelMapper.map(professorEntity, ProfessorDTO.class));
     }
 
-
     @Override
+    @Transactional
     public ProfessorDTO createProfessor(ProfessorDTO inputProfessor) {
         ProfessorEntity professorEntity = new ProfessorEntity();
         professorEntity.setName(inputProfessor.getName());
         professorEntity.setTitle(inputProfessor.getTitle());
 
-        // Subjects are optional
         if (inputProfessor.getSubjects() != null) {
             for (SubjectDTO subjectDTO : inputProfessor.getSubjects()) {
                 SubjectEntity subjectEntity = new SubjectEntity();
                 subjectEntity.setTitle(subjectDTO.getTitle());
-                subjectEntity.setProfessor(professorEntity); // IMPORTANT: set owning side
+                subjectEntity.setProfessor(professorEntity);  // Set owning side
                 professorEntity.getSubjects().add(subjectEntity);
             }
         }
@@ -104,49 +103,43 @@ public class ProfessorServiceImpl implements ProfessorService{
         return modelMapper.map(saved, ProfessorDTO.class);
     }
 
-
-//efficient way
     @Override
+    @Transactional
     public ProfessorDTO updateProfessor(Long id, ProfessorDTO professorDTO) {
         ProfessorEntity professor = professorRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Professor not found by id: " + id));
 
         professor.setTitle(professorDTO.getTitle());
+        professor.setName(professorDTO.getName());
+
         ProfessorEntity updated = professorRepository.save(professor);
         return modelMapper.map(updated, ProfessorDTO.class);
     }
-
-
 
     @Override
     public List<StudentDTO> getStudentsByProfessorId(Long professorId) {
         professorExistsById(professorId);
         return professorRepository.findById(professorId)
-                .map(professor -> professor.getStudents()
-                        .stream()
+                .map(professor -> professor.getStudents().stream()
                         .map(student -> new StudentDTO(student.getId(), student.getName()))
-                        .toList())
-
-                        .orElse(List.of());
+                        .collect(Collectors.toList()))
+                .orElse(List.of());
     }
 
     @Override
     public List<SubjectDTO> getSubjectsByProfessorId(Long professorId) {
         professorExistsById(professorId);
-        ProfessorEntity professor = professorRepository.findById(professorId).get();
+        ProfessorEntity professor = professorRepository.findById(professorId).orElseThrow();
         return professor.getSubjects().stream()
                 .map(subject -> new SubjectDTO(subject.getId(), subject.getTitle()))
-                .toList();
+                .collect(Collectors.toList());
     }
 
     @Override
+    @Transactional
     public boolean deleteProfessor(Long id) {
-        if (!professorRepository.existsById(id)) {
-            throw new NoSuchElementException("Professor not found by id: " + id);
-        }
+        professorExistsById(id);
         professorRepository.deleteById(id);
         return true;
     }
-
-
 }

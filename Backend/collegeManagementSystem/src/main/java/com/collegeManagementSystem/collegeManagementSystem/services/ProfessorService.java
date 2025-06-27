@@ -24,4 +24,5 @@ public interface ProfessorService {
     List<SubjectDTO> getSubjectsByProfessorId(Long professorId);
 
     boolean deleteProfessor(Long id);
+
 }

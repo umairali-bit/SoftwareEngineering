@@ -1,34 +1,27 @@
 package com.collegeManagementSystem.collegeManagementSystem.dto;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class SubjectDTO {
-
     private Long id;
     private String title;
-    @JsonBackReference
+
+    @JsonIgnore
     private ProfessorDTO professor;
-    private List<StudentDTO> students;
+
+    @JsonIgnore
+    private List<StudentDTO> students = new ArrayList<>();
+
     private int studentCount;
 
-    public SubjectDTO() {}
-
     public SubjectDTO(Long id, String title) {
-        this.id = id;
-        this.title = title;
+
     }
-
-//    public static void main(String[] args) {
-//        SubjectDTO subject = new SubjectDTO();
-//        subject.setTitle("Test");
-//        System.out.println(subject.getTitle());
-//    }
-
 }
