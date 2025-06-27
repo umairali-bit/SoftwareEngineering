@@ -3,7 +3,9 @@ package com.collegeManagementSystem.collegeManagementSystem.controllers;
 
 import com.collegeManagementSystem.collegeManagementSystem.dto.AdmissionRecordDTO;
 import com.collegeManagementSystem.collegeManagementSystem.services.AdmissionRecordService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -31,13 +33,13 @@ public class AdmissionRecordController {
     }
 
     @PostMapping
-    public ResponseEntity<AdmissionRecordDTO> createAdmission(@RequestBody AdmissionRecordDTO admissionRecordDTO) {
+    public ResponseEntity<AdmissionRecordDTO> createAdmission(@Valid @RequestBody AdmissionRecordDTO admissionRecordDTO) {
         AdmissionRecordDTO created = admissionRecordService.createAdmissionRecord(admissionRecordDTO);
         return ResponseEntity.ok(created);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<AdmissionRecordDTO> updateAdmission(@PathVariable Long id,
+    public ResponseEntity<AdmissionRecordDTO> updateAdmission(@Valid @PathVariable Long id,
                                                               @RequestBody AdmissionRecordDTO admissionRecordDTO) {
         AdmissionRecordDTO updated = admissionRecordService.updateAdmission(id, admissionRecordDTO);
         return ResponseEntity.ok(updated);
