@@ -31,4 +31,5 @@ public class StudentEntity {
             inverseJoinColumns = @JoinColumn(name = "subject_id")
     )
     private Set<SubjectEntity> subjects = new HashSet<>();
+
 }
