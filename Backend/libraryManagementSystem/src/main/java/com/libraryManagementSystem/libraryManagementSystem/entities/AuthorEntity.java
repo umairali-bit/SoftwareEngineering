@@ -3,19 +3,22 @@ package com.libraryManagementSystem.libraryManagementSystem.entities;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import lombok.Getter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Data
-public class Author {
+@Table(name = "Authors")
+public class AuthorEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String name;
 
-    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Book book;
+    @ManyToMany(mappedBy = "authors")
+    private List<BookEntity> books = new ArrayList<>();
 
 
 
