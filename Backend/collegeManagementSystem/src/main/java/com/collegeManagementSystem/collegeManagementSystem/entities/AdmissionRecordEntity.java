@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Table(name = "student_record")
 @Getter
@@ -25,4 +27,6 @@ public class AdmissionRecordEntity {
     @OneToOne
     @JoinColumn(name = "student_id", unique = true)
     private StudentEntity student;
+
+    private LocalDateTime admissionDateTime = LocalDateTime.now();
 }

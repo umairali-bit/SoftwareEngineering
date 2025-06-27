@@ -2,20 +2,28 @@ package com.collegeManagementSystem.collegeManagementSystem.services;
 
 import com.collegeManagementSystem.collegeManagementSystem.dto.AdmissionRecordDTO;
 import com.collegeManagementSystem.collegeManagementSystem.entities.AdmissionRecordEntity;
+import com.collegeManagementSystem.collegeManagementSystem.entities.StudentEntity;
 import com.collegeManagementSystem.collegeManagementSystem.repositories.AdmissionRecordRepository;
+import com.collegeManagementSystem.collegeManagementSystem.repositories.StudentRepository;
 import org.modelmapper.ModelMapper;
+import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
+@Service
 public class AdmissionRecordImpl implements AdmissionRecordService{
 
     private final AdmissionRecordRepository admissionRecordRepository;
+    private final StudentRepository studentRepository;
     private final ModelMapper modelMapper;
 
-    public AdmissionRecordImpl(AdmissionRecordRepository admissionRecordRepository, ModelMapper modelMapper) {
+    public AdmissionRecordImpl(AdmissionRecordRepository admissionRecordRepository, StudentRepository studentRepository,
+                               ModelMapper modelMapper) {
         this.admissionRecordRepository = admissionRecordRepository;
+        this.studentRepository = studentRepository;
         this.modelMapper = modelMapper;
     }
 
@@ -39,8 +47,20 @@ public class AdmissionRecordImpl implements AdmissionRecordService{
     @Override
     public AdmissionRecordDTO createAdmissionRecord(AdmissionRecordDTO admissionRecordDTO) {
         AdmissionRecordEntity entity = modelMapper.map(admissionRecordDTO, AdmissionRecordEntity.class);
+
+        Long studentId = admissionRecordDTO.getStudent().getId();
+        StudentEntity studentEntity = studentRepository.findById(studentId)
+                .orElseThrow(() -> new NoSuchElementException("Student not found with id: " + studentId));
+
+        entity.setStudent(studentEntity);
+
+        // Optionally, set current time if null
+        if (entity.getAdmissionDateTime() == null) {
+            entity.setAdmissionDateTime(LocalDateTime.now());
+        }
+
         AdmissionRecordEntity saved = admissionRecordRepository.save(entity);
-        return modelMapper.map(saved,AdmissionRecordDTO.class);
+        return modelMapper.map(saved, AdmissionRecordDTO.class);
     }
 
     @Override
