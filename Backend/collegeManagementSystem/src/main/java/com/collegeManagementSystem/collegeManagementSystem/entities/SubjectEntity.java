@@ -1,15 +1,13 @@
 package com.collegeManagementSystem.collegeManagementSystem.entities;
 
-
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 @Entity
 @Table(name = "subjects")
 @Getter
@@ -17,7 +15,6 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SubjectEntity {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -28,10 +25,6 @@ public class SubjectEntity {
     @JoinColumn(name = "professor_id")
     private ProfessorEntity professor;
 
-    @ManyToMany(mappedBy = "subjects", cascade = CascadeType.ALL)
-    private List<StudentEntity> students = new ArrayList<>();
-
-
-
-
+    @ManyToMany(mappedBy = "subjects", fetch = FetchType.LAZY)
+    private Set<StudentEntity> students = new HashSet<>();
 }

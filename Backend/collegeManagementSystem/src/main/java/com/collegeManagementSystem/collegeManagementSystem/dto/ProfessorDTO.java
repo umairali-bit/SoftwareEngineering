@@ -1,30 +1,26 @@
 package com.collegeManagementSystem.collegeManagementSystem.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import lombok.Data;
-
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class ProfessorDTO {
-
     private Long id;
     private String title;
     private String name;
-    @JsonManagedReference
-    private List<SubjectDTO> subjects;
-    private List<StudentDTO> students;
+
+    @JsonIgnore
+    private List<SubjectDTO> subjects = new ArrayList<>();
+
+    private List<StudentDTO> students = new ArrayList<>();
 
 
     public ProfessorDTO(Long id, String title, String name) {
-        this.id = id;
-        this.title = title;
-        this.name = name;
-    }
-
-    public ProfessorDTO() {
 
     }
-
 }

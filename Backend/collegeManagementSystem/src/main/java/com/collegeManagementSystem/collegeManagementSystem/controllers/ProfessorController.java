@@ -4,6 +4,7 @@ package com.collegeManagementSystem.collegeManagementSystem.controllers;
 import com.collegeManagementSystem.collegeManagementSystem.dto.ProfessorDTO;
 import com.collegeManagementSystem.collegeManagementSystem.dto.StudentDTO;
 import com.collegeManagementSystem.collegeManagementSystem.dto.SubjectDTO;
+import com.collegeManagementSystem.collegeManagementSystem.entities.ProfessorEntity;
 import com.collegeManagementSystem.collegeManagementSystem.services.ProfessorService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -40,6 +41,8 @@ public class ProfessorController {
         ProfessorDTO created = professorService.createProfessor(professorDTO);
         return ResponseEntity.ok(created);
     }
+
+
 
     @PutMapping("/{id}")
     public ResponseEntity<ProfessorDTO> updateProfessor(@PathVariable Long id,
