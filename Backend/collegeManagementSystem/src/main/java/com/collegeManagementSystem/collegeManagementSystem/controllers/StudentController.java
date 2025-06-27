@@ -41,6 +41,12 @@ public class StudentController {
         return new ResponseEntity<>(savedStudent, HttpStatus.CREATED);
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<StudentDTO> updateStudent(@PathVariable Long id, @RequestBody StudentDTO studentDTO) {
+        StudentDTO updatedStudent = studentService.updateStudent(id, studentDTO);
+        return ResponseEntity.ok(updatedStudent);
+    }
+
     @GetMapping("/{id}/subjects")
     public ResponseEntity<List<SubjectDTO>> getSubjectsByStudentId(@PathVariable Long id) {
         List<SubjectDTO> subjects = studentService.getSubjectsByStudentId(id);
