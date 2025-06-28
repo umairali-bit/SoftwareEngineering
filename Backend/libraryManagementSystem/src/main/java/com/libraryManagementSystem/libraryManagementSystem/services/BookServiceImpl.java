@@ -265,7 +265,7 @@ public List<BookDTO> findBookByAuthor(Long authorId) {
      */
 
     @Override
-    public boolean deleteBookById(long id) {
+    public boolean deleteBookById(Long id) {
         return false;
     }
 }
