@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/authors")
@@ -28,6 +29,13 @@ public class AuthorController {
     @GetMapping("/{id}")
     public ResponseEntity<AuthorDTO> getAuthorById (@PathVariable  Long id) {
         return authorService.getAuthorById(id)
+                .map(author -> ResponseEntity.ok(author))
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<AuthorDTO> findAuthorByName (@RequestParam String name) {
+        return authorService.findAuthorByName(name)
                 .map(author -> ResponseEntity.ok(author))
                 .orElse(ResponseEntity.notFound().build());
     }
