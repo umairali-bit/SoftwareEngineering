@@ -129,11 +129,22 @@ public class BookServiceImpl implements BookService{
     }
      */
 
+
+
     @Override
     public Optional<BookDTO> findBookByTitle(String title) {
         return bookRepository.findBookByTitleIgnoreCase(title)
                 .map(bookEntity -> convertToBookDTO(bookEntity));
     }
+
+    /*
+    @Override
+    public Optional<BookDTO> findBookByTitle(String title) {
+    return bookRepository.findBookByTitleIgnoreCase(title)
+            .map(bookEntity -> modelMapper.map(bookEntity, BookDTO.class));
+}
+     */
+
 
     @Override
     public List<BookDTO> findBookPublishedAfter(LocalDateTime dateTime) {
@@ -145,7 +156,14 @@ public class BookServiceImpl implements BookService{
 
     @Override
     public List<BookDTO> findBookByAuthor(Long authorId) {
-        return null;
+        if(!authorRepository.existsById(authorId)) {
+            throw new NoSuchElementException("Author not found with id: " + authorId);
+        }
+
+        List<BookEntity> books = bookRepository.findBooksByAuthorsId(authorId);
+        return books.stream()
+                .map(bookEntity -> convertToBookDTO(bookEntity))
+                .collect(Collectors.toList());
     }
 
     @Override

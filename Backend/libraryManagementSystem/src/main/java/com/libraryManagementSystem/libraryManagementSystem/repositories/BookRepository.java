@@ -7,12 +7,15 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.awt.print.Book;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
 @Repository
 public interface BookRepository extends JpaRepository<BookEntity, Long> {
+
+
 
     //option 1
 //    Optional<BookEntity> findByTitle(String title);
@@ -22,6 +25,9 @@ public interface BookRepository extends JpaRepository<BookEntity, Long> {
 
     @Query("SELECT b FROM BookEntity b WHERE b.publishedDate > :dateTime")
     List<BookEntity> findBooksPublishedAfter(@Param("dateTime") LocalDateTime dateTime);
+
+    @Query("SELECT b FROM BookEntity b JOIN b.authors a WHERE a.id = :authorId")
+    List<BookEntity> findBooksByAuthorsId(@Param("authorId") Long authorId);
 
 
 }
