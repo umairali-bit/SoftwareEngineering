@@ -10,7 +10,7 @@ public interface AuthorService {
     AuthorDTO createAuthor (AuthorDTO authorDTO);
     List<AuthorDTO> getAllAuthors();
     Optional<AuthorDTO> getAuthorById(Long id);
-    AuthorDTO findAuthorByName (String name);
+    Optional<AuthorDTO> findAuthorByName (String name);
     AuthorDTO updateAuthor (Long id, AuthorDTO authorDTO);
     boolean deleteAuthorById (Long id);
 
