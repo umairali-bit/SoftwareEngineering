@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class AuthorServiceImpl implements  AuthorService{
@@ -50,7 +51,10 @@ public class AuthorServiceImpl implements  AuthorService{
 
     @Override
     public List<AuthorDTO> getAllAuthors() {
-        return null;
+        List<AuthorEntity> authors = authorRepository.findAll();
+        return authors.stream()
+                .map(author -> convertToAuthorDTO(author))
+                .collect(Collectors.toList());
     }
 
     @Override
