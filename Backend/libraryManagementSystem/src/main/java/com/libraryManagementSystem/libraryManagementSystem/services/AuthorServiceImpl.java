@@ -59,7 +59,8 @@ public class AuthorServiceImpl implements  AuthorService{
 
     @Override
     public Optional<AuthorDTO> getAuthorById(Long id) {
-        return Optional.empty();
+        return authorRepository.findById(id)
+                .map(authorEntity -> convertToAuthorDTO(authorEntity));
     }
 
     @Override
