@@ -9,13 +9,13 @@ import java.util.Optional;
 
 public interface BookService {
 
-    Optional<Book> createBook(BookDTO bookdto);
-    List<Book> getAllBooks();
-    Optional<Book> getBookById (Long id);
-    Optional<Book> findBookByTitle(String title);
-    List<Book> findBookPublishedAfter(LocalDateTime dateTime);
-    List<Book> findBookByAuthor(Long authorId);
-    Optional<Book> updateBook (Long id, BookDTO bookdto);
+    BookDTO createBook(BookDTO bookdto);
+    List<BookDTO> getAllBooks();
+    Optional<BookDTO> getBookById (Long id);
+    Optional<BookDTO> findBookByTitle(String title);
+    List<BookDTO> findBookPublishedAfter(LocalDateTime dateTime);
+    List<BookDTO> findBookByAuthor(Long authorId);
+    Optional<BookDTO> updateBook (Long id, BookDTO bookdto);
     boolean deleteBookById (long id);
 
 }
