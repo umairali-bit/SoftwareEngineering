@@ -149,6 +149,9 @@ public class BookServiceImpl implements BookService{
     @Override
     public List<BookDTO> findBookPublishedAfter(LocalDateTime dateTime) {
         List<BookEntity> books = bookRepository.findBooksPublishedAfter(dateTime);
+        if (books.isEmpty()) {
+            throw new NoSuchElementException("No books found published after: " + dateTime);
+        }
         return books.stream()
                 .map(bookEntity -> convertToBookDTO(bookEntity))
                 .collect(Collectors.toList());
