@@ -131,12 +131,16 @@ public class BookServiceImpl implements BookService{
 
     @Override
     public Optional<BookDTO> findBookByTitle(String title) {
-        return Optional.empty();
+        return bookRepository.findBookByTitleIgnoreCase(title)
+                .map(bookEntity -> convertToBookDTO(bookEntity));
     }
 
     @Override
     public List<BookDTO> findBookPublishedAfter(LocalDateTime dateTime) {
-        return null;
+        List<BookEntity> books = bookRepository.findBooksPublishedAfter(dateTime);
+        return books.stream()
+                .map(bookEntity -> convertToBookDTO(bookEntity))
+                .collect(Collectors.toList());
     }
 
     @Override
