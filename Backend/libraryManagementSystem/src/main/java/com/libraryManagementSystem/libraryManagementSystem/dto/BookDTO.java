@@ -1,12 +1,15 @@
 package com.libraryManagementSystem.libraryManagementSystem.dto;
 
-import lombok.Data;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class BookDTO {
 
     private Long id;
@@ -17,4 +20,6 @@ public class BookDTO {
 
 
     private List<AuthorDTO> authors = new ArrayList<>();
+
+
 }

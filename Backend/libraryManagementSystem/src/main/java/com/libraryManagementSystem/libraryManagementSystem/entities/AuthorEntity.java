@@ -17,7 +17,7 @@ public class AuthorEntity {
 
     private String name;
 
-    @ManyToMany(mappedBy = "authors")
+    @ManyToMany(mappedBy = "authors", cascade = CascadeType.ALL)
     private List<BookEntity> books = new ArrayList<>();
 
 
