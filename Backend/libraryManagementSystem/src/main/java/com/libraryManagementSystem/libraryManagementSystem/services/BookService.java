@@ -15,7 +15,7 @@ public interface BookService {
     Optional<BookDTO> findBookByTitle(String title);
     List<BookDTO> findBookPublishedAfter(LocalDateTime dateTime);
     List<BookDTO> findBookByAuthor(Long authorId);
-    Optional<BookDTO> updateBook (Long id, BookDTO bookdto);
+    BookDTO updateBook (Long id, BookDTO bookdto);
     boolean deleteBookById (long id);
 
 }
