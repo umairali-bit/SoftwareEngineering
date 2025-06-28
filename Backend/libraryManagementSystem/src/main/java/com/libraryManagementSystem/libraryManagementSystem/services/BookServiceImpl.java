@@ -49,10 +49,13 @@ public class BookServiceImpl implements BookService{
         }
 
         List<AuthorEntity> authorEntities = new ArrayList<>();
-        for(AuthorDTO authorDTO : bookdto.getAuthors()) {
-            AuthorEntity author = authorRepository.findById(authorDTO.getId())
-                    .orElseThrow(() -> new NoSuchElementException("Author not found with id: " + authorDTO.getId()));
-            authorEntities.add(author);
+        if(bookdto.getAuthors() != null) {
+
+            for (AuthorDTO authorDTO : bookdto.getAuthors()) {
+                AuthorEntity author = authorRepository.findById(authorDTO.getId())
+                        .orElseThrow(() -> new NoSuchElementException("Author not found with id: " + authorDTO.getId()));
+                authorEntities.add(author);
+            }
         }
         bookEntity.setAuthors(authorEntities);
 

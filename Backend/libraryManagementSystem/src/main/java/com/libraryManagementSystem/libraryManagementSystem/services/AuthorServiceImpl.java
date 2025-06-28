@@ -1,4 +1,75 @@
 package com.libraryManagementSystem.libraryManagementSystem.services;
 
-public class AuthorServiceImpl {
+
+import com.libraryManagementSystem.libraryManagementSystem.dto.AuthorDTO;
+import com.libraryManagementSystem.libraryManagementSystem.dto.BookDTO;
+import com.libraryManagementSystem.libraryManagementSystem.entities.AuthorEntity;
+import com.libraryManagementSystem.libraryManagementSystem.entities.BookEntity;
+import com.libraryManagementSystem.libraryManagementSystem.repositories.AuthorRepository;
+import com.libraryManagementSystem.libraryManagementSystem.repositories.BookRepository;
+import static com.libraryManagementSystem.libraryManagementSystem.dtoMapper.DTOMapper.convertToAuthorDTO;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
+
+@Service
+public class AuthorServiceImpl implements  AuthorService{
+
+    private final AuthorRepository authorRepository;
+    private final BookRepository bookRepository;
+
+    public AuthorServiceImpl(AuthorRepository authorRepository, BookRepository bookRepository) {
+        this.authorRepository = authorRepository;
+        this.bookRepository = bookRepository;
+    }
+
+
+    @Override
+    public AuthorDTO createAuthor(AuthorDTO authorDTO) {
+        AuthorEntity authorEntity = new AuthorEntity();
+        authorEntity.setName(authorDTO.getName());
+
+        List<BookEntity> bookEntities = new ArrayList<>();
+        if (authorDTO.getBooks() != null) {
+            for (BookDTO bookDTO : authorDTO.getBooks()) {
+                BookEntity book = bookRepository.findById(bookDTO.getId())
+                        .orElseThrow(() -> new NoSuchElementException("Book not found with id: " + bookDTO.getId()));
+                bookEntities.add(book);
+            }
+        }
+
+        authorEntity.setBooks(bookEntities);
+
+        AuthorEntity savedAuthor = authorRepository.save(authorEntity);
+        return convertToAuthorDTO(savedAuthor);
+    }
+
+
+    @Override
+    public List<AuthorDTO> getAllAuthors() {
+        return null;
+    }
+
+    @Override
+    public Optional<AuthorDTO> getAuthorById(Long id) {
+        return Optional.empty();
+    }
+
+    @Override
+    public AuthorDTO findAuthorByName(String name) {
+        return null;
+    }
+
+    @Override
+    public AuthorDTO updateAuthor(Long id, AuthorDTO authorDTO) {
+        return null;
+    }
+
+    @Override
+    public boolean deleteAuthorById(Long id) {
+        return false;
+    }
 }
