@@ -64,9 +64,10 @@ public class AuthorServiceImpl implements  AuthorService{
     }
 
     @Override
-    public AuthorDTO findAuthorByName(String name) {
+    public Optional<AuthorDTO> findAuthorByName(String name) {
 
-        return null;
+        return authorRepository.findAuthorByName(name)
+                .map(authorEntity -> convertToAuthorDTO(authorEntity));
     }
 
     @Override

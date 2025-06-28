@@ -17,10 +17,15 @@ public class DTOMapper {
         dto.setPublishedDate(book.getPublishedDate());
 
         if (book.getAuthors() != null) {
-            AuthorDTO authorDTO = new AuthorDTO();
-            authorDTO.setId(authorDTO.getId());
-            authorDTO.setName(authorDTO.getName());
-            dto.setAuthors(List.of(authorDTO));
+        List<AuthorDTO> authorDTOS = book.getAuthors().stream().map(
+                author -> {
+                    AuthorDTO authorDTO = new AuthorDTO();
+                    authorDTO.setId(author.getId());
+                    authorDTO.setName(author.getName());
+                    return authorDTO;
+                }).collect(Collectors.toList());
+        dto.setAuthors(authorDTOS);
+
         }
         return dto;
     }
@@ -35,8 +40,8 @@ public class DTOMapper {
                 book -> {
                     BookDTO bookDTO = new BookDTO();
                     bookDTO.setId(book.getId());
-                    bookDTO.setTitle(bookDTO.getTitle());
-                    bookDTO.setPublishedDate(bookDTO.getPublishedDate());
+                    bookDTO.setTitle(book.getTitle());
+                    bookDTO.setPublishedDate(book.getPublishedDate());
                     return bookDTO;
                 }).collect(Collectors.toList());
 
