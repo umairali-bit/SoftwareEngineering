@@ -201,9 +201,68 @@ public List<BookDTO> findBookByAuthor(Long authorId) {
      */
 
     @Override
-    public Optional<BookDTO> updateBook(Long id, BookDTO bookdto) {
-        return Optional.empty();
+    public BookDTO updateBook(Long id, BookDTO bookdto) {
+
+        return bookRepository.findById(id)
+                .map(bookEntity -> {
+                    bookEntity.setTitle(bookdto.getTitle());
+
+                    if (bookdto.getPublishedDate() != null && bookdto.getPublishedDate().isBefore(LocalDateTime.now())) {
+
+                    } else {
+                        throw new IllegalArgumentException("Published date must be in the past");
+                    }
+
+                    List<AuthorEntity> authorEntities = new ArrayList<>();
+                    for (AuthorDTO authorDTO : bookdto.getAuthors()) {
+                        AuthorEntity author = authorRepository.findById(authorDTO.getId())
+                                .orElseThrow(() -> new NoSuchElementException("Author not found with id: " +
+                                        authorDTO.getId()));
+                        authorEntities.add(author);
+                    }
+                    bookEntity.setAuthors(authorEntities);
+
+                    BookEntity updatedBook = bookRepository.save(bookEntity);
+
+                    return convertToBookDTO(updatedBook);
+                }).orElseThrow(() -> new NoSuchElementException("Book not found with id: " + id));
+
+
     }
+
+    /*
+    @Override
+   public BookDTO updateBook(Long id, BookDTO bookdto) {
+    return bookRepository.findById(id)
+        .map(existingBook -> {
+            // Map DTO fields to existing entity, ignoring authors and publishedDate first
+            modelMapper.map(bookdto, existingBook);
+
+            // Validate publishedDate separately
+            if (bookdto.getPublishedDate() != null && bookdto.getPublishedDate().isBefore(LocalDateTime.now())) {
+                existingBook.setPublishedDate(bookdto.getPublishedDate());
+            } else {
+                throw new IllegalArgumentException("Published date must be in the past");
+            }
+
+            // Handle authors separately: fetch entities from DB
+            List<AuthorEntity> authorEntities = new ArrayList<>();
+            for (AuthorDTO authorDTO : bookdto.getAuthors()) {
+                AuthorEntity author = authorRepository.findById(authorDTO.getId())
+                    .orElseThrow(() -> new NoSuchElementException("Author not found with id: " + authorDTO.getId()));
+                authorEntities.add(author);
+            }
+            existingBook.setAuthors(authorEntities);
+
+            // Save updated entity
+            BookEntity updatedBook = bookRepository.save(existingBook);
+
+            // Map back to DTO and return
+            return modelMapper.map(updatedBook, BookDTO.class);
+        })
+        .orElseThrow(() -> new NoSuchElementException("Book not found with id: " + id));
+}
+     */
 
     @Override
     public boolean deleteBookById(long id) {
