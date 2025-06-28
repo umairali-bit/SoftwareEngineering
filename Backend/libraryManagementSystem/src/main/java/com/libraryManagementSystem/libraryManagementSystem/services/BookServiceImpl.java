@@ -157,6 +157,22 @@ public class BookServiceImpl implements BookService{
                 .collect(Collectors.toList());
     }
 
+    /*
+    @Override
+    public List<BookDTO> findBookPublishedAfter(LocalDateTime dateTime) {
+    List<BookEntity> books = bookRepository.findBooksPublishedAfter(dateTime);
+
+    if (books.isEmpty()) {
+        throw new NoSuchElementException("No books found published after: " + dateTime);
+    }
+
+    return books.stream()
+            .map(bookEntity -> modelMapper.map(bookEntity, BookDTO.class))
+            .collect(Collectors.toList());
+}
+
+     */
+
     @Override
     public List<BookDTO> findBookByAuthor(Long authorId) {
         if(!authorRepository.existsById(authorId)) {
@@ -168,6 +184,21 @@ public class BookServiceImpl implements BookService{
                 .map(bookEntity -> convertToBookDTO(bookEntity))
                 .collect(Collectors.toList());
     }
+    /*
+
+@Override
+public List<BookDTO> findBookByAuthor(Long authorId) {
+    if (!authorRepository.existsById(authorId)) {
+        throw new NoSuchElementException("Author not found with id: " + authorId);
+    }
+
+    List<BookEntity> books = bookRepository.findBooksByAuthorsId(authorId);
+
+    return books.stream()
+            .map(bookEntity -> modelMapper.map(bookEntity, BookDTO.class))
+            .collect(Collectors.toList());
+}
+     */
 
     @Override
     public Optional<BookDTO> updateBook(Long id, BookDTO bookdto) {
