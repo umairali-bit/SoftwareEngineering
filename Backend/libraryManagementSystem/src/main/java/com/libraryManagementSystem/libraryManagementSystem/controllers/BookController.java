@@ -40,4 +40,15 @@ public class BookController {
         BookDTO created = bookService.createBook(bookDTO);
         return new ResponseEntity<>(created, HttpStatus.CREATED);
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity <BookDTO> updateBook (@PathVariable Long id,
+                                              @RequestBody BookDTO bookDTO) {
+
+        BookDTO updated = bookService.updateBook(id,bookDTO);
+        return ResponseEntity.ok(updated);
+
+    }
+
+
 }
