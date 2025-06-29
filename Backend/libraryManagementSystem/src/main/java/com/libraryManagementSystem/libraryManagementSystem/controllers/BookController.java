@@ -52,6 +52,15 @@ public class BookController {
         return ResponseEntity.ok(books);
     }
 
+    @GetMapping("/{authorId}")
+        public ResponseEntity<List<BookDTO>> getBooksByAuthor(@PathVariable("authorId") Long authorId) {
+
+        List<BookDTO> books = bookService.findBookByAuthor(authorId);
+        return ResponseEntity.ok(books);
+
+        }
+
+
 
     @PostMapping
     public ResponseEntity<BookDTO> createBook (@RequestBody BookDTO bookDTO) {
