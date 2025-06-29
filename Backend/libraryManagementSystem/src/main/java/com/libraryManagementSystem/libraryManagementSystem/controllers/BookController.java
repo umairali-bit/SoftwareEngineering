@@ -2,12 +2,12 @@ package com.libraryManagementSystem.libraryManagementSystem.controllers;
 
 
 import com.libraryManagementSystem.libraryManagementSystem.dto.BookDTO;
+import com.libraryManagementSystem.libraryManagementSystem.entities.BookEntity;
 import com.libraryManagementSystem.libraryManagementSystem.services.BookService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -33,5 +33,11 @@ public class BookController {
         return bookService.getBookById(id)
                 .map(book -> ResponseEntity.ok(book))
                 .orElse(ResponseEntity.notFound().build());
+    }
+
+    @PostMapping
+    public ResponseEntity<BookDTO> createBook (@RequestBody BookDTO bookDTO) {
+        BookDTO created = bookService.createBook(bookDTO);
+        return new ResponseEntity<>(created, HttpStatus.CREATED);
     }
 }
