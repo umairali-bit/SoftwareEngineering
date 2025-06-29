@@ -84,6 +84,11 @@ public class AuthorServiceImpl implements  AuthorService{
 
     @Override
     public boolean deleteAuthorById(Long id) {
-        return false;
+        if (authorRepository.existsById(id)) {
+            authorRepository.deleteById(id);
+            return true;
+        } else {
+            return false;
+        }
     }
 }
