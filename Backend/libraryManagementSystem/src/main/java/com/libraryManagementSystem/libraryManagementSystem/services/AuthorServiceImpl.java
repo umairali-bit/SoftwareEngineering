@@ -72,7 +72,14 @@ public class AuthorServiceImpl implements  AuthorService{
 
     @Override
     public AuthorDTO updateAuthor(Long id, AuthorDTO authorDTO) {
-        return null;
+        AuthorEntity authorEntity = authorRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Author NOT found with id: " + id));
+
+        authorEntity.setName(authorDTO.getName());
+
+        AuthorEntity updatedAuthor = authorRepository.save(authorEntity);
+
+        return convertToAuthorDTO(updatedAuthor);
     }
 
     @Override
