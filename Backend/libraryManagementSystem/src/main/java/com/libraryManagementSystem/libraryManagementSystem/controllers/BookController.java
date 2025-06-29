@@ -35,6 +35,13 @@ public class BookController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @GetMapping("/search")
+    public ResponseEntity<BookDTO> findBookByTitle (@RequestParam String title) {
+        return bookService.findBookByTitle(title)
+                .map(book -> ResponseEntity.ok(book))
+                .orElse(ResponseEntity.notFound().build());
+    }
+
     @PostMapping
     public ResponseEntity<BookDTO> createBook (@RequestBody BookDTO bookDTO) {
         BookDTO created = bookService.createBook(bookDTO);
@@ -49,6 +56,12 @@ public class BookController {
         return ResponseEntity.ok(updated);
 
     }
+
+
+
+
+
+
 
 
 }
