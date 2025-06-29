@@ -4,11 +4,13 @@ package com.libraryManagementSystem.libraryManagementSystem.controllers;
 import com.libraryManagementSystem.libraryManagementSystem.dto.BookDTO;
 import com.libraryManagementSystem.libraryManagementSystem.entities.BookEntity;
 import com.libraryManagementSystem.libraryManagementSystem.services.BookService;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -36,11 +38,20 @@ public class BookController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<BookDTO> findBookByTitle (@RequestParam String title) {
+    public ResponseEntity<BookDTO> findBookByTitle(@RequestParam String title) {
         return bookService.findBookByTitle(title)
                 .map(book -> ResponseEntity.ok(book))
                 .orElse(ResponseEntity.notFound().build());
     }
+
+    @GetMapping("/published-after")
+    public ResponseEntity<List<BookDTO>> getBooksPublishedAfter(
+            @RequestParam("dateTime")
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dateTime) {
+        List<BookDTO> books = bookService.findBookPublishedAfter(dateTime);
+        return ResponseEntity.ok(books);
+    }
+
 
     @PostMapping
     public ResponseEntity<BookDTO> createBook (@RequestBody BookDTO bookDTO) {
@@ -56,6 +67,8 @@ public class BookController {
         return ResponseEntity.ok(updated);
 
     }
+
+
 
 
 
