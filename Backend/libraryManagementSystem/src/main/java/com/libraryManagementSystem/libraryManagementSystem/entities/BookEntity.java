@@ -23,9 +23,9 @@ public class BookEntity {
 
     private String title;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
-            name = "author_id",
+            name = "book_author",
             joinColumns = @JoinColumn(name = "book_id"),
             inverseJoinColumns = @JoinColumn(name = "author_id"))
     @ToString.Exclude
@@ -45,5 +45,12 @@ public class BookEntity {
     @Override
     public int hashCode() {
         return getClass().hashCode();
+    }
+
+    public void addAuthor(AuthorEntity author) {
+        this.authors.add(author);
+        if (!author.getBooks().contains(this)) {
+            author.getBooks().add(this);
+        }
     }
 }

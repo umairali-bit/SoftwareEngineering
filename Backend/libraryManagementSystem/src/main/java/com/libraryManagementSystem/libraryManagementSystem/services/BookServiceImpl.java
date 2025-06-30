@@ -55,6 +55,7 @@ public class BookServiceImpl implements BookService{
                 AuthorEntity author = authorRepository.findById(authorDTO.getId())
                         .orElseThrow(() -> new NoSuchElementException("Author not found with id: " + authorDTO.getId()));
                 authorEntities.add(author);
+                bookEntity.addAuthor(author);// important for bi-directional linkage
             }
         }
         bookEntity.setAuthors(authorEntities);
@@ -118,11 +119,14 @@ public class BookServiceImpl implements BookService{
 }
      */
 
+
+
     @Override
     public Optional<BookDTO> getBookById(Long id) {
-        return bookRepository.findById(id)
+        return bookRepository.findByIdWithAuthors(id)
                 .map(bookEntity -> convertToBookDTO(bookEntity));
     }
+
     /*
     modelMapper version
     @Override
@@ -151,7 +155,7 @@ public class BookServiceImpl implements BookService{
 
     @Override
     public List<BookDTO> findBookPublishedAfter(LocalDateTime dateTime) {
-        List<BookEntity> books = bookRepository.findBooksPublishedAfter(dateTime);
+        List<BookEntity> books = bookRepository.findByPublishedDateAfter(dateTime);
         if (books.isEmpty()) {
             throw new NoSuchElementException("No books found published after: " + dateTime);
         }

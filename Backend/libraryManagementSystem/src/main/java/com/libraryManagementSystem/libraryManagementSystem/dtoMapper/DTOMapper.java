@@ -4,6 +4,7 @@ import com.libraryManagementSystem.libraryManagementSystem.dto.AuthorDTO;
 import com.libraryManagementSystem.libraryManagementSystem.dto.BookDTO;
 import com.libraryManagementSystem.libraryManagementSystem.entities.AuthorEntity;
 import com.libraryManagementSystem.libraryManagementSystem.entities.BookEntity;
+import com.libraryManagementSystem.libraryManagementSystem.repositories.AuthorRepository;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -49,7 +50,21 @@ public class DTOMapper {
         return dto;
 
     }
+
+    public static BookEntity convertToBookEntity(BookDTO dto, AuthorRepository authorRepository) {
+        BookEntity book = new BookEntity();
+        book.setTitle(dto.getTitle());
+        book.setPublishedDate(dto.getPublishedDate());
+
+        for (AuthorDTO authorDTO : dto.getAuthors()) {
+            AuthorEntity author = authorRepository.findById(authorDTO.getId())
+                    .orElseThrow(() -> new RuntimeException("Author not found"));
+            book.addAuthor(author);
+        }
+        return book;
+    }
 }
+
 
 
 
