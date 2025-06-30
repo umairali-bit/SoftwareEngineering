@@ -1,3 +1,4 @@
+
 package com.libraryManagementSystem.libraryManagementSystem.controllers;
 
 
@@ -53,12 +54,12 @@ public class BookController {
     }
 
     @GetMapping("/author/{authorId}")
-        public ResponseEntity<List<BookDTO>> getBooksByAuthor(@PathVariable("authorId") Long authorId) {
+    public ResponseEntity<List<BookDTO>> getBooksByAuthor(@PathVariable("authorId") Long authorId) {
 
         List<BookDTO> books = bookService.findBookByAuthor(authorId);
         return ResponseEntity.ok(books);
 
-        }
+    }
 
 
 
@@ -70,7 +71,7 @@ public class BookController {
 
     @PutMapping("/{id}")
     public ResponseEntity <BookDTO> updateBook (@PathVariable Long id,
-                                              @RequestBody BookDTO bookDTO) {
+                                                @RequestBody BookDTO bookDTO) {
 
         BookDTO updated = bookService.updateBook(id,bookDTO);
         return ResponseEntity.ok(updated);

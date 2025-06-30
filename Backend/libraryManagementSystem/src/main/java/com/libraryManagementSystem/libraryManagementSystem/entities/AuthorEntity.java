@@ -1,6 +1,8 @@
+
 package com.libraryManagementSystem.libraryManagementSystem.entities;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
@@ -25,7 +27,6 @@ public class AuthorEntity {
 
     @ManyToMany(mappedBy = "authors", cascade = CascadeType.ALL)
     @ToString.Exclude
-    @JsonIgnore
     private List<BookEntity> books = new ArrayList<>();
 
 

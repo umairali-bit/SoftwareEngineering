@@ -1,6 +1,8 @@
+
 package com.libraryManagementSystem.libraryManagementSystem.entities;
 
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.Hibernate;
@@ -30,6 +32,7 @@ public class BookEntity {
             inverseJoinColumns = @JoinColumn(name = "author_id"))
     @ToString.Exclude
     private List<AuthorEntity> authors = new ArrayList<>();
+
 
     private LocalDateTime publishedDate = LocalDateTime.now().minusDays(1);
 
