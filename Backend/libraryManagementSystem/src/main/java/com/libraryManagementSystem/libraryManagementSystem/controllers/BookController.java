@@ -52,7 +52,7 @@ public class BookController {
         return ResponseEntity.ok(books);
     }
 
-    @GetMapping("/{authorId}")
+    @GetMapping("/author/{authorId}")
         public ResponseEntity<List<BookDTO>> getBooksByAuthor(@PathVariable("authorId") Long authorId) {
 
         List<BookDTO> books = bookService.findBookByAuthor(authorId);
