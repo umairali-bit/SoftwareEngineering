@@ -51,18 +51,6 @@ public class DTOMapper {
 
     }
 
-    public static BookEntity convertToBookEntity(BookDTO dto, AuthorRepository authorRepository) {
-        BookEntity book = new BookEntity();
-        book.setTitle(dto.getTitle());
-        book.setPublishedDate(dto.getPublishedDate());
-
-        for (AuthorDTO authorDTO : dto.getAuthors()) {
-            AuthorEntity author = authorRepository.findById(authorDTO.getId())
-                    .orElseThrow(() -> new RuntimeException("Author not found"));
-            book.addAuthor(author);
-        }
-        return book;
-    }
 }
 
 

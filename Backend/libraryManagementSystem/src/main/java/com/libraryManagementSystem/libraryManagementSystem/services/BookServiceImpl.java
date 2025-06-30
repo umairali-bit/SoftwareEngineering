@@ -123,7 +123,7 @@ public class BookServiceImpl implements BookService{
 
     @Override
     public Optional<BookDTO> getBookById(Long id) {
-        return bookRepository.findByIdWithAuthors(id)
+        return bookRepository.findById(id)
                 .map(bookEntity -> convertToBookDTO(bookEntity));
     }
 
