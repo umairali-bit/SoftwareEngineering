@@ -1,3 +1,4 @@
+
 package com.libraryManagementSystem.libraryManagementSystem.services;
 
 
@@ -38,6 +39,8 @@ public class AuthorServiceImpl implements  AuthorService{
             for (BookDTO bookDTO : authorDTO.getBooks()) {
                 BookEntity book = bookRepository.findById(bookDTO.getId())
                         .orElseThrow(() -> new NoSuchElementException("Book not found with id: " + bookDTO.getId()));
+                // 🔥 Important: also add the author to the book
+                book.getAuthors().add(authorEntity);
                 bookEntities.add(book);
             }
         }
@@ -51,7 +54,7 @@ public class AuthorServiceImpl implements  AuthorService{
 
     @Override
     public List<AuthorDTO> getAllAuthors() {
-        List<AuthorEntity> authors = authorRepository.findAll();
+        List<AuthorEntity> authors = authorRepository.findAllAuthorsWithBooks();
         return authors.stream()
                 .map(author -> convertToAuthorDTO(author))
                 .collect(Collectors.toList());
@@ -77,18 +80,39 @@ public class AuthorServiceImpl implements  AuthorService{
 
         authorEntity.setName(authorDTO.getName());
 
-        AuthorEntity updatedAuthor = authorRepository.save(authorEntity);
+        // Update books if provided
+        if (authorDTO.getBooks() != null) {
+            // Clear existing books and reset bidirectional links
+            for (BookEntity book : new ArrayList<>(authorEntity.getBooks())) {
+                book.getAuthors().remove(authorEntity);
+            }
+            authorEntity.getBooks().clear();
 
+            // Add new books and link bidirectionally
+            for (BookDTO bookDTO : authorDTO.getBooks()) {
+                BookEntity book = bookRepository.findById(bookDTO.getId())
+                        .orElseThrow(() -> new NoSuchElementException("Book not found with id: " + bookDTO.getId()));
+                book.getAuthors().add(authorEntity); // addBook manages both sides
+            }
+        }
+
+        AuthorEntity updatedAuthor = authorRepository.save(authorEntity);
         return convertToAuthorDTO(updatedAuthor);
     }
 
     @Override
-    public boolean deleteAuthorById(Long id) {
-        if (authorRepository.existsById(id)) {
-            authorRepository.deleteById(id);
-            return true;
-        } else {
-            return false;
+    public void deleteAuthor(Long authorId) {
+        AuthorEntity author = authorRepository.findById(authorId)
+                .orElseThrow(() -> new NoSuchElementException("Author not found with id: " + authorId));
+
+        // Remove this author from all books' author lists (unlink to avoid FK violation)
+        for (BookEntity book : new ArrayList<>(author.getBooks())) {
+            book.getAuthors().remove(author);
         }
+        author.getBooks().clear();
+
+        // Now safe to delete the author
+        authorRepository.delete(author);
     }
+
 }

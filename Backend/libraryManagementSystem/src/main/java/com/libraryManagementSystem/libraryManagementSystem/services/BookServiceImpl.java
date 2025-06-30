@@ -1,3 +1,4 @@
+
 package com.libraryManagementSystem.libraryManagementSystem.services;
 
 import static com.libraryManagementSystem.libraryManagementSystem.dtoMapper.DTOMapper.convertToBookDTO;
@@ -19,12 +20,11 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-public class BookServiceImpl implements BookService{
+public class BookServiceImpl implements BookService {
 
 
     private final BookRepository bookRepository;
     private final AuthorRepository authorRepository;
-
 
 
     public BookServiceImpl(BookRepository bookRepository, AuthorRepository authorRepository) {
@@ -35,34 +35,26 @@ public class BookServiceImpl implements BookService{
 
 
     @Override
-    public BookDTO createBook(BookDTO bookdto) {
-        //create a BookEntity
+    public BookDTO createBook(BookDTO bookDTO) {
         BookEntity bookEntity = new BookEntity();
-        bookEntity.setTitle(bookdto.getTitle());
+        bookEntity.setTitle(bookDTO.getTitle());
 
-
-        if (bookdto.getPublishedDate() != null && bookdto.getPublishedDate().isBefore(LocalDateTime.now())){
-            bookEntity.setPublishedDate(bookdto.getPublishedDate());
+        if (bookDTO.getPublishedDate() != null && bookDTO.getPublishedDate().isBefore(LocalDateTime.now())) {
+            bookEntity.setPublishedDate(bookDTO.getPublishedDate());
         } else {
             throw new IllegalArgumentException("Published date must be in the past");
-
         }
 
-        List<AuthorEntity> authorEntities = new ArrayList<>();
-        if(bookdto.getAuthors() != null) {
-
-            for (AuthorDTO authorDTO : bookdto.getAuthors()) {
+        if (bookDTO.getAuthors() != null) {
+            for (AuthorDTO authorDTO : bookDTO.getAuthors()) {
                 AuthorEntity author = authorRepository.findById(authorDTO.getId())
                         .orElseThrow(() -> new NoSuchElementException("Author not found with id: " + authorDTO.getId()));
-                authorEntities.add(author);
-                bookEntity.addAuthor(author);// important for bi-directional linkage
+                bookEntity.getAuthors().add(author);
+                author.getBooks().add(bookEntity);
             }
         }
-        bookEntity.setAuthors(authorEntities);
 
-        //Save Book
         BookEntity savedBook = bookRepository.save(bookEntity);
-
         return convertToBookDTO(savedBook);
     }
 /* ModelMapper version
@@ -102,9 +94,9 @@ public class BookServiceImpl implements BookService{
 
     @Override
     public List<BookDTO> getAllBooks() {
-        List<BookEntity> books = bookRepository.findAll();
+        List<BookEntity> books = bookRepository.findAllBooksWithAuthors();
         return books.stream()
-                .map(book -> convertToBookDTO(book))
+                .map(DTOMapper::convertToBookDTO)
                 .collect(Collectors.toList());
     }
 
@@ -118,7 +110,6 @@ public class BookServiceImpl implements BookService{
             .collect(Collectors.toList());
 }
      */
-
 
 
     @Override
@@ -137,12 +128,12 @@ public class BookServiceImpl implements BookService{
      */
 
 
-
     @Override
     public Optional<BookDTO> findBookByTitle(String title) {
         return bookRepository.findBookByTitleIgnoreCase(title)
-                .map(bookEntity -> convertToBookDTO(bookEntity));
+                .map(DTOMapper::convertToBookDTO);
     }
+
 
     /*
     @Override
@@ -160,7 +151,7 @@ public class BookServiceImpl implements BookService{
             throw new NoSuchElementException("No books found published after: " + dateTime);
         }
         return books.stream()
-                .map(bookEntity -> convertToBookDTO(bookEntity))
+                .map(DTOMapper::convertToBookDTO)
                 .collect(Collectors.toList());
     }
 
@@ -182,13 +173,12 @@ public class BookServiceImpl implements BookService{
 
     @Override
     public List<BookDTO> findBookByAuthor(Long authorId) {
-        if(!authorRepository.existsById(authorId)) {
+        if (!authorRepository.existsById(authorId)) {
             throw new NoSuchElementException("Author not found with id: " + authorId);
         }
-
         List<BookEntity> books = bookRepository.findBooksByAuthorsId(authorId);
         return books.stream()
-                .map(bookEntity -> convertToBookDTO(bookEntity))
+                .map(DTOMapper::convertToBookDTO)
                 .collect(Collectors.toList());
     }
     /*
@@ -273,6 +263,22 @@ public List<BookDTO> findBookByAuthor(Long authorId) {
 
     @Override
     public boolean deleteBookById(Long id) {
-        return false;
+        Optional<BookEntity> bookOpt = bookRepository.findById(id);
+        if (bookOpt.isPresent()) {
+            BookEntity book = bookOpt.get();
+
+            // Unlink book from all authors to avoid FK constraint violation
+            for (AuthorEntity author : new ArrayList<>(book.getAuthors())) {
+                author.getBooks().remove(book);
+            }
+            book.getAuthors().clear();
+
+            // Delete the book
+            bookRepository.delete(book);
+            return true;
+        } else {
+            return false; // book not found
+        }
     }
 }
+

@@ -1,3 +1,4 @@
+
 package com.libraryManagementSystem.libraryManagementSystem.controllers;
 
 
@@ -54,10 +55,9 @@ public class AuthorController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Boolean> deleteAuthor(@PathVariable Long id) {
-        boolean deleted = authorService.deleteAuthorById(id);
-        if (deleted) return ResponseEntity.ok(true);
-        return ResponseEntity.notFound().build();
+    public ResponseEntity<Void> deleteAuthor(@PathVariable Long id) {
+        authorService.deleteAuthor(id);
+        return ResponseEntity.noContent().build();
     }
 
 

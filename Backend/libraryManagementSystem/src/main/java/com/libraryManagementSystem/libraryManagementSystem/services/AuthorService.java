@@ -12,7 +12,5 @@ public interface AuthorService {
     Optional<AuthorDTO> getAuthorById(Long id);
     Optional<AuthorDTO> findAuthorByName (String name);
     AuthorDTO updateAuthor (Long id, AuthorDTO authorDTO);
-    boolean deleteAuthorById (Long id);
-
-
+    void deleteAuthor(Long id);
 }
