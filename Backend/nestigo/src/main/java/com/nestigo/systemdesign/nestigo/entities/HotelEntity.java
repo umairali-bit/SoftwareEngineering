@@ -8,6 +8,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Getter
@@ -40,6 +41,9 @@ public class HotelEntity {
 
     @Embedded
     private HotelContactInfo contactInfo;
+
+    @OneToMany(mappedBy = "hotel")
+    private List<RoomEntity> rooms;
 
 
 
