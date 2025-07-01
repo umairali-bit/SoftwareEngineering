@@ -11,7 +11,7 @@ import java.util.Set;
 @Entity
 @Getter
 @Setter
-@Table(name = "user")
+@Table(name = "app_user")//name cannot be user if we are using postgres
 public class UserEntity {
 
     @Id
