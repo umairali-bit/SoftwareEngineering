@@ -10,7 +10,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Embeddable
-public class HotelContactInfo {
+public class HotelContactInfoEntity {
 
     private String address;
     private String phoneNumber;
