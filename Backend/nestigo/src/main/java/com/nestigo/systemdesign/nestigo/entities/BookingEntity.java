@@ -1,6 +1,7 @@
 package com.nestigo.systemdesign.nestigo.entities;
 
 
+import com.nestigo.systemdesign.nestigo.entities.enums.BookingStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,7 +15,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @Table(name = "booking")
-public class BookingEntities {
+public class BookingEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -46,6 +47,13 @@ public class BookingEntities {
 
     @UpdateTimestamp
     private LocalDateTime updatedAT;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    private PaymentEntity payment;
+
+    @Enumerated(EnumType.STRING)
+    private BookingStatus bookingStatus;
+
 
 
 
