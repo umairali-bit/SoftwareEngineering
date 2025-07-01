@@ -39,7 +39,7 @@ public class HotelEntity {
     private LocalDateTime updatedAT;
 
     @Embedded
-    private HotelContactInfoEntity contactInfo;
+    private HotelContactInfo contactInfo;
 
 
 

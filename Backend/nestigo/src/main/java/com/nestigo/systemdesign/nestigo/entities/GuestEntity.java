@@ -31,8 +31,6 @@ public class GuestEntity {
 
     private Integer age;
 
-    @ManyToMany
-    private Set<BookingEntity> bookings = new HashSet<>();
 
 
 
