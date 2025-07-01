@@ -42,8 +42,8 @@ public class HotelEntity {
     @Embedded
     private HotelContactInfo contactInfo;
 
-    @OneToMany(mappedBy = "hotel")
-    private List<RoomEntity> rooms;
+
+
 
 
 

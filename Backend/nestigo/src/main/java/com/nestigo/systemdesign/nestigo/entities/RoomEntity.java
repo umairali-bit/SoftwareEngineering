@@ -20,7 +20,7 @@ public class RoomEntity {
     private Long id;
 
     @ManyToOne
-            @JoinColumn(name = "hotel_id")
+            @JoinColumn(name = "hotel_id",nullable = false)
     private HotelEntity hotel;
 
     @Column(nullable = false)
