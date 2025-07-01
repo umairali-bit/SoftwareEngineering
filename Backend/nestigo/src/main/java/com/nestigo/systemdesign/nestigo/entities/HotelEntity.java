@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @Table(name = "hotel")
-public class Hotel {
+public class HotelEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -28,6 +28,9 @@ public class Hotel {
 
     @Column(columnDefinition = "TEXT[]")
     private String[] amenities;
+
+    @Column(nullable = false)
+    private boolean active;
 
     @CreationTimestamp
     private LocalDateTime createdAt;
