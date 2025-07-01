@@ -49,9 +49,11 @@ public class BookingEntity {
     private LocalDateTime updatedAT;
 
     @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "payment_id")
     private PaymentEntity payment;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private BookingStatus bookingStatus;
 
 
