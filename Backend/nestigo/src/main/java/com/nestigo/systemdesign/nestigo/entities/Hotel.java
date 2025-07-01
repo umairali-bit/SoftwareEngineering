@@ -35,6 +35,9 @@ public class Hotel {
     @UpdateTimestamp
     private LocalDateTime updatedAT;
 
+    @Embedded
+    private HotelContactInfo contactInfo;
+
 
 
 
