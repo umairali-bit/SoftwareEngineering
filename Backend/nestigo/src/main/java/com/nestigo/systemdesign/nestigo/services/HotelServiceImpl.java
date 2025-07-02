@@ -26,6 +26,7 @@ public class HotelServiceImpl implements HotelService{
         HotelEntity hotelEntity = modelMapper.map(hotelDTO,HotelEntity.class);
         hotelEntity.setActive(false);
         hotelEntity = hotelRepository.save(hotelEntity);
+        log.info("Created a new hotel with ID {}", hotelDTO.getId());
 
 
         //converting entity back to DTO
@@ -34,6 +35,12 @@ public class HotelServiceImpl implements HotelService{
 
     @Override
     public HotelDTO getHotelById(Long id) {
-        return null;
+        log.info("Getting the hotel with ID: {}", id);
+        HotelEntity hotelEntity = hotelRepository.findById(id).
+                orElseThrow(() -> new RuntimeException("Hotel NOT found with ID:" + id));
+
+
+
+        return modelMapper.map(hotelEntity,HotelDTO.class);
     }
 }
