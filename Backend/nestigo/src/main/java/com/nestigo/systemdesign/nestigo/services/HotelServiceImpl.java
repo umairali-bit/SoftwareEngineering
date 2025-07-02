@@ -60,4 +60,16 @@ public class HotelServiceImpl implements HotelService{
         return modelMapper.map(updatedHotel, HotelDTO.class);
 
     }
+
+    @Override
+    public Boolean deleteHotelById(Long id) {
+        boolean exists = hotelRepository.existsById(id);
+        if(!exists) throw new ResourceNotFoundException("Hotel NOT found with ID:" + id);
+
+        hotelRepository.deleteById(id);
+
+        //TODO: delete the future inventories for this hotel
+
+        return true;
+    }
 }
