@@ -62,7 +62,7 @@ public class HotelServiceImpl implements HotelService{
     }
 
     @Override
-    public Boolean deleteHotelById(Long id) {
+    public void deleteHotelById(Long id) {
         boolean exists = hotelRepository.existsById(id);
         if(!exists) throw new ResourceNotFoundException("Hotel NOT found with ID:" + id);
 
@@ -70,6 +70,6 @@ public class HotelServiceImpl implements HotelService{
 
         //TODO: delete the future inventories for this hotel
 
-        return true;
+
     }
 }
