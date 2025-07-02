@@ -17,6 +17,8 @@ public class HotelServiceImpl implements HotelService{
 
     @Override
     public HotelDTO createHotel(HotelDTO hotelDTO) {
+        log.info("Creating a new hotel with name: {}", hotelDTO.getName());
+
         return null;
     }
 
