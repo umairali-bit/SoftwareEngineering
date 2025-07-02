@@ -41,6 +41,9 @@ public class HotelEntity {
     @Embedded
     private HotelContactInfo contactInfo;
 
+    @ManyToOne
+    private UserEntity owner;
+
 
 
 
