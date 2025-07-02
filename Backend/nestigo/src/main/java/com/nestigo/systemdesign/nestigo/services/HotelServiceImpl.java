@@ -46,7 +46,18 @@ public class HotelServiceImpl implements HotelService{
     }
 
     @Override
-    public HotelDTO updateHotel(Long id) {
-        return null;
+    public HotelDTO updateHotel(Long id, HotelDTO hotelDTO) {
+        log.info("Getting the hotel with ID: {}", id);
+
+        //getting hotel by id
+        HotelEntity existingHotel = hotelRepository
+                .findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Hotel not found with ID"));
+
+        modelMapper.map(hotelDTO, existingHotel);
+
+        HotelEntity updatedHotel = hotelRepository.save(existingHotel);
+        return modelMapper.map(updatedHotel, HotelDTO.class);
+
     }
 }
