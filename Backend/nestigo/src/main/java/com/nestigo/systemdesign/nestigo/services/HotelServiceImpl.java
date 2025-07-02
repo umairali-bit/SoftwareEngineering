@@ -28,8 +28,8 @@ public class HotelServiceImpl implements HotelService{
         hotelEntity = hotelRepository.save(hotelEntity);
 
 
-
-        return null;
+        //converting entity back to DTO
+        return modelMapper.map(hotelEntity, HotelDTO.class);
     }
 
     @Override
