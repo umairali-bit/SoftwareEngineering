@@ -16,7 +16,7 @@ public class HotelDTO {
     private String city;
     private String[] photos;
     private String[] amenities;
-    private boolean active;
+//    private boolean active;
     private HotelContactInfo contactInfo;
 
 
