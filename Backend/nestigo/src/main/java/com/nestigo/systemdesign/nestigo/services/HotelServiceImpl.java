@@ -55,6 +55,7 @@ public class HotelServiceImpl implements HotelService{
                 .orElseThrow(() -> new ResourceNotFoundException("Hotel not found with ID"));
 
         modelMapper.map(hotelDTO, existingHotel);
+        existingHotel.setId(id);
 
         HotelEntity updatedHotel = hotelRepository.save(existingHotel);
         return modelMapper.map(updatedHotel, HotelDTO.class);
