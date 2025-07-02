@@ -2,6 +2,7 @@ package com.nestigo.systemdesign.nestigo.services;
 
 import com.nestigo.systemdesign.nestigo.dtos.HotelDTO;
 import com.nestigo.systemdesign.nestigo.entities.HotelEntity;
+import com.nestigo.systemdesign.nestigo.exceptions.ResourceNotFoundException;
 import com.nestigo.systemdesign.nestigo.repositories.HotelRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -37,7 +38,7 @@ public class HotelServiceImpl implements HotelService{
     public HotelDTO getHotelById(Long id) {
         log.info("Getting the hotel with ID: {}", id);
         HotelEntity hotelEntity = hotelRepository.findById(id).
-                orElseThrow(() -> new RuntimeException("Hotel NOT found with ID:" + id));
+                orElseThrow(() -> new ResourceNotFoundException("Hotel NOT found with ID:" + id));
 
 
 
