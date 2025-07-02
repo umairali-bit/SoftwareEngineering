@@ -25,7 +25,7 @@ public class HotelController {
         return new ResponseEntity<>(hotel, HttpStatus.CREATED);
     }
 
-    @GetMapping("/{hotel}")
+    @GetMapping("/{id}")
     public ResponseEntity<HotelDTO> getHotelById(@PathVariable Long id) {
         HotelDTO hotelDTO = hotelService.getHotelById(id);
         return ResponseEntity.ok(hotelDTO);

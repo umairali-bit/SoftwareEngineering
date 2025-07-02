@@ -9,6 +9,8 @@ public interface HotelService {
 
     HotelDTO getHotelById(Long id);
 
+    HotelDTO updateHotel(Long id);
+
 
 
 
