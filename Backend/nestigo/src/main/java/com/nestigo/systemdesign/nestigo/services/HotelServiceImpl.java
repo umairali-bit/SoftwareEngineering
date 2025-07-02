@@ -44,4 +44,9 @@ public class HotelServiceImpl implements HotelService{
 
         return modelMapper.map(hotelEntity,HotelDTO.class);
     }
+
+    @Override
+    public HotelDTO updateHotel(Long id) {
+        return null;
+    }
 }
