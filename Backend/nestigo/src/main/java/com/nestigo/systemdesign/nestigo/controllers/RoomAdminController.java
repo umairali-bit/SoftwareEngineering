@@ -1,0 +1,32 @@
+package com.nestigo.systemdesign.nestigo.controllers;
+
+
+import com.nestigo.systemdesign.nestigo.dtos.RoomDTO;
+import com.nestigo.systemdesign.nestigo.services.HotelService;
+import com.nestigo.systemdesign.nestigo.services.RoomService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/admin/hotels/{hotelId}/rooms")
+@RequiredArgsConstructor
+@Slf4j
+public class RoomController {
+
+    private final RoomService roomService;
+    private final HotelService hotelService;
+
+    @PostMapping
+    public ResponseEntity<RoomDTO> createRoom (@RequestBody RoomDTO roomDTO,
+                                               @PathVariable Long hotelId) {
+        log.info("Creating a new room with id: " + roomDTO.getId());
+
+        RoomDTO room = roomService.createRoom(hotelId, roomDTO);
+        return new ResponseEntity<>(room, HttpStatus.CREATED);
+    }
+
+
+}
