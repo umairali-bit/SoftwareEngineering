@@ -8,7 +8,7 @@ public interface RoomService {
 
     RoomDTO createRoom (Long hotelId, RoomDTO roomDTO);
 
-    List<RoomDTO> getAllRoomsByHotel (Long hotelIDd);
+    List<RoomDTO> getAllRoomsByHotelId (Long hotelIDd);
 
     RoomDTO getRoomById(Long id);
 

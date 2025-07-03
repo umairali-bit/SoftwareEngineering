@@ -12,6 +12,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -46,8 +47,17 @@ public class RoomServiceImpl implements RoomService{
     }
 
     @Override
-    public List<RoomDTO> getAllRoomsByHotel(Long hotelIDd) {
-        return null;
+    public List<RoomDTO> getAllRoomsByHotelId(Long hotelId) {
+        log.info("Getting all rooms in hotel with ID: {}", hotelId);
+
+    //  checking if the hotel exists or not
+        HotelEntity hotel = hotelRepository
+                .findById(hotelId)
+                .orElseThrow(() -> new ResourceNotFoundException("Hotel NOT found with ID: " + hotelId));
+        return hotel.getRooms()
+                .stream()
+                .map(room -> modelMapper.map(room, RoomDTO.class))
+                .collect(Collectors.toList());
     }
 
     @Override
