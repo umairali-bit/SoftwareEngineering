@@ -8,6 +8,8 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -43,6 +45,9 @@ public class HotelEntity {
 
     @ManyToOne
     private UserEntity owner;
+
+    @OneToMany(mappedBy = "hotel")
+    private List<RoomEntity> rooms = new ArrayList<>();
 
 
 
