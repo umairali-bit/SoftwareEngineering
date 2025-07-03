@@ -1,5 +1,6 @@
 package com.nestigo.systemdesign.nestigo.services;
 
+import com.nestigo.systemdesign.nestigo.dtos.HotelDTO;
 import com.nestigo.systemdesign.nestigo.dtos.RoomDTO;
 import com.nestigo.systemdesign.nestigo.entities.HotelEntity;
 import com.nestigo.systemdesign.nestigo.entities.RoomEntity;
@@ -62,7 +63,13 @@ public class RoomServiceImpl implements RoomService{
 
     @Override
     public RoomDTO getRoomById(Long id) {
-        return null;
+        log.info("Getting the room in hotel with ID: {}", id);
+
+        //  checking if the room exists or not
+        RoomEntity room = roomRepository
+                .findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Hotel NOT found with ID: " + id));
+        return modelMapper.map(room, RoomDTO.class);
     }
 
     @Override
