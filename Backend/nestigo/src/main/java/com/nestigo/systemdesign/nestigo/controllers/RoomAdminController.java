@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.annotation.ApplicationScope;
 
 import java.util.List;
 
@@ -35,9 +36,10 @@ public class RoomController {
         return ResponseEntity.ok(roomService.getAllRoomsByHotelId(hotelId));
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<RoomDTO> getRoomById (@PathVariable Long id) {
-        return ResponseEntity.ok(roomService.getRoomById(id));
+    @GetMapping("/{roomId}")
+    public ResponseEntity<RoomDTO> getRoomById (@PathVariable Long roomId,
+                                                @PathVariable Long hotelId) {
+        return ResponseEntity.ok(roomService.getRoomById(roomId));
     }
 
 
