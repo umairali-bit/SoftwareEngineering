@@ -38,9 +38,19 @@ public class HotelController {
         return ResponseEntity.ok(hotel);
     }
 
+    @PatchMapping("/{id")
+    public ResponseEntity<Void> activateHotel(@PathVariable Long id) {
+        hotelService.activateHotel(id);
+        return ResponseEntity.noContent().build();
+
+    }
+
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteHotel(@PathVariable Long id) {
         hotelService.deleteHotelById(id);
         return ResponseEntity.noContent().build();
     }
+
+
 }
