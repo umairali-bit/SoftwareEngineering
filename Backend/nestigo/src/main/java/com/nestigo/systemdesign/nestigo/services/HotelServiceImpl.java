@@ -52,7 +52,7 @@ public class HotelServiceImpl implements HotelService{
         //getting hotel by id
         HotelEntity existingHotel = hotelRepository
                 .findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Hotel not found with ID"));
+                .orElseThrow(() -> new ResourceNotFoundException("Hotel not found with ID" + id));
 
         modelMapper.map(hotelDTO, existingHotel);
         existingHotel.setId(id);
@@ -70,6 +70,20 @@ public class HotelServiceImpl implements HotelService{
         hotelRepository.deleteById(id);
 
         //TODO: delete the future inventories for this hotel
+
+
+    }
+
+    @Override
+    public void activateHotel(Long id) {
+        log.info("Activating the hotel with ID: {}", id);
+        HotelEntity existingHotel = hotelRepository
+                .findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Hotel not found with ID" + id));
+
+        existingHotel.setActive(true);
+        //TODO: Create inventory for all the rooms for this hotel
+
 
 
     }
