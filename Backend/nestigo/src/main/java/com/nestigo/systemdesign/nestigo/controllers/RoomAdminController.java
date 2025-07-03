@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/admin/hotels/{hotelId}/rooms")
 @RequiredArgsConstructor
@@ -26,6 +28,11 @@ public class RoomController {
 
         RoomDTO room = roomService.createRoom(hotelId, roomDTO);
         return new ResponseEntity<>(room, HttpStatus.CREATED);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<RoomDTO>> getAllRoomsInHotel(@PathVariable Long hotelId) {
+        return ResponseEntity.ok(roomService.getAllRoomsByHotelId(hotelId));
     }
 
 
