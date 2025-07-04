@@ -2,8 +2,7 @@ package com.nestigo.systemdesign.nestigo.entities;
 
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -14,6 +13,9 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(
         uniqueConstraints =  @UniqueConstraint(
                 name = "unique_hotel_room_date", columnNames = {"hotel_id", "room_id","date"}))
@@ -57,11 +59,6 @@ public class InventoryEntity {
 
     @UpdateTimestamp
     private LocalDateTime updatedAT;
-
-
-
-
-
 
 
 }

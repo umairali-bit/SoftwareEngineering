@@ -1,9 +1,13 @@
 package com.nestigo.systemdesign.nestigo.services;
 
+import com.nestigo.systemdesign.nestigo.entities.InventoryEntity;
 import com.nestigo.systemdesign.nestigo.repositories.InventoryRepository;
+import com.nestigo.systemdesign.nestigo.entities.RoomEntity;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
 
 
 @Service
@@ -15,7 +19,22 @@ public class InventoryServiceImpl implements InventoryService{
 
 
     @Override
-    public void initializeRoomForAYear(Long roomId) {
+    public void initializeRoomForAYear(RoomEntity room) {
+        LocalDate today = LocalDate.now();
+
+        LocalDate endDate = today.plusYears(1);
+
+        for (; !today.isAfter(endDate); today.plusDays(1)) {
+            InventoryEntity inventory = InventoryEntity.builder()
+                    .hotel(room.getHotel())
+                    .room(room)
+                    .bookedCount(0)
+                    .city(room.getHotel().getCity())
+                    .build();
+
+        }
+
+
 
     }
 }
