@@ -7,6 +7,7 @@ import com.nestigo.systemdesign.nestigo.entities.RoomEntity;
 import com.nestigo.systemdesign.nestigo.exceptions.ResourceNotFoundException;
 import com.nestigo.systemdesign.nestigo.repositories.HotelRepository;
 import com.nestigo.systemdesign.nestigo.repositories.RoomRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -77,19 +78,19 @@ public class RoomServiceImpl implements RoomService{
         return modelMapper.map(room, RoomDTO.class);
     }
 
+    @Transactional
     @Override
     public void deleteRoomById(Long id) {
         log.info("Deleting room with ID: {}", id);
-        boolean existsById = roomRepository.existsById(id);
-
-        if(!existsById) {
-            throw new ResourceNotFoundException("RoomID " + id + "does not exists");
-        }
-       roomRepository.deleteById(id);
         RoomEntity room = roomRepository
                 .findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Hotel NOT found with ID: " + id));
+
         inventoryService.deleteFutureInventories(room);
+
+        roomRepository.deleteById(id);
+
+
 
 
     }

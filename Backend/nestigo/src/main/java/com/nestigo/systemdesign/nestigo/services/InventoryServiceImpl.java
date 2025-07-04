@@ -25,7 +25,7 @@ public class InventoryServiceImpl implements InventoryService{
 
         LocalDate endDate = today.plusYears(1);
 
-        for (; !today.isAfter(endDate); today.plusDays(1)) {
+        for (; !today.isAfter(endDate); today = today.plusDays(1)) {
             InventoryEntity inventory = InventoryEntity.builder()
                     .hotel(room.getHotel())
                     .room(room)
