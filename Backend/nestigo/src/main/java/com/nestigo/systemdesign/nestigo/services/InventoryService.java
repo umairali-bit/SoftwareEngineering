@@ -1,7 +1,10 @@
 package com.nestigo.systemdesign.nestigo.services;
 
+
+import com.nestigo.systemdesign.nestigo.entities.RoomEntity;
+
 public interface InventoryService {
 
-    void initializeRoomForAYear(Long roomId);
+    void initializeRoomForAYear(RoomEntity room);
 
 }
