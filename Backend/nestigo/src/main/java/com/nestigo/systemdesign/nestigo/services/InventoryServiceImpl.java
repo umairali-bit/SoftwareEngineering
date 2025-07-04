@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 
@@ -30,7 +31,14 @@ public class InventoryServiceImpl implements InventoryService{
                     .room(room)
                     .bookedCount(0)
                     .city(room.getHotel().getCity())
+                    .date(today)
+                    .price(room.getBasePrice())
+                    .surgeFactor(BigDecimal.ONE)
+                    .totalCount(room.getTotalCount())
+                    .closed(false)
                     .build();
+
+            inventoryRepository.save(inventory);
 
         }
 
