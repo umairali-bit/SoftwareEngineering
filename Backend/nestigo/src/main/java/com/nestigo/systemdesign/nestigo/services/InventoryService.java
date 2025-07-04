@@ -7,4 +7,8 @@ public interface InventoryService {
 
     void initializeRoomForAYear(RoomEntity room);
 
+    void deleteFutureInventories (RoomEntity room);
+
+
+
 }

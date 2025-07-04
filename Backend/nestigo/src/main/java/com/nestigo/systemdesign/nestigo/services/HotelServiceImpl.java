@@ -2,6 +2,7 @@ package com.nestigo.systemdesign.nestigo.services;
 
 import com.nestigo.systemdesign.nestigo.dtos.HotelDTO;
 import com.nestigo.systemdesign.nestigo.entities.HotelEntity;
+import com.nestigo.systemdesign.nestigo.entities.RoomEntity;
 import com.nestigo.systemdesign.nestigo.exceptions.ResourceNotFoundException;
 import com.nestigo.systemdesign.nestigo.repositories.HotelRepository;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +17,7 @@ public class HotelServiceImpl implements HotelService{
 
 
     private final HotelRepository hotelRepository;
+    private final InventoryService inventoryService;
     private final ModelMapper modelMapper;
 
 
@@ -64,15 +66,20 @@ public class HotelServiceImpl implements HotelService{
 
     @Override
     public void deleteHotelById(Long id) {
-        boolean exists = hotelRepository.existsById(id);
-        if(!exists) throw new ResourceNotFoundException("Hotel NOT found with ID:" + id);
+        HotelEntity existingHotel = hotelRepository
+                .findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Hotel not found with ID" + id));
 
         hotelRepository.deleteById(id);
+        //TODO: Create inventory for all the rooms for this hotel - done
 
-        //TODO: delete the future inventories for this hotel
+
+        for(RoomEntity room: existingHotel.getRooms()){
+            inventoryService.deleteFutureInventories(room);
+        }
 
 
-    }
+        }
 
     @Override
     public void activateHotel(Long id) {
@@ -82,7 +89,16 @@ public class HotelServiceImpl implements HotelService{
                 .orElseThrow(() -> new ResourceNotFoundException("Hotel not found with ID" + id));
 
         existingHotel.setActive(true);
-        //TODO: Create inventory for all the rooms for this hotel
+        //TODO: Create inventory for all the rooms for this hotel - done
+
+        //assuming this has to be done once
+
+        for(RoomEntity room: existingHotel.getRooms()){
+            inventoryService.initializeRoomForAYear(room);
+
+
+        }
+
 
 
 
