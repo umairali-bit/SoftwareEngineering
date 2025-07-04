@@ -5,6 +5,7 @@ import com.nestigo.systemdesign.nestigo.entities.HotelEntity;
 import com.nestigo.systemdesign.nestigo.entities.RoomEntity;
 import com.nestigo.systemdesign.nestigo.exceptions.ResourceNotFoundException;
 import com.nestigo.systemdesign.nestigo.repositories.HotelRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -65,6 +66,7 @@ public class HotelServiceImpl implements HotelService{
     }
 
     @Override
+    @Transactional
     public void deleteHotelById(Long id) {
         HotelEntity existingHotel = hotelRepository
                 .findById(id)
@@ -82,6 +84,7 @@ public class HotelServiceImpl implements HotelService{
         }
 
     @Override
+    @Transactional
     public void activateHotel(Long id) {
         log.info("Activating the hotel with ID: {}", id);
         HotelEntity existingHotel = hotelRepository
