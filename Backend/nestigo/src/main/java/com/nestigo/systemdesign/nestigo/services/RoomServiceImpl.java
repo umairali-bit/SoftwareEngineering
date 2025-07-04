@@ -74,7 +74,7 @@ public class RoomServiceImpl implements RoomService{
 
     @Override
     public void deleteRoomById(Long id) {
-        log.info("Deleting the room in hotel with ID: {}", id);
+        log.info("Deleting room with ID: {}", id);
         boolean existsById = roomRepository.existsById(id);
 
         if(!existsById) {
@@ -83,6 +83,17 @@ public class RoomServiceImpl implements RoomService{
        roomRepository.deleteById(id);
 
         //TODO: delete all future inventory
+
+        /* Better and Safer version
+        @Override
+    public void deleteRoomById(Long hotelId, Long roomId) {
+    Room room = roomRepository.findByIdAndHotelId(roomId, hotelId)
+        .orElseThrow(() -> new ResourceNotFoundException(
+            "Room ID " + roomId + " not found for hotel ID " + hotelId
+        ));
+    roomRepository.delete(room);
+}
+         */
 
 
 

@@ -17,7 +17,7 @@ import java.util.List;
 @RequestMapping("/admin/hotels/{hotelId}/rooms")
 @RequiredArgsConstructor
 @Slf4j
-public class RoomController {
+public class RoomAdminController {
 
     private final RoomService roomService;
     private final HotelService hotelService;
@@ -43,10 +43,12 @@ public class RoomController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<RoomDTO> deleteRoomById (@PathVariable Long id){
+    public ResponseEntity<RoomDTO> deleteRoomById (@PathVariable Long id,
+                                                   @PathVariable Long hotelId){
         roomService.deleteRoomById(id);
         return ResponseEntity.noContent().build();
     }
 
 
 }
+
