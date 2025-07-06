@@ -7,6 +7,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -36,4 +37,17 @@ public class PostServiceImpl implements PostService{
         PostEntity postEntity = modelMapper.map(postDTO, PostEntity.class);
         return modelMapper.map(postRepository.save(postEntity), PostDTO.class);
     }
+
+    @Override
+    public Optional<PostDTO> getPostById(Long postId) {
+        return postRepository.findById(postId)
+                .map(postEntity -> modelMapper.map(postEntity, PostDTO.class));
+    }
+    /*
+    public PostDTO getPostById(Long postId){
+    PostEntity postEntity = postRepository.findBy(id).
+        orElseThrow(()-> new ResourceNotFoundException("Post not found"));
+    return modelMapper.map(postEntity, PostDTO.class);
+    }
+     */
 }
