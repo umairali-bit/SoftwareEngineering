@@ -17,18 +17,20 @@ public class PostController {
         this.postService = postService;
     }
 
-
     @GetMapping
     public List<PostDTO> getAllPosts() {
         return postService.getAllPosts();
-
     }
+
 
     @PostMapping
-    public PostDTO createNewPost (@RequestBody PostDTO postDTO) {
-        return postService.createNewPost(postDTO);
-
+    public PostDTO createNewPost(@RequestBody PostDTO inputPost) {
+        return postService.createNewPost(inputPost);
     }
+
+
 
 
 }
+
+
