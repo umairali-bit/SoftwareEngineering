@@ -1,6 +1,7 @@
 package com.example.prod_ready_features.prod_ready_features.services;
 
 import com.example.prod_ready_features.prod_ready_features.dtos.PostDTO;
+import com.example.prod_ready_features.prod_ready_features.entities.PostEntity;
 import com.example.prod_ready_features.prod_ready_features.repositories.PostRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -31,6 +32,8 @@ public class PostServiceImpl implements PostService{
 
     @Override
     public PostDTO createNewPost(PostDTO postDTO) {
-        return null;
+
+        PostEntity postEntity = modelMapper.map(postDTO, PostEntity.class);
+        return modelMapper.map(postRepository.save(postEntity), PostDTO.class);
     }
 }
