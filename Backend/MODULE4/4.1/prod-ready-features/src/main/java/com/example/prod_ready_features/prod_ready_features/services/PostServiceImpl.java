@@ -2,6 +2,7 @@ package com.example.prod_ready_features.prod_ready_features.services;
 
 import com.example.prod_ready_features.prod_ready_features.dtos.PostDTO;
 import com.example.prod_ready_features.prod_ready_features.entities.PostEntity;
+import com.example.prod_ready_features.prod_ready_features.exceptions.ResourceNotFoundException;
 import com.example.prod_ready_features.prod_ready_features.repositories.PostRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,7 @@ public class PostServiceImpl implements PostService{
 
     private final PostRepository postRepository;
     private final ModelMapper modelMapper;
+    private PostRepository postRepository1;
 
     public PostServiceImpl(PostRepository postRepository, ModelMapper modelMapper) {
         this.postRepository = postRepository;
@@ -39,9 +41,12 @@ public class PostServiceImpl implements PostService{
     }
 
     @Override
-    public Optional<PostDTO> getPostById(Long postId) {
-        return postRepository.findById(postId)
-                .map(postEntity -> modelMapper.map(postEntity, PostDTO.class));
+    public PostDTO getPostById(Long postId) {
+        PostEntity postEntity = postRepository
+                .findById(postId)
+                .orElseThrow(() -> new ResourceNotFoundException("The ID was not found "+ postId));
+
+        return modelMapper.map(postEntity, PostDTO.class);
     }
     /*
     public PostDTO getPostById(Long postId){
