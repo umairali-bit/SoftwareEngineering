@@ -17,7 +17,6 @@ public class PostServiceImpl implements PostService{
 
     private final PostRepository postRepository;
     private final ModelMapper modelMapper;
-    private PostRepository postRepository1;
 
     public PostServiceImpl(PostRepository postRepository, ModelMapper modelMapper) {
         this.postRepository = postRepository;
@@ -35,9 +34,11 @@ public class PostServiceImpl implements PostService{
 
     @Override
     public PostDTO createNewPost(PostDTO postDTO) {
-
         PostEntity postEntity = modelMapper.map(postDTO, PostEntity.class);
-        return modelMapper.map(postRepository.save(postEntity), PostDTO.class);
+        PostEntity savedEntity = postRepository.save(postEntity);
+        PostDTO result = modelMapper.map(savedEntity, PostDTO.class);
+        System.out.println("Saved PostDTO: " + result); // debug print
+        return result;
     }
 
     @Override
