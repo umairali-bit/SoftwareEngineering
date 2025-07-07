@@ -6,6 +6,7 @@ import com.example.prod_ready_features.prod_ready_features.services.PostService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping(path = "/posts")
@@ -23,7 +24,7 @@ public class PostController {
     }
 
     @GetMapping("/{postId}")
-    public PostDTO getPostById(@PathVariable Long postId) {
+    public Optional<PostDTO> getPostById(@PathVariable Long postId) {
         return postService.getPostById(postId);
     }
 
