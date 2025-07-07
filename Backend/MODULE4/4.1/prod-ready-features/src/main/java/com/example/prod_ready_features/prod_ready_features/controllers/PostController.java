@@ -27,9 +27,6 @@ public class PostController {
         return postService.getPostById(postId);
     }
 
-
-
-
     @PostMapping
     public PostDTO createNewPost(@RequestBody PostDTO inputPost) {
         return postService.createNewPost(inputPost);
