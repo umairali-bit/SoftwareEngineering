@@ -4,6 +4,7 @@ package com.example.Auditing.Auditing.entities;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -27,6 +28,7 @@ public class PostEntity extends AuditableEntity{
 
     private String title;
 
+    @NotAudited
     private String description;
 
 
