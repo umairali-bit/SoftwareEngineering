@@ -29,6 +29,7 @@ public class PostEntity {
     private String description;
 
     @CreatedDate
+    @Column(nullable = false, updatable = false)
     private LocalDateTime createDate;
 
     @LastModifiedDate
