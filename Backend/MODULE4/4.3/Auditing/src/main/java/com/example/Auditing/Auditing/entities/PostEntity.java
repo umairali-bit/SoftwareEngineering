@@ -28,7 +28,7 @@ public class PostEntity extends AuditableEntity{
 
     private String title;
 
-    @NotAudited
+//    @NotAudited
     private String description;
 
 
