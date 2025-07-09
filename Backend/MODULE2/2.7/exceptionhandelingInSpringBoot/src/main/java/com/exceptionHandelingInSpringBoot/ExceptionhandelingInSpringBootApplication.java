@@ -1,4 +1,4 @@
-package com.example.exceptionHandelingInSpringBoot;
+package com.exceptionHandelingInSpringBoot;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -9,5 +9,4 @@ public class ExceptionhandelingInSpringBootApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(ExceptionhandelingInSpringBootApplication.class, args);
 	}
-
 }
