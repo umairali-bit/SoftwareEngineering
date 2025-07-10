@@ -8,5 +8,7 @@ public interface EmployeeClient {
 
     List<EmployeeDTO> getAllEmployees();
 
+    EmployeeDTO getEmployeeById(Long id);
+
 
 }
