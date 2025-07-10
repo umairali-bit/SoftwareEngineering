@@ -16,12 +16,18 @@ public class EmployeeClientImpl implements EmployeeClient {
 
     @Override
     public List<EmployeeDTO> getAllEmployees() {
-        List<EmployeeDTO> employeeDTO = restClient.get()
-                .uri("employees")
-                .retrieve()
-                .body(new ParameterizedTypeReference<>() {
-                });
 
-        return employeeDTO;
+        try{
+            List<EmployeeDTO> employeeDTO = restClient.get()
+                    .uri("employees")
+                    .retrieve()
+                    .body(new ParameterizedTypeReference<>() {
+                    });
+
+            return employeeDTO;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
     }
 }
