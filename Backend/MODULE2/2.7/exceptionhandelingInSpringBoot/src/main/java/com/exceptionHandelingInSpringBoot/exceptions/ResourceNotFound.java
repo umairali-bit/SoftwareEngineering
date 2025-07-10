@@ -1,4 +1,4 @@
-package com.example.exceptionHandelingInSpringBoot.exceptions;
+package com.exceptionHandelingInSpringBoot.exceptions;
 
 import org.springframework.boot.context.config.ConfigDataResourceNotFoundException;
 

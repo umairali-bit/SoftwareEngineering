@@ -1,8 +1,6 @@
-package com.example.exceptionHandelingInSpringBoot.dto;
+package com.exceptionHandelingInSpringBoot.dto;
 
-
-
-import com.example.exceptionHandelingInSpringBoot.annotations.EmployeeRoleValidation;
+import com.exceptionHandelingInSpringBoot.annotations.EmployeeRoleValidation;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

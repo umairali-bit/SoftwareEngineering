@@ -1,4 +1,4 @@
-package com.example.exceptionHandelingInSpringBoot.entities;
+package com.exceptionHandelingInSpringBoot.entities;
 
 
 
