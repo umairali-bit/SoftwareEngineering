@@ -1,4 +1,4 @@
-package com.example.exceptionHandelingInSpringBoot.annotations;
+package com.exceptionHandelingInSpringBoot.annotations;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;

@@ -1,10 +1,10 @@
-package com.example.exceptionHandelingInSpringBoot.repositories;
+package com.exceptionHandelingInSpringBoot.repositories;
 import org.springframework.stereotype.Repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 
 @Repository
-public interface EmployeeRepository extends JpaRepository<com.example.exceptionHandelingInSpringBoot.entities
+public interface EmployeeRepository extends JpaRepository<com.exceptionHandelingInSpringBoot.entities
         .EmployeeEntity, Long> {
     
 }
