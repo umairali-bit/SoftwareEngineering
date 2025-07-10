@@ -1,6 +1,8 @@
 package com.example.ThridPartyAPICallsWithRestClient.ThridPartyAPICallsWithRestClient.clients;
 
-public class EmployeeClient {
+public interface EmployeeClient {
+
+    List<EmployeeDTO> getAllEmployees();
 
 
 }
