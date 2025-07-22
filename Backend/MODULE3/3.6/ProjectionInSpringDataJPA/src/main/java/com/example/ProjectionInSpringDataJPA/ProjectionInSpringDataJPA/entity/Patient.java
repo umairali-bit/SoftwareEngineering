@@ -23,6 +23,8 @@ public class Patient {
 
     private String gender;
 
+    private String bloodGroup;
+
     @CreationTimestamp
     private LocalDateTime createdAt;
 
