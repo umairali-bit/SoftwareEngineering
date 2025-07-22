@@ -1,6 +1,7 @@
 package com.example.ProjectionInSpringDataJPA.ProjectionInSpringDataJPA.entity;
 
 
+import com.example.ProjectionInSpringDataJPA.ProjectionInSpringDataJPA.entity.type.BloodGroup;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -23,7 +24,8 @@ public class Patient {
 
     private String gender;
 
-    private String bloodGroup;
+    @Enumerated(value = EnumType.STRING)
+    private BloodGroup bloodGroup;
 
     @CreationTimestamp
     private LocalDateTime createdAt;
@@ -76,6 +78,14 @@ public class Patient {
         this.createdAt = createdAt;
     }
 
+    public BloodGroup getBloodGroup() {
+        return bloodGroup;
+    }
+
+    public void setBloodGroup(BloodGroup bloodGroup) {
+        this.bloodGroup = bloodGroup;
+    }
+
     @Override
     public String toString() {
         return "Patient{" +
@@ -84,7 +94,10 @@ public class Patient {
                 ", birthDate=" + birthDate +
                 ", email='" + email + '\'' +
                 ", gender='" + gender + '\'' +
+                ", bloodGroup=" + bloodGroup +
                 ", createdAt=" + createdAt +
                 '}';
     }
+
+
 }
