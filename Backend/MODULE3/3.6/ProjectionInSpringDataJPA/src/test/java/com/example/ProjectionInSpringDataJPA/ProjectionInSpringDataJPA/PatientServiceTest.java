@@ -1,6 +1,7 @@
 package com.example.ProjectionInSpringDataJPA.ProjectionInSpringDataJPA;
 
 
+import com.example.ProjectionInSpringDataJPA.ProjectionInSpringDataJPA.dto.PatientInfo;
 import com.example.ProjectionInSpringDataJPA.ProjectionInSpringDataJPA.entity.Patient;
 import com.example.ProjectionInSpringDataJPA.ProjectionInSpringDataJPA.repository.PatientRepository;
 import org.junit.jupiter.api.Test;
@@ -18,9 +19,9 @@ public class PatientServiceTest {
     @Test
     public void testPatient() {
 
-        List<Patient> patientList = patientRepository.findAll();
+        List<PatientInfo> patientList = patientRepository.getPatientInfo();
 
-        for (Patient p : patientList) {
+        for (PatientInfo p : patientList) {
             System.out.println(p);
         }
 
