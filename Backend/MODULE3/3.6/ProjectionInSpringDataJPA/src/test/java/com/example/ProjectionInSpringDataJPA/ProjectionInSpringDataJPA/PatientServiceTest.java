@@ -41,6 +41,10 @@ public class PatientServiceTest {
             System.out.println(n);
         }
 
+        int rowsAffected = patientRepository.updatePatientNameWithId("Umair Ali", 1L);
+        System.out.println(rowsAffected);
+
+
 
     }
 }
