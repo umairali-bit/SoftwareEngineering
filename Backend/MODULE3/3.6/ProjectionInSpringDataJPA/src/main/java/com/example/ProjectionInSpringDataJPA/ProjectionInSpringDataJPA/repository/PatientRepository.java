@@ -8,6 +8,6 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface PatientRepository extends JpaRepository<Patient, Long> {
-    @Query("select p.id, p.name, p.email from Patient p")
+    @Query("select p.id as id, p.name as name, p.email as email from Patient p")
     List<PatientInfo> getPatientInfo();
 }
