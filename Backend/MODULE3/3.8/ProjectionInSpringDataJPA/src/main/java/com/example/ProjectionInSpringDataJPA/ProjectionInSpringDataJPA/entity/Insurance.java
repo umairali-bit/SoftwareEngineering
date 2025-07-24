@@ -88,4 +88,8 @@ public class Insurance {
                 ", createdAt=" + createdAt +
                 '}';
     }
+
+
+    @OneToOne(mappedBy = "insurance")
+    private Patient patient; //inverse side
 }
