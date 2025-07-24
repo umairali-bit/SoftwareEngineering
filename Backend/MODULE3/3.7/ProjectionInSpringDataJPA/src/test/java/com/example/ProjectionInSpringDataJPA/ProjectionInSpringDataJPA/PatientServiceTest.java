@@ -6,6 +6,7 @@ import com.example.ProjectionInSpringDataJPA.ProjectionInSpringDataJPA.dto.Patie
 import com.example.ProjectionInSpringDataJPA.ProjectionInSpringDataJPA.dto.PatientInfoImpl;
 import com.example.ProjectionInSpringDataJPA.ProjectionInSpringDataJPA.entity.Patient;
 import com.example.ProjectionInSpringDataJPA.ProjectionInSpringDataJPA.repository.PatientRepository;
+import com.example.ProjectionInSpringDataJPA.ProjectionInSpringDataJPA.service.PatientService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -14,6 +15,9 @@ import java.util.List;
 
 @SpringBootTest
 public class PatientServiceTest {
+
+    @Autowired
+    private PatientService patientService;
 
     @Autowired
     private PatientRepository patientRepository;
@@ -43,6 +47,10 @@ public class PatientServiceTest {
 
         int rowsAffected = patientRepository.updatePatientNameWithId("Umair Ali", 1L);
         System.out.println(rowsAffected);
+
+        patientService.testPatientTransaction();
+
+
 
 
 
