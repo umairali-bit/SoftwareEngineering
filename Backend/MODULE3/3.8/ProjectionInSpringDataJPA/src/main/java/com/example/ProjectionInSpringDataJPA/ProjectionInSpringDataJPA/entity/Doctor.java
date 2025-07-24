@@ -23,20 +23,18 @@ public class Doctor {
     @Column(nullable = false, unique = true, length = 100)
     private String email;
 
-    private LocalDateTime createdAt;
-
     @OneToMany(mappedBy = "doctor")//inverse side
     private Set<Appointment> appointment = new HashSet<>();
 
     public Doctor() {
     }
 
-    public Doctor(Long id, String name, String specialization, String email, LocalDateTime createdAt) {
+    public Doctor(Long id, String name, String specialization, String email) {
         this.id = id;
         this.name = name;
         this.specialization = specialization;
         this.email = email;
-        this.createdAt = createdAt;
+
     }
 
     public Long getId() {
@@ -71,13 +69,6 @@ public class Doctor {
         this.email = email;
     }
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
 
     @Override
     public String toString() {
@@ -86,7 +77,6 @@ public class Doctor {
                 ", name='" + name + '\'' +
                 ", specialization='" + specialization + '\'' +
                 ", email='" + email + '\'' +
-                ", createdAt=" + createdAt +
                 '}';
     }
 }
