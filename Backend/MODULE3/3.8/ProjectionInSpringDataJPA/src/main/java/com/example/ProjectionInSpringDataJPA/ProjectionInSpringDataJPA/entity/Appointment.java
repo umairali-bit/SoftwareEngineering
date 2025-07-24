@@ -20,6 +20,10 @@ public class Appointment {
     @JoinColumn(nullable = false)
     private Patient patient;
 
+    @ManyToOne
+    @JoinColumn(nullable = false)
+    private Doctor doctor;
+
     public Appointment() {
     }
 
