@@ -99,5 +99,9 @@ public class Patient {
                 '}';
     }
 
+    @OneToOne
+    @JoinColumn(name = "patient_insurance", unique = true)
+    private Insurance insurance; //owning side
+
 
 }
