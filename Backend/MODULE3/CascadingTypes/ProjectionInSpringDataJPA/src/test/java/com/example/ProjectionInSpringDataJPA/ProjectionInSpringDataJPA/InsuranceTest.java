@@ -1,18 +1,24 @@
 package com.example.ProjectionInSpringDataJPA.ProjectionInSpringDataJPA;
 
+import com.example.ProjectionInSpringDataJPA.ProjectionInSpringDataJPA.entity.Appointment;
 import com.example.ProjectionInSpringDataJPA.ProjectionInSpringDataJPA.entity.Insurance;
+import com.example.ProjectionInSpringDataJPA.ProjectionInSpringDataJPA.service.AppointmentService;
 import com.example.ProjectionInSpringDataJPA.ProjectionInSpringDataJPA.service.InsuranceService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @SpringBootTest
 public class InsuranceTest {
 
     @Autowired
     private InsuranceService insuranceService;
+
+    @Autowired
+    private AppointmentService appointmentService;
 
     @Test
     public void testAssignInsuranceToPatient(){
@@ -27,6 +33,25 @@ public class InsuranceTest {
         System.out.println(updatedInsurance);
 
         insuranceService.deletePatient(1L);
+    }
+
+    @Test
+    public void testCreateAppointment() {
+
+        Appointment appointment = new Appointment();
+        appointment.setAppointmentTime(LocalDateTime.of(2025,8,1,14,0,0));
+        appointment.setReason("Routine checkup");
+
+        var updatedAppointment = appointmentService.createNewAppointment(appointment,1L,
+                                            2L);
+
+        System.out.println(updatedAppointment);
+
+
+
+
+
+
     }
 
 
