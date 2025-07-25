@@ -51,6 +51,8 @@ public class InsuranceTest {
 
         System.out.println(updatedAppointment);
 
+        patientService.deletePatient(1L);
+
 
 
 
