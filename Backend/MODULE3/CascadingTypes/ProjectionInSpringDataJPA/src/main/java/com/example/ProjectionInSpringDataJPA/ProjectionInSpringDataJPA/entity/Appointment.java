@@ -1,6 +1,7 @@
 package com.example.ProjectionInSpringDataJPA.ProjectionInSpringDataJPA.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -18,10 +19,12 @@ public class Appointment {
 
     @ManyToOne//owning
     @JoinColumn(nullable = false)
+//    @JsonIgnore
     private Patient patient;
 
     @ManyToOne
     @JoinColumn(nullable = false)
+//    @JsonIgnore
     private Doctor doctor;
 
     public Appointment() {
