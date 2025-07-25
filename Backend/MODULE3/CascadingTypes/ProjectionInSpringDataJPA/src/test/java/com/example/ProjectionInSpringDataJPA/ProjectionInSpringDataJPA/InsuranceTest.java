@@ -4,6 +4,7 @@ import com.example.ProjectionInSpringDataJPA.ProjectionInSpringDataJPA.entity.Ap
 import com.example.ProjectionInSpringDataJPA.ProjectionInSpringDataJPA.entity.Insurance;
 import com.example.ProjectionInSpringDataJPA.ProjectionInSpringDataJPA.service.AppointmentService;
 import com.example.ProjectionInSpringDataJPA.ProjectionInSpringDataJPA.service.InsuranceService;
+import com.example.ProjectionInSpringDataJPA.ProjectionInSpringDataJPA.service.PatientService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -13,6 +14,9 @@ import java.time.LocalDateTime;
 
 @SpringBootTest
 public class InsuranceTest {
+
+    @Autowired
+    private PatientService patientService;
 
     @Autowired
     private InsuranceService insuranceService;
@@ -32,7 +36,7 @@ public class InsuranceTest {
 
         System.out.println(updatedInsurance);
 
-        insuranceService.deletePatient(1L);
+        patientService.deletePatient(1L);
     }
 
     @Test

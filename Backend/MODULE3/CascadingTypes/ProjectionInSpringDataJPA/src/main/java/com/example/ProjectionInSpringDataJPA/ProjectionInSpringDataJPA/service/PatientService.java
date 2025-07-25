@@ -29,4 +29,13 @@ public class PatientService {
 
 
     }
+
+    public void deletePatient(Long patientId) {
+
+        patientRepository.findById(patientId).orElseThrow();
+
+        patientRepository.deleteById(patientId);
+
+
+    }
 }
