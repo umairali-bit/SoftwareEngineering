@@ -9,3 +9,9 @@ INSERT INTO patient(name, gender, birth_date, email, blood_group) VALUES
 ('Henry Patel', 'Male', '1991-06-17', 'henry.patel@example.com', 'AB_NEGATIVE'),
 ('Isla Thompson', 'Female', '1994-04-25', 'isla.thompson@example.com', 'A_POSITIVE'),
 ('Jack Wilson', 'Male', '1988-08-09', 'jack.wilson@example.com', 'O_POSITIVE');
+
+INSERT INTO doctor(name, specialization, email) VALUES
+('Dr. Alice Smith', 'Cardiology', 'alice.smith@hospital.com'),
+('Dr. Bob Johnson', 'Neurology', 'bob.johnson@hospital.com'),
+('Dr. Clara Lee', 'Pediatrics', 'clara.lee@hospital.com');
+

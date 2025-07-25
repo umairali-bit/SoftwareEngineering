@@ -27,11 +27,12 @@ public class Appointment {
     public Appointment() {
     }
 
-    public Appointment(Long id, LocalDateTime appointmentTime, String reason, Patient patient) {
+    public Appointment(Long id, LocalDateTime appointmentTime, String reason, Patient patient, Doctor doctor) {
         this.id = id;
         this.appointmentTime = appointmentTime;
         this.reason = reason;
         this.patient = patient;
+        this.doctor = doctor;
     }
 
     public Long getId() {
@@ -73,6 +74,15 @@ public class Appointment {
                 ", appointmentTime=" + appointmentTime +
                 ", reason='" + reason + '\'' +
                 ", patient=" + patient +
+                ", doctor=" + doctor +
                 '}';
+    }
+
+    public Doctor getDoctor() {
+        return doctor;
+    }
+
+    public void setDoctor(Doctor doctor) {
+        this.doctor = doctor;
     }
 }
