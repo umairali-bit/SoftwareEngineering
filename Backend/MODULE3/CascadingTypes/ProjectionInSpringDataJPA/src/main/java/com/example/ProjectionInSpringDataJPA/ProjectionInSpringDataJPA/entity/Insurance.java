@@ -92,4 +92,12 @@ public class Insurance {
 
     @OneToOne(mappedBy = "insurance")
     private Patient patient; //inverse side
+
+    public Patient getPatient() {
+        return patient;
+    }
+
+    public void setPatient(Patient patient) {
+        this.patient = patient;
+    }
 }
