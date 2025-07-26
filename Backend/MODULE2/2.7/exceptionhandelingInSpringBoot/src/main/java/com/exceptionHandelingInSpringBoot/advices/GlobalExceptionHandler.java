@@ -1,13 +1,14 @@
-package com.example.exceptionHandelingInSpringBoot.advices;
+package com.exceptionHandelingInSpringBoot.advices;
 
 
-import com.example.exceptionHandelingInSpringBoot.exceptions.ResourceNotFound;
+
+import com.exceptionHandelingInSpringBoot.exceptions.ResourceNotFound;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import com.example.exceptionHandelingInSpringBoot.advices.ApiError;
+
 
 
 import java.util.List;

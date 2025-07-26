@@ -1,4 +1,4 @@
-package com.example.exceptionHandelingInSpringBoot.services;
+package com.exceptionHandelingInSpringBoot.services;
 
 
 import com.exceptionHandelingInSpringBoot.dto.EmployeeDTO;
