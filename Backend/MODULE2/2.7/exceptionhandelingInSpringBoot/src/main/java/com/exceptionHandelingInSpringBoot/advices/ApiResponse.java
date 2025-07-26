@@ -1,9 +1,9 @@
-package com.example.exceptionHandelingInSpringBoot.advices;
+package com.exceptionHandelingInSpringBoot.advices;
 
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
-import com.example.exceptionHandelingInSpringBoot.advices.ApiError;
+
 
 
 import java.time.LocalDateTime;
@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @Data
 public class ApiResponse<T> {
 
-    @JsonFormat(pattern = "hh:mm:ss dd-MM-yyyy")
+//    @JsonFormat(pattern = "hh:mm:ss dd-MM-yyyy")
     private LocalDateTime timeStamp;
     private T data;
     private ApiError error;

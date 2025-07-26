@@ -1,4 +1,4 @@
-package com.example.exceptionHandelingInSpringBoot.advices;
+package com.exceptionHandelingInSpringBoot.advices;
 
 import lombok.Builder;
 import lombok.Data;

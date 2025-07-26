@@ -21,4 +21,12 @@ class ProdReadyFeaturesApplicationTests {
 		System.out.println(employeeDTOList);
 	}
 
+	@Test
+	void getEmployeeById() {
+		EmployeeDTO employeeDTO = employeeClient.getEmployeeById(1L) {
+			System.out.println(employeeDTO);
+
+		}
+	}
+
 }
