@@ -28,6 +28,29 @@ public class InsuranceService {
         return insurance;
 
     }
+    @Transactional
+    public Insurance updateInsuranceOfPatient(Insurance insurance, Long patientId) {
+
+        Patient patient = patientRepository.findById(patientId).orElseThrow();
+        patient.setInsurance(insurance);
+        insurance.setPatient(patient);
+
+        return insurance;
+
+    }
+
+    @Transactional
+    public Patient removeInsuranceOfPatient(Long patientId) {
+
+        Patient patient = patientRepository.findById(patientId).orElseThrow();
+        patient.setInsurance(null);
+
+        return patient;
+
+
+    }
+
+
 
 
 
