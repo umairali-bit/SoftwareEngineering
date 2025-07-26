@@ -89,7 +89,8 @@ public class Patient {
     }
 
     @Override
-    public String toString() {
+    public String
+    toString() {
         return "Patient{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
@@ -98,6 +99,8 @@ public class Patient {
                 ", gender='" + gender + '\'' +
                 ", bloodGroup=" + bloodGroup +
                 ", createdAt=" + createdAt +
+                ", insurance=" + insurance +
+                ", appointments=" + appointments +
                 '}';
     }
 
@@ -121,7 +124,7 @@ public class Patient {
     @JoinColumn(name = "patient_insurance", unique = true)
     private Insurance insurance; //owning side
 
-    @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<Appointment> appointments = new HashSet<>();//inverse side
 
 
