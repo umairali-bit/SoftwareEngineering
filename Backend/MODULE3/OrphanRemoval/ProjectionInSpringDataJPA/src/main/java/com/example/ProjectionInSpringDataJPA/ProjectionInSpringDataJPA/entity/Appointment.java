@@ -70,16 +70,7 @@ public class Appointment {
         this.patient = patient;
     }
 
-    @Override
-    public String toString() {
-        return "Appointment{" +
-                "id=" + id +
-                ", appointmentTime=" + appointmentTime +
-                ", reason='" + reason + '\'' +
-                ", patient=" + patient +
-                ", doctor=" + doctor +
-                '}';
-    }
+
 
     public Doctor getDoctor() {
         return doctor;

@@ -25,30 +25,30 @@ public class PatientServiceTest {
     @Test
     public void testPatient() {
 
-//        // List<Patient> patientList = patientRepository.findAll();
-//
-//        List<PatientInfo> patientList = patientRepository.getPatientInfo();
-//
-//        for (PatientInfo p : patientList) {
-//            System.out.println(p);
-//        }
-//
-//        List<PatientInfoImpl> patientInfos = patientRepository.getPatientInfoConceret();
-//
-//        for (PatientInfoImpl a : patientInfos) {
-//            System.out.println(a);
-//        }
-//
-//        List<BloodGroupStats> bloodGroupStats = patientRepository.getBloodGroupStats();
-//
-//        for (var n : bloodGroupStats) {
-//            System.out.println(n);
-//        }
-//
-//        int rowsAffected = patientRepository.updatePatientNameWithId("Umair Ali", 1L);
-//        System.out.println(rowsAffected);
-//
-//        patientService.testPatientTransaction();
+        // List<Patient> patientList = patientRepository.findAll();
+
+        List<PatientInfo> patientList = patientRepository.getPatientInfo();
+
+        for (PatientInfo p : patientList) {
+            System.out.println(p);
+        }
+
+        List<PatientInfoImpl> patientInfos = patientRepository.getPatientInfoConceret();
+
+        for (PatientInfoImpl a : patientInfos) {
+            System.out.println(a);
+        }
+
+        List<BloodGroupStats> bloodGroupStats = patientRepository.getBloodGroupStats();
+
+        for (var n : bloodGroupStats) {
+            System.out.println(n);
+        }
+
+        int rowsAffected = patientRepository.updatePatientNameWithId("Umair Ali", 1L);
+        System.out.println(rowsAffected);
+
+        patientService.testPatientTransaction();
 
         List<Patient> patient = patientRepository.getPatientsWithAppointments();
 

@@ -88,22 +88,6 @@ public class Patient {
         this.bloodGroup = bloodGroup;
     }
 
-    @Override
-    public String
-    toString() {
-        return "Patient{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", birthDate=" + birthDate +
-                ", email='" + email + '\'' +
-                ", gender='" + gender + '\'' +
-                ", bloodGroup=" + bloodGroup +
-                ", createdAt=" + createdAt +
-                ", insurance=" + insurance +
-                ", appointments=" + appointments +
-                '}';
-    }
-
     public Insurance getInsurance() {
         return insurance;
     }
