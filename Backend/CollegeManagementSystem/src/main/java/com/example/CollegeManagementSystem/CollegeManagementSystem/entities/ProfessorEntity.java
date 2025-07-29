@@ -62,13 +62,5 @@ public class ProfessorEntity {
         this.students = students;
     }
 
-    @Override
-    public String toString() {
-        return "ProfessorEntity{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                ", subjects=" + subjects +
-                ", students=" + students +
-                '}';
-    }
+
 }

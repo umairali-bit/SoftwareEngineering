@@ -78,17 +78,6 @@ public class Insurance {
         this.createdAt = createdAt;
     }
 
-    @Override
-    public String toString() {
-        return "Insurance{" +
-                "id=" + id +
-                ", policyNumber='" + policyNumber + '\'' +
-                ", provider='" + provider + '\'' +
-                ", validUntil=" + validUntil +
-                ", createdAt=" + createdAt +
-                '}';
-    }
-
 
     @OneToOne(mappedBy = "insurance")
     private Patient patient; //inverse side

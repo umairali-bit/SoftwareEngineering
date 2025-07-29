@@ -53,12 +53,5 @@ public class AdmissionRecordEntity {
         this.student = student;
     }
 
-    @Override
-    public String toString() {
-        return "AdmissionRecordEntity{" +
-                "id=" + id +
-                ", fees=" + fees +
-                ", student=" + student +
-                '}';
-    }
+
 }
