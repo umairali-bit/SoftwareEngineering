@@ -4,11 +4,11 @@ package com.example.CollegeManagementSystem.CollegeManagementSystem.entities;
 import jakarta.persistence.*;
 
 
-
 import jakarta.persistence.*;
 
 @Entity
-public class AdmissionRecord {
+@Table(name = "Admission_Record")
+public class AdmissionRecordEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,14 +17,13 @@ public class AdmissionRecord {
     @Column(nullable = false)
     private int fees;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "student_id", nullable = false, unique = true)
-    private Student student;
+    private StudentEntity student;
 
-    public AdmissionRecord() {
-    }
+    public AdmissionRecordEntity() {}
 
-    public AdmissionRecord(Long id, int fees, Student student) {
+    public AdmissionRecordEntity(Long id, int fees, StudentEntity student) {
         this.id = id;
         this.fees = fees;
         this.student = student;
@@ -46,17 +45,17 @@ public class AdmissionRecord {
         this.fees = fees;
     }
 
-    public Student getStudent() {
+    public StudentEntity getStudent() {
         return student;
     }
 
-    public void setStudent(Student student) {
+    public void setStudent(StudentEntity student) {
         this.student = student;
     }
 
     @Override
     public String toString() {
-        return "AdmissionRecord{" +
+        return "AdmissionRecordEntity{" +
                 "id=" + id +
                 ", fees=" + fees +
                 ", student=" + student +

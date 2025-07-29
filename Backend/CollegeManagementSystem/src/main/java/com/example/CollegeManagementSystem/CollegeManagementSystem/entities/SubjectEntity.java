@@ -1,12 +1,12 @@
 package com.example.CollegeManagementSystem.CollegeManagementSystem.entities;
 
 import jakarta.persistence.*;
-
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-public class Subject {
+@Table (name = "subjects")
+public class SubjectEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -14,9 +14,9 @@ public class Subject {
 
     private String title;
 
-    @ManyToOne //owning
+    @ManyToOne
     @JoinColumn(nullable = false)
-    private Professor professor;
+    private ProfessorEntity professor;
 
     @ManyToMany
     @JoinTable(
@@ -24,12 +24,11 @@ public class Subject {
             joinColumns = @JoinColumn(name = "subject_id"),
             inverseJoinColumns = @JoinColumn(name = "student_id")
     )
-    private Set<Student> students = new HashSet<>();
+    private Set<StudentEntity> students = new HashSet<>();
 
-    public Subject() {
-    }
+    public SubjectEntity() {}
 
-    public Subject(Long id, String title, Professor professor, Set<Student> students) {
+    public SubjectEntity(Long id, String title, ProfessorEntity professor, Set<StudentEntity> students) {
         this.id = id;
         this.title = title;
         this.professor = professor;
@@ -52,25 +51,25 @@ public class Subject {
         this.title = title;
     }
 
-    public Professor getProfessor() {
+    public ProfessorEntity getProfessor() {
         return professor;
     }
 
-    public void setProfessor(Professor professor) {
+    public void setProfessor(ProfessorEntity professor) {
         this.professor = professor;
     }
 
-    public Set<Student> getStudents() {
+    public Set<StudentEntity> getStudents() {
         return students;
     }
 
-    public void setStudent(Set<Student> students) {
+    public void setStudents(Set<StudentEntity> students) {
         this.students = students;
     }
 
     @Override
     public String toString() {
-        return "Subject{" +
+        return "SubjectEntity{" +
                 "id=" + id +
                 ", title='" + title + '\'' +
                 ", professor=" + professor +
