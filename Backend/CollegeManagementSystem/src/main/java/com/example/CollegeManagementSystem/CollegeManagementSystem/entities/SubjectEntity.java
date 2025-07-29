@@ -14,11 +14,11 @@ public class SubjectEntity {
 
     private String title;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(nullable = false)
     private ProfessorEntity professor;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
             name = "subject_student",
             joinColumns = @JoinColumn(name = "subject_id"),
