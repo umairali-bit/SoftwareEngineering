@@ -16,18 +16,24 @@ public class Student {
     @Column(nullable = false, unique = true, length = 100)
     private String name;
 
-    private Set<Professor> professor = new HashSet<>();
+    @ManyToMany
+    @JoinTable(
+            name = "student_professor",
+            joinColumns = @JoinColumn(name = "student_id"),
+            inverseJoinColumns = @JoinColumn(name = "professor_id"))
+    private Set<Professor> professors = new HashSet<>();
 
-    private Set<Subject> subject = new HashSet<>();
+    @ManyToMany(mappedBy = "students")
+    private Set<Subject> subjects = new HashSet<>();
 
     public Student() {
     }
 
-    public Student(Long id, String name, Set<Professor> professor, Set<Subject> subject) {
+    public Student(Long id, String name, Set<Professor> professors, Set<Subject> subjects) {
         this.id = id;
         this.name = name;
-        this.professor = professor;
-        this.subject = subject;
+        this.professors = professors;
+        this.subjects = subjects;
     }
 
     public Long getId() {
@@ -46,20 +52,20 @@ public class Student {
         this.name = name;
     }
 
-    public Set<Professor> getProfessor() {
-        return professor;
+    public Set<Professor> getProfessors() {
+        return professors;
     }
 
-    public void setProfessor(Set<Professor> professor) {
-        this.professor = professor;
+    public void setProfessor(Set<Professor> professors) {
+        this.professors = professors;
     }
 
-    public Set<Subject> getSubject() {
-        return subject;
+    public Set<Subject> getSubjects() {
+        return subjects;
     }
 
-    public void setSubject(Set<Subject> subject) {
-        this.subject = subject;
+    public void setSubject(Set<Subject> subjects) {
+        this.subjects = subjects;
     }
 
     @Override
@@ -67,8 +73,8 @@ public class Student {
         return "Student{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", professor=" + professor +
-                ", subject=" + subject +
+                ", professors=" + professors +
+                ", subjects=" + subjects +
                 '}';
     }
 }

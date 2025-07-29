@@ -16,18 +16,19 @@ public class Professor {
     private String title;
 
     @OneToMany(mappedBy = "professor")//inverse side
-    private Set<Subject> subject = new HashSet<>();
+    private Set<Subject> subjects = new HashSet<>();
 
-    private Set<Student> student = new HashSet<>();
+    @ManyToMany(mappedBy = "professors")//inverse side
+    private Set<Student> students = new HashSet<>();
 
     public Professor() {
     }
 
-    public Professor(Long id, String title, Set<Subject> subject, Set<Student> student) {
+    public Professor(Long id, String title, Set<Subject> subjects, Set<Student> students) {
         this.id = id;
         this.title = title;
-        this.subject = subject;
-        this.student = student;
+        this.subjects = subjects;
+        this.students = students;
     }
 
     public Long getId() {
@@ -46,20 +47,20 @@ public class Professor {
         this.title = title;
     }
 
-    public Set<Subject> getSubject() {
-        return subject;
+    public Set<Subject> getSubjects() {
+        return subjects;
     }
 
-    public void setSubject(Set<Subject> subject) {
-        this.subject = subject;
+    public void setSubjects(Set<Subject> subjects) {
+        this.subjects = subjects;
     }
 
-    public Set<Student> getStudent() {
-        return student;
+    public Set<Student> getStudents() {
+        return students;
     }
 
-    public void setStudent(Set<Student> student) {
-        this.student = student;
+    public void setStudents(Set<Student> students) {
+        this.students = students;
     }
 
     @Override
@@ -67,8 +68,8 @@ public class Professor {
         return "Professor{" +
                 "id=" + id +
                 ", title='" + title + '\'' +
-                ", subject=" + subject +
-                ", student=" + student +
+                ", subjects=" + subjects +
+                ", students=" + students +
                 '}';
     }
 }

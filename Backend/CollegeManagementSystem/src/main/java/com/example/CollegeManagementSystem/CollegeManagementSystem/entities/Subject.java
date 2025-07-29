@@ -18,16 +18,22 @@ public class Subject {
     @JoinColumn(nullable = false)
     private Professor professor;
 
-    private Set<Student> student = new HashSet<>();
+    @ManyToMany
+    @JoinTable(
+            name = "subject_student",
+            joinColumns = @JoinColumn(name = "subject_id"),
+            inverseJoinColumns = @JoinColumn(name = "student_id")
+    )
+    private Set<Student> students = new HashSet<>();
 
     public Subject() {
     }
 
-    public Subject(Long id, String title, Professor professor, Set<Student> student) {
+    public Subject(Long id, String title, Professor professor, Set<Student> students) {
         this.id = id;
         this.title = title;
         this.professor = professor;
-        this.student = student;
+        this.students = students;
     }
 
     public Long getId() {
@@ -54,12 +60,12 @@ public class Subject {
         this.professor = professor;
     }
 
-    public Set<Student> getStudent() {
-        return student;
+    public Set<Student> getStudents() {
+        return students;
     }
 
-    public void setStudent(Set<Student> student) {
-        this.student = student;
+    public void setStudent(Set<Student> students) {
+        this.students = students;
     }
 
     @Override
@@ -68,7 +74,7 @@ public class Subject {
                 "id=" + id +
                 ", title='" + title + '\'' +
                 ", professor=" + professor +
-                ", student=" + student +
+                ", students=" + students +
                 '}';
     }
 }
