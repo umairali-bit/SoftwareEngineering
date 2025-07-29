@@ -1,13 +1,12 @@
 package com.example.CollegeManagementSystem.CollegeManagementSystem.entities;
 
-
 import jakarta.persistence.*;
-
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-public class Student {
+@Table(name = "students")
+public class StudentEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,16 +19,17 @@ public class Student {
     @JoinTable(
             name = "student_professor",
             joinColumns = @JoinColumn(name = "student_id"),
-            inverseJoinColumns = @JoinColumn(name = "professor_id"))
-    private Set<Professor> professors = new HashSet<>();
+            inverseJoinColumns = @JoinColumn(name = "professor_id")
 
-    @ManyToMany(mappedBy = "students")
-    private Set<Subject> subjects = new HashSet<>();
+    )
+    private Set<ProfessorEntity> professors = new HashSet<>();
 
-    public Student() {
-    }
+    @ManyToMany(mappedBy = "students", fetch = FetchType.EAGER)
+    private Set<SubjectEntity> subjects = new HashSet<>();
 
-    public Student(Long id, String name, Set<Professor> professors, Set<Subject> subjects) {
+    public StudentEntity() {}
+
+    public StudentEntity(Long id, String name, Set<ProfessorEntity> professors, Set<SubjectEntity> subjects) {
         this.id = id;
         this.name = name;
         this.professors = professors;
@@ -52,25 +52,25 @@ public class Student {
         this.name = name;
     }
 
-    public Set<Professor> getProfessors() {
+    public Set<ProfessorEntity> getProfessors() {
         return professors;
     }
 
-    public void setProfessor(Set<Professor> professors) {
+    public void setProfessors(Set<ProfessorEntity> professors) {
         this.professors = professors;
     }
 
-    public Set<Subject> getSubjects() {
+    public Set<SubjectEntity> getSubjects() {
         return subjects;
     }
 
-    public void setSubject(Set<Subject> subjects) {
+    public void setSubjects(Set<SubjectEntity> subjects) {
         this.subjects = subjects;
     }
 
     @Override
     public String toString() {
-        return "Student{" +
+        return "StudentEntity{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", professors=" + professors +
