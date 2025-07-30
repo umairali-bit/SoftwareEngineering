@@ -13,8 +13,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @SpringBootTest
 public class ProfessorTest {
@@ -34,66 +36,50 @@ public class ProfessorTest {
     @Autowired
     private Subject subjectService;
 
-//    @Test
-////    public void testSaveAdmissionRecordWithStudent() {
-////        StudentEntity student = new StudentEntity();
-////        student.setName("Ali");
-////
-////        student = studentRepository.save(student);
-////
-////        System.out.println(student);
-
+    @Test
+    public void testProfessor() {
+        List<ProfessorEntity> professor = professorRepository.findAll();
+        for (ProfessorEntity p : professor) {
+            System.out.println(p);
+        }
+    }
 
     @Test
-    public ProfessorEntity createProfessor() {
-        ProfessorEntity professor = new ProfessorEntity();
-        professor.setTitle("Dr. Jane Doe");
-        ProfessorEntity savedProfessor = professorRepository.save(professor);
-
-
-        return savedProfessor;
-
-
+    public void testStudents() {
+        List<StudentEntity> students = studentRepository.findAll();
+        for (StudentEntity s : students) {
+            System.out.println(s);
+        }
 
     }
 
     @Test
-    public List<StudentEntity> createStudent() {
-        StudentEntity student = new StudentEntity();
-        StudentEntity student2 = new StudentEntity();
-        student.setName("Alice");
-        student2.setName("Bob");
-        student = studentRepository.save(student);
-        student2 = studentRepository.save(student2);
+    public void testCreateSubject() {
+        // Assume you already have professors and students saved in DB
+        List<ProfessorEntity> professors = professorRepository.findAll();
+        List<StudentEntity> students = studentRepository.findAll();
 
+        if (professors.isEmpty() || students.isEmpty()) {
+            System.out.println("No professors or students found to create subject.");
+            return;
+        }
 
-        return List.of(student, student2);
+        ProfessorEntity professor = professors.get(0);
 
+        Set<Long> studentIds = students.stream()
+                .map(StudentEntity::getId)
+                .collect(Collectors.toSet());
+
+        SubjectEntity newSubject = new SubjectEntity();
+        newSubject.setName("Test Subject");
+
+        SubjectEntity createdSubject = subjectService.createNewSubject(newSubject, professor.getId(), studentIds);
+
+        System.out.println("Created Subject: " + createdSubject);
+        System.out.println("Assigned Professor: " + createdSubject.getProfessor());
+        System.out.println("Assigned Students: " + createdSubject.getStudents());
     }
-
-
-    @Test
-    public void testCreateNewSubject() {
-        SubjectEntity subject = new SubjectEntity();
-        subject.setTitle("Algorithms");
-
-        ProfessorEntity professor = createProfessor();
-        Long professorId = createProfessor().getId();
-
-
-        List<StudentEntity> students = createStudent();
-
-        StudentEntity student = students.get(0);
-        StudentEntity student2 = students.get(1);
-
-        Set<Long> studentIds = Set.of(student.getId(), student2.getId());
-
-        SubjectEntity createdSubject = subjectService.createNewSubject(subject, professorId, studentIds);
-
-        System.out.println(createdSubject);
-    }
-
-    }
+}
 
 
 
