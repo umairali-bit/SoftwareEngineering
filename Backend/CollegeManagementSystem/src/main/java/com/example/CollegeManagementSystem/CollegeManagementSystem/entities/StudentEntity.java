@@ -31,7 +31,7 @@ public class StudentEntity {
             inverseJoinColumns = @JoinColumn(name = "professor_id")
     )
     @ToString.Exclude
-    private Set<ProfessorEntity> professors;
+    private Set<ProfessorEntity> professors = new HashSet<>();
 
 
     @ManyToMany(cascade = CascadeType.ALL)
@@ -41,5 +41,5 @@ public class StudentEntity {
             inverseJoinColumns = @JoinColumn(name = "subject_id")
     )
     @ToString.Exclude
-    private Set<SubjectEntity> subjects;
+    private Set<SubjectEntity> subjects = new HashSet<>();
 }
