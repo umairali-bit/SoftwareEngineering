@@ -13,6 +13,7 @@ import java.util.Set;
 @Getter
 @Setter
 @Entity
+@ToString(exclude = {"students", "professor"})
 @NoArgsConstructor
 @Table(name = "subject")
 public class SubjectEntity {
@@ -24,13 +25,11 @@ public class SubjectEntity {
     private String name;
 
     // Like doctor in appointment
-    @ToString.Exclude
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false)
     private ProfessorEntity professor;
 
     // Like patient in appointment
-    @ToString.Exclude
     @ManyToMany
     @JoinTable(
             name = "subject_student",

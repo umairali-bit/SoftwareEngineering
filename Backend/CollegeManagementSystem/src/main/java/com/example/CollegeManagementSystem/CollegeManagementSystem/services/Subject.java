@@ -31,12 +31,26 @@ public class Subject {
 
     @Transactional
     public SubjectEntity createNewSubject(SubjectEntity subject, Long professorId, Set<Long> studentIds) {
-        ProfessorEntity professor = professorRepository.findById(professorId).orElseThrow();
-        Set<StudentEntity> students = studentRepository.findAllById(studentIds).stream().collect(Collectors.toSet());
 
+        // Load professor from DB - must exist and managed
+        ProfessorEntity professor = professorRepository.findById(professorId)
+                .orElseThrow(() -> new RuntimeException("Professor not found"));
+
+        // Load students from DB
+        Set<StudentEntity> students = new HashSet<>();
+        for (Long studentId : studentIds) {
+            StudentEntity student = studentRepository.findById(studentId)
+                    .orElseThrow(() -> new RuntimeException("Student not found"));
+            students.add(student);
+        }
+
+        // Set the professor and students to subject
         subject.setProfessor(professor);
         subject.setStudents(students);
 
+        // Save subject (professor is managed, so no error)
         return subjectRepository.save(subject);
     }
+
+
 }

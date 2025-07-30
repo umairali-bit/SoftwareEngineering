@@ -9,6 +9,7 @@ import com.example.CollegeManagementSystem.CollegeManagementSystem.repositories.
 import com.example.CollegeManagementSystem.CollegeManagementSystem.repositories.StudentRepository;
 import com.example.CollegeManagementSystem.CollegeManagementSystem.repositories.SubjectRepository;
 import com.example.CollegeManagementSystem.CollegeManagementSystem.services.Subject;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -79,6 +80,7 @@ public class ProfessorTest {
         System.out.println("Assigned Professor: " + createdSubject.getProfessor());
         System.out.println("Assigned Students: " + createdSubject.getStudents());
     }
+
 }
 
 
