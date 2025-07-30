@@ -1,70 +1,41 @@
 package com.example.CollegeManagementSystem.CollegeManagementSystem.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import lombok.*;
+
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
+@AllArgsConstructor
+@Builder
+@Getter
+@Setter
 @Entity
-@Table (name = "subjects")
+@NoArgsConstructor
+@Table(name = "subject")
 public class SubjectEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String title;
+    private String name;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    // Like doctor in appointment
+    @ToString.Exclude
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false)
     private ProfessorEntity professor;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    // Like patient in appointment
+    @ToString.Exclude
+    @ManyToMany
     @JoinTable(
             name = "subject_student",
             joinColumns = @JoinColumn(name = "subject_id"),
             inverseJoinColumns = @JoinColumn(name = "student_id")
     )
     private Set<StudentEntity> students = new HashSet<>();
-
-    public SubjectEntity() {}
-
-    public SubjectEntity(Long id, String title, ProfessorEntity professor, Set<StudentEntity> students) {
-        this.id = id;
-        this.title = title;
-        this.professor = professor;
-        this.students = students;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public ProfessorEntity getProfessor() {
-        return professor;
-    }
-
-    public void setProfessor(ProfessorEntity professor) {
-        this.professor = professor;
-    }
-
-    public Set<StudentEntity> getStudents() {
-        return students;
-    }
-
-    public void setStudents(Set<StudentEntity> students) {
-        this.students = students;
-    }
-
 }

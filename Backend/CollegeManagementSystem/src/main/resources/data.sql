@@ -1,16 +1,16 @@
---INSERT INTO professors (id, title) VALUES
---(1, 'Dr. Alan Turing'),
---(2, 'Dr. Marie Curie'),
---(3, 'Dr. Isaac Newton');
+INSERT INTO professor (name)
+VALUES
+  ('Dr. Alan Turing'),
+  ('Dr. Marie Curie'),
+  ('Dr. Isaac Newton');
 
 
---INSERT INTO students (id, name) VALUES
---(1, 'Alice Johnson'),
---(2, 'Brian Smith'),
---(3, 'Chloe Davis'),
---(4, 'David Lee'),
---(5, 'Eva Chen'),
---(6, 'Frank Murphy');
+
+INSERT INTO student (name) VALUES
+  ('Alice Johnson'),
+  ('Brian Smith'),
+  ('Chloe Davis');
+
 
 
 --INSERT INTO subjects (id, title, professor_id) VALUES

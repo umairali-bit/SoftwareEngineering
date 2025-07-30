@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class Subject {
@@ -30,25 +31,12 @@ public class Subject {
 
     @Transactional
     public SubjectEntity createNewSubject(SubjectEntity subject, Long professorId, Set<Long> studentIds) {
-
-        ProfessorEntity professor = professorRepository.findById(professorId).orElseThrow(); //transient state
-
-        Set<StudentEntity> students = new HashSet<>();
-
-        for (Long studentId : studentIds) {
-            StudentEntity student = studentRepository.findById(studentId).orElseThrow();//persistence
-
-            students.add(student);//persistence state
-        }
+        ProfessorEntity professor = professorRepository.findById(professorId).orElseThrow();
+        Set<StudentEntity> students = studentRepository.findAllById(studentIds).stream().collect(Collectors.toSet());
 
         subject.setProfessor(professor);
         subject.setStudents(students);
 
-
-
-        subjectRepository.save(subject);//save = managed-> persistence
-
-        return subject;
-
+        return subjectRepository.save(subject);
     }
 }
