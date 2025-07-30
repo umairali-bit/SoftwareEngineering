@@ -13,12 +13,12 @@ INSERT INTO student (name) VALUES
 
 
 
---INSERT INTO subjects (id, title, professor_id) VALUES
---(1, 'Computer Science', 1),
---(2, 'Physics', 2),
---(3, 'Mathematics', 3),
---(4, 'Quantum Mechanics', 2),
---(5, 'Artificial Intelligence', 1);
+INSERT INTO subject (name, professor_id) VALUES
+('Computer Science', 1),
+('Physics', 2),
+('Mathematics', 3),
+('Quantum Mechanics', 2),
+('Artificial Intelligence', 1);
 
 
 
