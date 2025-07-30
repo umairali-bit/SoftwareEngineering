@@ -81,6 +81,27 @@ public class ProfessorTest {
         System.out.println("Assigned Students: " + createdSubject.getStudents());
     }
 
+    @Test
+    void testGetSubjectById() {
+
+        ProfessorEntity professor = new ProfessorEntity();
+        professor.setName("Dr. Smith");
+        professor = professorRepository.save(professor);
+
+        SubjectEntity subject = new SubjectEntity();
+        subject.setName("Math");
+        subject.setProfessor(professor);
+        subject = subjectRepository.save(subject);
+
+        SubjectEntity result = subjectService.getSubjectById(subject.getId());
+        System.out.println(result);
+
+
+
+
+
+    }
+
 }
 
 

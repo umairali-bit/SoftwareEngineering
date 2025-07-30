@@ -52,5 +52,13 @@ public class Subject {
         return subjectRepository.save(subject);
     }
 
+    public SubjectEntity getSubjectById(Long subjectId) {
+
+        return subjectRepository.findById(subjectId).orElseThrow();
+
+    }
+
+
+
 
 }
