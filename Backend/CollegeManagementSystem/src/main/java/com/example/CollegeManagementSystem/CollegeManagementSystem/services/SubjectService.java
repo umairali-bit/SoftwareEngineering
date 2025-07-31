@@ -13,10 +13,9 @@ import org.springframework.stereotype.Service;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
-public class Subject {
+public class SubjectService {
 
     private final ProfessorRepository professorRepository;
 
@@ -24,7 +23,7 @@ public class Subject {
 
     private final SubjectRepository subjectRepository;
 
-    public Subject(ProfessorRepository professorRepository, StudentRepository studentRepository, SubjectRepository subjectRepository) {
+    public SubjectService(ProfessorRepository professorRepository, StudentRepository studentRepository, SubjectRepository subjectRepository) {
         this.professorRepository = professorRepository;
         this.studentRepository = studentRepository;
         this.subjectRepository = subjectRepository;
@@ -64,6 +63,8 @@ public class Subject {
         // Load from DB — the returned entity is in the Managed (Persistent) state
         return subjectRepository.findAll();
     }
+
+
 
 
 

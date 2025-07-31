@@ -8,14 +8,11 @@ import com.example.CollegeManagementSystem.CollegeManagementSystem.repositories.
 import com.example.CollegeManagementSystem.CollegeManagementSystem.repositories.ProfessorRepository;
 import com.example.CollegeManagementSystem.CollegeManagementSystem.repositories.StudentRepository;
 import com.example.CollegeManagementSystem.CollegeManagementSystem.repositories.SubjectRepository;
-import com.example.CollegeManagementSystem.CollegeManagementSystem.services.Subject;
-import jakarta.transaction.Transactional;
+import com.example.CollegeManagementSystem.CollegeManagementSystem.services.SubjectService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -36,7 +33,7 @@ public class ProfessorTest {
     private AdmissionRecordRepository admissionRecordRepository;
 
     @Autowired
-    private Subject subjectService;
+    private SubjectService subjectService;
 
     @Test
     public void testProfessor() {
