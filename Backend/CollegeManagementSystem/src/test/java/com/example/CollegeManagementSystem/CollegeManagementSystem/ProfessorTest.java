@@ -118,10 +118,6 @@ public class ProfessorTest {
         SubjectDTO result = subjectService.getSubjectById(subject.getId());
         System.out.println(result);
 
-
-
-
-
     }
 
     @Test

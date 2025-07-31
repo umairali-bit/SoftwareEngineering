@@ -102,7 +102,7 @@ public class SubjectService {
     }
 
 
-
+    @Transactional
     public List<SubjectDTO> getAllSubjects() {
         // Load from DB — the returned entity is in the Managed (Persistent) state
         List<SubjectEntity> subjectEntities = subjectRepository.findAll();
