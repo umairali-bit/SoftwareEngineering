@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -87,26 +88,41 @@ public class ProfessorTest {
         System.out.println("Assigned Students: " + createdSubject.getStudents());
     }
 
-//    @Test
-//    void testGetSubjectById() {
-//
-//        ProfessorEntity professor = new ProfessorEntity();
-//        professor.setName("Dr. Smith");
-//        professor = professorRepository.save(professor);
-//
-//        SubjectEntity subject = new SubjectEntity();
-//        subject.setName("Math");
-//        subject.setProfessor(professor);
-//        subject = subjectRepository.save(subject);
-//
-//        Optional<SubjectDTO> result = subjectService.getSubjectById(subject.getId());
-//        System.out.println(result);
-//
-//
-//
-//
-//
-//    }
+    @Test
+    void testGetSubjectById() {
+
+        ProfessorEntity professor = new ProfessorEntity();
+        professor.setName("Dr. Smith");
+        professor = professorRepository.save(professor);
+
+        // Create and save students
+        StudentEntity student1 = new StudentEntity();
+        student1.setName("Alice");
+        student1 = studentRepository.save(student1);
+
+        StudentEntity student2 = new StudentEntity();
+        student2.setName("Bob");
+        student2 = studentRepository.save(student2);
+
+        SubjectEntity subject = new SubjectEntity();
+        subject.setName("Math");
+        subject.setProfessor(professor);
+
+        Set<StudentEntity> students = new HashSet<>();
+        students.add(student1);
+        students.add(student2);
+        subject.setStudents(students);
+
+        subject = subjectRepository.save(subject);
+
+        SubjectDTO result = subjectService.getSubjectById(subject.getId());
+        System.out.println(result);
+
+
+
+
+
+    }
 
     @Test
     void testGetAllSubjects() {
