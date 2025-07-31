@@ -177,6 +177,50 @@ public class ProfessorTest {
 
     }
 
+    @Test
+    @Transactional
+    public void testPatch() {
+
+
+        //1. create a professor
+        ProfessorEntity professor = new ProfessorEntity();
+        professor.setName("Dr. Harry Porter");
+        professor = professorRepository.save(professor);
+
+
+
+        //2. create and save some students
+        StudentEntity student1 = StudentEntity.builder().name("Hermoine").build();
+        StudentEntity student2 = StudentEntity.builder().name("Harry").build();
+        student1 = studentRepository.save(student1);
+        student2 = studentRepository.save(student2);
+
+        Set<StudentEntity> studentEntities = new HashSet<>();
+        studentEntities.add(student1);
+        studentEntities.add(student2);
+
+
+        //3. create a subject
+        SubjectEntity subject = new SubjectEntity();
+        subject.setName("Old Name");
+        subject.setProfessor(professor);
+        subject.setStudents(studentEntities);
+        subject = subjectRepository.save(subject);
+
+
+        //3. prepare the subject DTO and patch
+        SubjectDTO newSubjectDTO = new SubjectDTO();
+        newSubjectDTO.setName("Data Structures and Algorithms");
+        newSubjectDTO.setProfessorId(professor.getId());
+        newSubjectDTO.setStudents(Set.of(student1.getId(), student2.getId()));
+
+        //4. call service method to insert subject
+        SubjectDTO savedSubjectDTO = subjectService.patchUpdateSubject(subject.getId(), newSubjectDTO);
+
+        // Step 7: Print the saved subject
+        System.out.println("Saved Subject: " + savedSubjectDTO);
+    }
+
 }
 
 
