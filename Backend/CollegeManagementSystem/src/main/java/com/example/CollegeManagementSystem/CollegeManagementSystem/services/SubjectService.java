@@ -76,6 +76,31 @@ public class SubjectService {
         return savedDTO;
     }
 
+    @Transactional
+    public SubjectDTO getSubjectById(Long subjectId) {
+        SubjectEntity subject = subjectRepository.findById(subjectId)
+                .orElseThrow(() -> new RuntimeException("Subject not found"));
+
+        SubjectDTO dto = new SubjectDTO();
+        dto.setId(subject.getId());
+        dto.setName(subject.getName());
+
+        if(subject.getProfessor() != null) {
+            dto.setProfessorId(subject.getProfessor().getId());
+            dto.setProfessorName(subject.getProfessor().getName());
+        }
+
+        if (subject.getStudents() != null) {
+            Set<Long> studentsIds = subject.getStudents().stream()
+                    .map(s -> s.getId())
+                    .collect(Collectors.toSet());
+            dto.setStudents(studentsIds);
+
+        }
+
+        return dto;
+    }
+
 
 
     public List<SubjectDTO> getAllSubjects() {
