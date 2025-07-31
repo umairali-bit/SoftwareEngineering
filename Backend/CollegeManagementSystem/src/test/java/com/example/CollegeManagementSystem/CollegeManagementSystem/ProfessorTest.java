@@ -1,6 +1,7 @@
 package com.example.CollegeManagementSystem.CollegeManagementSystem;
 
 
+import com.example.CollegeManagementSystem.CollegeManagementSystem.dtos.StudentDTO;
 import com.example.CollegeManagementSystem.CollegeManagementSystem.dtos.SubjectDTO;
 import com.example.CollegeManagementSystem.CollegeManagementSystem.entities.ProfessorEntity;
 import com.example.CollegeManagementSystem.CollegeManagementSystem.entities.StudentEntity;
@@ -10,6 +11,7 @@ import com.example.CollegeManagementSystem.CollegeManagementSystem.repositories.
 import com.example.CollegeManagementSystem.CollegeManagementSystem.repositories.StudentRepository;
 import com.example.CollegeManagementSystem.CollegeManagementSystem.repositories.SubjectRepository;
 import com.example.CollegeManagementSystem.CollegeManagementSystem.services.SubjectService;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -127,6 +129,52 @@ public class ProfessorTest {
         for (SubjectDTO s : subjects) {
             System.out.println(s);
         }
+    }
+
+    @Test
+    @Transactional
+    public void testUpdateSubject() {
+        // Step 1: Create and save an initial professor
+        ProfessorEntity originalProfessor = new ProfessorEntity();
+        originalProfessor.setName("Dr. Original Professor");
+        originalProfessor = professorRepository.save(originalProfessor);
+
+        // Step 2: Create and save an initial subject linked to original professor
+        SubjectEntity subject = new SubjectEntity();
+        subject.setName("Original Subject");
+        subject.setProfessor(originalProfessor);
+        subject = subjectRepository.save(subject);
+
+        // Step 3: Create and save a new professor for update
+        ProfessorEntity newProfessor = new ProfessorEntity();
+        newProfessor.setName("Dr. New Professor");
+        newProfessor = professorRepository.save(newProfessor);
+
+        // Step 4: Create and save some students
+        StudentEntity student1 = new StudentEntity();
+        student1.setName("Alice");
+        student1 = studentRepository.save(student1);
+
+        StudentEntity student2 = new StudentEntity();
+        student2.setName("Bob");
+        student2 = studentRepository.save(student2);
+
+        Set<Long> updatedStudentIds = new HashSet<>();
+        updatedStudentIds.add(student1.getId());
+        updatedStudentIds.add(student2.getId());
+
+        // Step 5: Prepare updated SubjectDTO
+        SubjectDTO updatedSubjectDTO = new SubjectDTO();
+        updatedSubjectDTO.setName("Updated Subject Name");
+        updatedSubjectDTO.setProfessorId(newProfessor.getId());
+        updatedSubjectDTO.setStudents(updatedStudentIds);
+
+        // Step 6: Call the updateSubject service method
+        SubjectDTO updatedSubject = subjectService.updateSubject(subject.getId(), updatedSubjectDTO);
+
+        // Step 7: Print updated subject DTO
+        System.out.println("Updated Subject DTO: " + updatedSubject);
+
     }
 
 }
