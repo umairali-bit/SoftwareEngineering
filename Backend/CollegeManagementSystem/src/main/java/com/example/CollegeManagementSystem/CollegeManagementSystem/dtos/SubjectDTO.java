@@ -15,5 +15,5 @@ public class SubjectDTO {
     private String name;
     private Long professorId;
     private String professorName;
-    private Set<Long> students = new HashSet<>();
+    private Set<Long> students;
 }

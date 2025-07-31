@@ -114,6 +114,45 @@ public class SubjectService {
     }
 
 
+    @Transactional
+    public SubjectDTO updateSubject (Long subjectId, SubjectDTO subjectDTO) {
+        //1. Load the existing entity (Persistence State)
+        SubjectEntity subjectEntity = subjectRepository.findById(subjectId)
+                .orElseThrow(() -> new RuntimeException("Subject not found with ID: " + subjectId));
+
+        //2. Map incoming DTO into the existing entity
+        modelMapper.map(subjectDTO, subjectEntity);
+
+        //3. Handle associations explicitly
+        if (subjectDTO.getProfessorId() != null) {
+            ProfessorEntity professor = professorRepository.findById(subjectDTO.getProfessorId())
+                    .orElseThrow(() -> new RuntimeException("Professor not found"));
+            subjectEntity.setProfessor(professor);
+        }
+
+        //4. Handle Student updates if needed
+        if (subjectDTO.getStudents() != null) {
+            Set<StudentEntity> students = subjectDTO.getStudents().stream()
+                    .map(idVal -> studentRepository.findById(idVal)
+                            .orElseThrow(() -> new RuntimeException("Student not found with ID: " + idVal)))
+                    .collect(Collectors.toSet());
+
+            subjectEntity.setStudents(students);
+        }
+
+        //5. Save updated entity and return DTO
+        SubjectEntity updatedSubject = subjectRepository.save(subjectEntity);
+        SubjectDTO updatedDTO = modelMapper.map(updatedSubject, SubjectDTO.class);
+
+        // Manually set students IDs in DTO
+        Set<Long> studentIds = updatedSubject.getStudents().stream()
+                .map(StudentEntity::getId)
+                .collect(Collectors.toSet());
+        updatedDTO.setStudents(studentIds);
+        return updatedDTO;
+    }
+
+
 
 
 
