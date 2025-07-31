@@ -1,6 +1,7 @@
 package com.example.CollegeManagementSystem.CollegeManagementSystem.services;
 
 
+import com.example.CollegeManagementSystem.CollegeManagementSystem.dtos.SubjectDTO;
 import com.example.CollegeManagementSystem.CollegeManagementSystem.entities.ProfessorEntity;
 import com.example.CollegeManagementSystem.CollegeManagementSystem.entities.StudentEntity;
 import com.example.CollegeManagementSystem.CollegeManagementSystem.entities.SubjectEntity;
@@ -8,11 +9,14 @@ import com.example.CollegeManagementSystem.CollegeManagementSystem.repositories.
 import com.example.CollegeManagementSystem.CollegeManagementSystem.repositories.StudentRepository;
 import com.example.CollegeManagementSystem.CollegeManagementSystem.repositories.SubjectRepository;
 import jakarta.transaction.Transactional;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class SubjectService {
@@ -23,45 +27,65 @@ public class SubjectService {
 
     private final SubjectRepository subjectRepository;
 
-    public SubjectService(ProfessorRepository professorRepository, StudentRepository studentRepository, SubjectRepository subjectRepository) {
+    private final ModelMapper modelMapper;
+
+    public SubjectService(ProfessorRepository professorRepository, StudentRepository studentRepository, SubjectRepository subjectRepository, ModelMapper modelMapper) {
         this.professorRepository = professorRepository;
         this.studentRepository = studentRepository;
         this.subjectRepository = subjectRepository;
+        this.modelMapper = modelMapper;
     }
 
     @Transactional
-    public SubjectEntity createNewSubject(SubjectEntity subject, Long professorId, Set<Long> studentIds) {
+    public SubjectDTO createSubject(SubjectDTO subjectDTO) {
+        // --- Transient State ---
+        // Map DTO to Entity (subject is in transient state)
+        SubjectEntity subject = modelMapper.map(subjectDTO, SubjectEntity.class);
 
-        // Load professor from DB - this entity is not managed - Persistence state
-        ProfessorEntity professor = professorRepository.findById(professorId)
+        // --- Persistent State for Professor ---
+        ProfessorEntity professor = professorRepository.findById(subjectDTO.getProfessorId())
                 .orElseThrow(() -> new RuntimeException("Professor not found"));
+        subject.setProfessor(professor); // Attach managed professor
 
-        // Load students from DB - each student entity is also managed (persistent) after fetch
-        Set<StudentEntity> students = new HashSet<>();//transient state
-        for (Long studentId : studentIds) {
+        // --- Persistent State for Students ---
+        Set<StudentEntity> managedStudents = new HashSet<>();
+        for (Long studentId : subjectDTO.getStudents()) {
             StudentEntity student = studentRepository.findById(studentId)
                     .orElseThrow(() -> new RuntimeException("Student not found"));
-            students.add(student);
+            managedStudents.add(student);
         }
+        subject.setStudents(managedStudents); // Attach managed students
 
-        // Set the professor and students to the new subject entity (subject is in transient state here)
-        subject.setProfessor(professor);
-        subject.setStudents(students);
+        // --- Persist the Subject Entity ---
+        SubjectEntity savedSubject = subjectRepository.save(subject);
 
-        // Save subject - this persists the subject entity and makes it managed/persistent
-        return subjectRepository.save(subject);//persistence
+        // --- Prepare DTO Response ---
+        SubjectDTO savedDTO = new SubjectDTO();
+        savedDTO.setId(savedSubject.getId());
+        savedDTO.setName(savedSubject.getName());
+        savedDTO.setProfessorId(savedSubject.getProfessor().getId());
+        savedDTO.setProfessorName(savedSubject.getProfessor().getName());
+
+        // Add student IDs
+        Set<Long> studentIds = new HashSet<>();
+        for (StudentEntity s : savedSubject.getStudents()) {
+            studentIds.add(s.getId());
+        }
+        savedDTO.setStudents(studentIds);
+
+        return savedDTO;
     }
 
-    public SubjectEntity getSubjectById(Long subjectId) {
 
-        //Load from DB - Persistence State
-        return subjectRepository.findById(subjectId).orElseThrow();
 
-    }
-
-    public List<SubjectEntity> getAllSubjects() {
+    public List<SubjectDTO> getAllSubjects() {
         // Load from DB — the returned entity is in the Managed (Persistent) state
-        return subjectRepository.findAll();
+        List<SubjectEntity> subjectEntities = subjectRepository.findAll();
+
+        return subjectEntities
+                .stream()
+                .map(subjectEntity -> modelMapper.map(subjectEntity, SubjectDTO.class))
+                .collect(Collectors.toList());
     }
 
 

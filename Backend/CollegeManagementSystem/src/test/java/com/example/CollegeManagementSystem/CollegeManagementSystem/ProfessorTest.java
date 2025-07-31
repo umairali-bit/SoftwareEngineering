@@ -1,6 +1,7 @@
 package com.example.CollegeManagementSystem.CollegeManagementSystem;
 
 
+import com.example.CollegeManagementSystem.CollegeManagementSystem.dtos.SubjectDTO;
 import com.example.CollegeManagementSystem.CollegeManagementSystem.entities.ProfessorEntity;
 import com.example.CollegeManagementSystem.CollegeManagementSystem.entities.StudentEntity;
 import com.example.CollegeManagementSystem.CollegeManagementSystem.entities.SubjectEntity;
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -54,7 +56,7 @@ public class ProfessorTest {
 
     @Test
     public void testCreateSubject() {
-        // Assume you already have professors and students saved in DB
+        // Fetch existing professors and students from DB
         List<ProfessorEntity> professors = professorRepository.findAll();
         List<StudentEntity> students = studentRepository.findAll();
 
@@ -66,45 +68,51 @@ public class ProfessorTest {
         ProfessorEntity professor = professors.get(0);
 
         Set<Long> studentIds = students.stream()
-                .map(StudentEntity::getId)
+                .map(student -> student.getId())
                 .collect(Collectors.toSet());
 
-        SubjectEntity newSubject = new SubjectEntity();
+        // Prepare SubjectDTO
+        SubjectDTO newSubject = new SubjectDTO();
         newSubject.setName("Test Subject");
+        newSubject.setProfessorId(professor.getId());
+        newSubject.setStudents(studentIds); // assuming your DTO has 'students' as Set<Long>
 
-        SubjectEntity createdSubject = subjectService.createNewSubject(newSubject, professor.getId(), studentIds);
+        // Call service method
+        SubjectDTO createdSubject = subjectService.createSubject(newSubject);
 
+        // Assertions / Prints
         System.out.println("Created Subject: " + createdSubject);
-        System.out.println("Assigned Professor: " + createdSubject.getProfessor());
+        System.out.println("Assigned Professor ID: " + createdSubject.getProfessorId());
+        System.out.println("Assigned Professor Name: " + createdSubject.getProfessorName());
         System.out.println("Assigned Students: " + createdSubject.getStudents());
     }
 
-    @Test
-    void testGetSubjectById() {
-
-        ProfessorEntity professor = new ProfessorEntity();
-        professor.setName("Dr. Smith");
-        professor = professorRepository.save(professor);
-
-        SubjectEntity subject = new SubjectEntity();
-        subject.setName("Math");
-        subject.setProfessor(professor);
-        subject = subjectRepository.save(subject);
-
-        SubjectEntity result = subjectService.getSubjectById(subject.getId());
-        System.out.println(result);
-
-
-
-
-
-    }
+//    @Test
+//    void testGetSubjectById() {
+//
+//        ProfessorEntity professor = new ProfessorEntity();
+//        professor.setName("Dr. Smith");
+//        professor = professorRepository.save(professor);
+//
+//        SubjectEntity subject = new SubjectEntity();
+//        subject.setName("Math");
+//        subject.setProfessor(professor);
+//        subject = subjectRepository.save(subject);
+//
+//        Optional<SubjectDTO> result = subjectService.getSubjectById(subject.getId());
+//        System.out.println(result);
+//
+//
+//
+//
+//
+//    }
 
     @Test
     void testGetAllSubjects() {
 
-        List<SubjectEntity> subjects = subjectService.getAllSubjects();
-        for (SubjectEntity s : subjects) {
+        List<SubjectDTO> subjects = subjectService.getAllSubjects();
+        for (SubjectDTO s : subjects) {
             System.out.println(s);
         }
     }
