@@ -153,6 +153,57 @@ public class SubjectService {
         return updatedDTO;
     }
 
+    @Transactional
+    public SubjectDTO patchUpdateSubject(Long subjectId, SubjectDTO subjectDTO){
+
+        //1.Load the existing subject (Persistence State)
+        SubjectEntity subjectEntity = subjectRepository.findById(subjectId)
+                .orElseThrow(() -> new RuntimeException("Subject not found with ID: " + subjectId));
+
+        //2. Update only non-null simple fields
+        if (subjectDTO.getName() != null) {
+            subjectEntity.setName(subjectDTO.getName());
+        }
+
+        //3. Update Professor if professorId is present
+        if (subjectDTO.getProfessorId() != null) {
+            ProfessorEntity professor = professorRepository.findById(subjectDTO.getProfessorId())
+                    .orElseThrow(() -> new RuntimeException("Professor not found with ID: "
+                            + subjectDTO.getProfessorId()));
+            subjectEntity.setProfessor(professor);
+
+        }
+
+        //4. Update student if provided
+        if (subjectDTO.getStudents() != null) {
+            Set<StudentEntity> studentEntities = subjectDTO.getStudents().stream()
+                    .map(studentId -> studentRepository.findById(studentId)
+                            .orElseThrow(() -> new RuntimeException("Student not found with ID: " + studentId)))
+                    .collect(Collectors.toSet());
+
+            subjectEntity.setStudents(studentEntities);
+
+        }
+
+        //5. Save a return updated entity
+        SubjectEntity updatedSubject = subjectRepository.save(subjectEntity);
+
+        //6. Map back to DTO manually especially, professor, student
+        SubjectDTO updatedDTO = new SubjectDTO();
+        updatedDTO.setId(updatedSubject.getId());
+        updatedDTO.setName(updatedSubject.getName());
+        updatedDTO.setProfessorId(updatedSubject.getProfessor().getId());
+        updatedDTO.setProfessorName(updatedSubject.getProfessor().getName());
+        updatedDTO.setStudents(
+                updatedSubject.getStudents().stream()
+                        .map(studentEntity -> studentEntity.getId())
+                        .collect(Collectors.toSet())
+        );
+
+        return updatedDTO;
+
+    }
+
 
 
 
