@@ -46,6 +46,7 @@ public class SubjectService {
         ProfessorEntity professor = professorRepository.findById(subjectDTO.getProfessorId())
                 .orElseThrow(() -> new RuntimeException("Professor not found"));
         subject.setProfessor(professor); // Attach managed professor
+        professor.getSubjects().add(subject); // Attach subjects to professor
 
         // --- Persistent State for Students ---
         Set<StudentEntity> managedStudents = new HashSet<>();
