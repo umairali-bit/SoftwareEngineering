@@ -255,6 +255,29 @@ public class ProfessorTest {
         System.out.println(isDeleted);
     }
 
+    @Test
+    @Transactional
+    public void testAssignProfessorToSubejct() {
+        //create and save professor
+        ProfessorEntity professor = new ProfessorEntity();
+        professor.setName("Dr. Assign");
+        professor = professorRepository.save(professor);
+
+        //create and save professor
+        SubjectEntity subject = new SubjectEntity();
+        subject.setName("Subject X");
+        subject.setProfessor(professor);
+        subject = subjectRepository.save(subject);
+
+        //call the service method
+        subjectService.assignProfessorToSubject(subject.getId(), professor.getId());
+
+        //verify
+        SubjectEntity updatedSubject = subjectRepository.findById(subject.getId()).orElseThrow();
+        System.out.println(updatedSubject.getProfessor().getName());//should print "Dr. Assign"
+
+    }
+
 
 
 }
