@@ -19,7 +19,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
-public class SubjectServiceImpl implements SubjectService{
+public class SubjectServiceImpl implements SubjectService {
 
     private final ProfessorRepository professorRepository;
 
@@ -36,6 +36,7 @@ public class SubjectServiceImpl implements SubjectService{
         this.modelMapper = modelMapper;
     }
 
+    @Override
     @Transactional
     public SubjectDTO createSubject(SubjectDTO subjectDTO) {
         // --- Transient State ---
@@ -77,6 +78,7 @@ public class SubjectServiceImpl implements SubjectService{
         return savedDTO;
     }
 
+    @Override
     @Transactional
     public SubjectDTO getSubjectById(Long subjectId) {
         SubjectEntity subject = subjectRepository.findById(subjectId)
@@ -86,7 +88,7 @@ public class SubjectServiceImpl implements SubjectService{
         dto.setId(subject.getId());
         dto.setName(subject.getName());
 
-        if(subject.getProfessor() != null) {
+        if (subject.getProfessor() != null) {
             dto.setProfessorId(subject.getProfessor().getId());
             dto.setProfessorName(subject.getProfessor().getName());
         }
@@ -102,7 +104,7 @@ public class SubjectServiceImpl implements SubjectService{
         return dto;
     }
 
-
+    @Override
     @Transactional
     public List<SubjectDTO> getAllSubjects() {
         // Load from DB — the returned entity is in the Managed (Persistent) state
@@ -114,9 +116,9 @@ public class SubjectServiceImpl implements SubjectService{
                 .collect(Collectors.toList());
     }
 
-
+    @Override
     @Transactional
-    public SubjectDTO updateSubject (Long subjectId, SubjectDTO subjectDTO) {
+    public SubjectDTO updateSubject(Long subjectId, SubjectDTO subjectDTO) {
         //1. Load the existing entity (Persistence State)
         SubjectEntity subjectEntity = subjectRepository.findById(subjectId)
                 .orElseThrow(() -> new RuntimeException("Subject not found with ID: " + subjectId));
@@ -153,8 +155,9 @@ public class SubjectServiceImpl implements SubjectService{
         return updatedDTO;
     }
 
+    @Override
     @Transactional
-    public SubjectDTO patchUpdateSubject(Long subjectId, SubjectDTO subjectDTO){
+    public SubjectDTO patchUpdateSubject(Long subjectId, SubjectDTO subjectDTO) {
 
         //1.Load the existing subject (Persistence State)
         SubjectEntity subjectEntity = subjectRepository.findById(subjectId)
@@ -204,6 +207,9 @@ public class SubjectServiceImpl implements SubjectService{
 
     }
 
+
+
+    @Override
     public boolean deleteSubjectById(Long subjectId) {
         if (!subjectRepository.existsById(subjectId)) {
             throw new RuntimeException("Subject does not exist with ID: " + subjectId);
@@ -211,7 +217,32 @@ public class SubjectServiceImpl implements SubjectService{
 
         subjectRepository.deleteById(subjectId);
         return true;
+
+
     }
+
+    @Override
+    public void assignProfessorToSubject(Long subjectId, Long professorId) {
+
+        //Fetch subject Entity
+        SubjectEntity subject = subjectRepository.findById(subjectId)
+                .orElseThrow(()-> new RuntimeException("Subject not found with ID: " + subjectId));
+
+        //Fetch Professor Entity
+        ProfessorEntity professor = professorRepository.findById(professorId)
+                .orElseThrow(()-> new RuntimeException("Professor not found with ID: " + professorId));
+
+        //Set professor
+        subject.setProfessor(professor);
+
+        //Save subject
+        subjectRepository.save(subject);
+
+
+    }
+
+
+
 
 
 

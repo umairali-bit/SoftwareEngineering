@@ -23,7 +23,7 @@ public interface SubjectService {
     SubjectDTO patchUpdateSubject(Long id, SubjectDTO subjectDTO);
 
     // Managing relationships
-//    void assignProfessorToSubject(Long subjectId, Long professorId);
+    void assignProfessorToSubject(Long subjectId, Long professorId);
 //
 //    void removeProfessorFromSubject(Long subjectId);
 //
