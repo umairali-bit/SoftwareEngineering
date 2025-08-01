@@ -221,6 +221,42 @@ public class ProfessorTest {
         System.out.println("Saved Subject: " + savedSubjectDTO);
     }
 
+    @Test
+    public void testDeleteSubjectById() {
+        // Create and save a professor
+        ProfessorEntity professor = new ProfessorEntity();
+        professor.setName("Dr. Einstein");
+        professor = professorRepository.save(professor);
+
+        // Create and save students
+        StudentEntity student1 = new StudentEntity();
+        student1.setName("Student one");
+        student1 = studentRepository.save(student1);
+
+        StudentEntity student2 = new StudentEntity();
+        student2.setName("Student two");
+        student2 = studentRepository.save(student2);
+
+        Set<StudentEntity> students = new HashSet<>();
+        students.add(student1);
+        students.add(student2);
+
+
+        // Create and save a subject
+        SubjectEntity subject = new SubjectEntity();
+        subject.setName("Subject To Delete");
+        subject.setProfessor(professor);
+        subject.setStudents(students);
+        subject = subjectRepository.save(subject);
+
+        // Call the service method
+        subjectService.deleteSubjectById(subject.getId());
+
+        //Check and print whether it was deleted
+        boolean isDeleted = !subjectRepository.existsById(subject.getId());
+        System.out.println(isDeleted);
+    }
+
 
 
 }
