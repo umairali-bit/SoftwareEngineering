@@ -241,13 +241,20 @@ public class SubjectServiceImpl implements SubjectService {
 
     }
 
+    @Override
+    @Transactional
+    public void removeProfessorFromSubject(Long subjectId) {
+
+        //Fetch the subjectEntity
+        SubjectEntity subject = subjectRepository.findById(subjectId)
+                .orElseThrow(()-> new RuntimeException("Subject not found with ID: " + subjectId));
+
+        //Set the current professor flag removed
+        subject.setProfessorRemoved(true);
+        subjectRepository.save(subject);
 
 
-
-
-
-
-
+    }
 
 
 }
