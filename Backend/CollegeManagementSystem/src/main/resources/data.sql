@@ -1,24 +1,29 @@
+-- Insert Professors
 INSERT INTO professor (name)
 VALUES
   ('Dr. Alan Turing'),
   ('Dr. Marie Curie'),
   ('Dr. Isaac Newton');
 
-
-
+-- Insert Students
 INSERT INTO student (name) VALUES
   ('Alice Johnson'),
   ('Brian Smith'),
   ('Chloe Davis');
 
+-- Insert Subjects
+INSERT INTO subject (name, professor_id, professor_removed) VALUES
+  ('Computer Science', 1, false),
+  ('Physics', 2, false),
+  ('Mathematics', 3, false),
+  ('Quantum Mechanics', 2, false),
+  ('Artificial Intelligence', 1, false);
 
 
-INSERT INTO subject (name, professor_id) VALUES
-('Computer Science', 1),
-('Physics', 2),
-('Mathematics', 3),
-('Quantum Mechanics', 2),
-('Artificial Intelligence', 1);
+
+
+
+
 
 
 

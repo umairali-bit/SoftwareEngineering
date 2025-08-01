@@ -5,8 +5,7 @@ import lombok.*;
 import java.util.HashSet;
 import java.util.Set;
 
-@Getter
-@Setter
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
@@ -16,5 +15,4 @@ public class SubjectDTO {
     private Long professorId;
     private String professorName;
     private Set<Long> students;
-    private boolean professorRemoved;
 }

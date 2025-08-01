@@ -14,7 +14,6 @@ import java.util.Set;
 @Getter
 @Setter
 @Entity
-@Data
 @NoArgsConstructor
 @Table(name = "professor")
 public class ProfessorEntity {

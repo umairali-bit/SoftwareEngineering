@@ -278,6 +278,33 @@ public class ProfessorTest {
 
     }
 
+    @Test
+    @Transactional
+    public void testRemoveProfessorFromSubject() {
+        //create a new professor
+        ProfessorEntity professor = new ProfessorEntity();
+        professor.setName("Dr. Removed");
+        professor = professorRepository.save(professor);
+
+        //create a new subject
+        SubjectEntity subject = new SubjectEntity();
+        subject.setProfessor(professor);
+        subject.setProfessorRemoved(false);
+        subject = subjectRepository.save(subject);
+
+
+        //Actual removal logic
+        subject.setProfessor(null);
+        subject.setProfessorRemoved(true);
+        subject = subjectRepository.save(subject);
+
+        //call the method to remove professor
+        SubjectEntity updatedSubject = subjectRepository.findById(subject.getId()).orElseThrow();
+
+        //print the professorRemoved flag
+        System.out.println("professorRemoved: " + updatedSubject.isProfessorRemoved());
+    }
+
 
 
 }
