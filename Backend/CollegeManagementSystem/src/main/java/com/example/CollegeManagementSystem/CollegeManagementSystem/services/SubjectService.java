@@ -24,8 +24,8 @@ public interface SubjectService {
 
     // Managing relationships
     void assignProfessorToSubject(Long subjectId, Long professorId);
-//
-//    void removeProfessorFromSubject(Long subjectId);
+
+    void removeProfessorFromSubject(Long subjectId);
 //
 //    void assignStudentToSubject(Long subjectId, Long studentId);
 //

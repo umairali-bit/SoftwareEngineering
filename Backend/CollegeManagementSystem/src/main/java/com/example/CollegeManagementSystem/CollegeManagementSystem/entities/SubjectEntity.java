@@ -37,4 +37,6 @@ public class SubjectEntity {
             inverseJoinColumns = @JoinColumn(name = "student_id")
     )
     private Set<StudentEntity> students = new HashSet<>();
+
+    private boolean professorRemoved;
 }

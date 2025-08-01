@@ -16,4 +16,5 @@ public class SubjectDTO {
     private Long professorId;
     private String professorName;
     private Set<Long> students;
+    private boolean professorRemoved;
 }
