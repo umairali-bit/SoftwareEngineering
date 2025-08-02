@@ -29,8 +29,8 @@ public interface SubjectService {
     void removeProfessorFromSubject(Long subjectId);
 
     void assignStudentToSubject(Long subjectId, Set<Long> studentIds);
-//
-//    void removeStudentFromSubject(Long subjectId, Long studentId);
+
+    void removeStudentFromSubject(Long subjectId, Set<Long> studentIds);
 
 
 }

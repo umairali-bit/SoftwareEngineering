@@ -271,8 +271,23 @@ public class SubjectServiceImpl implements SubjectService {
         }
 
         subjectRepository.save(subject);
+    }
 
+    @Override
+    @Transactional
+    public void removeStudentFromSubject(Long subjectId, Set<Long> studentIds) {
 
+        SubjectEntity subject = subjectRepository.findById(subjectId)
+                .orElseThrow(() -> new RuntimeException("Subject not found with ID: " + subjectId));
+
+        Set<StudentEntity> students = new HashSet<>(studentRepository.findAllById(studentIds));
+
+        for (StudentEntity student : students) {
+            subject.getStudents().remove(student);
+            student.getSubjects().remove(student);
+        }
+
+        subjectRepository.save(subject);
 
 
 
