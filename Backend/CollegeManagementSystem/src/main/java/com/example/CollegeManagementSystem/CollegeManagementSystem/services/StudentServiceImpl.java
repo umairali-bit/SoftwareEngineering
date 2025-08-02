@@ -33,11 +33,9 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public StudentDTO createStudent(StudentDTO studentDTO) {
 
-        // dto to entity - persistence
-        StudentEntity student = modelMapper.map(studentDTO, StudentEntity.class);
-        StudentEntity savedStudent = studentRepository.save(student);
-
-        //entity to dto - persistence
-        return modelMapper.map(savedStudent, StudentDTO.class);
+        // 1. dto to entity
+        StudentEntity student = new StudentEntity();
+        student.setName(studentDTO.getName());
+        student.s
     }
 }

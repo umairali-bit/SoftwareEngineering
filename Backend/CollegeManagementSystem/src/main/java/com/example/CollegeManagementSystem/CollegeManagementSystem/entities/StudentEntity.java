@@ -24,7 +24,7 @@ public class StudentEntity {
 
     private String name;
 
-    @OneToOne(mappedBy = "student")
+    @OneToOne(mappedBy = "student", cascade = CascadeType.ALL)
     private AdmissionRecordEntity admissionRecord;
 
     @ManyToMany
@@ -37,12 +37,6 @@ public class StudentEntity {
     private Set<ProfessorEntity> professors = new HashSet<>();
 
 
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(
-            name = "student_subject_mapping",
-            joinColumns = @JoinColumn(name = "student_id"),
-            inverseJoinColumns = @JoinColumn(name = "subject_id")
-    )
-    @ToString.Exclude
+    @ManyToMany(mappedBy = "students")
     private Set<SubjectEntity> subjects = new HashSet<>();
 }
