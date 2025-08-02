@@ -39,4 +39,5 @@ public class SubjectEntity {
     private Set<StudentEntity> students = new HashSet<>();
 
     private boolean professorRemoved;
+
 }
