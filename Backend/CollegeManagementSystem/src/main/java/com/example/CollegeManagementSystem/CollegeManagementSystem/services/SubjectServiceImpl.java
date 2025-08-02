@@ -38,36 +38,36 @@ public class SubjectServiceImpl implements SubjectService {
     @Override
     @Transactional
     public SubjectDTO createSubject(SubjectDTO subjectDTO) {
-        // --- Transient State ---
-        // Map DTO to Entity (subject is in transient state)
-        SubjectEntity subject = modelMapper.map(subjectDTO, SubjectEntity.class);
+        // --- Step 1: Create a new SubjectEntity from the DTO ---
+        SubjectEntity subject = new SubjectEntity();
+        subject.setName(subjectDTO.getName()); // Set subject name from DTO
 
-        // --- Persistent State for Professor ---
+        // --- Step 2: Attach the Professor (Persistent State) ---
         ProfessorEntity professor = professorRepository.findById(subjectDTO.getProfessorId())
-                .orElseThrow(() -> new RuntimeException("Professor not found"));
-        subject.setProfessor(professor); // Attach managed professor
-        professor.getSubjects().add(subject); // Attach subjects to professor
+                .orElseThrow(() -> new RuntimeException("Professor not found with ID: " + subjectDTO.getProfessorId()));
+        subject.setProfessor(professor); // Link professor to subject
+        professor.getSubjects().add(subject); // Maintain bidirectional relationship
 
-        // --- Persistent State for Students ---
+        // --- Step 3: Attach Students (Persistent State) ---
         Set<StudentEntity> managedStudents = new HashSet<>();
         for (Long studentId : subjectDTO.getStudents()) {
             StudentEntity student = studentRepository.findById(studentId)
-                    .orElseThrow(() -> new RuntimeException("Student not found"));
-            managedStudents.add(student);
+                    .orElseThrow(() -> new RuntimeException("Student not found with ID: " + studentId));
+            managedStudents.add(student); // Collect managed student entity
         }
-        subject.setStudents(managedStudents); // Attach managed students
+        subject.setStudents(managedStudents); // Link students to subject
 
-        // --- Persist the Subject Entity ---
-        SubjectEntity savedSubject = subjectRepository.save(subject);
+        // --- Step 4: Save the SubjectEntity ---
+        SubjectEntity savedSubject = subjectRepository.save(subject); // Now subject is persistent
 
-        // --- Prepare DTO Response ---
+        // --- Step 5: Prepare and return the SubjectDTO response ---
         SubjectDTO savedDTO = new SubjectDTO();
-        savedDTO.setId(savedSubject.getId());
-        savedDTO.setName(savedSubject.getName());
-        savedDTO.setProfessorId(savedSubject.getProfessor().getId());
-        savedDTO.setProfessorName(savedSubject.getProfessor().getName());
+        savedDTO.setId(savedSubject.getId()); // Set generated ID
+        savedDTO.setName(savedSubject.getName()); // Set subject name
+        savedDTO.setProfessorId(savedSubject.getProfessor().getId()); // Set professor ID
+        savedDTO.setProfessorName(savedSubject.getProfessor().getName()); // Set professor name
 
-        // Add student IDs
+        // Extract student IDs from saved subject
         Set<Long> studentIds = new HashSet<>();
         for (StudentEntity s : savedSubject.getStudents()) {
             studentIds.add(s.getId());
