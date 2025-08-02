@@ -16,10 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.sql.SQLOutput;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @SpringBootTest
@@ -338,6 +335,22 @@ public class ProfessorTest {
         System.out.println("Subject Name: " + updatedSubject.getName());
         System.out.println("Assigned Students: ");
         updatedSubject.getStudents().forEach(s -> System.out.println("_" + s.getName()));
+
+    }
+
+    @Test
+    @Transactional
+    public void testRemoveStudentsFromSubjects() {
+
+        Long subjectId = 4L;
+
+       Set<Long> studentIds = new HashSet<>(Arrays.asList(11l));
+
+        subjectService.removeStudentFromSubject(subjectId, studentIds);
+        System.out.println("Removed students with IDs: " + studentIds);
+
+        SubjectEntity updatedSubject = subjectRepository.findById(subjectId).orElseThrow();
+        System.out.println("Students related to subject: " + updatedSubject.getStudents());
 
     }
 
