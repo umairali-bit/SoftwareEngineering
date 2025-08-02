@@ -284,7 +284,7 @@ public class SubjectServiceImpl implements SubjectService {
 
         for (StudentEntity student : students) {
             subject.getStudents().remove(student);
-            student.getSubjects().remove(student);
+            student.getSubjects().remove(subject);
         }
 
         subjectRepository.save(subject);

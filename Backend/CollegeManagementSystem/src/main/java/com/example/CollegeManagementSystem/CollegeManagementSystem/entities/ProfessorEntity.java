@@ -29,6 +29,6 @@ public class ProfessorEntity {
     private Set<StudentEntity> students = new HashSet<>();
 
     @ToString.Exclude
-    @OneToMany(mappedBy = "professor")
+    @OneToMany(mappedBy = "professor", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<SubjectEntity> subjects = new HashSet<>();
 }
