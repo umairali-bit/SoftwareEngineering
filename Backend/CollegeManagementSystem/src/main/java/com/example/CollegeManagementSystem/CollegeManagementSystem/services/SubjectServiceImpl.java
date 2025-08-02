@@ -12,7 +12,6 @@ import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
-import javax.security.auth.Subject;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -252,6 +251,29 @@ public class SubjectServiceImpl implements SubjectService {
         //Set the current professor flag removed
         subject.setProfessorRemoved(true);
         subjectRepository.save(subject);
+
+
+    }
+
+    @Transactional
+    @Override
+    public void assignStudentToSubject(Long subjectId, Set<Long> studentIds) {
+
+        SubjectEntity subject = subjectRepository.findById(subjectId)
+                .orElseThrow(() -> new RuntimeException("Subject not found with ID: " + subjectId));
+
+        Set<StudentEntity> students = new HashSet<>(studentRepository.findAllById(studentIds));
+
+        subject.getStudents().addAll(students);
+
+        for (StudentEntity s : students) {
+            s.getSubjects().add(subject);//maintain bidirectional relationship
+        }
+
+        subjectRepository.save(subject);
+
+
+
 
 
     }
