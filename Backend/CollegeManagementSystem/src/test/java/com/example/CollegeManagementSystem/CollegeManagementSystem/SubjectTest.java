@@ -15,12 +15,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.sql.SQLOutput;
 import java.util.*;
 import java.util.stream.Collectors;
 
 @SpringBootTest
-public class ProfessorTest {
+public class SubjectTest {
 
     @Autowired
     private ProfessorRepository professorRepository;
