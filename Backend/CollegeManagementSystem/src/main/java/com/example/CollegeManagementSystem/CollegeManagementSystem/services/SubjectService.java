@@ -5,6 +5,7 @@ import com.example.CollegeManagementSystem.CollegeManagementSystem.dtos.SubjectD
 import javax.security.auth.Subject;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public interface SubjectService {
 
@@ -26,8 +27,8 @@ public interface SubjectService {
     void assignProfessorToSubject(Long subjectId, Long professorId);
 
     void removeProfessorFromSubject(Long subjectId);
-//
-//    void assignStudentToSubject(Long subjectId, Long studentId);
+
+    void assignStudentToSubject(Long subjectId, Set<Long> studentIds);
 //
 //    void removeStudentFromSubject(Long subjectId, Long studentId);
 
