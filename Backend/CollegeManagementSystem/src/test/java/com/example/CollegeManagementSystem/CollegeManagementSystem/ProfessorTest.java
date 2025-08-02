@@ -15,6 +15,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.sql.SQLOutput;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -303,6 +305,40 @@ public class ProfessorTest {
 
         //print the professorRemoved flag
         System.out.println("professorRemoved: " + updatedSubject.isProfessorRemoved());
+    }
+
+
+    @Test
+    @Transactional
+    public void testAssignStudentsToSubjects() {
+        //1. fetch list of all students and subjects
+        List<SubjectEntity> subjects = subjectRepository.findAll();
+        List<StudentEntity> students = studentRepository.findAll();
+
+        if (subjects.isEmpty() || students.isEmpty()) {
+            System.out.println("No students or subjects found in DB");
+        }
+
+        //2. grab the 1st subject and create a Set of student IDs, limit them to 2
+        SubjectEntity subject = subjects.get(0);
+
+        Set<Long> studentIds = students.stream()
+                .limit(2)
+                .map(i -> i.getId())
+                .collect(Collectors.toSet());
+
+
+        //3. call the service method
+        subjectService.assignStudentToSubject(subject.getId(), studentIds);
+
+        // fetch the updated subject
+        SubjectEntity updatedSubject = subjectRepository.findById(subject.getId()).orElseThrow();
+
+        //Print verification
+        System.out.println("Subject Name: " + updatedSubject.getName());
+        System.out.println("Assigned Students: ");
+        updatedSubject.getStudents().forEach(s -> System.out.println("_" + s.getName()));
+
     }
 
 
