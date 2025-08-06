@@ -9,9 +9,11 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@ToString
 public class StudentDTO {
     private Long id;
     private String name;
+
 
     // You can optionally include this if you want admission record details
     private AdmissionRecordDTO admissionRecord;

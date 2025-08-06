@@ -2,6 +2,7 @@ package com.example.CollegeManagementSystem.CollegeManagementSystem.services;
 
 
 import com.example.CollegeManagementSystem.CollegeManagementSystem.dtos.StudentDTO;
+import com.example.CollegeManagementSystem.CollegeManagementSystem.entities.AdmissionRecordEntity;
 import com.example.CollegeManagementSystem.CollegeManagementSystem.entities.StudentEntity;
 import com.example.CollegeManagementSystem.CollegeManagementSystem.repositories.ProfessorRepository;
 import com.example.CollegeManagementSystem.CollegeManagementSystem.repositories.StudentRepository;
@@ -36,6 +37,25 @@ public class StudentServiceImpl implements StudentService {
         // 1. dto to entity
         StudentEntity student = new StudentEntity();
         student.setName(studentDTO.getName());
-        student.s
+
+
+        //2. Handle AdmissionRecord if provided
+        if (studentDTO.getAdmissionRecord() != null) {
+
+            AdmissionRecordEntity admissionRecord = new AdmissionRecordEntity();
+            admissionRecord.setAdmissionDate(studentDTO.getAdmissionRecord().getAdmissionDate());
+            admissionRecord.setStudent(student);
+            admissionRecord.setFees(studentDTO.getAdmissionRecord().getFees());
+            student.setAdmissionRecord(admissionRecord);
+
+        }
+
+        //3. save student
+        StudentEntity savedStudent = studentRepository.save(student);
+
+
+        //4 convert back to dto
+        return modelMapper.map(savedStudent, StudentDTO.class);
+
     }
 }
