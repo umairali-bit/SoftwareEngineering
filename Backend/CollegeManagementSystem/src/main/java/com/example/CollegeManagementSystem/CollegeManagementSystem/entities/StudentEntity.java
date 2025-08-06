@@ -39,4 +39,6 @@ public class StudentEntity {
 
     @ManyToMany(mappedBy = "students")
     private Set<SubjectEntity> subjects = new HashSet<>();
+
+
 }

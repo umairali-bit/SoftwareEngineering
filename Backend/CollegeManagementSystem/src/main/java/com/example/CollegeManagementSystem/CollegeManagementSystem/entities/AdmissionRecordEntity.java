@@ -5,13 +5,13 @@ import jakarta.persistence.*;
 
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
+import java.time.LocalDateTime;
 
 @AllArgsConstructor
-@Builder
+@Getter
+@Setter
 @Data
 @Entity
 @NoArgsConstructor
@@ -27,4 +27,6 @@ public class AdmissionRecordEntity {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "student_id")
     private StudentEntity student;
+
+    private LocalDateTime admissionDate;
 }
