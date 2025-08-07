@@ -85,10 +85,9 @@ public class StudentTest {
 
         System.out.println("AdmissionRecord fees before save: " + admissionRecordEntity.getFees());
 
-
-
-
     }
+
+
 
 
 
