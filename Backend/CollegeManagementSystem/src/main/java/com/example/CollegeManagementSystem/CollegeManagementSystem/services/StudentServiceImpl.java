@@ -10,6 +10,9 @@ import com.example.CollegeManagementSystem.CollegeManagementSystem.repositories.
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class StudentServiceImpl implements StudentService {
 
@@ -66,5 +69,15 @@ public class StudentServiceImpl implements StudentService {
                 "following id is not found" + id));
 
         return modelMapper.map(student, StudentDTO.class);
+    }
+
+    @Override
+    public List<StudentDTO> getAllStudents() {
+        List<StudentEntity> studentEntities = studentRepository.findAll();
+
+        return studentEntities
+                .stream()
+                .map(studentEntity -> modelMapper.map(studentEntity, StudentDTO.class))
+                .collect(Collectors.toList());
     }
 }
