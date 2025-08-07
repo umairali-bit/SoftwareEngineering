@@ -14,7 +14,7 @@ public interface StudentService {
 //
     List<StudentDTO> getAllStudents();
 //
-//    StudentDTO updateStudent(Long id, StudentDTO studentDetails); // Full update (PUT)
+    StudentDTO updateStudent(Long id, StudentDTO studentDetails); // Full update (PUT)
 //
 //    void deleteStudent(Long id);
 //

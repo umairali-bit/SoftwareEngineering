@@ -80,4 +80,14 @@ public class StudentServiceImpl implements StudentService {
                 .map(studentEntity -> modelMapper.map(studentEntity, StudentDTO.class))
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public StudentDTO updateStudent(Long id, StudentDTO studentDTO) {
+        StudentEntity existingStudent = studentRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Student not found with the ID: " + id));
+
+
+
+        return null;
+    }
 }
