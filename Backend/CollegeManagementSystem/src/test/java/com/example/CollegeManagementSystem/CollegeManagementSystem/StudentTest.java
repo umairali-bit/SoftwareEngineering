@@ -87,6 +87,40 @@ public class StudentTest {
 
     }
 
+    @Test
+    void testGetStudentById() {
+        // create a student and its admission record
+
+        AdmissionRecordEntity admissionRecordEntity = new AdmissionRecordEntity();
+        admissionRecordEntity.setAdmissionDate(LocalDateTime.of(2025, 9,9,0,0));
+        admissionRecordEntity.setFees(30000.00);
+
+
+        StudentEntity student = new StudentEntity();
+        student.setName("Walter White");
+        student.setAdmissionRecord(admissionRecordEntity);
+        admissionRecordEntity.setStudent(student); //bidirectional link
+
+        // save to DB
+        StudentEntity savedEntity = studentRepository.save(student);
+        Long id = savedEntity.getId();
+
+        //Act
+        StudentDTO result = studentService.getStudentById(id);
+
+        //Print
+        System.out.println("Student ID: " +result.getId());
+        System.out.println("Student Name: " +result.getName());
+        System.out.println("Student Admission Record: " + result.getAdmissionRecord());
+
+
+
+
+
+
+
+    }
+
 
 
 
