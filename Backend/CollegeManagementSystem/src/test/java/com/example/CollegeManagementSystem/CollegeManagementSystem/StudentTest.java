@@ -14,9 +14,11 @@ import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Commit;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @SpringBootTest
 public class StudentTest {
@@ -71,6 +73,7 @@ public class StudentTest {
     }
 
     @Test
+    @Commit //persists Ben in DB
     void testGetStudentById() {
         // create a student and its admission record
 
@@ -80,7 +83,7 @@ public class StudentTest {
 
 
         StudentEntity student = new StudentEntity();
-        student.setName("Walter White");
+        student.setName("Ben");
         student.setAdmissionRecord(admissionRecordEntity);
         admissionRecordEntity.setStudent(student); //bidirectional link
 
@@ -96,14 +99,13 @@ public class StudentTest {
         System.out.println("Student Name: " +result.getName());
         System.out.println("Student Admission Record: " + result.getAdmissionRecord());
 
-
-
-
-
-
-
     }
 
+    @Test
+    void testGetAllStudents() {
+        List<StudentDTO> studentDTOList = studentService.getAllStudents();
+        System.out.println("Student List: " + studentDTOList);
+    }
 
 
 
