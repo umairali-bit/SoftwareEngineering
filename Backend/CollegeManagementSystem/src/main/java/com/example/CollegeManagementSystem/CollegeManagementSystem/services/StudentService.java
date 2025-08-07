@@ -10,7 +10,7 @@ public interface StudentService {
     // Basic CRUD
     StudentDTO createStudent(StudentDTO studentDTO);
 //
-//    StudentDTO getStudentById(Long id);
+    StudentDTO getStudentById(Long id);
 //
 //    List<StudentDTO> getAllStudents();
 //
