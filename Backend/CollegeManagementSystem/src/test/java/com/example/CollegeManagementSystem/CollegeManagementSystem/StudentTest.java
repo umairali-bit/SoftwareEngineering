@@ -45,45 +45,28 @@ public class StudentTest {
     public void testCreateStudent_WithAdmissionRecord() {
 
         // prepare Admission record DTO
-        AdmissionRecordDTO admissionRecordDTO = AdmissionRecordDTO.builder()
+        AdmissionRecordDTO admissionRecord = AdmissionRecordDTO.builder()
                 .admissionDate(LocalDateTime.of(2025,8,8,0,0))
                 .fees(20000.00)
                 .build();
 
-        // prepare student dto
-        StudentDTO studentDTO = StudentDTO.builder()
+        // prepare student DTO
+        StudentDTO student = StudentDTO.builder()
                 .name("Jesse Pinkman")
-                .admissionRecord(admissionRecordDTO)
+                .admissionRecord(admissionRecord)
                 .build();
 
-        // expected entity after save
-        StudentEntity savedEntity = new StudentEntity();
-        savedEntity.setId(1L);
-        savedEntity.setName("Jesse Pinkman");
+
+        // save to DB
+        StudentDTO createdStudent= studentService.createStudent(student);
 
 
-        AdmissionRecordEntity admissionRecordEntity = new AdmissionRecordEntity();
-        admissionRecordEntity.setId(10L);
-        admissionRecordEntity.setAdmissionDate(LocalDateTime.of(2025,8,8,0,0));
-        admissionRecordEntity.setFees(20000.00);
-        admissionRecordEntity.setStudent(savedEntity);
 
-        savedEntity.setAdmissionRecord(admissionRecordEntity);
-
-        StudentDTO result = studentService.createStudent(studentDTO);
-
-        System.out.println(result);
-
-        AdmissionRecordEntity entity = savedEntity.getAdmissionRecord();
-        System.out.println("Fees in entity: " + entity.getFees());
-
-        AdmissionRecordDTO dto = modelMapper.map(entity, AdmissionRecordDTO.class);
-        System.out.println("Fees in DTO after map: " + dto.getFees());
-
-        StudentDTO dtos = modelMapper.map(savedEntity, StudentDTO.class);
-        System.out.println("Fees in nested admission record: " + dtos.getAdmissionRecord().getFees());
-
-        System.out.println("AdmissionRecord fees before save: " + admissionRecordEntity.getFees());
+        // Print results
+        System.out.println("Created Student ID: " + createdStudent.getId());
+        System.out.println("Student Name: " + createdStudent.getName());
+        System.out.println("Admission Date: " + createdStudent.getAdmissionRecord().getAdmissionDate());
+        System.out.println("Admission Fees: " + createdStudent.getAdmissionRecord().getFees());
 
     }
 

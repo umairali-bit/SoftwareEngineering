@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @Data
+@Builder
 @Entity
 @NoArgsConstructor
 @Table(name = "admission_record")
