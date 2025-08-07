@@ -12,7 +12,7 @@ public interface StudentService {
 //
     StudentDTO getStudentById(Long id);
 //
-//    List<StudentDTO> getAllStudents();
+    List<StudentDTO> getAllStudents();
 //
 //    StudentDTO updateStudent(Long id, StudentDTO studentDetails); // Full update (PUT)
 //
