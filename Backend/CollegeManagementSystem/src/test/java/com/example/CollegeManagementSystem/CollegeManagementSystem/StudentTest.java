@@ -113,24 +113,32 @@ public class StudentTest {
     @Test
     void testUpdateStudent() {
         //create AdmissionRecord, student, subject and professor
-        StudentEntity student = new StudentEntity();
-        student.setName("Original Name");
-        studentRepository.save(student);
-
-        SubjectEntity subject = new SubjectEntity();
-        subject.setName("Calculus");
-        subjectRepository.save(subject);
 
         ProfessorEntity professor = new ProfessorEntity();
         professor.setName("Mr. Smith");
         professorRepository.save(professor);
 
+        SubjectEntity subject = new SubjectEntity();
+        subject.setName("Calculus");
+        subject.setProfessor(professor);
+        subjectRepository.save(subject);
+
+        StudentEntity student = new StudentEntity();
+        student.setName("Original Name");
+        student.setProfessors(Set.of(professor));
+        student.setSubjects(Set.of(subject));
+        studentRepository.save(student);
+
         AdmissionRecordEntity admissionRecord = new AdmissionRecordEntity();
-        admissionRecord.setAdmissionDate(LocalDateTime.of(2025,8,8,0,0));
+        admissionRecord.setAdmissionDate(LocalDateTime.of(2025, 8, 8, 0, 0));
         admissionRecord.setFees(30000.00);
         admissionRecord.setStudent(student);
-        student.setAdmissionRecord(admissionRecord);
+
         admissionRecordRepository.save(admissionRecord);
+
+        student.setAdmissionRecord(admissionRecord);
+        studentRepository.save(student);
+
 
 
         // Prepare DTO
