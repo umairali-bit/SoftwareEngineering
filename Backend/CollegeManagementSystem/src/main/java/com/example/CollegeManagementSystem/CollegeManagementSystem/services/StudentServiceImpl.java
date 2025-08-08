@@ -3,6 +3,7 @@ package com.example.CollegeManagementSystem.CollegeManagementSystem.services;
 
 import com.example.CollegeManagementSystem.CollegeManagementSystem.dtos.StudentDTO;
 import com.example.CollegeManagementSystem.CollegeManagementSystem.entities.AdmissionRecordEntity;
+import com.example.CollegeManagementSystem.CollegeManagementSystem.entities.ProfessorEntity;
 import com.example.CollegeManagementSystem.CollegeManagementSystem.entities.StudentEntity;
 import com.example.CollegeManagementSystem.CollegeManagementSystem.entities.SubjectEntity;
 import com.example.CollegeManagementSystem.CollegeManagementSystem.repositories.ProfessorRepository;
@@ -121,7 +122,28 @@ public class StudentServiceImpl implements StudentService {
         }
 
 
+        //Handle Professor IDs
+        if (studentDTO.getProfessorIds() != null) {
+            Set<ProfessorEntity> professorsEntity = studentDTO.getProfessorIds().stream()
+                    .map(professorId -> professorRepository.findById(professorId)
+                            .orElseThrow(()-> new RuntimeException("Professor not found with ID: " + professorId)))
+                    .collect(Collectors.toSet());
 
-        return null;
+            existingStudent.setProfessors(professorsEntity);
+
+            //maintain bidirectional
+            for (ProfessorEntity professor : professorsEntity) {
+                professor.getStudents().add(existingStudent);
+            }
+
+        }  else {
+            existingStudent.setProfessors(null);
+        }
+
+        StudentEntity savedStudent = studentRepository.save(existingStudent);
+
+
+
+        return modelMapper.map(savedStudent, StudentDTO.class);
     }
 }
