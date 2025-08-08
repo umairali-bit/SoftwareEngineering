@@ -4,6 +4,7 @@ package com.example.CollegeManagementSystem.CollegeManagementSystem.services;
 import com.example.CollegeManagementSystem.CollegeManagementSystem.dtos.StudentDTO;
 import com.example.CollegeManagementSystem.CollegeManagementSystem.entities.AdmissionRecordEntity;
 import com.example.CollegeManagementSystem.CollegeManagementSystem.entities.StudentEntity;
+import com.example.CollegeManagementSystem.CollegeManagementSystem.entities.SubjectEntity;
 import com.example.CollegeManagementSystem.CollegeManagementSystem.repositories.ProfessorRepository;
 import com.example.CollegeManagementSystem.CollegeManagementSystem.repositories.StudentRepository;
 import com.example.CollegeManagementSystem.CollegeManagementSystem.repositories.SubjectRepository;
@@ -11,6 +12,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -99,6 +101,23 @@ public class StudentServiceImpl implements StudentService {
             existingStudent.setAdmissionRecord(admissionRecord);//maintaining bidirectional
         } else {
             existingStudent.setAdmissionRecord(null);
+        }
+
+        // Handle subjectIds
+        if (studentDTO.getSubjectIds() != null) {
+            Set<SubjectEntity> subjectEntities = studentDTO.getSubjectIds().stream()
+                    .map(subjectId -> subjectRepository.findById(subjectId)
+                    .orElseThrow(() -> new RuntimeException("Subject not found with ID: " + subjectId)))
+                    .collect(Collectors.toSet());
+
+            existingStudent.setSubjects(subjectEntities);
+
+            //maintaining bidirectional relationship
+            for (SubjectEntity subject : subjectEntities) {
+                subject.getStudents().add(existingStudent);
+            }
+        } else {
+            existingStudent.setSubjects(null);
         }
 
 
