@@ -86,6 +86,21 @@ public class StudentServiceImpl implements StudentService {
         StudentEntity existingStudent = studentRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Student not found with the ID: " + id));
 
+        // Update student fields
+        existingStudent.setName(studentDTO.getName());
+
+        // Handle AdmissionRecord
+        if (studentDTO.getAdmissionRecord() != null) {
+            AdmissionRecordEntity admissionRecord = new AdmissionRecordEntity();
+            admissionRecord.setAdmissionDate(studentDTO.getAdmissionRecord().getAdmissionDate());
+            admissionRecord.setStudent(existingStudent);
+            admissionRecord.setFees(studentDTO.getAdmissionRecord().getFees());
+
+            existingStudent.setAdmissionRecord(admissionRecord);//maintaining bidirectional
+        } else {
+            existingStudent.setAdmissionRecord(null);
+        }
+
 
 
         return null;
