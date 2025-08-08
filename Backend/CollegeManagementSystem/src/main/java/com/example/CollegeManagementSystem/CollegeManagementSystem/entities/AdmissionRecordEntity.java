@@ -25,7 +25,7 @@ public class AdmissionRecordEntity {
 
     private Double fees;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name = "student_id")
     private StudentEntity student;
 

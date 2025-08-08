@@ -9,6 +9,7 @@ import com.example.CollegeManagementSystem.CollegeManagementSystem.entities.Subj
 import com.example.CollegeManagementSystem.CollegeManagementSystem.repositories.ProfessorRepository;
 import com.example.CollegeManagementSystem.CollegeManagementSystem.repositories.StudentRepository;
 import com.example.CollegeManagementSystem.CollegeManagementSystem.repositories.SubjectRepository;
+import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
@@ -83,7 +84,7 @@ public class StudentServiceImpl implements StudentService {
                 .map(studentEntity -> modelMapper.map(studentEntity, StudentDTO.class))
                 .collect(Collectors.toList());
     }
-
+    @Transactional
     @Override
     public StudentDTO updateStudent(Long id, StudentDTO studentDTO) {
         StudentEntity existingStudent = studentRepository.findById(id)
@@ -94,10 +95,17 @@ public class StudentServiceImpl implements StudentService {
 
         // Handle AdmissionRecord
         if (studentDTO.getAdmissionRecord() != null) {
-            AdmissionRecordEntity admissionRecord = new AdmissionRecordEntity();
+            AdmissionRecordEntity admissionRecord = existingStudent.getAdmissionRecord();
+
+            if (admissionRecord == null) {
+                admissionRecord = new AdmissionRecordEntity();
+                admissionRecord.setStudent(existingStudent);
+            }
             admissionRecord.setAdmissionDate(studentDTO.getAdmissionRecord().getAdmissionDate());
             admissionRecord.setStudent(existingStudent);
             admissionRecord.setFees(studentDTO.getAdmissionRecord().getFees());
+
+
 
             existingStudent.setAdmissionRecord(admissionRecord);//maintaining bidirectional
         } else {
