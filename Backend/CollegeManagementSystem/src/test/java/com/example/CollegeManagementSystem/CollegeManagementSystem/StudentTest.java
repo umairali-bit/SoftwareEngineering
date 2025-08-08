@@ -114,7 +114,7 @@ public class StudentTest {
     void testUpdateStudent() {
         //create AdmissionRecord, student, subject and professor
         StudentEntity student = new StudentEntity();
-        student.setName("Hank Schrader");
+        student.setName("Original Name");
         studentRepository.save(student);
 
         SubjectEntity subject = new SubjectEntity();
@@ -131,6 +131,26 @@ public class StudentTest {
         admissionRecord.setStudent(student);
         student.setAdmissionRecord(admissionRecord);
         admissionRecordRepository.save(admissionRecord);
+
+
+        // Prepare DTO
+        StudentDTO updatedDTO = StudentDTO.builder()
+                .name("Hank Schradar")
+                .admissionRecord(AdmissionRecordDTO.builder()
+                        .admissionDate(LocalDateTime.of(2025, 9,9,0,0))
+                        .fees(2500.00)
+                        .build())
+                .subjectIds(Set.of(subject.getId()))
+                .professorIds(Set.of(professor.getId()))
+                .build();
+
+
+        // Call updatedStudent
+        StudentDTO updatedStudent = studentService.updateStudent(student.getId(), updatedDTO);
+        System.out.println("Updated Student ID: " + updatedStudent.getId());
+        System.out.println("Student Name: " + updatedStudent.getName());
+        System.out.println("Student Admission Record: " + updatedStudent.getAdmissionRecord());
+
 
     }
 
