@@ -4,7 +4,9 @@ package com.example.CollegeManagementSystem.CollegeManagementSystem;
 import com.example.CollegeManagementSystem.CollegeManagementSystem.dtos.AdmissionRecordDTO;
 import com.example.CollegeManagementSystem.CollegeManagementSystem.dtos.StudentDTO;
 import com.example.CollegeManagementSystem.CollegeManagementSystem.entities.AdmissionRecordEntity;
+import com.example.CollegeManagementSystem.CollegeManagementSystem.entities.ProfessorEntity;
 import com.example.CollegeManagementSystem.CollegeManagementSystem.entities.StudentEntity;
+import com.example.CollegeManagementSystem.CollegeManagementSystem.entities.SubjectEntity;
 import com.example.CollegeManagementSystem.CollegeManagementSystem.repositories.AdmissionRecordRepository;
 import com.example.CollegeManagementSystem.CollegeManagementSystem.repositories.ProfessorRepository;
 import com.example.CollegeManagementSystem.CollegeManagementSystem.repositories.StudentRepository;
@@ -19,6 +21,7 @@ import org.springframework.test.annotation.Commit;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 @SpringBootTest
 public class StudentTest {
@@ -105,6 +108,30 @@ public class StudentTest {
     void testGetAllStudents() {
         List<StudentDTO> studentDTOList = studentService.getAllStudents();
         System.out.println("Student List: " + studentDTOList);
+    }
+
+    @Test
+    void testUpdateStudent() {
+        //create AdmissionRecord, student, subject and professor
+        StudentEntity student = new StudentEntity();
+        student.setName("Hank Schrader");
+        studentRepository.save(student);
+
+        SubjectEntity subject = new SubjectEntity();
+        subject.setName("Calculus");
+        subjectRepository.save(subject);
+
+        ProfessorEntity professor = new ProfessorEntity();
+        professor.setName("Mr. Smith");
+        professorRepository.save(professor);
+
+        AdmissionRecordEntity admissionRecord = new AdmissionRecordEntity();
+        admissionRecord.setAdmissionDate(LocalDateTime.of(2025,8,8,0,0));
+        admissionRecord.setFees(30000.00);
+        admissionRecord.setStudent(student);
+        student.setAdmissionRecord(admissionRecord);
+        admissionRecordRepository.save(admissionRecord);
+
     }
 
 
