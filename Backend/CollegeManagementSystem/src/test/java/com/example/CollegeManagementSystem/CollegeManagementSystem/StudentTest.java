@@ -162,6 +162,31 @@ public class StudentTest {
 
     }
 
+    @Test
+    void deleteStudent() {
+        StudentEntity student = new StudentEntity();
+        student.setName("Test Student");
+        student = studentRepository.save(student);
+
+
+        Long studentId = student.getId();
+
+        // Act - delete student
+        studentService.deleteStudent(studentId);
+
+        // Check if student still exists
+        boolean exists = studentRepository.existsById(studentId);
+
+        // Print the result
+        if (exists) {
+            System.out.println("Student was NOT deleted.");
+        } else {
+            System.out.println("Student deleted successfully.");
+        }
+    }
+
+
+
 
 
 
