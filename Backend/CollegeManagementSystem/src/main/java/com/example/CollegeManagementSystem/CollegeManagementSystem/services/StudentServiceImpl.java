@@ -14,6 +14,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -164,7 +165,23 @@ public class StudentServiceImpl implements StudentService {
 
         studentRepository.deleteById(id);
 
+    }
+    @Transactional
+    @Override
+    public StudentDTO patchStudent(Long id, StudentDTO studentDTO) {
+
+        //1. find the id
+        StudentEntity student = studentRepository.findById(id)
+                .orElseThrow(()-> new RuntimeException("Student not found with the ID: " + id));
+
+        // 2. patching name
+        if (studentDTO.getName()!= null){
+            student.setName(studentDTO.getName());
+        }
 
 
     }
+
+
+
 }
