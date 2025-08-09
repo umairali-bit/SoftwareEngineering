@@ -12,6 +12,7 @@ import com.example.CollegeManagementSystem.CollegeManagementSystem.repositories.
 import com.example.CollegeManagementSystem.CollegeManagementSystem.repositories.StudentRepository;
 import com.example.CollegeManagementSystem.CollegeManagementSystem.repositories.SubjectRepository;
 import com.example.CollegeManagementSystem.CollegeManagementSystem.services.StudentService;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -186,9 +187,65 @@ public class StudentTest {
     }
 
 
+    @Test
+    void patchExistingStudentsAdmissionRecords() {
+        // Retrieve existing students by their IDs
+        StudentEntity alice = studentRepository.findById(1L)
+                .orElseThrow(() -> new RuntimeException("Student 1 not found"));
 
+        StudentEntity brian = studentRepository.findById(2L)
+                .orElseThrow(() -> new RuntimeException("Student 2 not found"));
 
+        StudentEntity chloe = studentRepository.findById(3L)
+                .orElseThrow(() -> new RuntimeException("Student 3 not found"));
 
+        // Create AdmissionRecordDTOs to patch
+        AdmissionRecordDTO aliceAdmission = AdmissionRecordDTO.builder()
+                .admissionDate(LocalDateTime.of(2025, 8, 1, 0, 0))
+                .fees(15000.00)
+                .build();
 
+        AdmissionRecordDTO brianAdmission = AdmissionRecordDTO.builder()
+                .admissionDate(LocalDateTime.of(2025, 8, 2, 0, 0))
+                .fees(16000.00)
+                .build();
+
+        AdmissionRecordDTO chloeAdmission = AdmissionRecordDTO.builder()
+                .admissionDate(LocalDateTime.of(2025, 8, 3, 0, 0))
+                .fees(15500.00)
+                .build();
+
+        // Patch DTOs
+        StudentDTO alicePatch = StudentDTO.builder()
+                .admissionRecord(aliceAdmission)
+                .build();
+
+        StudentDTO brianPatch = StudentDTO.builder()
+                .admissionRecord(brianAdmission)
+                .build();
+
+        StudentDTO chloePatch = StudentDTO.builder()
+                .admissionRecord(chloeAdmission)
+                .build();
+
+        // Patch existing students by their IDs
+        StudentDTO updatedAlice = studentService.patchStudent(alice.getId(), alicePatch);
+        StudentDTO updatedBrian = studentService.patchStudent(brian.getId(), brianPatch);
+        StudentDTO updatedChloe = studentService.patchStudent(chloe.getId(), chloePatch);
+
+        // Print updated info
+        System.out.println("Updated Alice: " + updatedAlice);
+        System.out.println("Updated Brian: " + updatedBrian);
+        System.out.println("Updated Chloe: " + updatedChloe);
+    }
 
 }
+
+
+
+
+
+
+
+
+
