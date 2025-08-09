@@ -1,7 +1,9 @@
 package com.example.CollegeManagementSystem.CollegeManagementSystem.services;
 
 
+import com.example.CollegeManagementSystem.CollegeManagementSystem.dtos.AdmissionRecordDTO;
 import com.example.CollegeManagementSystem.CollegeManagementSystem.dtos.StudentDTO;
+import com.example.CollegeManagementSystem.CollegeManagementSystem.dtos.SubjectDTO;
 import com.example.CollegeManagementSystem.CollegeManagementSystem.entities.AdmissionRecordEntity;
 import com.example.CollegeManagementSystem.CollegeManagementSystem.entities.ProfessorEntity;
 import com.example.CollegeManagementSystem.CollegeManagementSystem.entities.StudentEntity;
@@ -171,15 +173,66 @@ public class StudentServiceImpl implements StudentService {
     public StudentDTO patchStudent(Long id, StudentDTO studentDTO) {
 
         //1. find the id
-        StudentEntity student = studentRepository.findById(id)
+        StudentEntity existingStudent = studentRepository.findById(id)
                 .orElseThrow(()-> new RuntimeException("Student not found with the ID: " + id));
 
         // 2. patching name
         if (studentDTO.getName()!= null){
-            student.setName(studentDTO.getName());
+            existingStudent.setName(studentDTO.getName());
         }
 
+        //3. patching AdmissionRecord
+        if(studentDTO.getAdmissionRecord() != null) {
+            AdmissionRecordDTO admissionRecordDTO = studentDTO.getAdmissionRecord();
 
+            AdmissionRecordEntity admissionRecord = existingStudent.getAdmissionRecord();
+
+            // if no admission record was associated with the student
+            if (admissionRecord == null) {
+                admissionRecord = new AdmissionRecordEntity();
+                admissionRecord.setStudent(existingStudent);
+                existingStudent.setAdmissionRecord(admissionRecord); // maintain bidirectional
+            }
+
+            // Now patch fields (common to both new or existing)
+            if (admissionRecordDTO.getAdmissionDate() != null) {
+                admissionRecord.setAdmissionDate(admissionRecordDTO.getAdmissionDate());
+            }
+
+            if (admissionRecordDTO.getFees() != null) {
+                admissionRecord.setFees(admissionRecordDTO.getFees());
+            }
+
+        }
+
+        //4. update subjects
+        if (studentDTO.getSubjectIds()!= null) {
+            Set<Long> subjectIDs =  studentDTO.getSubjectIds();
+
+            Set<SubjectEntity> subjects = subjectIDs.stream()
+                    .map(subjectID -> subjectRepository.findById(subjectID)
+                            .orElseThrow(() -> new RuntimeException("Subject not found with ID: " + subjectID)))
+                            .collect(Collectors.toSet());
+
+            existingStudent.setSubjects(subjects);
+        }
+
+        //5. update professors
+        if (studentDTO.getProfessorIds() != null) {
+            Set<Long> professorIDs = studentDTO.getProfessorIds();
+
+            Set<ProfessorEntity> professors = professorIDs.stream()
+                    .map(professorID -> professorRepository.findById(professorID)
+                            .orElseThrow(() -> new RuntimeException("Professor not found with ID: " + professorID)))
+                    .collect(Collectors.toSet());
+
+            existingStudent.setProfessors(professors);
+        }
+
+        //6. save the exisiting student in the StudentEntity
+        StudentEntity savedStudent = studentRepository.save(existingStudent);
+
+        return modelMapper.map(savedStudent,  StudentDTO.class);
     }
 
 
