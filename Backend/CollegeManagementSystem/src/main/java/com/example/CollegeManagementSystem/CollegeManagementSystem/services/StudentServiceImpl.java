@@ -13,6 +13,7 @@ import com.example.CollegeManagementSystem.CollegeManagementSystem.repositories.
 import com.example.CollegeManagementSystem.CollegeManagementSystem.repositories.SubjectRepository;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
+import org.springframework.http.converter.json.GsonBuilderUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -229,11 +230,13 @@ public class StudentServiceImpl implements StudentService {
             existingStudent.setProfessors(professors);
         }
 
-        //6. save the exisiting student in the StudentEntity
+        //6. save the existing student in the StudentEntity
         StudentEntity savedStudent = studentRepository.save(existingStudent);
 
-        return modelMapper.map(savedStudent,  StudentDTO.class);
+        return modelMapper.map(savedStudent, StudentDTO.class);
     }
+
+
 
 
 
