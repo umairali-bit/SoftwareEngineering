@@ -24,7 +24,8 @@ public class StudentEntity {
 
     private String name;
 
-    @OneToOne(mappedBy = "student", cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "admission_record_id") // FK column in Student table
     private AdmissionRecordEntity admissionRecord;
 
     @ManyToMany

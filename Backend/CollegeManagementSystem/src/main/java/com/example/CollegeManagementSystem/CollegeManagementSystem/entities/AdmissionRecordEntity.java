@@ -3,8 +3,6 @@ package com.example.CollegeManagementSystem.CollegeManagementSystem.entities;
 
 import jakarta.persistence.*;
 
-
-import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -25,9 +23,9 @@ public class AdmissionRecordEntity {
 
     private Double fees;
 
-    @OneToOne
-    @JoinColumn(name = "student_id")
+    @OneToOne(mappedBy = "admissionRecord")
     private StudentEntity student;
+
 
     private LocalDateTime admissionDate;
 }

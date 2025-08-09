@@ -9,14 +9,14 @@ public interface StudentService {
 
     // Basic CRUD
     StudentDTO createStudent(StudentDTO studentDTO);
-//
+
     StudentDTO getStudentById(Long id);
-//
+
     List<StudentDTO> getAllStudents();
-//
+
     StudentDTO updateStudent(Long id, StudentDTO studentDetails); // Full update (PUT)
-//
-//    void deleteStudent(Long id);
+
+   void deleteStudent(Long id);
 //
 //    // Partial update (PATCH)
 //    StudentDTO patchStudent(Long id, Map<String, Object> updates);
