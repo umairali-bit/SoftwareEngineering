@@ -17,9 +17,9 @@ public interface StudentService {
     StudentDTO updateStudent(Long id, StudentDTO studentDetails); // Full update (PUT)
 
    void deleteStudent(Long id);
-//
-//    // Partial update (PATCH)
-//    StudentDTO patchStudent(Long id, Map<String, Object> updates);
+
+//     Partial update (PATCH)
+    StudentDTO patchStudent(Long id, StudentDTO studentDTO);
 //
 //    // Managing relationships
 //    void assignProfessorToStudent(Long studentId, Long professorId);
