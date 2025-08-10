@@ -274,6 +274,9 @@ public class StudentServiceImpl implements StudentService {
         student.getProfessors().remove(professor);
         professor.getStudents().remove(student);
 
+        //Set the current professor flag removed
+        student.setProfessorRemoved(true);
+
         //persists change
         studentRepository.save(student);
 
