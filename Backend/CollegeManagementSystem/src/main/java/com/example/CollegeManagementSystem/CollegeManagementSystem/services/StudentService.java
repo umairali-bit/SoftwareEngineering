@@ -20,9 +20,9 @@ public interface StudentService {
 
 //     Partial update (PATCH)
     StudentDTO patchStudent(Long id, StudentDTO studentDTO);
-//
-//    // Managing relationships
-//    void assignProfessorToStudent(Long studentId, Long professorId);
+
+//   Managing relationships
+   void assignProfessorToStudent(Long studentId, Long professorId);
 //
 //    void removeProfessorFromStudent(Long studentId, Long professorId);
 //
