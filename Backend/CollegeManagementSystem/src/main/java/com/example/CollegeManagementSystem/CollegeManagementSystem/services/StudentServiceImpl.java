@@ -236,8 +236,57 @@ public class StudentServiceImpl implements StudentService {
         return modelMapper.map(savedStudent, StudentDTO.class);
     }
 
+    @Override
+    public void assignProfessorToStudent(Long studentId, Long professorId) {
 
+        //Fetch Student Entity
+        StudentEntity student = studentRepository.findById(studentId)
+                .orElseThrow(()-> new RuntimeException("Student is not found with ID: " + studentId));
 
+        //Fetch Professor Entity
+        ProfessorEntity professor = professorRepository.findById(professorId)
+                .orElseThrow(()-> new RuntimeException("Professor is not found with ID: " + professorId));
+
+        //Set professor to Student
+        student.getProfessors().add(professor);
+
+        //Set Student to Professor (Bidirectional)
+        professor.getStudents().add(student);
+
+        //Save entities
+        studentRepository.save(student);
+        professorRepository.save(professor);
+
+    }
 
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
