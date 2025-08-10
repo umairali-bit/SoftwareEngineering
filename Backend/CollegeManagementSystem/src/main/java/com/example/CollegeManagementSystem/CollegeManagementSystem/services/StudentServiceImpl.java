@@ -259,6 +259,26 @@ public class StudentServiceImpl implements StudentService {
 
     }
 
+    @Override
+    public void removeProfessorFromStudent(Long studentId, Long professorId) {
+
+        //Fetch the Student
+        StudentEntity student = studentRepository.findById(studentId)
+                .orElseThrow(()-> new RuntimeException("Student is not found with ID: " + studentId));
+
+        //Fetch Professor Entity
+        ProfessorEntity professor = professorRepository.findById(professorId)
+                .orElseThrow(()-> new RuntimeException("Professor is not found with ID: " + professorId));
+
+        //remove association from both sides
+        student.getProfessors().remove(professor);
+        professor.getStudents().remove(student);
+
+        //persists change
+        studentRepository.save(student);
+
+    }
+
 
 }
 
