@@ -248,8 +248,20 @@ public class SubjectServiceImpl implements SubjectService {
         SubjectEntity subject = subjectRepository.findById(subjectId)
                 .orElseThrow(()-> new RuntimeException("Subject not found with ID: " + subjectId));
 
+        //Fetch professor from the subject
+        ProfessorEntity current = subject.getProfessor();
+        if (current != null) {
+            //maintain bidirectional relationship, if present
+            if (current.getSubjects() != null) {
+                current.getSubjects().remove(subject);
+            }
+            subject.setProfessor(null);
+        }
+
         //Set the current professor flag removed
         subject.setProfessorRemoved(true);
+
+        // In a @Transactional service, explicit save isn't required, but harmless:
         subjectRepository.save(subject);
 
 
