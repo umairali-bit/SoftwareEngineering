@@ -6,10 +6,10 @@ VALUES
   ('Dr. Isaac Newton');
 
 -- Insert Students
-INSERT INTO student (name) VALUES
-  ('Alice Johnson'),
-  ('Brian Smith'),
-  ('Chloe Davis');
+INSERT INTO student (name, professor_removed, admission_record_id) VALUES
+('Alice Johnson', false, NULL),
+('Brian Smith',  false, NULL),
+('Chloe Davis',  false, NULL);
 
 -- Insert Subjects
 INSERT INTO subject (name, professor_id, professor_removed) VALUES

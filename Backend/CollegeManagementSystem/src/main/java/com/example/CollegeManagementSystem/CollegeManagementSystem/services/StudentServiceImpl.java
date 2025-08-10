@@ -240,7 +240,7 @@ public class StudentServiceImpl implements StudentService {
     public void assignProfessorToStudent(Long studentId, Long professorId) {
 
         //Fetch Student Entity
-        StudentEntity student = studentRepository.findById(studentId)
+        StudentEntity student = studentRepository.findWithProfessorsById(studentId)
                 .orElseThrow(()-> new RuntimeException("Student is not found with ID: " + studentId));
 
         //Fetch Professor Entity
@@ -250,16 +250,15 @@ public class StudentServiceImpl implements StudentService {
         //Set professor to Student
         student.getProfessors().add(professor);
 
-        //Set Student to Professor (Bidirectional)
-        professor.getStudents().add(student);
 
-        //Save entities
+        //Save entity
         studentRepository.save(student);
-        professorRepository.save(professor);
+
 
     }
 
     @Override
+    @Transactional
     public void removeProfessorFromStudent(Long studentId, Long professorId) {
 
         //Fetch the Student

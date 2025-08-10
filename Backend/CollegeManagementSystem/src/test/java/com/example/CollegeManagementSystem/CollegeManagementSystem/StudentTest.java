@@ -23,6 +23,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @SpringBootTest
 public class StudentTest {
@@ -238,6 +240,49 @@ public class StudentTest {
         System.out.println("Updated Brian: " + updatedBrian);
         System.out.println("Updated Chloe: " + updatedChloe);
     }
+
+
+    @Test
+    void testsAssignProfessorToStudent(){
+        //create a professor
+        ProfessorEntity professor = new ProfessorEntity();
+        professor.setName("Gus Fring");
+        professor = professorRepository.save(professor);
+
+        //create a Student
+        StudentEntity student = new StudentEntity();
+        student.setName("Walter White Jr");
+        student = studentRepository.save(student);
+
+        //Assign professor to student
+        studentService.assignProfessorToStudent(student.getId(), professor.getId());
+
+        // Fetch updated student from DB
+        StudentEntity updatedStudent = studentRepository.findWithProfessorsById(student.getId()).orElseThrow();
+
+        System.out.println("After assignment:");
+        System.out.println("Student: " + updatedStudent.getName());
+        System.out.println("Professors: " + updatedStudent.getProfessors()
+                .stream().map(professorEntity -> professorEntity.getName())
+                        .collect(Collectors.toSet()));
+
+        // Fetch updated professor from DB
+        ProfessorEntity updatedProfessor = professorRepository.findWithStudentsById(professor.getId()).orElseThrow();
+
+        System.out.println("Professor: " + updatedProfessor.getName());
+        System.out.println("Student: " + updatedProfessor.getStudents()
+                .stream().map(studentEntity -> studentEntity.getName())
+                .collect(Collectors.toSet()));
+
+
+
+    }
+
+
+
+
+
+
 
 }
 
