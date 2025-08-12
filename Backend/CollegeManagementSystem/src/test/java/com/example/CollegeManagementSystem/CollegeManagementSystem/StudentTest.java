@@ -58,7 +58,7 @@ public class StudentTest {
 
         // prepare Admission record DTO
         AdmissionRecordDTO admissionRecord = AdmissionRecordDTO.builder()
-                .admissionDate(LocalDateTime.of(2025,8,8,0,0))
+                .admissionDate(LocalDateTime.of(2025, 8, 8, 0, 0))
                 .fees(20000.00)
                 .build();
 
@@ -70,8 +70,7 @@ public class StudentTest {
 
 
         // save to DB
-        StudentDTO createdStudent= studentService.createStudent(student);
-
+        StudentDTO createdStudent = studentService.createStudent(student);
 
 
         // Print results
@@ -83,12 +82,13 @@ public class StudentTest {
     }
 
     @Test
-    @Commit //persists Ben in DB
+    @Commit
+        //persists Ben in DB
     void testGetStudentById() {
         // create a student and its admission record
 
         AdmissionRecordEntity admissionRecordEntity = new AdmissionRecordEntity();
-        admissionRecordEntity.setAdmissionDate(LocalDateTime.of(2025, 9,9,0,0));
+        admissionRecordEntity.setAdmissionDate(LocalDateTime.of(2025, 9, 9, 0, 0));
         admissionRecordEntity.setFees(30000.00);
 
 
@@ -105,8 +105,8 @@ public class StudentTest {
         StudentDTO result = studentService.getStudentById(id);
 
         //Print
-        System.out.println("Student ID: " +result.getId());
-        System.out.println("Student Name: " +result.getName());
+        System.out.println("Student ID: " + result.getId());
+        System.out.println("Student Name: " + result.getName());
         System.out.println("Student Admission Record: " + result.getAdmissionRecord());
 
     }
@@ -147,12 +147,11 @@ public class StudentTest {
         studentRepository.save(student);
 
 
-
         // Prepare DTO
         StudentDTO updatedDTO = StudentDTO.builder()
                 .name("Hank Schradar")
                 .admissionRecord(AdmissionRecordDTO.builder()
-                        .admissionDate(LocalDateTime.of(2025, 9,9,0,0))
+                        .admissionDate(LocalDateTime.of(2025, 9, 9, 0, 0))
                         .fees(2500.00)
                         .build())
                 .subjectIds(Set.of(subject.getId()))
@@ -304,6 +303,7 @@ public class StudentTest {
         // Will throw "Professor does not teach the subject"
         studentService.assignProfessorToStudent(student.getId(), profA.getId(), chem.getId());
     }
+
     @Test
     @Transactional
     void assignProfessorToStudent_happyPath_printsState() {
@@ -345,7 +345,6 @@ public class StudentTest {
         // Re-fetch with professors loaded (your repo method)
         StudentEntity updatedStudent =
                 studentRepository.findWithProfessorsAndSubjectsById(student.getId()).orElseThrow();
-
 
 
         System.out.println("\nAfter assignment:");
@@ -417,7 +416,22 @@ public class StudentTest {
                 + " | Subjects=" + afterRemoval.getSubjects().stream()
                 .map(SubjectEntity::getName).toList());
     }
+
+    @Test
+    @Transactional
+    void demoRemoveProfessor() {
+        // fetch for printing
+        StudentEntity before = studentRepository.findWithProfessorsAndSubjectsById(6L).orElseThrow();
+
+        studentService.removeProfessorFromStudent(6L, 5L);
+
+        // re-fetch to see DB state
+        StudentEntity after = studentRepository.findWithProfessorsAndSubjectsById(6L).orElseThrow();
+        System.out.println("After: " + after.getName() + " -> " +
+                after.getProfessors().stream().map(ProfessorEntity::getName).toList());
+    }
 }
+
 
 
 
