@@ -240,7 +240,7 @@ public class StudentServiceImpl implements StudentService {
     public void assignProfessorToStudent(Long studentId, Long professorId, Long subjectId) {
 
         //Fetch Student Entity
-        StudentEntity student = studentRepository.findWithProfessorsById(studentId)
+        StudentEntity student = studentRepository.findWithProfessorsAndSubjectsById(studentId)
                 .orElseThrow(()-> new RuntimeException("Student is not found with ID: " + studentId));
 
         //Fetch Professor Entity
@@ -257,7 +257,7 @@ public class StudentServiceImpl implements StudentService {
         }
 
         //Validation: professor must be teaching the subject
-        if(professor.getSubjects().contains(subject)){
+        if(!professor.getSubjects().contains(subject)){
             throw new RuntimeException("Professor does not teach the subject");
         }
 
