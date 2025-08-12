@@ -354,13 +354,78 @@ public class StudentTest {
                 updatedStudent.getProfessors().stream().map(ProfessorEntity::getName).collect(Collectors.toSet()));
     }
 
+    @Test
+    @Transactional
+    void removeProfessorFromStudent_andRemoveAstrophysics() {
+        // 1️⃣ Create Professor
+        ProfessorEntity professor = new ProfessorEntity();
+        professor.setName("Gus Fring");
+        professor = professorRepository.save(professor);
 
+        // 2️⃣ Create Subject (Astrophysics) and link to Professor
+        SubjectEntity subject = new SubjectEntity();
+        subject.setName("Astrophysics");
+        subject.setProfessor(professor);
+        professor.getSubjects().add(subject); // bidirectional
+        subject = subjectRepository.save(subject);
 
+        // 3️⃣ Create Student and enroll in Subject
+        StudentEntity student = new StudentEntity();
+        student.setName("Walter White Jr");
+        student.getSubjects().add(subject); // inverse
+        subject.getStudents().add(student); // owning
+        student.getProfessors().add(professor);
+        professor.getStudents().add(student);
+        student = studentRepository.save(student);
 
+//        em.flush();
+//        em.clear();
 
+        System.out.println("Before removal:");
+        StudentEntity beforeRemoval = studentRepository
+                .findWithProfessorsAndSubjectsById(student.getId())
+                .orElseThrow();
+        System.out.println("Student: " + beforeRemoval.getName()
+                + " | Professors=" + beforeRemoval.getProfessors().stream()
+                .map(ProfessorEntity::getName).toList()
+                + " | Subjects=" + beforeRemoval.getSubjects().stream()
+                .map(SubjectEntity::getName).toList());
 
+        // 4️⃣ Remove professor
+        studentService.removeProfessorFromStudent(student.getId(), professor.getId());
 
+        // 5️⃣ Remove "Astrophysics" subject from student (owning side)
+        StudentEntity managedStudent = studentRepository.findById(student.getId())
+                .orElseThrow();
+        SubjectEntity managedSubject = subjectRepository.findById(subject.getId())
+                .orElseThrow();
+        managedSubject.getStudents().remove(managedStudent);
+        managedStudent.getSubjects().remove(managedSubject);
+
+        studentRepository.save(managedStudent);
+        em.flush();
+        em.clear();
+
+        // 6️⃣ Verify after removal
+        System.out.println("\nAfter removal:");
+        StudentEntity afterRemoval = studentRepository
+                .findWithProfessorsAndSubjectsById(student.getId())
+                .orElseThrow();
+        System.out.println("Student: " + afterRemoval.getName()
+                + " | Professors=" + afterRemoval.getProfessors().stream()
+                .map(ProfessorEntity::getName).toList()
+                + " | Subjects=" + afterRemoval.getSubjects().stream()
+                .map(SubjectEntity::getName).toList());
+    }
 }
+
+
+
+
+
+
+
+
 
 
 

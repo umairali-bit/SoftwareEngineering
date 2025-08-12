@@ -40,4 +40,15 @@ public class SubjectEntity {
 
     private boolean professorRemoved;
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof SubjectEntity)) return false;
+        SubjectEntity other = (SubjectEntity) o;
+        return id != null && id.equals(other.id);
+    }
+    @Override
+    public int hashCode() { return 31; } // stable
+
+
 }
