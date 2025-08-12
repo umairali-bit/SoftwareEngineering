@@ -237,7 +237,7 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public void assignProfessorToStudent(Long studentId, Long professorId) {
+    public void assignProfessorToStudent(Long studentId, Long professorId, Long subjectId) {
 
         //Fetch Student Entity
         StudentEntity student = studentRepository.findWithProfessorsById(studentId)
@@ -246,6 +246,22 @@ public class StudentServiceImpl implements StudentService {
         //Fetch Professor Entity
         ProfessorEntity professor = professorRepository.findById(professorId)
                 .orElseThrow(()-> new RuntimeException("Professor is not found with ID: " + professorId));
+
+        //Fetch Subject Entity
+        SubjectEntity subject = subjectRepository.findById(subjectId)
+                .orElseThrow(()-> new RuntimeException("Subject is not found with ID: " + subjectId));
+
+        //Validation: student must be enrolled in the subject
+        if(!student.getSubjects().contains(subject)){
+            throw new RuntimeException("Student is not enrolled in the subject");
+        }
+
+        //Validation: professor must be teaching the subject
+        if(professor.getSubjects().contains(subject)){
+            throw new RuntimeException("Professor does not teach the subject");
+        }
+
+
 
         //Set professor to Student
         student.getProfessors().add(professor);

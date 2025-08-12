@@ -22,7 +22,7 @@ public interface StudentService {
     StudentDTO patchStudent(Long id, StudentDTO studentDTO);
 
 //   Managing relationships
-   void assignProfessorToStudent(Long studentId, Long professorId);
+   void assignProfessorToStudent(Long studentId, Long professorId, Long subjectId);
 //
    void removeProfessorFromStudent(Long studentId, Long professorId);
 //
