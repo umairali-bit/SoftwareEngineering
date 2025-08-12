@@ -12,6 +12,7 @@ import com.example.CollegeManagementSystem.CollegeManagementSystem.repositories.
 import com.example.CollegeManagementSystem.CollegeManagementSystem.repositories.StudentRepository;
 import com.example.CollegeManagementSystem.CollegeManagementSystem.repositories.SubjectRepository;
 import com.example.CollegeManagementSystem.CollegeManagementSystem.services.StudentService;
+import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
@@ -47,6 +48,9 @@ public class StudentTest {
 
     @Autowired
     private ModelMapper modelMapper;
+
+    @Autowired
+    EntityManager em;
 
 
     @Test
@@ -243,39 +247,111 @@ public class StudentTest {
 
 
     @Test
-    void testsAssignProfessorToStudent(){
-        //create a professor
-        ProfessorEntity professor = new ProfessorEntity();
-        professor.setName("Gus Fring");
-        professor = professorRepository.save(professor);
+    @Transactional
+    void assignProfessorToStudent_shouldFail_whenStudentNotEnrolled() {
+        // Professor who teaches Astrophysics
+        ProfessorEntity prof = new ProfessorEntity();
+        prof.setName("Gus Fring");
+        prof = professorRepository.save(prof);
 
-        //create a Student
+        SubjectEntity astro = new SubjectEntity();
+        astro.setName("Astrophysics");
+        astro.setProfessor(prof);           // required (nullable=false)
+        prof.getSubjects().add(astro);
+        astro = subjectRepository.save(astro);
+        professorRepository.save(prof);
+
+        // Student NOT enrolled in astro
         StudentEntity student = new StudentEntity();
         student.setName("Walter White Jr");
         student = studentRepository.save(student);
 
-        //Assign professor to student
-        studentService.assignProfessorToStudent(student.getId(), professor.getId());
+        System.out.println("CASE 1 — Expect failure: student NOT enrolled in subject");
+        // Will throw "Student is not enrolled in the subject"
+        studentService.assignProfessorToStudent(student.getId(), prof.getId(), astro.getId());
+    }
 
-        // Fetch updated student from DB
-        StudentEntity updatedStudent = studentRepository.findWithProfessorsById(student.getId()).orElseThrow();
+    @Test
+    @Transactional
+    void assignProfessorToStudent_shouldFail_whenProfessorNotTeachingSubject() {
+        // Professor A (the one we will pass to service)
+        ProfessorEntity profA = new ProfessorEntity();
+        profA.setName("Mike Ehrmantraut");
+        profA = professorRepository.save(profA);
 
-        System.out.println("After assignment:");
+        // Professor B (actually teaches Chemistry)
+        ProfessorEntity profB = new ProfessorEntity();
+        profB.setName("Gale Boetticher");
+        profB = professorRepository.save(profB);
+
+        // Subject Chemistry is taught by profB (NOT profA)
+        SubjectEntity chem = new SubjectEntity();
+        chem.setName("Chemistry");
+        chem.setProfessor(profB);          // satisfy DB constraint
+        profB.getSubjects().add(chem);
+        chem = subjectRepository.save(chem);
+        professorRepository.save(profB);
+
+        // Student IS enrolled in Chemistry
+        StudentEntity student = new StudentEntity();
+        student.setName("Jesse Pinkman");
+        chem.getStudents().add(student);    // owning side for ManyToMany (if Subject owns)
+        student.getSubjects().add(chem);    // inverse for in-memory consistency
+        student = studentRepository.save(student);
+        subjectRepository.save(chem);
+
+        System.out.println("CASE 2 — Expect failure: professor DOES NOT teach subject");
+        // Will throw "Professor does not teach the subject"
+        studentService.assignProfessorToStudent(student.getId(), profA.getId(), chem.getId());
+    }
+    @Test
+    @Transactional
+    void assignProfessorToStudent_happyPath_printsState() {
+        // Create Professor
+        ProfessorEntity professor = new ProfessorEntity();
+        professor.setName("Dr. Sagan");
+        professor = professorRepository.save(professor);
+
+        // Create Subject and link to Professor (ensure both sides if bidirectional)
+        SubjectEntity subject = new SubjectEntity();
+        subject.setName("Astrophysics");
+        // If your mapping is ManyToOne on Subject -> Professor:
+        subject.setProfessor(professor);
+        // If Professor has Set<SubjectEntity> subjects:
+        professor.getSubjects().add(subject);
+
+        subject = subjectRepository.save(subject);
+        professor = professorRepository.save(professor);
+
+        // Create Student and enroll in Subject (maintain both sides)
+        StudentEntity student = new StudentEntity();
+        student.setName("Ellie Arroway");
+        student.getSubjects().add(subject);
+        // If Subject has Set<StudentEntity> students:
+        subject.getStudents().add(student);
+
+        student = studentRepository.save(student);
+        subject = subjectRepository.save(subject);
+
+        System.out.println("Before assignment:");
+        System.out.println("Student: " + student.getName() + " | subjects=" +
+                student.getSubjects().stream().map(SubjectEntity::getName).toList());
+        System.out.println("Professor: " + professor.getName() + " | teaches=" +
+                professor.getSubjects().stream().map(SubjectEntity::getName).toList());
+
+        // Call the service
+        studentService.assignProfessorToStudent(student.getId(), professor.getId(), subject.getId());
+
+        // Re-fetch with professors loaded (your repo method)
+        StudentEntity updatedStudent =
+                studentRepository.findWithProfessorsAndSubjectsById(student.getId()).orElseThrow();
+
+
+
+        System.out.println("\nAfter assignment:");
         System.out.println("Student: " + updatedStudent.getName());
-        System.out.println("Professors: " + updatedStudent.getProfessors()
-                .stream().map(professorEntity -> professorEntity.getName())
-                        .collect(Collectors.toSet()));
-
-        // Fetch updated professor from DB
-        ProfessorEntity updatedProfessor = professorRepository.findWithStudentsById(professor.getId()).orElseThrow();
-
-        System.out.println("Professor: " + updatedProfessor.getName());
-        System.out.println("Student: " + updatedProfessor.getStudents()
-                .stream().map(studentEntity -> studentEntity.getName())
-                .collect(Collectors.toSet()));
-
-
-
+        System.out.println("Professors now linked to student: " +
+                updatedStudent.getProfessors().stream().map(ProfessorEntity::getName).collect(Collectors.toSet()));
     }
 
 

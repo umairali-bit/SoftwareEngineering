@@ -12,7 +12,13 @@ import java.util.Optional;
 @Repository
 public interface ProfessorRepository extends JpaRepository<ProfessorEntity, Long> {
 
-    @Query("select p from ProfessorEntity p left join fetch p.students where p.id = :id")
-    Optional<ProfessorEntity> findWithStudentsById(@Param("id") Long id);
+    @Query("""
+  select distinct p
+  from ProfessorEntity p
+  left join fetch p.students
+  left join fetch p.subjects
+  where p.id = :id
+""")
+    Optional<ProfessorEntity> findWithSubjectsById(@Param("id") Long id);
 
 }
