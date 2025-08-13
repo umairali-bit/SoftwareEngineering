@@ -459,7 +459,36 @@ public class StudentTest {
 
 
     }
+
+
+    @Test
+    @Transactional
+    @Commit
+    void removeTestSubjectFromStudent() {
+        Long studentId = 2L;
+        Set<Long> subjectIds = Set.of(2L);
+
+        // BEFORE
+        StudentEntity before = studentRepository.findById(studentId).orElseThrow();
+        System.out.println("Before: " + before.getName());
+        before.getSubjects().forEach(s -> System.out.println("  HAS: " + s.getName()));
+
+        // ACT
+        studentService.removeSubjectFromStudent(studentId, subjectIds);
+
+        // Force SQL and detach cache
+        em.flush();
+        em.clear();
+
+        // AFTER
+        StudentEntity after = studentRepository.findById(studentId).orElseThrow();
+        System.out.println("After: " + after.getName());
+        after.getSubjects().forEach(s -> System.out.println("  HAS: " + s.getName()));
+    }
+
+
 }
+
 
 
 

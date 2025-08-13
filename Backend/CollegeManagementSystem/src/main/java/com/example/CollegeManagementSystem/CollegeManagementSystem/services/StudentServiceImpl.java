@@ -14,6 +14,7 @@ import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -294,7 +295,7 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public void assignSubjectsToStudent(Long studentId, Set<Long> subjectIds) {
 
-        //Fetch subjects
+        //Fetch subjects - this method will hit the DB multiple times, look into assignStudentToSubjecty (Better!)
         Set<SubjectEntity> subjects = subjectIds.stream()
                 .map(subjectID -> subjectRepository.findById(subjectID)
                         .orElseThrow(() -> new RuntimeException("Subject not found with ID: " + subjectID)))
@@ -313,6 +314,46 @@ public class StudentServiceImpl implements StudentService {
             studentRepository.save(student);
 
         }
+
+
+    }
+
+    @Override
+    @Transactional
+    public void removeSubjectFromStudent(Long studentId, Set<Long> subjectIds) {
+
+        StudentEntity student = studentRepository.findById(studentId)
+                .orElseThrow(() -> new RuntimeException("Student not found with ID: " + studentId));
+
+        List<SubjectEntity> found = subjectRepository.findAllById(subjectIds);
+        Set<Long> foundIds = found.stream().map(subjectEntity -> subjectEntity.getId())
+                .collect(java.util.stream.Collectors.toSet());
+        if (found.size() != subjectIds.size()) {
+
+            // find which IDS are missing for a clearer error
+            Set<Long> missing = new HashSet<>(subjectIds);
+            missing.removeAll(foundIds);
+            throw new RuntimeException("Subject(s) not found with IDs: " + missing);
+        }
+
+        // Remove only those that are actually linked
+        Set<Long> notLinked = new HashSet<>(foundIds);
+        for (SubjectEntity subject : found) {
+            if ( subject.getStudents().remove(student)) {
+                student.getSubjects().remove(subject);// keep inverse consistent
+                notLinked.remove(subject.getId());
+            }
+        }
+
+        subjectRepository.saveAll(found);
+        studentRepository.save(student);
+
+
+
+
+
+
+
 
 
     }
