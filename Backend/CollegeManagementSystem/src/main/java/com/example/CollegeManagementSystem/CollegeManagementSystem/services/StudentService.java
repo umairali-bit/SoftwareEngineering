@@ -29,7 +29,7 @@ public interface StudentService {
 
     void assignSubjectsToStudent(Long studentId, Set<Long> subjectIds);
 
-//    void removeSubjectFromStudent(Long studentId, Long subjectId);
+    void removeSubjectFromStudent(Long studentId, Set<Long> subjectIds);
 //
 //    // Admission record handling
 //    void assignAdmissionRecordToStudent(Long studentId, Long admissionRecordId);
