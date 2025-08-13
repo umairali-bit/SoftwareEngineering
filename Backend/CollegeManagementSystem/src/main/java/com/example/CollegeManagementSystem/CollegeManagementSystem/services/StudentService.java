@@ -4,6 +4,7 @@ import com.example.CollegeManagementSystem.CollegeManagementSystem.dtos.StudentD
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public interface StudentService {
 
@@ -23,11 +24,11 @@ public interface StudentService {
 
 //   Managing relationships
    void assignProfessorToStudent(Long studentId, Long professorId, Long subjectId);
-//
+
    void removeProfessorFromStudent(Long studentId, Long professorId);
-//
-//    void assignSubjectToStudent(Long studentId, Long subjectId);
-//
+
+    void assignSubjectsToStudent(Long studentId, Set<Long> subjectIds);
+
 //    void removeSubjectFromStudent(Long studentId, Long subjectId);
 //
 //    // Admission record handling

@@ -430,6 +430,12 @@ public class StudentTest {
         System.out.println("After: " + after.getName() + " -> " +
                 after.getProfessors().stream().map(ProfessorEntity::getName).toList());
     }
+
+
+    @Test
+    void assignSubjectsToStudent() {
+
+    }
 }
 
 
