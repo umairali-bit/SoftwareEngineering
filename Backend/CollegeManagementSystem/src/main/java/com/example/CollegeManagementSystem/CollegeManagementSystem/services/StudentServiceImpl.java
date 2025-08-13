@@ -3,7 +3,6 @@ package com.example.CollegeManagementSystem.CollegeManagementSystem.services;
 
 import com.example.CollegeManagementSystem.CollegeManagementSystem.dtos.AdmissionRecordDTO;
 import com.example.CollegeManagementSystem.CollegeManagementSystem.dtos.StudentDTO;
-import com.example.CollegeManagementSystem.CollegeManagementSystem.dtos.SubjectDTO;
 import com.example.CollegeManagementSystem.CollegeManagementSystem.entities.AdmissionRecordEntity;
 import com.example.CollegeManagementSystem.CollegeManagementSystem.entities.ProfessorEntity;
 import com.example.CollegeManagementSystem.CollegeManagementSystem.entities.StudentEntity;
@@ -13,11 +12,9 @@ import com.example.CollegeManagementSystem.CollegeManagementSystem.repositories.
 import com.example.CollegeManagementSystem.CollegeManagementSystem.repositories.SubjectRepository;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
-import org.springframework.http.converter.json.GsonBuilderUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -88,6 +85,7 @@ public class StudentServiceImpl implements StudentService {
                 .map(studentEntity -> modelMapper.map(studentEntity, StudentDTO.class))
                 .collect(Collectors.toList());
     }
+
     @Transactional
     @Override
     public StudentDTO updateStudent(Long id, StudentDTO studentDTO) {
@@ -110,7 +108,6 @@ public class StudentServiceImpl implements StudentService {
             admissionRecord.setFees(studentDTO.getAdmissionRecord().getFees());
 
 
-
             existingStudent.setAdmissionRecord(admissionRecord);//maintaining bidirectional
         } else {
             existingStudent.setAdmissionRecord(null);
@@ -120,7 +117,7 @@ public class StudentServiceImpl implements StudentService {
         if (studentDTO.getSubjectIds() != null) {
             Set<SubjectEntity> subjectEntities = studentDTO.getSubjectIds().stream()
                     .map(subjectId -> subjectRepository.findById(subjectId)
-                    .orElseThrow(() -> new RuntimeException("Subject not found with ID: " + subjectId)))
+                            .orElseThrow(() -> new RuntimeException("Subject not found with ID: " + subjectId)))
                     .collect(Collectors.toSet());
 
             existingStudent.setSubjects(subjectEntities);
@@ -138,7 +135,7 @@ public class StudentServiceImpl implements StudentService {
         if (studentDTO.getProfessorIds() != null) {
             Set<ProfessorEntity> professorsEntity = studentDTO.getProfessorIds().stream()
                     .map(professorId -> professorRepository.findById(professorId)
-                            .orElseThrow(()-> new RuntimeException("Professor not found with ID: " + professorId)))
+                            .orElseThrow(() -> new RuntimeException("Professor not found with ID: " + professorId)))
                     .collect(Collectors.toSet());
 
             existingStudent.setProfessors(professorsEntity);
@@ -148,12 +145,11 @@ public class StudentServiceImpl implements StudentService {
                 professor.getStudents().add(existingStudent);
             }
 
-        }  else {
+        } else {
             existingStudent.setProfessors(null);
         }
 
         StudentEntity savedStudent = studentRepository.save(existingStudent);
-
 
 
         return modelMapper.map(savedStudent, StudentDTO.class);
@@ -162,28 +158,29 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public void deleteStudent(Long id) {
 
-        if(!studentRepository.existsById(id)) {
+        if (!studentRepository.existsById(id)) {
             throw new RuntimeException("Student not found with the ID: " + id);
         }
 
         studentRepository.deleteById(id);
 
     }
+
     @Transactional
     @Override
     public StudentDTO patchStudent(Long id, StudentDTO studentDTO) {
 
         //1. find the id
         StudentEntity existingStudent = studentRepository.findById(id)
-                .orElseThrow(()-> new RuntimeException("Student not found with the ID: " + id));
+                .orElseThrow(() -> new RuntimeException("Student not found with the ID: " + id));
 
         // 2. patching name
-        if (studentDTO.getName()!= null){
+        if (studentDTO.getName() != null) {
             existingStudent.setName(studentDTO.getName());
         }
 
         //3. patching AdmissionRecord
-        if(studentDTO.getAdmissionRecord() != null) {
+        if (studentDTO.getAdmissionRecord() != null) {
             AdmissionRecordDTO admissionRecordDTO = studentDTO.getAdmissionRecord();
 
             AdmissionRecordEntity admissionRecord = existingStudent.getAdmissionRecord();
@@ -207,13 +204,13 @@ public class StudentServiceImpl implements StudentService {
         }
 
         //4. update subjects
-        if (studentDTO.getSubjectIds()!= null) {
-            Set<Long> subjectIDs =  studentDTO.getSubjectIds();
+        if (studentDTO.getSubjectIds() != null) {
+            Set<Long> subjectIDs = studentDTO.getSubjectIds();
 
             Set<SubjectEntity> subjects = subjectIDs.stream()
                     .map(subjectID -> subjectRepository.findById(subjectID)
                             .orElseThrow(() -> new RuntimeException("Subject not found with ID: " + subjectID)))
-                            .collect(Collectors.toSet());
+                    .collect(Collectors.toSet());
 
             existingStudent.setSubjects(subjects);
         }
@@ -241,26 +238,25 @@ public class StudentServiceImpl implements StudentService {
 
         //Fetch Student Entity
         StudentEntity student = studentRepository.findWithProfessorsAndSubjectsById(studentId)
-                .orElseThrow(()-> new RuntimeException("Student is not found with ID: " + studentId));
+                .orElseThrow(() -> new RuntimeException("Student is not found with ID: " + studentId));
 
         //Fetch Professor Entity
         ProfessorEntity professor = professorRepository.findById(professorId)
-                .orElseThrow(()-> new RuntimeException("Professor is not found with ID: " + professorId));
+                .orElseThrow(() -> new RuntimeException("Professor is not found with ID: " + professorId));
 
         //Fetch Subject Entity
         SubjectEntity subject = subjectRepository.findById(subjectId)
-                .orElseThrow(()-> new RuntimeException("Subject is not found with ID: " + subjectId));
+                .orElseThrow(() -> new RuntimeException("Subject is not found with ID: " + subjectId));
 
         //Validation: student must be enrolled in the subject
-        if(!student.getSubjects().contains(subject)){
+        if (!student.getSubjects().contains(subject)) {
             throw new RuntimeException("Student is not enrolled in the subject");
         }
 
         //Validation: professor must be teaching the subject
-        if(!professor.getSubjects().contains(subject)){
+        if (!professor.getSubjects().contains(subject)) {
             throw new RuntimeException("Professor does not teach the subject");
         }
-
 
 
         //Set professor to Student
@@ -279,11 +275,11 @@ public class StudentServiceImpl implements StudentService {
 
         //Fetch the Student
         StudentEntity student = studentRepository.findById(studentId)
-                .orElseThrow(()-> new RuntimeException("Student is not found with ID: " + studentId));
+                .orElseThrow(() -> new RuntimeException("Student is not found with ID: " + studentId));
 
         //Fetch Professor Entity
         ProfessorEntity professor = professorRepository.findById(professorId)
-                .orElseThrow(()-> new RuntimeException("Professor is not found with ID: " + professorId));
+                .orElseThrow(() -> new RuntimeException("Professor is not found with ID: " + professorId));
 
         //remove association from both sides
         student.getProfessors().remove(professor);
@@ -297,7 +293,33 @@ public class StudentServiceImpl implements StudentService {
 
     }
 
+    @Override
+    public void assignSubjectsToStudent(Long studentId, Set<Long> subjectIds) {
 
+        //Fetch subjects
+        Set<SubjectEntity> subjects = subjectIds.stream()
+                .map(subjectID -> subjectRepository.findById(subjectID)
+                        .orElseThrow(() -> new RuntimeException("Subject not found with ID: " + subjectID)))
+                .collect(Collectors.toSet());
+
+        //Fetch the student
+        StudentEntity student = studentRepository.findById(studentId)
+                .orElseThrow(() -> new RuntimeException("Student not found with ID: " + studentId));
+
+
+        student.setSubjects(subjects);
+
+        for (SubjectEntity s : subjects) {
+            if (s.getStudents().add(student)) {// owning side
+                s.getStudents().add(student); // inverse sync
+            }
+
+            studentRepository.save(student);
+
+        }
+
+
+    }
 }
 
 

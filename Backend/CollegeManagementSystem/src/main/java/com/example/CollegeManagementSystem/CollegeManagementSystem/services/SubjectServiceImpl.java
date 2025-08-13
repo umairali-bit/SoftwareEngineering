@@ -270,21 +270,28 @@ public class SubjectServiceImpl implements SubjectService {
     @Transactional
     @Override
     public void assignStudentToSubject(Long subjectId, Set<Long> studentIds) {
-
         SubjectEntity subject = subjectRepository.findById(subjectId)
                 .orElseThrow(() -> new RuntimeException("Subject not found with ID: " + subjectId));
 
-        Set<StudentEntity> students = new HashSet<>(studentRepository.findAllById(studentIds));
-
-        subject.getStudents().addAll(students);
-
-        for (StudentEntity s : students) {
-            s.getSubjects().add(subject);//maintain bidirectional relationship
+        // Load all students and validate missing IDs
+        List<StudentEntity> found = studentRepository.findAllById(studentIds);
+        if (found.size() != studentIds.size()) {
+            // find which IDs are missing for a clearer error
+            Set<Long> foundIds = found.stream().map(StudentEntity::getId).collect(java.util.stream.Collectors.toSet());
+            Set<Long> missing = new java.util.HashSet<>(studentIds);
+            missing.removeAll(foundIds);
+            throw new RuntimeException("Student(s) not found with IDs: " + missing);
         }
 
-        subjectRepository.save(subject);
-    }
+        // Add (idempotent if equals/hashCode by id)
+        for (StudentEntity s : found) {
+            if (subject.getStudents().add(s)) {   // owning side
+                s.getSubjects().add(subject);     // inverse side sync
+            }
+        }
 
+        subjectRepository.save(subject); // owning side save is enough
+    }
     @Override
     @Transactional
     public void removeStudentFromSubject(Long subjectId, Set<Long> studentIds) {
