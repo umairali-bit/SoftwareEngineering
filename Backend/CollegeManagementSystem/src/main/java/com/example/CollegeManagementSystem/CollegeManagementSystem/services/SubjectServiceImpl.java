@@ -258,9 +258,6 @@ public class SubjectServiceImpl implements SubjectService {
             subject.setProfessor(null);
         }
 
-        //Set the current professor flag removed
-        subject.setProfessorRemoved(true);
-
         // In a @Transactional service, explicit save isn't required, but harmless:
         subjectRepository.save(subject);
 

@@ -433,7 +433,30 @@ public class StudentTest {
 
 
     @Test
+    @Transactional
+    @Commit
     void assignSubjectsToStudent() {
+
+        StudentEntity student = studentRepository.findById(2L).orElseThrow();
+
+        Set<Long> subjectIds = Set.of(1L, 2L);
+
+        studentService.assignSubjectsToStudent(student.getId(), subjectIds);
+
+        StudentEntity updatedStudent = studentRepository.findById(student.getId())
+                .orElseThrow();
+
+        System.out.println("Student: " + updatedStudent.getName());
+        System.out.println("Subjects assigned:");
+        updatedStudent.getSubjects().forEach(sub ->
+                System.out.println(" - " + sub.getName())
+        );
+
+
+
+
+
+
 
     }
 }

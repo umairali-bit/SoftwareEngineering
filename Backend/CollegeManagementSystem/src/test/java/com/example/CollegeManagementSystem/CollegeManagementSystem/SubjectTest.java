@@ -287,20 +287,16 @@ public class SubjectTest {
         //create a new subject
         SubjectEntity subject = new SubjectEntity();
         subject.setProfessor(professor);
-        subject.setProfessorRemoved(false);
         subject = subjectRepository.save(subject);
 
 
         //Actual removal logic
         subject.setProfessor(null);
-        subject.setProfessorRemoved(true);
         subject = subjectRepository.save(subject);
 
         //call the method to remove professor
         SubjectEntity updatedSubject = subjectRepository.findById(subject.getId()).orElseThrow();
 
-        //print the professorRemoved flag
-        System.out.println("professorRemoved: " + updatedSubject.isProfessorRemoved());
     }
 
 
