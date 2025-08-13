@@ -285,8 +285,6 @@ public class StudentServiceImpl implements StudentService {
         student.getProfessors().remove(professor);
         professor.getStudents().remove(student);
 
-        //Set the current professor flag removed
-        student.setProfessorRemoved(true);
 
         //persists change
         studentRepository.save(student);
@@ -307,11 +305,9 @@ public class StudentServiceImpl implements StudentService {
                 .orElseThrow(() -> new RuntimeException("Student not found with ID: " + studentId));
 
 
-        student.setSubjects(subjects);
-
         for (SubjectEntity s : subjects) {
             if (s.getStudents().add(student)) {// owning side
-                s.getStudents().add(student); // inverse sync
+                student.getSubjects().add(s); // inverse sync
             }
 
             studentRepository.save(student);

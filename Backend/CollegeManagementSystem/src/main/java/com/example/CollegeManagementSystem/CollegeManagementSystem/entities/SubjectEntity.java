@@ -38,7 +38,6 @@ public class SubjectEntity {
     )
     private Set<StudentEntity> students = new HashSet<>();
 
-    private boolean professorRemoved;
 
     @Override
     public boolean equals(Object o) {
