@@ -7,6 +7,7 @@ import com.example.CollegeManagementSystem.CollegeManagementSystem.entities.Admi
 import com.example.CollegeManagementSystem.CollegeManagementSystem.entities.ProfessorEntity;
 import com.example.CollegeManagementSystem.CollegeManagementSystem.entities.StudentEntity;
 import com.example.CollegeManagementSystem.CollegeManagementSystem.entities.SubjectEntity;
+import com.example.CollegeManagementSystem.CollegeManagementSystem.repositories.AdmissionRecordRepository;
 import com.example.CollegeManagementSystem.CollegeManagementSystem.repositories.ProfessorRepository;
 import com.example.CollegeManagementSystem.CollegeManagementSystem.repositories.StudentRepository;
 import com.example.CollegeManagementSystem.CollegeManagementSystem.repositories.SubjectRepository;
@@ -28,14 +29,17 @@ public class StudentServiceImpl implements StudentService {
 
     private final ProfessorRepository professorRepository;
 
+    private final AdmissionRecordRepository admissionRecordRepository;
+
     private final ModelMapper modelMapper;
 
 
     public StudentServiceImpl(SubjectRepository subjectRepository, StudentRepository studentRepository
-            , ProfessorRepository professorRepository, ModelMapper modelMapper) {
+            , ProfessorRepository professorRepository, AdmissionRecordRepository admissionRecordRepository, ModelMapper modelMapper) {
         this.subjectRepository = subjectRepository;
         this.studentRepository = studentRepository;
         this.professorRepository = professorRepository;
+        this.admissionRecordRepository = admissionRecordRepository;
         this.modelMapper = modelMapper;
     }
 
@@ -349,14 +353,50 @@ public class StudentServiceImpl implements StudentService {
         studentRepository.save(student);
 
 
+    }
+
+    @Override
+    public void assignAdmissionRecordToStudent(Long studentId, Long admissionRecordId) {
+
+        //Fetch the student
+
+        StudentEntity student = studentRepository.findById(studentId)
+                .orElseThrow(() -> new RuntimeException("Student not found with ID: " + studentId));
+
+        //Fetch the admissionRecord
+        AdmissionRecordEntity admissionRecord = admissionRecordRepository.findById(admissionRecordId)
+                .orElseThrow(() -> new RuntimeException("Admission record not found: " + admissionRecordId));
 
 
+        // Prevent assigning a record that already belongs to a different student
+        StudentEntity currentOwner = admissionRecord.getStudent();
+        if (currentOwner != null && !currentOwner.getId().equals(student.getId())) {
+            throw new IllegalStateException(
+                    "Admission record " + admissionRecordId + " already assigned to a student " +currentOwner.getId());
+        }
+
+        //If student already has different admissionRecord, unlink it first
+        AdmissionRecordEntity old = student.getAdmissionRecord();
+
+        if (old != null && !old.getId().equals(admissionRecord.getId())) {
+            old.setStudent(null);
+            student.setAdmissionRecord(null);
+        }
 
 
+        //Link both sides
+        student.setAdmissionRecord(admissionRecord); //owning side
+        admissionRecord.setStudent(student);//inverse side
+
+        //save the owning side
+        studentRepository.save(student);
+        admissionRecordRepository.save(admissionRecord);
 
 
 
     }
+
+
 }
 
 
