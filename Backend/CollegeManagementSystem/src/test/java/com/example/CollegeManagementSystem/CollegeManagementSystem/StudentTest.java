@@ -14,6 +14,7 @@ import com.example.CollegeManagementSystem.CollegeManagementSystem.repositories.
 import com.example.CollegeManagementSystem.CollegeManagementSystem.services.StudentService;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
+import org.hibernate.annotations.processing.SQL;
 import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -494,6 +495,16 @@ public class StudentTest {
         StudentEntity student3 = studentRepository.findById(3L)
                 .orElseThrow(() -> new RuntimeException("Student 3 not found"));
 
+        // ----- Fetch Admission records before assignment ---
+        AdmissionRecordEntity record = admissionRecordRepository.findById(1L)
+                        .orElseThrow(() -> new RuntimeException("Admission Record not found "));
+
+        AdmissionRecordEntity record2 = admissionRecordRepository.findById(2L)
+                .orElseThrow(() -> new RuntimeException("Admission Record not found "));
+
+        AdmissionRecordEntity record3 = admissionRecordRepository.findById(3L)
+                .orElseThrow(() -> new RuntimeException("Admission Record not found "));
+
         System.out.println("=== BEFORE ASSIGNMENT ===");
         System.out.println("Student 1: id=" + student.getId() + ", name=" + student.getName()
                 + ", record=" + (student.getAdmissionRecord() == null ? "null" : student.getAdmissionRecord().getId()));
@@ -502,27 +513,33 @@ public class StudentTest {
         System.out.println("Student 3: id=" + student3.getId() + ", name=" + student3.getName()
                 + ", record=" + (student3.getAdmissionRecord() == null ? "null" : student3.getAdmissionRecord().getId()));
 
-        // --- Create admission records ---
-        AdmissionRecordEntity record = admissionRecordRepository.save(
-                AdmissionRecordEntity.builder()
-                        .fees(1800.00)
-                        .admissionDate(LocalDateTime.of(2025, 8, 20, 10, 0))
-                        .build()
-        );
+//        // --- Create admission records ---
+//        AdmissionRecordEntity record = admissionRecordRepository.save(
+//                AdmissionRecordEntity.builder()
+//                        .fees(1800.00)
+//                        .admissionDate(LocalDateTime.of(2025, 8, 20, 10, 0))
+//                        .build()
+//        );
+//
+//        AdmissionRecordEntity record2 = admissionRecordRepository.save(
+//                AdmissionRecordEntity.builder()
+//                        .fees(20000.00)
+//                        .admissionDate(LocalDateTime.of(2024, 7, 10, 10, 0))
+//                        .build()
+//        );
+//
+//        AdmissionRecordEntity record3 = admissionRecordRepository.save(
+//                AdmissionRecordEntity.builder()
+//                        .fees(15000.00)
+//                        .admissionDate(LocalDateTime.of(2024, 2, 14, 0, 0))
+//                        .build()
+//        );
 
-        AdmissionRecordEntity record2 = admissionRecordRepository.save(
-                AdmissionRecordEntity.builder()
-                        .fees(20000.00)
-                        .admissionDate(LocalDateTime.of(2024, 7, 10, 10, 0))
-                        .build()
-        );
+        //assign the admission record to student
+        studentService.assignAdmissionRecordToStudent(student.getId(), record.getId());
+        studentService.assignAdmissionRecordToStudent(student2.getId(), record2.getId());
+        studentService.assignAdmissionRecordToStudent(student3.getId(), record3.getId());
 
-        AdmissionRecordEntity record3 = admissionRecordRepository.save(
-                AdmissionRecordEntity.builder()
-                        .fees(15000.00)
-                        .admissionDate(LocalDateTime.of(2024, 2, 14, 0, 0))
-                        .build()
-        );
 
         System.out.println("\n=== CREATED NEW RECORDS ===");
         System.out.println("Record 1: id=" + record.getId() + ", fees=" + record.getFees() +
@@ -532,10 +549,10 @@ public class StudentTest {
         System.out.println("Record 3: id=" + record3.getId() + ", fees=" + record3.getFees() +
                 ", date=" + record3.getAdmissionDate());
 
-        // --- Assign records ---
-        studentService.assignAdmissionRecordToStudent(student.getId(), record.getId());
-        studentService.assignAdmissionRecordToStudent(student2.getId(), record2.getId());
-        studentService.assignAdmissionRecordToStudent(student3.getId(), record3.getId());
+//        // --- Assign records ---
+//        studentService.assignAdmissionRecordToStudent(student.getId(), record.getId());
+//        studentService.assignAdmissionRecordToStudent(student2.getId(), record2.getId());
+//        studentService.assignAdmissionRecordToStudent(student3.getId(), record3.getId());
 
         // --- Fetch updated students and records ---
         StudentEntity updatedStudent = studentRepository.findById(student.getId())
@@ -568,6 +585,34 @@ public class StudentTest {
                 + ", recordId=" + updatedStudent3.getAdmissionRecord().getId());
         System.out.println("Record 3: id=" + updatedRecord3.getId()
                 + ", studentId=" + updatedRecord3.getStudent().getId());
+    }
+
+
+    @Test
+    @Transactional
+    @Commit // Keep changes in DB for manual verification
+    void testRemoveAdmissionRecordFromStudent() {
+
+        Long studentId = 3L;
+
+        // BEFORE: print student and record
+        StudentEntity before = studentRepository.findById(studentId)
+                .orElseThrow(() -> new RuntimeException("Student not found"));
+        System.out.println("BEFORE: Student " + before.getId() +
+                " has record = " + (before.getAdmissionRecord() == null
+                ? "null"
+                : before.getAdmissionRecord().getId()));
+
+        // Call the service method
+        studentService.removeAdmissionRecordFromStudent(studentId);
+
+        // AFTER: print student and record
+        StudentEntity after = studentRepository.findById(studentId)
+                .orElseThrow(() -> new RuntimeException("Student not found after removal"));
+        System.out.println("AFTER: Student " + after.getId() +
+                " has record = " + (after.getAdmissionRecord() == null
+                ? "null"
+                : after.getAdmissionRecord().getId()));
     }
 
 }
