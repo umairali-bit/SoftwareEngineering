@@ -482,11 +482,45 @@ public class StudentTest {
     }
 
 
+    @Test
+    public void testAssignAdmissionRecordToStudent_SimpleSysout() {
+        // 1) Create a student
+        StudentEntity student = StudentEntity.builder()
+                .name("John Doe")
+                .build();
+        student = studentRepository.save(student);
 
-    
+        // 2) Create an admission record
+        AdmissionRecordEntity record = AdmissionRecordEntity.builder()
+                .fees(15000.0)
+                .admissionDate(LocalDateTime.now())
+                .build();
+        record = admissionRecordRepository.save(record);
 
+        // 3) Call the service method
+        studentService.assignAdmissionRecordToStudent(student.getId(), record.getId());
 
+        // 4) Fetch the student again from DB and print details
+        StudentEntity updatedStudent = studentRepository.findById(student.getId()).orElseThrow();
+        System.out.println("Student ID: " + updatedStudent.getId());
+        System.out.println("Student Name: " + updatedStudent.getName());
+        System.out.println("Admission Record ID: " + updatedStudent.getAdmissionRecord().getId());
+        System.out.println("Admission Record Fees: " + updatedStudent.getAdmissionRecord().getFees());
+        System.out.println("Admission Record Date: " + updatedStudent.getAdmissionRecord().getAdmissionDate());
+
+        // 5) Fetch the admission record again from DB and print its linked student
+        AdmissionRecordEntity updatedRecord = admissionRecordRepository.findById(record.getId()).orElseThrow();
+        System.out.println("Record's Student ID: " + updatedRecord.getStudent().getId());
+        System.out.println("Record's Student Name: " + updatedRecord.getStudent().getName());
+    }
 }
+
+
+
+
+
+
+
 
 
 
