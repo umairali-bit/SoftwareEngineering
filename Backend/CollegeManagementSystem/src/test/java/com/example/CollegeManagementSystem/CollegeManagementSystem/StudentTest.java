@@ -453,11 +453,6 @@ public class StudentTest {
         );
 
 
-
-
-
-
-
     }
 
 
@@ -485,6 +480,10 @@ public class StudentTest {
         System.out.println("After: " + after.getName());
         after.getSubjects().forEach(s -> System.out.println("  HAS: " + s.getName()));
     }
+
+
+
+    
 
 
 }
