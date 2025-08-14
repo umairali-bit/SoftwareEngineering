@@ -434,16 +434,7 @@ public class StudentServiceImpl implements StudentService {
         admissionRecordRepository.delete(record);
 
 
-
-
-
-
      }
-
-
-
-
-
 }
 
 
