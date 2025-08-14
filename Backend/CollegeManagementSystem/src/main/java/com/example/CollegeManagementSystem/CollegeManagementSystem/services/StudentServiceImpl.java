@@ -163,13 +163,20 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public void deleteStudent(Long id) {
 
-        if (!studentRepository.existsById(id)) {
-            throw new RuntimeException("Student not found with the ID: " + id);
+        StudentEntity student = studentRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Student not found: " + id));
+
+        AdmissionRecordEntity record = student.getAdmissionRecord();
+        if (record != null) {
+            record.setStudent(null);
+            student.setAdmissionRecord(null);
+            admissionRecordRepository.save(record);
+            // optionally: admissionRecordRepository.delete(record);
         }
 
-        studentRepository.deleteById(id);
-
+        studentRepository.delete(student);
     }
+
 
     @Transactional
     @Override
@@ -395,6 +402,35 @@ public class StudentServiceImpl implements StudentService {
 
 
     }
+
+    @Transactional
+    @Override
+    public void removeAdmissionRecordFromStudent(Long studentId) {
+
+        //Fetching the student
+        StudentEntity student = studentRepository.findById(studentId)
+                .orElseThrow(() -> new RuntimeException("Student not found: " + studentId));
+
+        //Fetching the AdmissionRecord of the student
+        AdmissionRecordEntity record = student.getAdmissionRecord();
+
+        if (record == null) return;
+
+        //unlink both sides
+        record.setStudent(null);
+        student.setAdmissionRecord(null);
+
+        admissionRecordRepository.delete(record);
+
+
+
+
+
+
+     }
+
+
+
 
 
 }
