@@ -246,6 +246,7 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
+    @Transactional
     public void assignProfessorToStudent(Long studentId, Long professorId, Long subjectId) {
 
         //Fetch Student Entity
@@ -270,6 +271,16 @@ public class StudentServiceImpl implements StudentService {
             throw new RuntimeException("Professor does not teach the subject");
         }
 
+        //Validation if professor is already assigned to this student
+        if (student.getProfessors().contains(professor)) {
+            throw new IllegalArgumentException("Professor is already assigned to this student");
+        }
+
+        // Remove any existing professor for this subject
+        student.getProfessors().removeIf(
+                existingProfessor -> existingProfessor.getSubjects().contains(subject)
+
+        );
 
         //Set professor to Student
         student.getProfessors().add(professor);
