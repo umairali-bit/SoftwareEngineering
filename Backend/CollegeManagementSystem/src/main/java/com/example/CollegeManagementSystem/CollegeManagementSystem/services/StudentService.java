@@ -32,6 +32,6 @@ public interface StudentService {
     void removeSubjectFromStudent(Long studentId, Set<Long> subjectIds);
 // Admission record handling
     void assignAdmissionRecordToStudent(Long studentId, Long admissionRecordId);
-//
-//    void removeAdmissionRecordFromStudent(Long studentId);
+
+    void removeAdmissionRecordFromStudent(Long studentId);
 }
