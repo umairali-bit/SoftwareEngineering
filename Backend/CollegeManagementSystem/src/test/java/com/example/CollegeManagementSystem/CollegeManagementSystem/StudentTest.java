@@ -483,36 +483,93 @@ public class StudentTest {
 
 
     @Test
-    public void testAssignAdmissionRecordToStudent_SimpleSysout() {
-        // 1) Create a student
-        StudentEntity student = StudentEntity.builder()
-                .name("John Doe")
-                .build();
-        student = studentRepository.save(student);
+    @Transactional
+    @Commit
+    void testAssignAdmissionRecordToExistingStudent() {
+        // --- Fetch students before assignment ---
+        StudentEntity student = studentRepository.findById(1L)
+                .orElseThrow(() -> new RuntimeException("Student 1 not found"));
+        StudentEntity student2 = studentRepository.findById(2L)
+                .orElseThrow(() -> new RuntimeException("Student 2 not found"));
+        StudentEntity student3 = studentRepository.findById(3L)
+                .orElseThrow(() -> new RuntimeException("Student 3 not found"));
 
-        // 2) Create an admission record
-        AdmissionRecordEntity record = AdmissionRecordEntity.builder()
-                .fees(15000.0)
-                .admissionDate(LocalDateTime.now())
-                .build();
-        record = admissionRecordRepository.save(record);
+        System.out.println("=== BEFORE ASSIGNMENT ===");
+        System.out.println("Student 1: id=" + student.getId() + ", name=" + student.getName()
+                + ", record=" + (student.getAdmissionRecord() == null ? "null" : student.getAdmissionRecord().getId()));
+        System.out.println("Student 2: id=" + student2.getId() + ", name=" + student2.getName()
+                + ", record=" + (student2.getAdmissionRecord() == null ? "null" : student2.getAdmissionRecord().getId()));
+        System.out.println("Student 3: id=" + student3.getId() + ", name=" + student3.getName()
+                + ", record=" + (student3.getAdmissionRecord() == null ? "null" : student3.getAdmissionRecord().getId()));
 
-        // 3) Call the service method
+        // --- Create admission records ---
+        AdmissionRecordEntity record = admissionRecordRepository.save(
+                AdmissionRecordEntity.builder()
+                        .fees(1800.00)
+                        .admissionDate(LocalDateTime.of(2025, 8, 20, 10, 0))
+                        .build()
+        );
+
+        AdmissionRecordEntity record2 = admissionRecordRepository.save(
+                AdmissionRecordEntity.builder()
+                        .fees(20000.00)
+                        .admissionDate(LocalDateTime.of(2024, 7, 10, 10, 0))
+                        .build()
+        );
+
+        AdmissionRecordEntity record3 = admissionRecordRepository.save(
+                AdmissionRecordEntity.builder()
+                        .fees(15000.00)
+                        .admissionDate(LocalDateTime.of(2024, 2, 14, 0, 0))
+                        .build()
+        );
+
+        System.out.println("\n=== CREATED NEW RECORDS ===");
+        System.out.println("Record 1: id=" + record.getId() + ", fees=" + record.getFees() +
+                ", date=" + record.getAdmissionDate());
+        System.out.println("Record 2: id=" + record2.getId() + ", fees=" + record2.getFees() +
+                ", date=" + record2.getAdmissionDate());
+        System.out.println("Record 3: id=" + record3.getId() + ", fees=" + record3.getFees() +
+                ", date=" + record3.getAdmissionDate());
+
+        // --- Assign records ---
         studentService.assignAdmissionRecordToStudent(student.getId(), record.getId());
+        studentService.assignAdmissionRecordToStudent(student2.getId(), record2.getId());
+        studentService.assignAdmissionRecordToStudent(student3.getId(), record3.getId());
 
-        // 4) Fetch the student again from DB and print details
-        StudentEntity updatedStudent = studentRepository.findById(student.getId()).orElseThrow();
-        System.out.println("Student ID: " + updatedStudent.getId());
-        System.out.println("Student Name: " + updatedStudent.getName());
-        System.out.println("Admission Record ID: " + updatedStudent.getAdmissionRecord().getId());
-        System.out.println("Admission Record Fees: " + updatedStudent.getAdmissionRecord().getFees());
-        System.out.println("Admission Record Date: " + updatedStudent.getAdmissionRecord().getAdmissionDate());
+        // --- Fetch updated students and records ---
+        StudentEntity updatedStudent = studentRepository.findById(student.getId())
+                .orElseThrow(() -> new RuntimeException("Student 1 not found after assignment"));
+        StudentEntity updatedStudent2 = studentRepository.findById(student2.getId())
+                .orElseThrow(() -> new RuntimeException("Student 2 not found after assignment"));
+        StudentEntity updatedStudent3 = studentRepository.findById(student3.getId())
+                .orElseThrow(() -> new RuntimeException("Student 3 not found after assignment"));
 
-        // 5) Fetch the admission record again from DB and print its linked student
-        AdmissionRecordEntity updatedRecord = admissionRecordRepository.findById(record.getId()).orElseThrow();
-        System.out.println("Record's Student ID: " + updatedRecord.getStudent().getId());
-        System.out.println("Record's Student Name: " + updatedRecord.getStudent().getName());
+        AdmissionRecordEntity updatedRecord = admissionRecordRepository.findById(record.getId())
+                .orElseThrow(() -> new RuntimeException("Record 1 not found after assignment"));
+        AdmissionRecordEntity updatedRecord2 = admissionRecordRepository.findById(record2.getId())
+                .orElseThrow(() -> new RuntimeException("Record 2 not found after assignment"));
+        AdmissionRecordEntity updatedRecord3 = admissionRecordRepository.findById(record3.getId())
+                .orElseThrow(() -> new RuntimeException("Record 3 not found after assignment"));
+
+        // --- Print after state ---
+        System.out.println("\n=== AFTER ASSIGNMENT ===");
+        System.out.println("Student 1: id=" + updatedStudent.getId() + ", name=" + updatedStudent.getName()
+                + ", recordId=" + updatedStudent.getAdmissionRecord().getId());
+        System.out.println("Record 1: id=" + updatedRecord.getId()
+                + ", studentId=" + updatedRecord.getStudent().getId());
+
+        System.out.println("Student 2: id=" + updatedStudent2.getId() + ", name=" + updatedStudent2.getName()
+                + ", recordId=" + updatedStudent2.getAdmissionRecord().getId());
+        System.out.println("Record 2: id=" + updatedRecord2.getId()
+                + ", studentId=" + updatedRecord2.getStudent().getId());
+
+        System.out.println("Student 3: id=" + updatedStudent3.getId() + ", name=" + updatedStudent3.getName()
+                + ", recordId=" + updatedStudent3.getAdmissionRecord().getId());
+        System.out.println("Record 3: id=" + updatedRecord3.getId()
+                + ", studentId=" + updatedRecord3.getStudent().getId());
     }
+
 }
 
 
