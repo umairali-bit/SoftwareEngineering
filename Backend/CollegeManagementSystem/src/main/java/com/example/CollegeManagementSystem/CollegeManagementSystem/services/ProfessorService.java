@@ -8,29 +8,29 @@ import java.util.Set;
 
 public interface ProfessorService {
 
-    // Basic CRUD
-    ProfessorDTO createProfessor(ProfessorDTO professorDTO);
-
-    ProfessorDTO getProfessorById(Long id);
-
-    List<ProfessorDTO> getAllProfessors();
-
-    ProfessorDTO updateProfessor(Long id, ProfessorDTO professorDTO);
-
-    void deleteProfessor(Long id);
-
-    // PATCH (Partial update)
-    ProfessorDTO patchProfessor(Long id, ProfessorDTO professorDTO);
-
-    // Managing relationships
-    void assignSubjectToProfessor(Long professorId, Long subjectId);
-
-    void removeSubjectFromProfessor(Long professorId, Long subjectId);
-
-    void assignStudentToProfessor(Long professorId, Long studentId);
-
-    void removeStudentFromProfessor(Long professorId, Long studentId);
-
-    // New operation
-    Set<SubjectDTO> getSubjectsByProfessorId(Long professorId);
+//    // Basic CRUD
+//    ProfessorDTO createProfessor(ProfessorDTO professorDTO);
+//
+//    ProfessorDTO getProfessorById(Long id);
+//
+//    List<ProfessorDTO> getAllProfessors();
+//
+//    ProfessorDTO updateProfessor(Long id, ProfessorDTO professorDTO);
+//
+//    void deleteProfessor(Long id);
+//
+//    // PATCH (Partial update)
+//    ProfessorDTO patchProfessor(Long id, ProfessorDTO professorDTO);
+//
+//    // Managing relationships
+//    void assignSubjectToProfessor(Long professorId, Long subjectId);
+//
+//    void removeSubjectFromProfessor(Long professorId, Long subjectId);
+//
+//    void assignStudentToProfessor(Long professorId, Long studentId);
+//
+//    void removeStudentFromProfessor(Long professorId, Long studentId);
+//
+//    // New operation
+//    Set<SubjectDTO> getSubjectsByProfessorId(Long professorId);
 }
