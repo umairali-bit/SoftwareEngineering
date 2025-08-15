@@ -2,6 +2,8 @@ package com.example.CollegeManagementSystem.CollegeManagementSystem.services;
 
 import com.example.CollegeManagementSystem.CollegeManagementSystem.dtos.ProfessorDTO;
 import com.example.CollegeManagementSystem.CollegeManagementSystem.entities.ProfessorEntity;
+import com.example.CollegeManagementSystem.CollegeManagementSystem.entities.StudentEntity;
+import com.example.CollegeManagementSystem.CollegeManagementSystem.entities.SubjectEntity;
 import com.example.CollegeManagementSystem.CollegeManagementSystem.repositories.AdmissionRecordRepository;
 import com.example.CollegeManagementSystem.CollegeManagementSystem.repositories.ProfessorRepository;
 import com.example.CollegeManagementSystem.CollegeManagementSystem.repositories.StudentRepository;
@@ -11,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.security.PrivateKey;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -56,7 +59,7 @@ public class ProfessorServiceImpl implements ProfessorService{
 
         // find if te ID is present
         ProfessorEntity professor = professorRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException());
+                .orElseThrow(() -> new RuntimeException("Professor not found with the ID: " + id));
 
         return modelMapper.map(professor, ProfessorDTO.class);
 
@@ -70,6 +73,65 @@ public class ProfessorServiceImpl implements ProfessorService{
                 .stream()
                 .map(professorEntity -> modelMapper.map(professorEntity, ProfessorDTO.class))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public ProfessorDTO updateProfessor(Long id, ProfessorDTO professorDTO) {
+
+        //1. fetch the professor
+        ProfessorEntity professor = professorRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Professor not found with the ID: " + id));
+
+        //Update the professor fields
+        professor.setName(professorDTO.getName());
+
+        //Handle students
+        if (professorDTO.getStudentIds() != null) {
+            Set<StudentEntity> studentEntities = professorDTO.getStudentIds().stream()
+                    .map(studentId -> studentRepository.findById(studentId)
+                            .orElseThrow(() -> new RuntimeException("Student not found with the ID: " + studentId)))
+                    .collect(Collectors.toSet());
+
+            professor.setStudents(studentEntities);
+
+            //maintaining bidirectional
+            for (StudentEntity student : studentEntities) {
+                student.getProfessors().add(professor);
+
+            }
+
+        } else {
+            professor.setStudents(null);
+        }
+
+
+
+        //Handle Subjects
+        if (professorDTO.getSubjectIds() != null) {
+            Set<SubjectEntity> subjectEntities = professorDTO.getSubjectIds().stream()
+                    .map(subjectId -> subjectRepository.findById(subjectId)
+                            .orElseThrow(() -> new RuntimeException("Subject not found with ID: " + subjectId)))
+                    .collect(Collectors.toSet());
+
+            professor.setSubjects(subjectEntities);
+
+
+            for (SubjectEntity subject : subjectEntities) {
+                subject.setProfessor(professor);
+            }
+
+        } else {
+            professor.setSubjects(null);
+        }
+
+
+        //save professor
+        ProfessorEntity savedProfessor = professorRepository.save(professor);
+
+
+        //entity to dto
+        return modelMapper.map(savedProfessor, ProfessorDTO.class);
+
     }
 
 
