@@ -134,5 +134,13 @@ public class ProfessorServiceImpl implements ProfessorService{
 
     }
 
+    @Override
+    public void deleteProfessor(Long id) {
+        ProfessorEntity professor = professorRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Professor not found with the ID: " + id));
+
+        professorRepository.delete(professor); //map it to 404 not found
+    }
+
 
 }

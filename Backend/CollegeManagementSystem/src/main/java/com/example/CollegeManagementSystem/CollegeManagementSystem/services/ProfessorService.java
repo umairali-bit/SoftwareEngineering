@@ -7,8 +7,7 @@ import java.util.List;
 import java.util.Set;
 
 public interface ProfessorService {
-
-//    // Basic CRUD
+    // Basic CRUD
     ProfessorDTO createProfessor(ProfessorDTO professorDTO);
 
     ProfessorDTO getProfessorById(Long id);
@@ -16,8 +15,8 @@ public interface ProfessorService {
     List<ProfessorDTO> getAllProfessors();
 
     ProfessorDTO updateProfessor(Long id, ProfessorDTO professorDTO);
-//
-//    void deleteProfessor(Long id);
+
+    void deleteProfessor(Long id);
 //
 //    // PATCH (Partial update)
 //    ProfessorDTO patchProfessor(Long id, ProfessorDTO professorDTO);
