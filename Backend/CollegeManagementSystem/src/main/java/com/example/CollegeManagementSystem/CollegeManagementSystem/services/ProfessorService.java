@@ -12,8 +12,8 @@ public interface ProfessorService {
     ProfessorDTO createProfessor(ProfessorDTO professorDTO);
 
     ProfessorDTO getProfessorById(Long id);
-//
-//    List<ProfessorDTO> getAllProfessors();
+
+    List<ProfessorDTO> getAllProfessors();
 //
 //    ProfessorDTO updateProfessor(Long id, ProfessorDTO professorDTO);
 //

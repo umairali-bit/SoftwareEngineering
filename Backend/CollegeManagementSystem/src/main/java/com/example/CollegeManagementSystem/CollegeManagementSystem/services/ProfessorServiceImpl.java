@@ -10,6 +10,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.security.PrivateKey;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ProfessorServiceImpl implements ProfessorService{
@@ -59,4 +61,16 @@ public class ProfessorServiceImpl implements ProfessorService{
         return modelMapper.map(professor, ProfessorDTO.class);
 
     }
+
+    @Override
+    public List<ProfessorDTO> getAllProfessors() {
+        List<ProfessorEntity> professorEntities = professorRepository.findAll();
+
+        return professorEntities
+                .stream()
+                .map(professorEntity -> modelMapper.map(professorEntity, ProfessorDTO.class))
+                .collect(Collectors.toList());
+    }
+
+
 }
