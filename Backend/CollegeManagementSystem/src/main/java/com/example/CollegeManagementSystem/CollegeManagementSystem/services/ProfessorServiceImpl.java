@@ -48,4 +48,15 @@ public class ProfessorServiceImpl implements ProfessorService{
         //3. Map saved entity back to DTO
         return modelMapper.map(savedProfessor, ProfessorDTO.class);
     }
+
+    @Override
+    public ProfessorDTO getProfessorById(Long id) {
+
+        // find if te ID is present
+        ProfessorEntity professor = professorRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException());
+
+        return modelMapper.map(professor, ProfessorDTO.class);
+
+    }
 }
