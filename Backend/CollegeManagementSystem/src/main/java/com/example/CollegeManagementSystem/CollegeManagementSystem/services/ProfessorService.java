@@ -10,8 +10,8 @@ public interface ProfessorService {
 
 //    // Basic CRUD
     ProfessorDTO createProfessor(ProfessorDTO professorDTO);
-//
-//    ProfessorDTO getProfessorById(Long id);
+
+    ProfessorDTO getProfessorById(Long id);
 //
 //    List<ProfessorDTO> getAllProfessors();
 //
