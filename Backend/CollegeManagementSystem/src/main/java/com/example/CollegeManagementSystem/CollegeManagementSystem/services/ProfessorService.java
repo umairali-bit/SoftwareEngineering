@@ -9,7 +9,7 @@ import java.util.Set;
 public interface ProfessorService {
 
 //    // Basic CRUD
-//    ProfessorDTO createProfessor(ProfessorDTO professorDTO);
+    ProfessorDTO createProfessor(ProfessorDTO professorDTO);
 //
 //    ProfessorDTO getProfessorById(Long id);
 //

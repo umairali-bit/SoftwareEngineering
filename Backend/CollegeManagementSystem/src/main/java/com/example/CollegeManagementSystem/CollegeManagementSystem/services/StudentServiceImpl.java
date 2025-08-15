@@ -47,8 +47,10 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public StudentDTO createStudent(StudentDTO studentDTO) {
 
-        // 1. dto to entity
+        // 1. creating a new entity
         StudentEntity student = new StudentEntity();
+
+        //Manual mapping for fields
         student.setName(studentDTO.getName());
 
 
