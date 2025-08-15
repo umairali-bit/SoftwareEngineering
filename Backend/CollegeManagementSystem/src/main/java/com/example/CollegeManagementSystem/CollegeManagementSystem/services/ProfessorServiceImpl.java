@@ -25,18 +25,14 @@ public class ProfessorServiceImpl implements ProfessorService{
 
     private final ProfessorRepository professorRepository;
 
-    private final AdmissionRecordRepository admissionRecordRepository;
-
     private final ModelMapper modelMapper;
 
 
     public ProfessorServiceImpl(SubjectRepository subjectRepository, StudentRepository studentRepository,
-                                ProfessorRepository professorRepository, AdmissionRecordRepository admissionRecordRepository,
-                                ModelMapper modelMapper) {
+                                ProfessorRepository professorRepository, ModelMapper modelMapper) {
         this.subjectRepository = subjectRepository;
         this.studentRepository = studentRepository;
         this.professorRepository = professorRepository;
-        this.admissionRecordRepository = admissionRecordRepository;
         this.modelMapper = modelMapper;
     }
 
@@ -44,14 +40,54 @@ public class ProfessorServiceImpl implements ProfessorService{
     @Override
     public ProfessorDTO createProfessor(ProfessorDTO professorDTO) {
 
-        //1. Map DTO to entity
+        // 1. Map DTO to Entity (basic fields only)
         ProfessorEntity professor = modelMapper.map(professorDTO, ProfessorEntity.class);
 
-        //2. Save entity to DB
+        // 2. Handle students
+        if (professorDTO.getStudentIds() != null && !professorDTO.getStudentIds().isEmpty()) {
+            Set<StudentEntity> studentEntities = professorDTO.getStudentIds().stream()
+                    .map(studentId -> studentRepository.findById(studentId)
+                            .orElseThrow(() -> new RuntimeException("Student not found with ID: " + studentId)))
+                    .collect(Collectors.toSet());
+
+            professor.setStudents(studentEntities);
+
+            // Maintain bidirectional relationship
+            for (StudentEntity student : studentEntities) {
+                student.getProfessors().add(professor);
+            }
+        }
+
+        // 3. Handle subjects
+        if (professorDTO.getSubjectIds() != null && !professorDTO.getSubjectIds().isEmpty()) {
+            Set<SubjectEntity> subjectEntities = professorDTO.getSubjectIds().stream()
+                    .map(subjectId -> subjectRepository.findById(subjectId)
+                            .orElseThrow(() -> new RuntimeException("Subject not found with ID: " + subjectId)))
+                    .collect(Collectors.toSet());
+
+            professor.setSubjects(subjectEntities);
+
+            // Maintain bidirectional relationship
+            for (SubjectEntity subject : subjectEntities) {
+                subject.setProfessor(professor); // one-to-many case
+                // OR subject.getProfessors().add(professor); // many-to-many case
+            }
+        }
+
+        // 4. Save to DB
         ProfessorEntity savedProfessor = professorRepository.save(professor);
 
-        //3. Map saved entity back to DTO
-        return modelMapper.map(savedProfessor, ProfessorDTO.class);
+        // 5. Manually map back to DTO
+        ProfessorDTO dto = modelMapper.map(savedProfessor, ProfessorDTO.class);
+        dto.setStudentIds(savedProfessor.getStudents().stream()
+                .map(StudentEntity::getId)
+                .collect(Collectors.toSet()));
+        dto.setSubjectIds(savedProfessor.getSubjects().stream()
+                .map(SubjectEntity::getId)
+                .collect(Collectors.toSet()));
+
+        return dto;
+
     }
 
     @Override
@@ -136,9 +172,10 @@ public class ProfessorServiceImpl implements ProfessorService{
 
     @Override
     public void deleteProfessor(Long id) {
+        //Fetch the professor entity
         ProfessorEntity professor = professorRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Professor not found with the ID: " + id));
-
+        //delete
         professorRepository.delete(professor); //map it to 404 not found
     }
 
