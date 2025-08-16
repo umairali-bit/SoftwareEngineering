@@ -196,7 +196,7 @@ public class ProfessorServiceImpl implements ProfessorService{
 
         //subject IDS
         if (professorDTO.getSubjectIds() != null) {
-            Set<Long> subjectsIDs = professorDTO.getStudentIds();
+            Set<Long> subjectsIDs = professorDTO.getSubjectIds();
 
             Set<SubjectEntity> subjects = subjectsIDs.stream()
                     .map(subjectsID -> subjectRepository.findById(subjectsID)
@@ -222,8 +222,13 @@ public class ProfessorServiceImpl implements ProfessorService{
         //save the existing professor in ProfessorEntity
         ProfessorEntity savedProfessor = professorRepository.save(existingProfessor);
 
-        //Entity to dto
-        return modelMapper.map(savedProfessor, ProfessorDTO.class);
+        //Entity
+        ProfessorDTO dto = modelMapper.map(savedProfessor, ProfessorDTO.class);
+        dto.setStudentIds(savedProfessor.getStudents().stream()
+                .map(studentEntity -> studentEntity.getId()).collect(Collectors.toSet()));
+        dto.setSubjectIds(savedProfessor.getSubjects().stream()
+                .map(subjectEntity -> subjectEntity.getId()).collect(Collectors.toSet()));
+        return dto;
     }
 
 
