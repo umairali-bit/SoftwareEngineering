@@ -179,5 +179,75 @@ public class ProfessorServiceImpl implements ProfessorService{
         professorRepository.delete(professor); //map it to 404 not found
     }
 
+    @Override
+    public ProfessorDTO patchProfessor(Long id, ProfessorDTO professorDTO) {
+
+        //find the professor
+        ProfessorEntity existingProfessor = professorRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Professor not found with the ID: " + id));
+
+        //start patching fields
+        //name
+        if (professorDTO.getName() != null) {
+            existingProfessor.setName(professorDTO.getName());
+
+
+        }
+
+        //subject IDS
+        if (professorDTO.getSubjectIds() != null) {
+            Set<Long> subjectsIDs = professorDTO.getStudentIds();
+
+            Set<SubjectEntity> subjects = subjectsIDs.stream()
+                    .map(subjectsID -> subjectRepository.findById(subjectsID)
+                            .orElseThrow(() -> new RuntimeException("Subject not found with ID: " +subjectsID)))
+                    .collect(Collectors.toSet());
+
+            existingProfessor.setSubjects(subjects);
+        }
+
+        //studentIDs
+        if (professorDTO.getStudentIds() != null) {
+            Set<Long> studentsIDs = professorDTO.getStudentIds();
+
+            Set<StudentEntity> students = studentsIDs.stream()
+                    .map(studentID -> studentRepository.findById(studentID)
+                            .orElseThrow(() -> new RuntimeException("Student not foudn with ID: " + studentID)))
+                    .collect(Collectors.toSet());
+
+            existingProfessor.setStudents(students);
+        }
+
+
+        //save the existing professor in ProfessorEntity
+        ProfessorEntity savedProfessor = professorRepository.save(existingProfessor);
+
+        //Entity to dto
+        return modelMapper.map(savedProfessor, ProfessorDTO.class);
+    }
+
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
