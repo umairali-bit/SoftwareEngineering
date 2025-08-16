@@ -16,10 +16,10 @@ public interface ProfessorService {
 
     ProfessorDTO updateProfessor(Long id, ProfessorDTO professorDTO);
 
-    void deleteProfessor(Long id);
-//
-//    // PATCH (Partial update)
-//    ProfessorDTO patchProfessor(Long id, ProfessorDTO professorDTO);
+    void deleteProfessor(Long id)
+
+    // PATCH (Partial update)
+    ProfessorDTO patchProfessor(Long id, ProfessorDTO professorDTO);
 //
 //    // Managing relationships
 //    void assignSubjectToProfessor(Long professorId, Long subjectId);
