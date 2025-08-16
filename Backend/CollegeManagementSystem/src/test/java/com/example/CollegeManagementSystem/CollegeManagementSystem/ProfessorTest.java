@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Commit;
 
+import java.util.List;
 import java.util.Set;
 
 @SpringBootTest
@@ -87,6 +88,42 @@ public class ProfessorTest {
 
         professorService.deleteProfessor(professorId);
     }
+
+
+
+
+
+    @Test
+    @Transactional
+    void getProfessor() {
+        List<ProfessorEntity> professors = professorRepository.findAll();
+
+        System.out.println("=== Professors with Students & Subjects ===");
+        for (ProfessorEntity prof : professors) {
+            System.out.println("Professor ID: " + prof.getId() + ", Name: " + prof.getName());
+
+            // Print subjects
+            if (prof.getSubjects().isEmpty()) {
+                System.out.println("   Subjects: none");
+            } else {
+                for (SubjectEntity subject : prof.getSubjects()) {
+                    System.out.println("   Subject ID: " + subject.getId() + ", Name: " + subject.getName());
+                }
+            }
+
+            // Print students
+            if (prof.getStudents().isEmpty()) {
+                System.out.println("   Students: none");
+            } else {
+                for (StudentEntity student : prof.getStudents()) {
+                    System.out.println("   Student ID: " + student.getId() + ", Name: " + student.getName());
+                }
+            }
+        }
+    }
+
+
+
 
 
 
