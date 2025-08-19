@@ -202,12 +202,22 @@ public class ProfessorTest {
                 System.out.println(" - " + s.getName() + " (Professor: " + s.getProfessor().getName() + ")")
         );
 
+    }
 
 
+    @Test
+    void testAssignSubjectToProfessorWithMissingSubject() {
+        ProfessorEntity professor = new ProfessorEntity();
+        professor.setName("Dr. Missing");
+        professor = professorRepository.save(professor);
 
+        Set<Long> subjectIds = Set.of(999L);
 
-
-
+        try {
+            professorService.assignSubjectToProfessor(professor.getId(), subjectIds);
+        } catch (RuntimeException e) {
+            System.out.println("Caught exception: " + e.getMessage());
+        }
     }
 
 
