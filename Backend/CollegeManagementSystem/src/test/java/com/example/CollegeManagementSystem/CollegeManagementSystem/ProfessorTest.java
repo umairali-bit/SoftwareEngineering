@@ -1,6 +1,7 @@
 package com.example.CollegeManagementSystem.CollegeManagementSystem;
 
 import com.example.CollegeManagementSystem.CollegeManagementSystem.dtos.ProfessorDTO;
+import com.example.CollegeManagementSystem.CollegeManagementSystem.dtos.StudentDTO;
 import com.example.CollegeManagementSystem.CollegeManagementSystem.entities.ProfessorEntity;
 import com.example.CollegeManagementSystem.CollegeManagementSystem.entities.StudentEntity;
 import com.example.CollegeManagementSystem.CollegeManagementSystem.entities.SubjectEntity;
@@ -19,6 +20,7 @@ import org.springframework.test.annotation.Commit;
 
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @SpringBootTest
 public class ProfessorTest {
@@ -123,6 +125,48 @@ public class ProfessorTest {
     }
 
 
+    @Test
+    @Commit
+    @Transactional
+    void patchExistingProfessor() {
+        // Arrange – fetch an existing professor
+        ProfessorEntity existing = professorRepository.findAll().get(0);
+
+        // Create a new student
+        StudentEntity student = new StudentEntity();
+        student.setName("Walter Jr");
+        studentRepository.save(student);
+
+        // Create a new subject and link it to professor
+        SubjectEntity subject = new SubjectEntity();
+        subject.setName("Machine Learning");
+        subject.setProfessor(existing);  // bidirectional link
+        subjectRepository.save(subject);
+
+        // Build patch DTO
+        ProfessorDTO patchDTO = new ProfessorDTO();
+        patchDTO.setName(existing.getName()); // keep same name
+        patchDTO.setStudentIds(Set.of(student.getId()));
+        patchDTO.setSubjectIds(Set.of(subject.getId()));
+
+        // Act – patch professor
+        ProfessorDTO updated = professorService.patchProfessor(existing.getId(), patchDTO);
+
+        // Assert – print results
+        System.out.println("Professor updated: " + updated.getName());
+        System.out.println("Linked Students: " + updated.getStudentIds());
+        System.out.println("Linked Subjects: " + updated.getSubjectIds());
+
+        // Fetch professor again to verify persistence
+        ProfessorEntity refreshed = professorRepository.findById(existing.getId())
+                .orElseThrow(() -> new RuntimeException("Professor not found"));
+
+        System.out.println("Professors linked to student: " +
+                refreshed.getStudents().stream().map(StudentEntity::getName).toList());
+
+        System.out.println("Subjects linked to professor: " +
+                refreshed.getSubjects().stream().map(SubjectEntity::getName).toList());
+    }
 
 
 

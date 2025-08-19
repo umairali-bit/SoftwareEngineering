@@ -12,6 +12,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.security.PrivateKey;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -183,44 +184,44 @@ public class ProfessorServiceImpl implements ProfessorService{
     public ProfessorDTO patchProfessor(Long id, ProfessorDTO professorDTO) {
 
         //find the professor
-        ProfessorEntity existingProfessor = professorRepository.findById(id)
+        ProfessorEntity professor = professorRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Professor not found with the ID: " + id));
 
         //start patching fields
         //name
-        if (professorDTO.getName() != null) {
-            existingProfessor.setName(professorDTO.getName());
-
-
+        if (professorDTO.getName() != null && !professorDTO.getName().isBlank()) {
+            professor.setName(professorDTO.getName());
         }
 
         //subject IDS
         if (professorDTO.getSubjectIds() != null) {
-            Set<Long> subjectsIDs = professorDTO.getSubjectIds();
+            Set<SubjectEntity> newSubjects = new HashSet<>(subjectRepository.findAllById(professorDTO.getSubjectIds()));
 
-            Set<SubjectEntity> subjects = subjectsIDs.stream()
-                    .map(subjectsID -> subjectRepository.findById(subjectsID)
-                            .orElseThrow(() -> new RuntimeException("Subject not found with ID: " +subjectsID)))
-                    .collect(Collectors.toSet());
+            // Clear existing while keeping the same collection reference
+            professor.getSubjects().clear();
 
-            existingProfessor.setSubjects(subjects);
+            // Maintain bidirectional relationship
+            newSubjects.forEach(s -> s.setProfessor(professor));
+
+            professor.getSubjects().addAll(newSubjects);
         }
 
         //studentIDs
         if (professorDTO.getStudentIds() != null) {
-            Set<Long> studentsIDs = professorDTO.getStudentIds();
+            Set<StudentEntity> newStudents = new HashSet<>(studentRepository.findAllById(professorDTO.getStudentIds()));
 
-            Set<StudentEntity> students = studentsIDs.stream()
-                    .map(studentID -> studentRepository.findById(studentID)
-                            .orElseThrow(() -> new RuntimeException("Student not foudn with ID: " + studentID)))
-                    .collect(Collectors.toSet());
+            // Clear existing while keeping the same collection reference
+            professor.getStudents().clear();
 
-            existingProfessor.setStudents(students);
+            professor.getStudents().addAll(newStudents);
+
+            // Maintain bidirectional relationship
+            newStudents.forEach(s -> s.getProfessors().add(professor));
         }
 
 
         //save the existing professor in ProfessorEntity
-        ProfessorEntity savedProfessor = professorRepository.save(existingProfessor);
+        ProfessorEntity savedProfessor = professorRepository.save(professor);
 
         //Entity
         ProfessorDTO dto = modelMapper.map(savedProfessor, ProfessorDTO.class);
