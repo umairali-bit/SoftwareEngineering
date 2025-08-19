@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.security.PrivateKey;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -230,6 +231,40 @@ public class ProfessorServiceImpl implements ProfessorService{
         dto.setSubjectIds(savedProfessor.getSubjects().stream()
                 .map(subjectEntity -> subjectEntity.getId()).collect(Collectors.toSet()));
         return dto;
+    }
+
+    @Override
+    public void assignSubjectToProfessor(Long professorId, Set<Long> subjectIds) {
+
+        //different approach than assigningSubjectsToStudent
+
+        //fetch the professor
+        ProfessorEntity professor = professorRepository.findById(professorId)
+                .orElseThrow(() -> new RuntimeException("Professor not found with the ID: " + professorId));
+
+        //fetch the subjects
+        Set<SubjectEntity> subjects = subjectRepository.findWithProfessorAndStudentsById(subjectIds);
+
+        // 3. Validate (strict mode: check mismatch)
+        if (subjects.size() != subjectIds.size()) {
+            throw new RuntimeException("Some subject IDs do not exist. Provided: "
+                    + subjectIds + ", Found: "
+                    + subjects.stream().map(SubjectEntity::getId).toList());
+        }
+
+        // 4. update relationship
+        professor.getSubjects().clear(); // if you want replacement
+        for (SubjectEntity s : subjects) {
+            s.setProfessor(professor);           // owning side
+            professor.getSubjects().add(s);      // inverse side
+        }
+
+        // 5. Save professor (cascades if set)
+        professorRepository.save(professor);
+
+
+
+
     }
 
 

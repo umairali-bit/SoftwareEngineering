@@ -13,12 +13,11 @@ import java.util.Optional;
 public interface ProfessorRepository extends JpaRepository<ProfessorEntity, Long> {
 
     @Query("""
-  select distinct p
-  from ProfessorEntity p
-  left join fetch p.students
-  left join fetch p.subjects
-  where p.id = :id
-""")
+              select distinct p
+              from ProfessorEntity p
+              left join fetch p.students
+              left join fetch p.subjects
+              where p.id = :id
+            """)
     Optional<ProfessorEntity> findWithSubjectsById(@Param("id") Long id);
-
 }
