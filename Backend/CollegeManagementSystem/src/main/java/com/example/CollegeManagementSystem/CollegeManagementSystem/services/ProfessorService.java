@@ -20,9 +20,9 @@ public interface ProfessorService {
 
     // PATCH (Partial update)
     ProfessorDTO patchProfessor(Long id, ProfessorDTO professorDTO);
-//
-//    // Managing relationships
-//    void assignSubjectToProfessor(Long professorId, Long subjectId);
+
+    // Managing relationships
+    void assignSubjectToProfessor(Long professorId, Set<Long> subjectIds);
 //
 //    void removeSubjectFromProfessor(Long professorId, Long subjectId);
 //

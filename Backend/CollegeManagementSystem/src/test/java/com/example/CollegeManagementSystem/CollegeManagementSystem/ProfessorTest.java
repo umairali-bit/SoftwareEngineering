@@ -169,6 +169,48 @@ public class ProfessorTest {
     }
 
 
+    @Test
+    @Transactional
+    @Commit
+    void  testAssigningSubjectToProfessor() {
+        // Arrange – fetch an existing professor
+        ProfessorEntity existing = professorRepository.findAll().get(2);
+
+        SubjectEntity subject1 = new SubjectEntity();
+        subject1.setName("Introduction To Linux");
+        subject1.setProfessor(existing);  // bidirectional link
+        subjectRepository.save(subject1);
+
+
+        SubjectEntity subject2 = new SubjectEntity();
+        subject2.setName("Linear Algebra");
+        subject2.setProfessor(existing);  // bidirectional link
+        subjectRepository.save(subject2);
+
+        Set<Long> subjectIds = Set.of(subject1.getId(), subject2.getId());
+
+        // Act
+        professorService.assignSubjectToProfessor(existing.getId(), subjectIds);
+
+        // Fetch updated professor
+        ProfessorEntity updated = professorRepository.findById(existing.getId()).orElseThrow();
+
+        // Print results
+        System.out.println("Professor: " + updated.getName());
+        System.out.println("Subjects assigned:");
+        updated.getSubjects().forEach(s ->
+                System.out.println(" - " + s.getName() + " (Professor: " + s.getProfessor().getName() + ")")
+        );
+
+
+
+
+
+
+
+    }
+
+
 
 
 }
