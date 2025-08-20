@@ -221,6 +221,37 @@ public class ProfessorTest {
     }
 
 
+    @Test
+    @Transactional
+    @Commit
+    void testRemoveExistingSubjectFromProfessor() {
+        Long professorId = 2L;
+        Long subjectIdToRemove = 4L;
+
+        //Fetch before removal
+        ProfessorEntity beforeProfessor = professorRepository.findById(professorId)
+                .orElseThrow(() -> new RuntimeException("Professor not found with id " + professorId));
+
+        System.out.println("Before");
+        beforeProfessor.getSubjects()
+                .forEach(subjectEntity -> System.out.println(subjectEntity));
+
+
+        //remove subject
+        professorService.removeSubjectFromProfessor(professorId,Set.of(subjectIdToRemove));
+
+        //Fetch after removal
+        ProfessorEntity afterProfessor = professorRepository.findById(professorId)
+                .orElseThrow(() -> new RuntimeException("Professor not found with id " + professorId));
+
+        System.out.println("After");
+        afterProfessor.getSubjects()
+                .forEach(s -> System.out.println("Professor: " + afterProfessor.getName()
+                + " Subjects: " + s.getName()));
+
+    }
+
+
 
 
 }
