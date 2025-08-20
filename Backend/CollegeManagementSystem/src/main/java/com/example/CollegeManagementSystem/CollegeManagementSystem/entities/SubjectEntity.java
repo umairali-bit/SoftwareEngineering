@@ -26,7 +26,7 @@ public class SubjectEntity {
 
     // Like doctor in appointment
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(nullable = false)
+    @JoinColumn(nullable = true)
     private ProfessorEntity professor;
 
     // Like patient in appointment
