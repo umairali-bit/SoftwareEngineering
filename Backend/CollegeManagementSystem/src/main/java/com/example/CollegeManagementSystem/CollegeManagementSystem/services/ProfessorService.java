@@ -23,8 +23,8 @@ public interface ProfessorService {
 
     // Managing relationships
     void assignSubjectToProfessor(Long professorId, Set<Long> subjectIds);
-//
-//    void removeSubjectFromProfessor(Long professorId, Long subjectId);
+
+    void removeSubjectFromProfessor(Long professorId, Set<Long> subjectIds);
 //
 //    void assignStudentToProfessor(Long professorId, Long studentId);
 //

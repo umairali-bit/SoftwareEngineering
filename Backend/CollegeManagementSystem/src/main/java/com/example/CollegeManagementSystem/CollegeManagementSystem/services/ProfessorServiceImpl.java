@@ -245,7 +245,7 @@ public class ProfessorServiceImpl implements ProfessorService{
         //fetch the subjects
         Set<SubjectEntity> subjects = subjectRepository.findWithProfessorAndStudentsById(subjectIds);
 
-        // 3. Validate (strict mode: check mismatch)
+        // 3. Validate (strict mode: check mismatch) If you want to fetch all subjects at once and validate that all exist:
         if (subjects.size() != subjectIds.size()) {
             throw new RuntimeException("Some subject IDs do not exist. Provided: "
                     + subjectIds + ", Found: "
@@ -253,7 +253,7 @@ public class ProfessorServiceImpl implements ProfessorService{
         }
 
         // 4. update relationship
-        professor.getSubjects().clear(); // if you want replacement
+     //   professor.getSubjects().clear(); // if you want replacement
         for (SubjectEntity s : subjects) {
             s.setProfessor(professor);           // owning side
             professor.getSubjects().add(s);      // inverse side
@@ -266,6 +266,61 @@ public class ProfessorServiceImpl implements ProfessorService{
 
 
     }
+
+    @Override
+    public void removeSubjectFromProfessor(Long professorId, Set<Long> subjectIds) {
+
+        //Fetch Professor
+        ProfessorEntity professor = professorRepository.findById(professorId)
+                .orElseThrow(() -> new RuntimeException("Professor not found with the ID: " + professorId));
+
+        //Fetch Subject
+        //If you really want to validate per subject and throw immediately when one is missing:
+        Set<SubjectEntity> subjects = subjectIds.stream()
+                .map(id -> subjectRepository.findById(id)
+                        .orElseThrow(() -> new RuntimeException("Subject not found with ID: " + id)))
+                .collect(Collectors.toSet());
+
+        for (SubjectEntity subject : subjects) {
+            if (professor.getSubjects().contains(subject)) {
+                professor.getSubjects().remove(subject); //inverse side
+                subject.setProfessor(null);// owning side
+            }
+        }
+
+        //save changes
+        professorRepository.save(professor);
+        subjectRepository.saveAll(subjects);
+
+    }
+
+    /*
+    @Override
+@Transactional
+public void removeSubjectFromProfessor(Long professorId, Long subjectId) {
+    ProfessorEntity professor = professorRepository.findById(professorId)
+            .orElseThrow(() -> new RuntimeException("Professor not found with ID: " + professorId));
+
+    SubjectEntity subject = subjectRepository.findById(subjectId)
+            .orElseThrow(() -> new RuntimeException("Subject not found with ID: " + subjectId));
+
+    if (!professor.getSubjects().contains(subject)) {
+        throw new RuntimeException("Subject " + subjectId + " is not assigned to Professor " + professorId);
+    }
+
+    professor.getSubjects().remove(subject);
+    subject.setProfessor(null); // now allowed
+
+    professorRepository.save(professor);
+    subjectRepository.save(subject);
+}
+     */
+
+
+
+
+
+
 
 
 }
