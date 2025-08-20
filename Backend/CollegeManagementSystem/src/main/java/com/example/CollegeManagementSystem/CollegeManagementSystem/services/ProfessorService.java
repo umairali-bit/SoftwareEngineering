@@ -25,11 +25,8 @@ public interface ProfessorService {
     void assignSubjectToProfessor(Long professorId, Set<Long> subjectIds);
 
     void removeSubjectFromProfessor(Long professorId, Set<Long> subjectIds);
-//
-//    void assignStudentToProfessor(Long professorId, Long studentId);
-//
-//    void removeStudentFromProfessor(Long professorId, Long studentId);
-//
-//    // New operation
-//    Set<SubjectDTO> getSubjectsByProfessorId(Long professorId);
+
+
+    // New operation
+    Set<SubjectDTO> getSubjectsByProfessorId(Long professorId);
 }
