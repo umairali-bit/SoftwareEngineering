@@ -1,6 +1,7 @@
 package com.example.CollegeManagementSystem.CollegeManagementSystem.services;
 
 import com.example.CollegeManagementSystem.CollegeManagementSystem.dtos.ProfessorDTO;
+import com.example.CollegeManagementSystem.CollegeManagementSystem.dtos.SubjectDTO;
 import com.example.CollegeManagementSystem.CollegeManagementSystem.entities.ProfessorEntity;
 import com.example.CollegeManagementSystem.CollegeManagementSystem.entities.StudentEntity;
 import com.example.CollegeManagementSystem.CollegeManagementSystem.entities.SubjectEntity;
@@ -294,6 +295,8 @@ public class ProfessorServiceImpl implements ProfessorService{
 
     }
 
+
+
     /*
     @Override
 @Transactional
@@ -316,7 +319,15 @@ public void removeSubjectFromProfessor(Long professorId, Long subjectId) {
 }
      */
 
+    @Override
+    public Set<SubjectDTO> getSubjectsByProfessorId(Long professorId) {
+        ProfessorEntity professor = professorRepository.findWithSubjectsById(professorId)
+                .orElseThrow(() -> new RuntimeException("Professor not found with ID: " + professorId));
 
+        return professor.getSubjects().stream()
+                .map(subject -> modelMapper.map(subject, SubjectDTO.class))
+                        .collect(Collectors.toSet());
+    }
 
 
 
