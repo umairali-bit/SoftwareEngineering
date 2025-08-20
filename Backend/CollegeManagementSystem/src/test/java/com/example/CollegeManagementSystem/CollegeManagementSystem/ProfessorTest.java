@@ -2,6 +2,7 @@ package com.example.CollegeManagementSystem.CollegeManagementSystem;
 
 import com.example.CollegeManagementSystem.CollegeManagementSystem.dtos.ProfessorDTO;
 import com.example.CollegeManagementSystem.CollegeManagementSystem.dtos.StudentDTO;
+import com.example.CollegeManagementSystem.CollegeManagementSystem.dtos.SubjectDTO;
 import com.example.CollegeManagementSystem.CollegeManagementSystem.entities.ProfessorEntity;
 import com.example.CollegeManagementSystem.CollegeManagementSystem.entities.StudentEntity;
 import com.example.CollegeManagementSystem.CollegeManagementSystem.entities.SubjectEntity;
@@ -248,6 +249,20 @@ public class ProfessorTest {
         afterProfessor.getSubjects()
                 .forEach(s -> System.out.println("Professor: " + afterProfessor.getName()
                 + " Subjects: " + s.getName()));
+
+    }
+
+    @Test
+    @Transactional
+    void testGetAllSubjectsByProfessorId() {
+        Long professorId = (1L);
+
+        Set<SubjectDTO> subjectDTO = professorService.getSubjectsByProfessorId(professorId);
+
+        System.out.println("Professor: " + professorId);
+        subjectDTO.forEach(dto -> System.out.println(dto.getName()));
+
+
 
     }
 
