@@ -321,6 +321,7 @@ public void removeSubjectFromProfessor(Long professorId, Long subjectId) {
 
     @Override
     public Set<SubjectDTO> getSubjectsByProfessorId(Long professorId) {
+
         ProfessorEntity professor = professorRepository.findWithSubjectsById(professorId)
                 .orElseThrow(() -> new RuntimeException("Professor not found with ID: " + professorId));
 
