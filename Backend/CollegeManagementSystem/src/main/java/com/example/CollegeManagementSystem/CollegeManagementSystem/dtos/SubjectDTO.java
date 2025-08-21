@@ -1,9 +1,11 @@
 package com.example.CollegeManagementSystem.CollegeManagementSystem.dtos;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
 import lombok.*;
 
 import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 
@@ -15,5 +17,9 @@ public class SubjectDTO {
     private String name;
     private Long professorId;
     private String professorName;
-    private Set<Long> students;
+  //  private Set<Long> studentIds;
+  //  private Map<Long, String> students;
+
+    private List<StudentSummaryDTO> students;
+
 }

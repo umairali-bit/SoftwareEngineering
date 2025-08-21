@@ -1,6 +1,7 @@
 package com.example.CollegeManagementSystem.CollegeManagementSystem.services;
 
 
+import com.example.CollegeManagementSystem.CollegeManagementSystem.dtos.StudentSummaryDTO;
 import com.example.CollegeManagementSystem.CollegeManagementSystem.dtos.SubjectDTO;
 import com.example.CollegeManagementSystem.CollegeManagementSystem.entities.ProfessorEntity;
 import com.example.CollegeManagementSystem.CollegeManagementSystem.entities.StudentEntity;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -50,8 +52,8 @@ public class SubjectServiceImpl implements SubjectService {
 
         // --- Step 3: Attach Students (Persistent State) ---
         Set<StudentEntity> managedStudents = new HashSet<>();
-        for (Long studentId : subjectDTO.getStudents()) {
-            StudentEntity student = studentRepository.findById(studentId)
+        for (StudentSummaryDTO studentId : subjectDTO.getStudents()) {
+            StudentEntity student = studentRepository.findById(studentId.getId())
                     .orElseThrow(() -> new RuntimeException("Student not found with ID: " + studentId));
             managedStudents.add(student); // Collect managed student entity
         }
@@ -67,12 +69,11 @@ public class SubjectServiceImpl implements SubjectService {
         savedDTO.setProfessorId(savedSubject.getProfessor().getId()); // Set professor ID
         savedDTO.setProfessorName(savedSubject.getProfessor().getName()); // Set professor name
 
-        // Extract student IDs from saved subject
-        Set<Long> studentIds = new HashSet<>();
-        for (StudentEntity s : savedSubject.getStudents()) {
-            studentIds.add(s.getId());
-        }
-        savedDTO.setStudents(studentIds);
+        // Map students into StudentSummaryDTO list
+        List<StudentSummaryDTO> studentSummaries = savedSubject.getStudents().stream()
+                .map(s -> new StudentSummaryDTO(s.getId(), s.getName()))
+                .collect(Collectors.toList());
+        savedDTO.setStudents(studentSummaries);
 
         return savedDTO;
     }
@@ -96,9 +97,15 @@ public class SubjectServiceImpl implements SubjectService {
             Set<Long> studentsIds = subject.getStudents().stream()
                     .map(s -> s.getId())
                     .collect(Collectors.toSet());
-            dto.setStudents(studentsIds);
+            // Convert to List<StudentSummaryDTO>
+            List<StudentSummaryDTO> studentSummaries = subject.getStudents().stream()
+                    .map(s -> new StudentSummaryDTO(s.getId(), s.getName()))
+                    .collect(Collectors.toList());
 
+            dto.setStudents(studentSummaries);
         }
+
+
 
         return dto;
     }
@@ -135,8 +142,8 @@ public class SubjectServiceImpl implements SubjectService {
         //4. Handle Student updates if needed
         if (subjectDTO.getStudents() != null) {
             Set<StudentEntity> students = subjectDTO.getStudents().stream()
-                    .map(idVal -> studentRepository.findById(idVal)
-                            .orElseThrow(() -> new RuntimeException("Student not found with ID: " + idVal)))
+                    .map(s-> studentRepository.findById(s.getId())
+                            .orElseThrow(() -> new RuntimeException("Student not found with ID: " + s.getId())))
                     .collect(Collectors.toSet());
 
             subjectEntity.setStudents(students);
@@ -144,13 +151,25 @@ public class SubjectServiceImpl implements SubjectService {
 
         //5. Save updated entity and return DTO
         SubjectEntity updatedSubject = subjectRepository.save(subjectEntity);
-        SubjectDTO updatedDTO = modelMapper.map(updatedSubject, SubjectDTO.class);
 
-        // Manually set students IDs in DTO
-        Set<Long> studentIds = updatedSubject.getStudents().stream()
-                .map(StudentEntity::getId)
-                .collect(Collectors.toSet());
-        updatedDTO.setStudents(studentIds);
+
+        // 6. Map back to DTO
+        SubjectDTO updatedDTO = new SubjectDTO();
+        updatedDTO.setId(updatedSubject.getId());
+        updatedDTO.setName(updatedSubject.getName());
+
+
+        if (updatedSubject.getProfessor() != null) {
+            updatedDTO.setProfessorId(updatedSubject.getProfessor().getId());
+            updatedDTO.setProfessorName(updatedSubject.getProfessor().getName());
+        }
+
+        // 7. Convert students -> List<StudentSummaryDTO>
+        List<StudentSummaryDTO> studentSummaries = updatedSubject.getStudents().stream()
+                .map(s -> new StudentSummaryDTO(s.getId(), s.getName()))
+                .collect(Collectors.toList());
+        updatedDTO.setStudents(studentSummaries);
+
         return updatedDTO;
     }
 
@@ -179,8 +198,8 @@ public class SubjectServiceImpl implements SubjectService {
         //4. Update student if provided
         if (subjectDTO.getStudents() != null) {
             Set<StudentEntity> studentEntities = subjectDTO.getStudents().stream()
-                    .map(studentId -> studentRepository.findById(studentId)
-                            .orElseThrow(() -> new RuntimeException("Student not found with ID: " + studentId)))
+                    .map(studentId -> studentRepository.findById(studentId.getId())
+                            .orElseThrow(() -> new RuntimeException("Student not found with ID: " + studentId.getId())))
                     .collect(Collectors.toSet());
 
             subjectEntity.setStudents(studentEntities);
@@ -193,14 +212,14 @@ public class SubjectServiceImpl implements SubjectService {
         //6. Map back to DTO manually especially, professor, student
         SubjectDTO updatedDTO = new SubjectDTO();
         updatedDTO.setId(updatedSubject.getId());
-        updatedDTO.setName(updatedSubject.getName());
-        updatedDTO.setProfessorId(updatedSubject.getProfessor().getId());
-        updatedDTO.setProfessorName(updatedSubject.getProfessor().getName());
-        updatedDTO.setStudents(
-                updatedSubject.getStudents().stream()
-                        .map(studentEntity -> studentEntity.getId())
-                        .collect(Collectors.toSet())
-        );
+        if (updatedSubject.getProfessor() != null) {
+            updatedDTO.setProfessorId(updatedSubject.getProfessor().getId());
+            updatedDTO.setProfessorName(updatedSubject.getProfessor().getName());
+        }
+        List<StudentSummaryDTO> studentSummaries = updatedSubject.getStudents().stream()
+                .map(s -> new StudentSummaryDTO(s.getId(), s.getName()))
+                .toList();
+
 
         return updatedDTO;
 
