@@ -40,6 +40,7 @@ public class SubjectServiceImpl implements SubjectService {
     @Override
     @Transactional
     public SubjectDTO createSubject(SubjectDTO subjectDTO) {
+
         // --- Step 1: Create a new SubjectEntity from the DTO ---
         SubjectEntity subject = new SubjectEntity();
         subject.setName(subjectDTO.getName()); // Set subject name from DTO
