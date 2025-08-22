@@ -68,6 +68,19 @@ public class SubjectController {
          */
     }
 
+    //DELETE Subject
+    @DeleteMapping("/{subjectID}")
+    public ResponseEntity<Boolean> deleteSubject(@PathVariable Long subjectID) {
+        boolean deleted = subjectService.deleteSubjectById(subjectID);
+        if(deleted) {
+            return ResponseEntity.ok(true);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+
+    }
+
+
 
 
 }
