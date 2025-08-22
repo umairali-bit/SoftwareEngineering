@@ -221,6 +221,8 @@ public class SubjectServiceImpl implements SubjectService {
                 .map(s -> new StudentSummaryDTO(s.getId(), s.getName()))
                 .toList();
 
+        updatedDTO.setStudents(studentSummaries);
+
 
         return updatedDTO;
 
