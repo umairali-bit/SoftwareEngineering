@@ -235,7 +235,6 @@ public class SubjectServiceImpl implements SubjectService {
         if (!subjectRepository.existsById(subjectId)) {
             throw new RuntimeException("Subject does not exist with ID: " + subjectId);
         }
-
         subjectRepository.deleteById(subjectId);
         return true;
 
