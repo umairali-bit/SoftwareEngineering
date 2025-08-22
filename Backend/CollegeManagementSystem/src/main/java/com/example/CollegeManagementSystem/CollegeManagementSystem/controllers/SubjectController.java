@@ -52,8 +52,20 @@ public class SubjectController {
         SubjectDTO updatedSubject = subjectService.updateSubject(subjectId, subjectDTO);
         return ResponseEntity.ok(updatedSubject);
 
+    }
 
+    //Patch Subject
+    @PatchMapping("/{subjectID}")
+    public ResponseEntity<SubjectDTO> patchSubject (@PathVariable Long subjectID, @RequestBody SubjectDTO subjectDTO) {
+        SubjectDTO patchSubject = subjectService.patchUpdateSubject(subjectID, subjectDTO);
+        return ResponseEntity.ok(patchSubject);
 
+        /*
+        @PatchMapping("/{subjectID}")
+        public SubjectDTO patchSubject(@PathVariable Long subjectID, @RequestBody SubjectDTO subjectDTO) {
+        return subjectService.patchUpdateSubject(subjectID, subjectDTO);
+        }
+         */
     }
 
 
