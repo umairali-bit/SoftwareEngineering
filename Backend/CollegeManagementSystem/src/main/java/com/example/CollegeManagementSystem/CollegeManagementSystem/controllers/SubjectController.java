@@ -43,5 +43,19 @@ public class SubjectController {
 
     }
 
+    //Update Subject
+    @PutMapping ("/{subjectId}")
+    public ResponseEntity<SubjectDTO> updateSubject (
+            @PathVariable Long subjectId,
+            @RequestBody SubjectDTO subjectDTO) {
+
+        SubjectDTO updatedSubject = subjectService.updateSubject(subjectId, subjectDTO);
+        return ResponseEntity.ok(updatedSubject);
+
+
+
+    }
+
+
 
 }
