@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/subjects")
 @RequiredArgsConstructor
@@ -31,6 +33,14 @@ public class SubjectController {
     public ResponseEntity<SubjectDTO> getSubjectById(@PathVariable Long id) {
         SubjectDTO subjectDTO = subjectService.getSubjectById(id);
         return ResponseEntity.ok(subjectDTO);
+    }
+
+    //GET all subjects
+    @GetMapping
+    public ResponseEntity<List<SubjectDTO>> getAllSubjects() {
+        List<SubjectDTO> subjects = subjectService.getAllSubjects();
+        return ResponseEntity.ok(subjects);
+
     }
 
 
