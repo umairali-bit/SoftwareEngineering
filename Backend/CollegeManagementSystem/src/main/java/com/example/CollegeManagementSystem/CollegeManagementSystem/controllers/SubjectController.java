@@ -3,10 +3,12 @@ package com.example.CollegeManagementSystem.CollegeManagementSystem.controllers;
 
 import com.example.CollegeManagementSystem.CollegeManagementSystem.dtos.SubjectDTO;
 import com.example.CollegeManagementSystem.CollegeManagementSystem.services.SubjectServiceImpl;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.SpringVersion;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,7 +23,7 @@ public class SubjectController {
 
     //create a new subject
     @PostMapping
-    public ResponseEntity<SubjectDTO> createSubject(@RequestBody SubjectDTO subjectDTO) {
+    public ResponseEntity<SubjectDTO> createSubject(@Valid  @RequestBody SubjectDTO subjectDTO) {
         SubjectDTO created = subjectService.createSubject(subjectDTO);
 
         // 201 created with the created subject

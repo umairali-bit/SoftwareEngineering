@@ -3,10 +3,10 @@ package com.example.CollegeManagementSystem.CollegeManagementSystem.dtos;
 
 import lombok.*;
 
-import java.util.HashSet;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 
 @NoArgsConstructor
@@ -14,7 +14,10 @@ import java.util.Set;
 @Data
 public class SubjectDTO {
     private Long id;
+
+    @NotBlank(message = "Subject name must not be blank")
     private String name;
+
     private Long professorId;
     private String professorName;
   //  private Set<Long> studentIds;
