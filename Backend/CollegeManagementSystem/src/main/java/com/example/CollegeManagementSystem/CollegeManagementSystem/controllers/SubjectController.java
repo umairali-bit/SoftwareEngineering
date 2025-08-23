@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/subjects")
@@ -90,6 +91,40 @@ public class SubjectController {
         // 204 No Content because we’re only updating the relation, not returning data
         return ResponseEntity.noContent().build();
     }
+
+    // Remove professor from a Subject
+    @DeleteMapping("/{subjectId}/professor")
+    public ResponseEntity<Void> removeProfessorFromSubject(@PathVariable Long subjectId) {
+        subjectService.removeProfessorFromSubject(subjectId);
+        return  ResponseEntity.noContent().build();
+    }
+
+    // Assign students to a subject
+    @PostMapping("/{subjectId}/students")
+    public ResponseEntity<SubjectDTO> assignStudentsToSubject(
+            @PathVariable Long subjectId,
+            @RequestBody Set<Long> studentIds){
+
+        subjectService.assignStudentToSubject(subjectId, studentIds);
+        SubjectDTO updated = subjectService.getSubjectById(subjectId);
+        return ResponseEntity.status(HttpStatus.CREATED).body(updated);
+
+
+    }
+
+    // Remove students from a subject
+    @DeleteMapping("/{subjectId}/students")
+    public ResponseEntity<Void> removeStudentsFromSubject(
+            @PathVariable Long subjectId,
+            @RequestBody Set<Long> studentIds) {
+
+        subjectService.removeStudentFromSubject(subjectId, studentIds);
+        return ResponseEntity.noContent().build(); // 204 No Content on success
+
+
+    }
+
+
 
 
 

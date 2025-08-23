@@ -24,12 +24,10 @@ public class SubjectEntity {
 
     private String name;
 
-    // Like doctor in appointment
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = true)
     private ProfessorEntity professor;
 
-    // Like patient in appointment
     @ManyToMany
     @JoinTable(
             name = "subject_student",
