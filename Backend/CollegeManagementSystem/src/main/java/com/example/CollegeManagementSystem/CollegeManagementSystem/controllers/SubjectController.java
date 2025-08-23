@@ -80,6 +80,19 @@ public class SubjectController {
 
     }
 
+    // Assign a professor to a subject
+    @PutMapping("/{subjectId}/professors/{professorId}")
+    public ResponseEntity<Void> assignProfessorToSubject(
+            @PathVariable Long subjectId,
+            @PathVariable Long professorId) {
+        subjectService.assignProfessorToSubject(subjectId, professorId);
+
+        // 204 No Content because we’re only updating the relation, not returning data
+        return ResponseEntity.noContent().build();
+    }
+
+
+
 
 
 
