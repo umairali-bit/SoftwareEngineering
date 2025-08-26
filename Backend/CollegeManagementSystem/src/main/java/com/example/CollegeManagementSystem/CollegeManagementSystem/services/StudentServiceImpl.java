@@ -177,8 +177,22 @@ public class StudentServiceImpl implements StudentService {
 
         StudentEntity savedStudent = studentRepository.save(existingStudent);
 
+        StudentDTO dto = modelMapper.map(savedStudent, StudentDTO.class);
 
-        return modelMapper.map(savedStudent, StudentDTO.class);
+        // Manually set IDs
+        dto.setSubjectIds(
+                savedStudent.getSubjects().stream()
+                        .map(SubjectEntity::getId)
+                        .collect(Collectors.toSet())
+        );
+
+        dto.setProfessorIds(
+                savedStudent.getProfessors().stream()
+                        .map(ProfessorEntity::getId)
+                        .collect(Collectors.toSet())
+        );
+
+        return dto;
     }
 
     @Override
