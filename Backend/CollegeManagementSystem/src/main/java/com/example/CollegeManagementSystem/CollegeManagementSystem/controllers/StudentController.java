@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.PublicKey;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/students")
@@ -32,6 +33,14 @@ public class StudentController {
         StudentDTO studentDTO = studentService.getStudentById(id);
 
         return ResponseEntity.ok(studentDTO);
+    }
+
+    //GET all students
+    @GetMapping
+    public ResponseEntity<List<StudentDTO>> getAllStudents() {
+        List<StudentDTO> studentDTOList = studentService.getAllStudents();
+
+        return ResponseEntity.ok(studentDTOList);
     }
 
 }
