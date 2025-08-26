@@ -63,7 +63,7 @@ public class StudentServiceImpl implements StudentService {
         );
 
         admissionRecord.setFees(
-                studentDTO.getAdmissionRecord() != null && studentDTO.getAdmissionRecord().getAdmissionDate() != null
+                studentDTO.getAdmissionRecord() != null && studentDTO.getAdmissionRecord().getFees() != null
                 ? studentDTO.getAdmissionRecord().getFees() :  0.0
         );
 
@@ -78,6 +78,11 @@ public class StudentServiceImpl implements StudentService {
 //            student.setAdmissionRecord(admissionRecord);
 //
 //        }
+
+        //link student → record
+        student.setAdmissionRecord(admissionRecord);
+        admissionRecord.setStudent(student); // bidirectional
+
 
         //3. save student
         StudentEntity savedStudent = studentRepository.save(student);
