@@ -6,10 +6,7 @@ import com.example.CollegeManagementSystem.CollegeManagementSystem.services.Stud
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.PublicKey;
 
@@ -27,6 +24,14 @@ public class StudentController {
 
         //201 created with the created student
         return ResponseEntity.status(HttpStatus.CREATED).body(created);
+    }
+
+    //GET /api/students/{id}
+    @GetMapping("/{id}")
+    public ResponseEntity<StudentDTO> getStudentById(@PathVariable Long id) {
+        StudentDTO studentDTO = studentService.getStudentById(id);
+
+        return ResponseEntity.ok(studentDTO);
     }
 
 }
