@@ -25,7 +25,7 @@ public class StudentEntity {
     private String name;
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "admission_record_id") // FK column in Student table
+    @JoinColumn(name = "admission_record_id", unique = true) // FK column in Student table, enforce uniqueness
     private AdmissionRecordEntity admissionRecord;
 
     @ManyToMany
