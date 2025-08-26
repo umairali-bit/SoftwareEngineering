@@ -15,6 +15,7 @@ import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -53,17 +54,30 @@ public class StudentServiceImpl implements StudentService {
         //Manual mapping for fields
         student.setName(studentDTO.getName());
 
+        // 2. Always create a new AdmissionRecord
+        AdmissionRecordEntity admissionRecord = new AdmissionRecordEntity();
+        admissionRecord.setStudent(student); // linking both sides
+        admissionRecord.setAdmissionDate(
+               studentDTO.getAdmissionRecord() != null && studentDTO.getAdmissionRecord().getAdmissionDate() != null
+                ? studentDTO.getAdmissionRecord().getAdmissionDate() : LocalDateTime.now()
+        );
 
-        //2. Handle AdmissionRecord if provided
-        if (studentDTO.getAdmissionRecord() != null) {
+        admissionRecord.setFees(
+                studentDTO.getAdmissionRecord() != null && studentDTO.getAdmissionRecord().getAdmissionDate() != null
+                ? studentDTO.getAdmissionRecord().getFees() :  0.0
+        );
 
-            AdmissionRecordEntity admissionRecord = new AdmissionRecordEntity();
-            admissionRecord.setAdmissionDate(studentDTO.getAdmissionRecord().getAdmissionDate());
-            admissionRecord.setStudent(student);
-            admissionRecord.setFees(studentDTO.getAdmissionRecord().getFees());
-            student.setAdmissionRecord(admissionRecord);
 
-        }
+//        //2. Handle AdmissionRecord if provided
+//        if (studentDTO.getAdmissionRecord() != null) {
+//
+//            AdmissionRecordEntity admissionRecord = new AdmissionRecordEntity();
+//            admissionRecord.setAdmissionDate(studentDTO.getAdmissionRecord().getAdmissionDate());
+//            admissionRecord.setStudent(student);
+//            admissionRecord.setFees(studentDTO.getAdmissionRecord().getFees());
+//            student.setAdmissionRecord(admissionRecord);
+//
+//        }
 
         //3. save student
         StudentEntity savedStudent = studentRepository.save(student);
