@@ -3,7 +3,6 @@ package com.example.CollegeManagementSystem.CollegeManagementSystem.services;
 import com.example.CollegeManagementSystem.CollegeManagementSystem.dtos.StudentDTO;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 public interface StudentService {
@@ -17,7 +16,7 @@ public interface StudentService {
 
     StudentDTO updateStudent(Long id, StudentDTO studentDetails); // Full update (PUT)
 
-   void deleteStudent(Long id);
+   boolean deleteStudent(Long id);
 
 //     Partial update (PATCH)
     StudentDTO patchStudent(Long id, StudentDTO studentDTO);
