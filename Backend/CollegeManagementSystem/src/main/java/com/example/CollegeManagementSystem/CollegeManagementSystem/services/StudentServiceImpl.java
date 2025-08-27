@@ -108,10 +108,26 @@ public class StudentServiceImpl implements StudentService {
     public List<StudentDTO> getAllStudents() {
         List<StudentEntity> studentEntities = studentRepository.findAll();
 
-        return studentEntities
-                .stream()
-                .map(studentEntity -> modelMapper.map(studentEntity, StudentDTO.class))
-                .collect(Collectors.toList());
+        return studentEntities.stream().map(student -> {
+            System.out.println("Student " + student.getId() + " has subjects: " + student.getSubjects());
+            StudentDTO dto = modelMapper.map(student, StudentDTO.class);
+
+            dto.setSubjectIds(
+                    student.getSubjects().stream()
+                            .map(SubjectEntity::getId)
+                            .collect(Collectors.toSet())
+            );
+
+            dto.setProfessorIds(
+                    student.getProfessors().stream()
+                            .map(ProfessorEntity::getId)
+                            .collect(Collectors.toSet())
+            );
+
+            return dto;
+        }).collect(Collectors.toList());
+
+
     }
 
     @Transactional
@@ -153,6 +169,7 @@ public class StudentServiceImpl implements StudentService {
             //maintaining bidirectional relationship
             for (SubjectEntity subject : subjectEntities) {
                 subject.getStudents().add(existingStudent);
+                subjectRepository.save(subject); // flush owning side
             }
         } else {
             existingStudent.setSubjects(null);
@@ -184,7 +201,7 @@ public class StudentServiceImpl implements StudentService {
         // Manually set IDs
         dto.setSubjectIds(
                 savedStudent.getSubjects().stream()
-                        .map(SubjectEntity::getId)
+                        .map(SubjectEntity -> SubjectEntity.getId())
                         .collect(Collectors.toSet())
         );
 
@@ -252,39 +269,11 @@ public class StudentServiceImpl implements StudentService {
             }
 
         }
-
-        //4. update subjects
-        if (studentDTO.getSubjectIds() != null) {
-            Set<Long> subjectIDs = studentDTO.getSubjectIds();
-
-            Set<SubjectEntity> subjects = subjectIDs.stream()
-                    .map(subjectID -> subjectRepository.findById(subjectID)
-                            .orElseThrow(() -> new RuntimeException("Subject not found with ID: " + subjectID)))
-                    .collect(Collectors.toSet());
-
-            existingStudent.setSubjects(subjects);
-        }
-
-        //5. update professors
-        if (studentDTO.getProfessorIds() != null) {
-            Set<Long> professorIDs = studentDTO.getProfessorIds();
-
-            Set<ProfessorEntity> professors = professorIDs.stream()
-                    .map(professorID -> professorRepository.findById(professorID)
-                            .orElseThrow(() -> new RuntimeException("Professor not found with ID: " + professorID)))
-                    .collect(Collectors.toSet());
-
-            existingStudent.setProfessors(professors);
-        }
-
-        //6. save the existing student in the StudentEntity
+        // SAVE
         StudentEntity savedStudent = studentRepository.save(existingStudent);
 
-        // Map to DTO and manually set IDs
-        StudentDTO dto = modelMapper.map(savedStudent, StudentDTO.class);
-        dto.setSubjectIds(savedStudent.getSubjects().stream().map(SubjectEntity::getId).collect(Collectors.toSet()));
-        dto.setProfessorIds(savedStudent.getProfessors().stream().map(ProfessorEntity::getId).collect(Collectors.toSet()));
-        return dto;
+        // Convert to DTO
+        return modelMapper.map(savedStudent, StudentDTO.class);
     }
 
     @Override
