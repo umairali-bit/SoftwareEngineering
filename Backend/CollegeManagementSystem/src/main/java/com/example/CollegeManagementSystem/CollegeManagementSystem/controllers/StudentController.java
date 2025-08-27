@@ -59,6 +59,10 @@ public class StudentController {
     public ResponseEntity<Boolean> deleteStudent(@PathVariable Long studentID) {
 
         boolean deleted = studentService.deleteStudent(studentID);
+
+        if(deleted) return ResponseEntity.ok(true);
+
+        return ResponseEntity.notFound().build();
     }
 
 
