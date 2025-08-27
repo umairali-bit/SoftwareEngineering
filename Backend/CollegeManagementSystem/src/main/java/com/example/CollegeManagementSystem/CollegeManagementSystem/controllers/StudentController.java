@@ -2,6 +2,7 @@ package com.example.CollegeManagementSystem.CollegeManagementSystem.controllers;
 
 
 import com.example.CollegeManagementSystem.CollegeManagementSystem.dtos.StudentDTO;
+import com.example.CollegeManagementSystem.CollegeManagementSystem.dtos.SubjectDTO;
 import com.example.CollegeManagementSystem.CollegeManagementSystem.services.StudentServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -63,6 +64,17 @@ public class StudentController {
         if(deleted) return ResponseEntity.ok(true);
 
         return ResponseEntity.notFound().build();
+    }
+
+    //PATACH Student
+    @PatchMapping("/{studentID}")
+    public ResponseEntity<StudentDTO> patchStudent(@PathVariable Long studentID,
+                                                   @RequestBody StudentDTO studentDTO) {
+        StudentDTO patchStudent = studentService.patchStudent(studentID, studentDTO);
+
+        return ResponseEntity.ok(patchStudent);
+
+
     }
 
 
