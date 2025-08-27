@@ -56,6 +56,8 @@ public class StudentServiceImpl implements StudentService {
 
         // 2. Always create a new AdmissionRecord
         AdmissionRecordEntity admissionRecord = new AdmissionRecordEntity();
+        // Hibernate to generate a new ID (ignore incoming id)
+        admissionRecord.setId(null);
         admissionRecord.setStudent(student); // linking both sides
         admissionRecord.setAdmissionDate(
                studentDTO.getAdmissionRecord() != null && studentDTO.getAdmissionRecord().getAdmissionDate() != null
@@ -210,7 +212,7 @@ public class StudentServiceImpl implements StudentService {
         }
 
         studentRepository.delete(student);
-        return false;
+        return true;
     }
 
 
