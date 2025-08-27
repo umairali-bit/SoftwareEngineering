@@ -196,7 +196,7 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public void deleteStudent(Long id) {
+    public boolean deleteStudent(Long id) {
 
         StudentEntity student = studentRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Student not found: " + id));
@@ -205,11 +205,12 @@ public class StudentServiceImpl implements StudentService {
         if (record != null) {
             record.setStudent(null);
             student.setAdmissionRecord(null);
-            admissionRecordRepository.save(record);
+      //      admissionRecordRepository.save(record);Handle admission record unlinking (if not using orphanRemoval)
             // optionally: admissionRecordRepository.delete(record);
         }
 
         studentRepository.delete(student);
+        return false;
     }
 
 

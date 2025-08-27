@@ -54,4 +54,13 @@ public class StudentController {
 
     }
 
+    //DELETE Student
+    @DeleteMapping("/{studentID}")
+    public ResponseEntity<Boolean> deleteStudent(@PathVariable Long studentID) {
+
+        boolean deleted = studentService.deleteStudent(studentID);
+    }
+
+
+
 }
