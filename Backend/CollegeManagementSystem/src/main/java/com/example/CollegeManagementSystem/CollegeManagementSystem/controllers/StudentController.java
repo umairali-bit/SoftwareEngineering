@@ -1,6 +1,7 @@
 package com.example.CollegeManagementSystem.CollegeManagementSystem.controllers;
 
 
+import com.example.CollegeManagementSystem.CollegeManagementSystem.advices.ApiResponse;
 import com.example.CollegeManagementSystem.CollegeManagementSystem.dtos.StudentDTO;
 import com.example.CollegeManagementSystem.CollegeManagementSystem.dtos.SubjectDTO;
 import com.example.CollegeManagementSystem.CollegeManagementSystem.services.StudentServiceImpl;
@@ -66,7 +67,7 @@ public class StudentController {
         return ResponseEntity.notFound().build();
     }
 
-    //PATACH Student
+    //PATACH Student - just for the admission record
     @PatchMapping("/{studentID}")
     public ResponseEntity<StudentDTO> patchStudent(@PathVariable Long studentID,
                                                    @RequestBody StudentDTO studentDTO) {
@@ -76,6 +77,30 @@ public class StudentController {
 
 
     }
+    //POST mapping by adding simple guards in the controller
+    @PostMapping("/assign-professor")
+    public ResponseEntity<Void> assignProfessorToStudent(@RequestBody StudentDTO studentDTO) {
+        if (studentDTO.getId() == null) {
+            throw new IllegalArgumentException("studentId is required");
+        }
+        if (studentDTO.getProfessorIds() == null || studentDTO.getProfessorIds().isEmpty()) {
+            throw new IllegalArgumentException("At least one professorId is required");
+        }
+        if (studentDTO.getSubjectIds() == null || studentDTO.getSubjectIds().isEmpty()) {
+            throw new IllegalArgumentException("At least one subjectId is required");
+        }
+
+        Long studentId   = studentDTO.getId();
+        Long professorId = studentDTO.getProfessorIds().iterator().next();
+        Long subjectId   = studentDTO.getSubjectIds().iterator().next();
+
+        studentService.assignProfessorToStudent(studentId, professorId, subjectId);
+        return ResponseEntity.noContent().build(); // 204
+    }
+
+
+
+
 
 
 
