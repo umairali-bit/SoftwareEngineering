@@ -1,5 +1,7 @@
 -- Clean up existing data first (important for dev restarts)
-DELETE FROM student;
+DELETE FROM student_professor;
+DELETE FROM subject_student;
+DELETE FROM student;            -- delete students before admission_record
 DELETE FROM subject;
 DELETE FROM professor;
 DELETE FROM admission_record;
