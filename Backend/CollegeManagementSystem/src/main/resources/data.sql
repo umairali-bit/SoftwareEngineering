@@ -6,11 +6,11 @@ VALUES
   ('Dr. Isaac Newton');
 
 -- Insert Admission Records first
-INSERT INTO admission_record (id, fees, admission_date)
+INSERT INTO admission_record (fees, admission_date)
 VALUES
-  (1, 5000, '2025-01-10 00:00:00'),
-  (2, 5500, '2025-02-15 00:00:00'),
-  (3, 5300, '2025-03-12 00:00:00');
+  (5000, '2025-01-10 00:00:00'),
+  (5500, '2025-02-15 00:00:00'),
+  (5300, '2025-03-12 00:00:00');
 
 -- Insert Students linked to Admission Records
 INSERT INTO student (name, admission_record_id)

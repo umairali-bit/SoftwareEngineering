@@ -98,6 +98,8 @@ public class StudentController {
         return ResponseEntity.noContent().build(); // 204
     }
 
+    //DELETE professor from a
+
 
 
 
