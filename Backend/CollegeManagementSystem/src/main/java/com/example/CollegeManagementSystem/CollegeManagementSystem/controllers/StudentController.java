@@ -98,7 +98,15 @@ public class StudentController {
         return ResponseEntity.noContent().build(); // 204
     }
 
-    //DELETE professor from a
+    // DELETE /api/students/{studentId}/professors/{professorId}
+    @DeleteMapping("/{studentId}/professors/{professorId}")
+    public ResponseEntity<Void> removeProfessorFromStudent(
+            @PathVariable Long studentId,
+            @PathVariable Long professorId) {
+
+        studentService.removeProfessorFromStudent(studentId, professorId);
+        return ResponseEntity.noContent().build();
+    }
 
 
 
