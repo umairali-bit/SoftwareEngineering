@@ -91,7 +91,22 @@ public class StudentServiceImpl implements StudentService {
 
 
         //4 convert back to dto
-        return modelMapper.map(savedStudent, StudentDTO.class);
+        StudentDTO dto = modelMapper.map(savedStudent, StudentDTO.class);
+
+        // manually set IDs for relationships
+        dto.setSubjectIds(
+                savedStudent.getSubjects().stream()
+                        .map(SubjectEntity::getId)
+                        .collect(Collectors.toSet())
+        );
+
+        dto.setProfessorIds(
+                savedStudent.getProfessors().stream()
+                        .map(ProfessorEntity::getId)
+                        .collect(Collectors.toSet())
+        );
+
+        return dto;
 
     }
 
