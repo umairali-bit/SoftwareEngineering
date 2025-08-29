@@ -26,9 +26,9 @@ public interface StudentService {
 
    void removeProfessorFromStudent(Long studentId, Long professorId);
 
-    void assignSubjectsToStudent(Long studentId, Set<Long> subjectIds);
+ //   void assignSubjectsToStudent(Long studentId, Set<Long> subjectIds);
 
-    void removeSubjectFromStudent(Long studentId, Set<Long> subjectIds);
+  //  void removeSubjectFromStudent(Long studentId, Set<Long> subjectIds);
 // Admission record handling
     void assignAdmissionRecordToStudent(Long studentId, Long admissionRecordId);
 
