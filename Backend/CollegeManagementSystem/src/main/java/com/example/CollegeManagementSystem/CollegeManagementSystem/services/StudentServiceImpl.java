@@ -344,7 +344,7 @@ public class StudentServiceImpl implements StudentService {
         studentRepository.save(student);
 
     }
-
+/* redundant code in  subjectImpl
     @Override
     public void assignSubjectsToStudent(Long studentId, Set<Long> subjectIds) {
 
@@ -403,6 +403,8 @@ public class StudentServiceImpl implements StudentService {
 
 
     }
+
+ */
 
     @Override
     public void assignAdmissionRecordToStudent(Long studentId, Long admissionRecordId) {
