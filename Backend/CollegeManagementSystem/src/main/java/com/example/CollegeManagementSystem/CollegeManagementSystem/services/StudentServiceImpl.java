@@ -406,6 +406,14 @@ public class StudentServiceImpl implements StudentService {
 
  */
 
+    /*
+     already create an AdmissionRecord automatically when you create a new student.
+
+     The StudentEntity has a @OneToOne relationship with AdmissionRecordEntity.
+
+      That means each student can have at most one admission record, and that record belongs only to that student.
+
+
     @Override
     public void assignAdmissionRecordToStudent(Long studentId, Long admissionRecordId) {
 
@@ -468,6 +476,8 @@ public class StudentServiceImpl implements StudentService {
 
 
      }
+
+     */
 }
 
 
