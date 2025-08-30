@@ -266,6 +266,7 @@ public class SubjectServiceImpl implements SubjectService {
 
         //Set professor
         subject.setProfessor(professor);
+        professor.getSubjects().add(subject); // maintain bidirectional consistency
 
         //Save subject
         subjectRepository.save(subject);

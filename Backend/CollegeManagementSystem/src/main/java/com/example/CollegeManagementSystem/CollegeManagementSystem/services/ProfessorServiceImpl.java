@@ -302,7 +302,7 @@ public class ProfessorServiceImpl implements ProfessorService{
                 .orElseThrow(() -> new RuntimeException("Professor not found with the ID: " + professorId));
 
         //fetch the subjects
-        Set<SubjectEntity> subjects = subjectRepository.findWithProfessorAndStudentsById(subjectIds);
+        List<SubjectEntity> subjects = subjectRepository.findAllById(subjectIds);
 
         // 3. Validate (strict mode: check mismatch) If you want to fetch all subjects at once and validate that all exist:
         if (subjects.size() != subjectIds.size()) {
@@ -312,7 +312,7 @@ public class ProfessorServiceImpl implements ProfessorService{
         }
 
         // 4. update relationship
-     //   professor.getSubjects().clear(); // if you want replacement
+        professor.getSubjects().clear(); // if you want replacement
         for (SubjectEntity s : subjects) {
             s.setProfessor(professor);           // owning side
             professor.getSubjects().add(s);      // inverse side

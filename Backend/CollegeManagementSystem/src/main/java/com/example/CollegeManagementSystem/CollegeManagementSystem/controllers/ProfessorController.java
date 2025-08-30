@@ -75,6 +75,25 @@ public class ProfessorController {
         return ResponseEntity.ok(professorDTO1);
     }
 
+    //POST
+    @PostMapping("/assign-subject")
+    public ResponseEntity<ProfessorDTO> assignSubject (@RequestBody ProfessorDTO professorDTO) {
+
+        if (professorDTO.getId() == null) {
+            throw new RuntimeException("ProfessorID is required");
+    }
+        if (professorDTO.getSubjectIds() == null || professorDTO.getSubjectIds().isEmpty()) {
+            throw new RuntimeException("Subject ID is required");
+        }
+
+        Long professorId = professorDTO.getId();
+
+        // Pass the whole set directly
+        professorService.assignSubjectToProfessor(professorId, professorDTO.getSubjectIds());
+        return ResponseEntity.noContent().build();
+
+    }
+
 
 
 
