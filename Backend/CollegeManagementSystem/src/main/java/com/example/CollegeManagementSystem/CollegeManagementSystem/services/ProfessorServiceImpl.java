@@ -123,10 +123,24 @@ public class ProfessorServiceImpl implements ProfessorService{
     public List<ProfessorDTO> getAllProfessors() {
         List<ProfessorEntity> professorEntities = professorRepository.findAll();
 
-        return professorEntities
-                .stream()
-                .map(professorEntity -> modelMapper.map(professorEntity, ProfessorDTO.class))
-                .collect(Collectors.toList());
+        return professorEntities.stream().map(professor -> {
+            ProfessorDTO dto = modelMapper.map(professor, ProfessorDTO.class);
+
+            dto.setSubjectIds(
+                    professor.getSubjects().stream()
+                            .map(subjectEntity -> subjectEntity.getId())
+                            .collect(Collectors.toSet())
+            );
+
+            dto.setStudentIds(
+                    professor.getStudents().stream()
+                            .map(studentEntity -> studentEntity.getId())
+                            .collect(Collectors.toSet())
+            );
+
+            return dto;
+
+        }).toList();
     }
 
     @Override
