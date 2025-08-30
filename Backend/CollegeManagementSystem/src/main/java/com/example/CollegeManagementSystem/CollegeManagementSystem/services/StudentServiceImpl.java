@@ -354,8 +354,16 @@ public class StudentServiceImpl implements StudentService {
 
         );
 
+        // Remove professor from student side
+        student.getProfessors().removeIf(
+                existingProfessor -> existingProfessor.getSubjects().contains(subject)
+        );
+
+
         //Set professor to Student
         student.getProfessors().add(professor);
+        // Also clean student from the professor side
+        professor.getStudents().add(student);
 
 
         //Save entity
