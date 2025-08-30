@@ -198,7 +198,21 @@ public class ProfessorServiceImpl implements ProfessorService{
 
 
         //entity to dto
-        return modelMapper.map(savedProfessor, ProfessorDTO.class);
+        ProfessorDTO dto = modelMapper.map(savedProfessor, ProfessorDTO.class);
+
+        dto.setStudentIds(
+                savedProfessor.getStudents().stream()
+                        .map(StudentEntity::getId)
+                        .collect(Collectors.toSet())
+        );
+
+        dto.setSubjectIds(
+                savedProfessor.getSubjects().stream()
+                        .map(SubjectEntity::getId)
+                        .collect(Collectors.toSet())
+        );
+
+        return dto;
 
     }
 
