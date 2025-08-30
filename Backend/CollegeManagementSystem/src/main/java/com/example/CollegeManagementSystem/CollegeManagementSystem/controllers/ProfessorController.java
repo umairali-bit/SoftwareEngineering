@@ -2,7 +2,6 @@ package com.example.CollegeManagementSystem.CollegeManagementSystem.controllers;
 
 
 import com.example.CollegeManagementSystem.CollegeManagementSystem.dtos.ProfessorDTO;
-import com.example.CollegeManagementSystem.CollegeManagementSystem.dtos.StudentDTO;
 import com.example.CollegeManagementSystem.CollegeManagementSystem.services.ProfessorService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -43,6 +42,17 @@ public class ProfessorController {
         List<ProfessorDTO>  professorDTOList = professorService.getAllProfessors();
 
         return ResponseEntity.ok(professorDTOList);
+    }
+
+    //UPDATE Professor
+    @PutMapping("/{professorId}")
+    public ResponseEntity<ProfessorDTO> updateStudent(@PathVariable Long professorId,
+                                                      @RequestBody ProfessorDTO professorDTO) {
+
+        ProfessorDTO professorDTO1 = professorService.updateProfessor(professorId, professorDTO);
+        return ResponseEntity.ok(professorDTO1);
+
+
     }
 
 
