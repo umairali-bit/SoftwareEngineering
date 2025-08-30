@@ -244,19 +244,31 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
+    @Transactional
     public boolean deleteStudent(Long id) {
-
         StudentEntity student = studentRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Student not found: " + id));
 
+        //  Unlink AdmissionRecord
         AdmissionRecordEntity record = student.getAdmissionRecord();
         if (record != null) {
             record.setStudent(null);
             student.setAdmissionRecord(null);
-      //      admissionRecordRepository.save(record);Handle admission record unlinking (if not using orphanRemoval)
-            // optionally: admissionRecordRepository.delete(record);
         }
 
+        //  Unlink from Professors
+        for (ProfessorEntity professor : new HashSet<>(student.getProfessors())) {
+            professor.getStudents().remove(student);
+        }
+        student.getProfessors().clear();
+
+        //  Unlink from Subjects
+        for (SubjectEntity subject : new HashSet<>(student.getSubjects())) {
+            subject.getStudents().remove(student);
+        }
+        student.getSubjects().clear();
+
+        //  Finally delete
         studentRepository.delete(student);
         return true;
     }
