@@ -116,7 +116,21 @@ public class StudentServiceImpl implements StudentService {
         StudentEntity student = studentRepository.findById(id).orElseThrow(() -> new RuntimeException("Student with the" +
                 "following id is not found" + id));
 
-        return modelMapper.map(student, StudentDTO.class);
+        StudentDTO dto = modelMapper.map(student, StudentDTO.class);
+
+        dto.setSubjectIds(
+                student.getSubjects().stream()
+                        .map(subjectEntity -> subjectEntity.getId())
+                        .collect(Collectors.toSet())
+        );
+
+        dto.setProfessorIds(
+                student.getProfessors().stream()
+                        .map(professorEntity -> professorEntity.getId())
+                        .collect(Collectors.toSet())
+        );
+
+        return dto;
     }
 
     @Override
