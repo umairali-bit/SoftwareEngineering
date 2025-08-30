@@ -66,6 +66,15 @@ public class ProfessorController {
 
     }
 
+    //PATCH
+    @PatchMapping("/{professorId}")
+    public ResponseEntity<ProfessorDTO> patchProfessor (@PathVariable Long professorId,
+                                                        @RequestBody ProfessorDTO professorDTO) {
+
+        ProfessorDTO professorDTO1 = professorService.patchProfessor(professorId, professorDTO);
+        return ResponseEntity.ok(professorDTO1);
+    }
+
 
 
 
