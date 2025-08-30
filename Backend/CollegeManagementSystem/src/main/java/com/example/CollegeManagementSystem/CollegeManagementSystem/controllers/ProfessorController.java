@@ -7,10 +7,7 @@ import com.example.CollegeManagementSystem.CollegeManagementSystem.services.Prof
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/professors")
@@ -27,6 +24,14 @@ public class ProfessorController {
 
         return ResponseEntity.status(HttpStatus.CREATED).body(created);
 
+    }
+
+    //GET /api/professors/{id}
+    @GetMapping("/{id}")
+    public ResponseEntity<ProfessorDTO> getProfessorBytId(@PathVariable Long id) {
+
+        ProfessorDTO professorDTO = professorService.getProfessorById(id);
+        return ResponseEntity.ok(professorDTO);
     }
 
 
