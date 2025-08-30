@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/professors")
 @RequiredArgsConstructor
@@ -33,6 +35,17 @@ public class ProfessorController {
         ProfessorDTO professorDTO = professorService.getProfessorById(id);
         return ResponseEntity.ok(professorDTO);
     }
+
+    //GET all students
+    @GetMapping
+    public ResponseEntity<List<ProfessorDTO>> getAllProfessors() {
+
+        List<ProfessorDTO>  professorDTOList = professorService.getAllProfessors();
+
+        return ResponseEntity.ok(professorDTOList);
+    }
+
+
 
 
 
