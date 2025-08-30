@@ -231,14 +231,26 @@ public class SubjectServiceImpl implements SubjectService {
 
 
     @Override
+    @Transactional
     public boolean deleteSubjectById(Long subjectId) {
-        if (!subjectRepository.existsById(subjectId)) {
-            throw new RuntimeException("Subject does not exist with ID: " + subjectId);
+        SubjectEntity subject = subjectRepository.findById(subjectId)
+                .orElseThrow(() -> new RuntimeException("Subject does not exist with ID: " + subjectId));
+
+        //  Unlink from professor
+        if (subject.getProfessor() != null) {
+            subject.getProfessor().getSubjects().remove(subject);
+            subject.setProfessor(null);
         }
-        subjectRepository.deleteById(subjectId);
+
+        //  Unlink from students
+        for (StudentEntity student : new HashSet<>(subject.getStudents())) {
+            student.getSubjects().remove(subject); // remove subject from each student
+        }
+        subject.getStudents().clear();
+
+        //  Now safe to delete
+        subjectRepository.delete(subject);
         return true;
-
-
     }
 
     @Override
