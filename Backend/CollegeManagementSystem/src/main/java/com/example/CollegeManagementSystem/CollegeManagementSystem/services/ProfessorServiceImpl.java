@@ -100,7 +100,22 @@ public class ProfessorServiceImpl implements ProfessorService{
         ProfessorEntity professor = professorRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Professor not found with the ID: " + id));
 
-        return modelMapper.map(professor, ProfessorDTO.class);
+        //map basic fields
+        ProfessorDTO dto = modelMapper.map(professor, ProfessorDTO.class);
+
+        dto.setStudentIds(
+                professor.getStudents().stream()
+                        .map(studentEntity -> studentEntity.getId())
+                                .collect(Collectors.toSet())
+        );
+
+        dto.setSubjectIds(
+                professor.getSubjects().stream()
+                        .map(subjectEntity -> subjectEntity.getId())
+                        .collect(Collectors.toSet())
+        );
+
+        return dto;
 
     }
 
