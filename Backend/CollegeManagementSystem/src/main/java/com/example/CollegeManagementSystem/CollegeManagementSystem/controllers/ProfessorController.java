@@ -2,6 +2,7 @@ package com.example.CollegeManagementSystem.CollegeManagementSystem.controllers;
 
 
 import com.example.CollegeManagementSystem.CollegeManagementSystem.dtos.ProfessorDTO;
+import com.example.CollegeManagementSystem.CollegeManagementSystem.dtos.StudentDTO;
 import com.example.CollegeManagementSystem.CollegeManagementSystem.services.ProfessorService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -54,6 +55,18 @@ public class ProfessorController {
 
 
     }
+
+    //DELETE mapping
+    @DeleteMapping("/{professorId}")
+    public ResponseEntity<ProfessorDTO> dtoResponseEntity(@PathVariable Long professorId) {
+
+       professorService.deleteProfessor(professorId);
+
+       return ResponseEntity.noContent().build();
+
+    }
+
+
 
 
 

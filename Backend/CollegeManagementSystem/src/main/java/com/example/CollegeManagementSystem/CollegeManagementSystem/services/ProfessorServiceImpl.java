@@ -9,6 +9,7 @@ import com.example.CollegeManagementSystem.CollegeManagementSystem.repositories.
 import com.example.CollegeManagementSystem.CollegeManagementSystem.repositories.ProfessorRepository;
 import com.example.CollegeManagementSystem.CollegeManagementSystem.repositories.StudentRepository;
 import com.example.CollegeManagementSystem.CollegeManagementSystem.repositories.SubjectRepository;
+import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
@@ -217,12 +218,26 @@ public class ProfessorServiceImpl implements ProfessorService{
     }
 
     @Override
+    @Transactional
     public void deleteProfessor(Long id) {
-        //Fetch the professor entity
+        // Fetch professor
         ProfessorEntity professor = professorRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Professor not found with the ID: " + id));
-        //delete
-        professorRepository.delete(professor); //map it to 404 not found
+
+        // Unlink from students (owning side: student_professor table)
+        for (StudentEntity student : new HashSet<>(professor.getStudents())) {
+            student.getProfessors().remove(professor);  // remove professor from each student
+        }
+        professor.getStudents().clear(); // clear collection
+
+        // Unlink from subjects (if professor teaches subjects)
+        for (SubjectEntity subject : new HashSet<>(professor.getSubjects())) {
+            subject.setProfessor(null); // break one-to-many link
+        }
+        professor.getSubjects().clear();
+
+        // Now safe to delete
+        professorRepository.delete(professor);
     }
 
     @Override
