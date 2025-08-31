@@ -3,6 +3,7 @@ package com.example.CollegeManagementSystem.CollegeManagementSystem.controllers;
 
 import com.example.CollegeManagementSystem.CollegeManagementSystem.dtos.ProfessorDTO;
 import com.example.CollegeManagementSystem.CollegeManagementSystem.dtos.StudentDTO;
+import com.example.CollegeManagementSystem.CollegeManagementSystem.dtos.SubjectDTO;
 import com.example.CollegeManagementSystem.CollegeManagementSystem.services.ProfessorService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -104,11 +105,15 @@ public class ProfessorController {
 
     }
 
-
-
-
-
-
-
-
+    // GET /api/professors/{professorId}/subjects
+    @GetMapping("/{professorId}/subjects")
+    public ResponseEntity<Set<SubjectDTO>> getSubjectsByProfessor(@PathVariable Long professorId) {
+        Set<SubjectDTO> subjects = professorService.getSubjectsByProfessorId(professorId);
+        return ResponseEntity.ok(subjects);
+    }
 }
+
+
+
+
+
