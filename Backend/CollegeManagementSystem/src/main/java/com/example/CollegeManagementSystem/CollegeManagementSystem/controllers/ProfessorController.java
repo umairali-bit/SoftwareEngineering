@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/professors")
@@ -90,6 +91,15 @@ public class ProfessorController {
 
         // Pass the whole set directly
         professorService.assignSubjectToProfessor(professorId, professorDTO.getSubjectIds());
+        return ResponseEntity.noContent().build();
+
+    }
+
+    //REMOVE /api/professors/{professorId}/subjects
+    @DeleteMapping("/{professorId}/subjects")
+    public ResponseEntity<Void> removeSubject(@PathVariable Long professorId,
+                                              @RequestBody Set<Long> subjectId) {
+        professorService.removeSubjectFromProfessor(professorId,subjectId);
         return ResponseEntity.noContent().build();
 
     }
