@@ -17,10 +17,6 @@ public class AdmissionRecordDTO {
 
     private Double fees;
 
-    private Long studentId;
-
-    private String studentName;
-
     private LocalDateTime admissionDate;
 
 
