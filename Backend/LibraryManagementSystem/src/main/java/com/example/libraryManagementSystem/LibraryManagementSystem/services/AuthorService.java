@@ -33,10 +33,14 @@ public class AuthorService {
         for(BookEntity bookEntity : authorDTO.getBooks()) {
             BookEntity book = bookRepository.findById(bookEntity.getId())
                     .orElseThrow(() -> new BookNotFoundException(bookEntity.getId()));
+
+            //maintain both sides
+            book.setAuthor(author);
             books.add(book);
         }
 
         author.setBooks(books);
+
 
         //save author
         AuthorEntity savedAuthor = authorRepository.save(author);
