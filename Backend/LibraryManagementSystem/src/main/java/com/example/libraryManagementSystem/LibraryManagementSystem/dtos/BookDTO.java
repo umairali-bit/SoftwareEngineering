@@ -1,6 +1,7 @@
 package com.example.libraryManagementSystem.LibraryManagementSystem.dtos;
 
 import com.example.libraryManagementSystem.LibraryManagementSystem.entities.AuthorEntity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,7 +19,7 @@ public class BookDTO {
 
     private LocalDate publishedDate;
 
-    private AuthorEntity author;
+    private AuthorSummaryDTO author;
 
 
 }
