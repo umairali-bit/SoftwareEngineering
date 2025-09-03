@@ -25,6 +25,8 @@ public class BookEntity {
 
     private LocalDate publishedDate;
 
+    @ManyToOne //many book can be written by one author
+    @JoinColumn(name = "author_id") //FK
     private AuthorEntity author;
 
     @Override
