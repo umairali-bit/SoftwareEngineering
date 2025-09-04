@@ -25,7 +25,7 @@ public class BookEntity {
 
     private LocalDate publishedDate;
 
-    @ManyToOne //many book can be written by one author
+    @ManyToOne(fetch = FetchType.LAZY) //many book can be written by one author - eager by default
     @JoinColumn(name = "author_id") //FK
     private AuthorEntity author;
 
