@@ -7,6 +7,7 @@ import com.example.libraryManagementSystem.LibraryManagementSystem.dtos.BookSumm
 import com.example.libraryManagementSystem.LibraryManagementSystem.entities.AuthorEntity;
 import com.example.libraryManagementSystem.LibraryManagementSystem.entities.BookEntity;
 import com.example.libraryManagementSystem.LibraryManagementSystem.exception.AuthorNotFoundException;
+import com.example.libraryManagementSystem.LibraryManagementSystem.exception.AuthorNotFoundNameException;
 import com.example.libraryManagementSystem.LibraryManagementSystem.exception.BookNotFoundException;
 import com.example.libraryManagementSystem.LibraryManagementSystem.repositories.AuthorRepository;
 import com.example.libraryManagementSystem.LibraryManagementSystem.repositories.BookRepository;
@@ -51,16 +52,7 @@ public class AuthorService {
         //save author
         AuthorEntity savedAuthor = authorRepository.save(author);
 
-        //convert back to dto
-        AuthorDTO savedAuthorDTO = new AuthorDTO();
-        savedAuthorDTO.setId(savedAuthor.getId());
-        savedAuthorDTO.setName(savedAuthor.getName());
-
-        Set<BookSummaryDTO> bookSummaries = savedAuthor.getBooks().stream().
-                map(s -> new BookSummaryDTO(s.getId(),s.getTitle(),s.getPublishedDate()))
-                .collect(Collectors.toSet());
-
-        return savedAuthorDTO;
+        return Mapper.mapToDTO(savedAuthor);
 
     }
 
@@ -68,25 +60,7 @@ public class AuthorService {
         List<AuthorEntity> authorEntities = authorRepository.findAll();
 
         return authorEntities.stream()
-                .map(authorEntity -> {
-                    AuthorDTO authorDTO = new AuthorDTO();
-                    authorDTO.setId(authorEntity.getId());
-                    authorDTO.setName(authorEntity.getName());
-
-                    Set<BookSummaryDTO> bookDTOSet = authorEntity.getBooks().stream()
-                            .map(bookDTO -> new BookSummaryDTO(
-                                    bookDTO.getId(),
-                                    bookDTO.getTitle(),
-                                    bookDTO.getPublishedDate()
-                            ))
-                            .collect(Collectors.toSet());
-
-                    authorDTO.setBooks(bookDTOSet);
-
-                    return  authorDTO;
-
-
-                })
+                .map(s-> Mapper.mapToDTO(s))
                 .collect(Collectors.toList());
     }
 
@@ -95,26 +69,7 @@ public class AuthorService {
         AuthorEntity author = authorRepository.findById(id)
                 .orElseThrow(() -> new AuthorNotFoundException(id));
 
-
-        AuthorDTO authorDTO = new AuthorDTO();
-        authorDTO.setId(author.getId());
-        authorDTO.setName(author.getName());
-
-        if (author.getBooks() != null) {
-            Set<BookSummaryDTO> books = author.getBooks().stream()
-                    .map(book -> new BookSummaryDTO(
-                            book.getId(),
-                            book.getTitle(),
-                            book.getPublishedDate()
-
-                    ))
-                    .collect(Collectors.toSet());
-
-            authorDTO.setBooks(books);
-
-        }
-
-        return authorDTO;
+        return Mapper.mapToDTO(author);
 
     }
 
@@ -130,6 +85,15 @@ public class AuthorService {
 
         authorRepository.delete(author);
         return true;
+    }
+
+    public AuthorDTO getAuthorByName(String name) {
+
+        AuthorEntity author = authorRepository.findByName(name)
+                .orElseThrow(() -> new AuthorNotFoundNameException(name));
+
+        return Mapper.mapToDTO(author);
+
     }
 
 
