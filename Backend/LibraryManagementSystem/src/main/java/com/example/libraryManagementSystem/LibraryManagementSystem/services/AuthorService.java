@@ -3,8 +3,10 @@ package com.example.libraryManagementSystem.LibraryManagementSystem.services;
 import com.example.libraryManagementSystem.LibraryManagementSystem.dtos.AuthorDTO;
 import com.example.libraryManagementSystem.LibraryManagementSystem.dtos.AuthorSummaryDTO;
 import com.example.libraryManagementSystem.LibraryManagementSystem.dtos.BookDTO;
+import com.example.libraryManagementSystem.LibraryManagementSystem.dtos.BookSummaryDTO;
 import com.example.libraryManagementSystem.LibraryManagementSystem.entities.AuthorEntity;
 import com.example.libraryManagementSystem.LibraryManagementSystem.entities.BookEntity;
+import com.example.libraryManagementSystem.LibraryManagementSystem.exception.AuthorNotFoundException;
 import com.example.libraryManagementSystem.LibraryManagementSystem.exception.BookNotFoundException;
 import com.example.libraryManagementSystem.LibraryManagementSystem.repositories.AuthorRepository;
 import com.example.libraryManagementSystem.LibraryManagementSystem.repositories.BookRepository;
@@ -34,7 +36,7 @@ public class AuthorService {
 
         //attach books
         Set<BookEntity> books = new HashSet<>();
-        for(BookDTO bookDTO : authorDTO.getBooks()) {
+        for(BookSummaryDTO bookDTO : authorDTO.getBooks()) {
             BookEntity book = bookRepository.findById(bookDTO.getId())
                     .orElseThrow(() -> new BookNotFoundException(bookDTO.getId()));
 
@@ -68,12 +70,11 @@ public class AuthorService {
                     authorDTO.setId(authorEntity.getId());
                     authorDTO.setName(authorEntity.getName());
 
-                    Set<BookDTO> bookDTOSet = authorEntity.getBooks().stream()
-                            .map(bookDTO -> new BookDTO(
+                    Set<BookSummaryDTO> bookDTOSet = authorEntity.getBooks().stream()
+                            .map(bookDTO -> new BookSummaryDTO(
                                     bookDTO.getId(),
                                     bookDTO.getTitle(),
-                                    bookDTO.getPublishedDate(),
-                                    new AuthorSummaryDTO(authorEntity.getId(), authorEntity.getName())
+                                    bookDTO.getPublishedDate()
                             ))
                             .collect(Collectors.toSet());
 
@@ -85,6 +86,32 @@ public class AuthorService {
                 })
                 .collect(Collectors.toList());
     }
+
+    public AuthorDTO getAuthor(Long id) {
+
+        AuthorEntity author = authorRepository.findById(id)
+                .orElseThrow(() -> new AuthorNotFoundException(id));
+        AuthorDTO authorDTO = new AuthorDTO();
+        authorDTO.setId(author.getId());
+        authorDTO.setName(author.getName());
+
+        if (author.getBooks() != null) {
+            Set<BookSummaryDTO> bookIds = authorDTO.getBooks().stream()
+                    .map(book -> new BookSummaryDTO(
+                            book.getId(),
+                            book.getTitle(),
+                            book.getPublishedDate()
+
+                    ))
+                    .collect(Collectors.toSet());
+
+        }
+
+        return authorDTO;
+
+    }
+
+
 
 
 }
