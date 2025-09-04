@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.awt.print.Book;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -25,8 +26,8 @@ public class AuthorEntity {
     private String name;
 
     //inverse side of the relationship
-    @OneToMany(mappedBy = "author",cascade = CascadeType.ALL,orphanRemoval = true)
-    private Set<BookEntity> books;
+    @OneToMany(mappedBy = "author",cascade = CascadeType.ALL) //Lazy by default
+    private Set<BookEntity> books = new HashSet<>();
 
     @Override
     public boolean equals(Object o) {

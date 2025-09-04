@@ -53,9 +53,12 @@ public class AuthorService {
 
         //convert back to dto
         AuthorDTO savedAuthorDTO = new AuthorDTO();
-        savedAuthorDTO.setId(savedAuthorDTO.getId());
+        savedAuthorDTO.setId(savedAuthor.getId());
         savedAuthorDTO.setName(savedAuthor.getName());
-        savedAuthorDTO.setBooks(savedAuthorDTO.getBooks());
+
+        Set<BookSummaryDTO> bookSummaries = savedAuthor.getBooks().stream().
+                map(s -> new BookSummaryDTO(s.getId(),s.getTitle(),s.getPublishedDate()))
+                .collect(Collectors.toSet());
 
         return savedAuthorDTO;
 
@@ -91,12 +94,14 @@ public class AuthorService {
 
         AuthorEntity author = authorRepository.findById(id)
                 .orElseThrow(() -> new AuthorNotFoundException(id));
+
+
         AuthorDTO authorDTO = new AuthorDTO();
         authorDTO.setId(author.getId());
         authorDTO.setName(author.getName());
 
         if (author.getBooks() != null) {
-            Set<BookSummaryDTO> bookIds = authorDTO.getBooks().stream()
+            Set<BookSummaryDTO> books = author.getBooks().stream()
                     .map(book -> new BookSummaryDTO(
                             book.getId(),
                             book.getTitle(),
@@ -105,11 +110,29 @@ public class AuthorService {
                     ))
                     .collect(Collectors.toSet());
 
+            authorDTO.setBooks(books);
+
         }
 
         return authorDTO;
 
     }
+
+    public boolean deleteAuthor(Long authorId) {
+        AuthorEntity author = authorRepository.findById(authorId)
+                .orElseThrow(() -> new AuthorNotFoundException(authorId));
+
+        //Unlink book
+        for (BookEntity book : new HashSet<>(author.getBooks())) {
+            book.setAuthor(null);
+        }
+        author.getBooks().clear();
+
+        authorRepository.delete(author);
+        return true;
+    }
+
+
 
 
 
