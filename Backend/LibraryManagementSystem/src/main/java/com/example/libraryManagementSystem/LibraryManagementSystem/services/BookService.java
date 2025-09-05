@@ -7,9 +7,12 @@ import com.example.libraryManagementSystem.LibraryManagementSystem.exception.Aut
 import com.example.libraryManagementSystem.LibraryManagementSystem.repositories.AuthorRepository;
 import com.example.libraryManagementSystem.LibraryManagementSystem.repositories.BookRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.awt.print.Book;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class BookService {
@@ -44,5 +47,12 @@ public class BookService {
         BookEntity savedBook = bookRepository.save(book);
 
         return Mapper.mapToDTO(savedBook);
+    }
+
+    public List<BookDTO> findAllBooks() {
+        List<BookEntity> bookEntities = bookRepository.findAll(Sort.by(Sort.Direction.DESC, "publishedDate"));
+        return bookEntities.stream()
+                .map(bookEntity -> Mapper.mapToDTO(bookEntity))
+                .collect(Collectors.toList());
     }
 }
