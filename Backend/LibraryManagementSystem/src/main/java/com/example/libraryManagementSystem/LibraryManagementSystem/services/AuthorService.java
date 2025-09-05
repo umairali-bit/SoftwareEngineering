@@ -98,6 +98,19 @@ public class AuthorService {
 
     }
 
+    public Set<BookSummaryDTO> getBooksByAuthor(Long authorId) {
+        AuthorEntity author = authorRepository.findById(authorId)
+                .orElseThrow(() -> new AuthorNotFoundException(authorId));
+
+        return author.getBooks().stream()
+                .map(bookEntity -> new BookSummaryDTO(
+                        bookEntity.getId(),
+                        bookEntity.getTitle(),
+                        bookEntity.getPublishedDate()
+                ))
+                .collect(Collectors.toSet());
+    }
+
 
 
 
