@@ -98,6 +98,38 @@ public class AuthorService {
 
     }
 
+    @Transactional
+    public AuthorDTO updateAuthor(Long authorId, AuthorDTO authorDTO) {
+        // 1. Find the existing author
+        AuthorEntity author = authorRepository.findById(authorId)
+                .orElseThrow(() -> new AuthorNotFoundException(authorId));
+
+        // 2. Update simple fields
+        author.setName(authorDTO.getName());
+
+        // 3. Update books
+        if(authorDTO.getBooks() != null) {
+            // Clear old associations
+            author.getBooks().forEach(bookEntity -> bookEntity.setAuthor(null));
+            author.getBooks().clear();
+
+            //attach new books
+            Set<BookEntity> updatedBooks = authorDTO.getBooks().stream()
+                    .map(bookSummaryDTO -> bookRepository.findById(bookSummaryDTO.getId())
+                            .orElseThrow(() -> new BookNotFoundException(bookSummaryDTO.getId())))
+                    .peek(bookEntity -> bookEntity.setAuthor(author))
+                    .collect(Collectors.toSet());
+
+            author.setBooks(updatedBooks);
+
+        }
+        // 4. Save the updated author
+        AuthorEntity savedAuthor = authorRepository.save(author);
+
+        // 5. Convert back to DTO
+        return Mapper.mapToDTO(savedAuthor);
+    }
+
     public Set<BookSummaryDTO> getBooksByAuthor(Long authorId) {
         AuthorEntity author = authorRepository.findById(authorId)
                 .orElseThrow(() -> new AuthorNotFoundException(authorId));

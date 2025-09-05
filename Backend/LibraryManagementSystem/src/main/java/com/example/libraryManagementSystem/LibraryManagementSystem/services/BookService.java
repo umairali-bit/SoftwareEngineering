@@ -49,7 +49,7 @@ public class BookService {
         return Mapper.mapToDTO(savedBook);
     }
 
-    public List<BookDTO> findAllBooks() {
+    public List<BookDTO> getAllBooks() {
         List<BookEntity> bookEntities = bookRepository.findAll(Sort.by(Sort.Direction.DESC, "publishedDate"));
         return bookEntities.stream()
                 .map(bookEntity -> Mapper.mapToDTO(bookEntity))
