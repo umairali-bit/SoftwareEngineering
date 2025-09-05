@@ -4,6 +4,7 @@ import com.example.libraryManagementSystem.LibraryManagementSystem.dtos.BookDTO;
 import com.example.libraryManagementSystem.LibraryManagementSystem.entities.AuthorEntity;
 import com.example.libraryManagementSystem.LibraryManagementSystem.entities.BookEntity;
 import com.example.libraryManagementSystem.LibraryManagementSystem.exception.AuthorNotFoundException;
+import com.example.libraryManagementSystem.LibraryManagementSystem.exception.BookNotFoundException;
 import com.example.libraryManagementSystem.LibraryManagementSystem.repositories.AuthorRepository;
 import com.example.libraryManagementSystem.LibraryManagementSystem.repositories.BookRepository;
 import jakarta.transaction.Transactional;
@@ -54,5 +55,45 @@ public class BookService {
         return bookEntities.stream()
                 .map(bookEntity -> Mapper.mapToDTO(bookEntity))
                 .collect(Collectors.toList());
+    }
+
+
+    @Transactional
+    public BookDTO updateBook(Long id, BookDTO bookDTO) {
+        //1. Find the existing book
+        BookEntity book = bookRepository.findById(id)
+                .orElseThrow(() -> new BookNotFoundException(bookDTO.getId()));
+
+        //2. update simple fields
+        book.setTitle(bookDTO.getTitle());
+        book.setPublishedDate(bookDTO.getPublishedDate());
+
+
+        //3. Update author
+        if (bookDTO.getAuthor() != null) {
+            if (book.getAuthor() != null) {
+                book.getAuthor().getBooks().remove(book);
+                book.setAuthor(null);
+
+            }
+
+            // find the new author
+            AuthorEntity newAuthor = authorRepository.findById(bookDTO.getAuthor().getId())
+                    .orElseThrow(() -> new AuthorNotFoundException(bookDTO.getAuthor().getId()));
+
+            //assign the new author
+            book.setAuthor(newAuthor);
+
+            //maintain bidirectional
+            newAuthor.getBooks().add(book);
+        }
+
+        //4. Save the updated book
+        BookEntity savedBook = bookRepository.save(book);
+
+        //5. convert back to DTO
+        return Mapper.mapToDTO(savedBook);
+
+
     }
 }
