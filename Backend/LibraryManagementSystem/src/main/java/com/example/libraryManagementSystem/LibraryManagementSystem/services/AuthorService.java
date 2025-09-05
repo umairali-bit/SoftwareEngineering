@@ -11,6 +11,7 @@ import com.example.libraryManagementSystem.LibraryManagementSystem.exception.Aut
 import com.example.libraryManagementSystem.LibraryManagementSystem.exception.BookNotFoundException;
 import com.example.libraryManagementSystem.LibraryManagementSystem.repositories.AuthorRepository;
 import com.example.libraryManagementSystem.LibraryManagementSystem.repositories.BookRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -73,6 +74,7 @@ public class AuthorService {
 
     }
 
+    @Transactional
     public boolean deleteAuthor(Long authorId) {
         AuthorEntity author = authorRepository.findById(authorId)
                 .orElseThrow(() -> new AuthorNotFoundException(authorId));
@@ -87,7 +89,7 @@ public class AuthorService {
         return true;
     }
 
-    public AuthorDTO getAuthorByName(String name) {
+    public AuthorDTO findAuthorByName(String name) {
 
         AuthorEntity author = authorRepository.findByName(name)
                 .orElseThrow(() -> new AuthorNotFoundNameException(name));
@@ -95,6 +97,10 @@ public class AuthorService {
         return Mapper.mapToDTO(author);
 
     }
+
+
+
+
 
 
 
