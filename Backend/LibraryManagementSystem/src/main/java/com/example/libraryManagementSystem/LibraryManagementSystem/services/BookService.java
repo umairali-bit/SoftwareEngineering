@@ -62,7 +62,7 @@ public class BookService {
     public BookDTO updateBook(Long id, BookDTO bookDTO) {
         //1. Find the existing book
         BookEntity book = bookRepository.findById(id)
-                .orElseThrow(() -> new BookNotFoundException(bookDTO.getId()));
+                .orElseThrow(() -> new BookNotFoundException(id));
 
         //2. update simple fields
         book.setTitle(bookDTO.getTitle());
@@ -96,4 +96,21 @@ public class BookService {
 
 
     }
+
+    @Transactional
+    public boolean deleteBook(Long id) {
+        BookEntity book = bookRepository.findById(id)
+                .orElseThrow(() -> new BookNotFoundException(id));
+
+        //Unlink Author (both sides)
+        if(book.getAuthor() != null) {
+            book.getAuthor().getBooks().remove(book);
+            book.setAuthor(null);
+        }
+
+        bookRepository.delete(book);
+        return true;
+    }
+
+
 }
