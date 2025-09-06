@@ -16,7 +16,8 @@ public class BookDTO {
 
     private Long id;
 
-    @ValidateBookTitle
+    // overriding the default message
+    @ValidateBookTitle(message = "Title must be at least 3 characters long")
     private String title;
 
     private LocalDate publishedDate;
