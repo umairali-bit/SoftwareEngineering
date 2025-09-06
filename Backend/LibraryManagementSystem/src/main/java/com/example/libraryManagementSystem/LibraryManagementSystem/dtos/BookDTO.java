@@ -1,5 +1,6 @@
 package com.example.libraryManagementSystem.LibraryManagementSystem.dtos;
 
+import com.example.libraryManagementSystem.LibraryManagementSystem.annotations.ValidateBookTitle;
 import com.example.libraryManagementSystem.LibraryManagementSystem.entities.AuthorEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
@@ -15,6 +16,7 @@ public class BookDTO {
 
     private Long id;
 
+    @ValidateBookTitle
     private String title;
 
     private LocalDate publishedDate;

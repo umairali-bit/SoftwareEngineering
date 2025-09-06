@@ -1,5 +1,6 @@
 package com.example.libraryManagementSystem.LibraryManagementSystem.services;
 
+import com.example.libraryManagementSystem.LibraryManagementSystem.annotations.AdminOnly;
 import com.example.libraryManagementSystem.LibraryManagementSystem.dtos.BookDTO;
 import com.example.libraryManagementSystem.LibraryManagementSystem.entities.AuthorEntity;
 import com.example.libraryManagementSystem.LibraryManagementSystem.entities.BookEntity;
@@ -60,6 +61,7 @@ public class BookService {
 
 
     @Transactional
+    @AdminOnly
     public BookDTO updateBook(Long id, BookDTO bookDTO) {
         //1. Find the existing book
         BookEntity book = bookRepository.findById(id)
@@ -99,6 +101,7 @@ public class BookService {
     }
 
     @Transactional
+    @AdminOnly
     public boolean deleteBook(Long id) {
         BookEntity book = bookRepository.findById(id)
                 .orElseThrow(() -> new BookNotFoundException(id));
