@@ -112,5 +112,17 @@ public class BookService {
         return true;
     }
 
+    public BookDTO getBookByTitle(String title) {
+
+        BookEntity book = bookRepository.findByTitle(title)
+                .orElseThrow(() -> new RuntimeException("Book Not Found" + title));
+
+        return Mapper.mapToDTO(book);
+
+
+    }
+
+
+
 
 }
