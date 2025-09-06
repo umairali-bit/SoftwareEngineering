@@ -12,6 +12,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.awt.print.Book;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -120,6 +121,12 @@ public class BookService {
         return Mapper.mapToDTO(book);
 
 
+    }
+
+    public List<BookDTO> findBookPublishedAfter(LocalDateTime date) {
+        return bookRepository.findByPublishedDateAfter(date).stream()
+                .map(bookEntity -> Mapper.mapToDTO(bookEntity))
+                .collect(Collectors.toList());
     }
 
 
