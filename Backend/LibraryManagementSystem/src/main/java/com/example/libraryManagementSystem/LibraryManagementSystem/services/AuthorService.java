@@ -75,18 +75,18 @@ public class AuthorService {
     }
 
     @Transactional
-    public boolean deleteAuthor(Long authorId) {
+    public void deleteAuthor(Long authorId) {
         AuthorEntity author = authorRepository.findById(authorId)
                 .orElseThrow(() -> new AuthorNotFoundException(authorId));
 
-        //Unlink book
+        //Unlink Book (both sides)
         for (BookEntity book : new HashSet<>(author.getBooks())) {
             book.setAuthor(null);
         }
         author.getBooks().clear();
 
         authorRepository.delete(author);
-        return true;
+
     }
 
     public AuthorDTO findAuthorByName(String name) {
