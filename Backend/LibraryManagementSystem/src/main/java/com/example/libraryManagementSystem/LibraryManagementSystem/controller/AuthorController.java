@@ -53,4 +53,11 @@ public class AuthorController {
         return ResponseEntity.noContent().build();
     }
 
+    // GET /api/authors/by-name/{name}
+    @GetMapping("/by-name/{name}")
+    public ResponseEntity<AuthorDTO> getAuthorByName(@PathVariable String name) {
+        AuthorDTO authorDTO = authorService.findAuthorByName(name);
+        return ResponseEntity.ok(authorDTO);
+    }
+
 }

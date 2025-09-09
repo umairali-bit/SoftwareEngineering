@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public interface AuthorRepository extends JpaRepository<AuthorEntity,Long> {
     @EntityGraph(attributePaths = "books")
-    Optional<AuthorEntity> findByName(String name);
+    Optional<AuthorEntity> findByNameIgnoreCase(String name);
 
 
 }
