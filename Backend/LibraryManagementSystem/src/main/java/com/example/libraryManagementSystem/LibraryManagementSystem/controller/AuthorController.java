@@ -2,6 +2,8 @@ package com.example.libraryManagementSystem.LibraryManagementSystem.controller;
 
 
 import com.example.libraryManagementSystem.LibraryManagementSystem.dtos.AuthorDTO;
+import com.example.libraryManagementSystem.LibraryManagementSystem.dtos.BookDTO;
+import com.example.libraryManagementSystem.LibraryManagementSystem.dtos.BookSummaryDTO;
 import com.example.libraryManagementSystem.LibraryManagementSystem.services.AuthorService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/authors")
@@ -59,5 +62,21 @@ public class AuthorController {
         AuthorDTO authorDTO = authorService.findAuthorByName(name);
         return ResponseEntity.ok(authorDTO);
     }
+
+    // UPDATE Author
+    @PutMapping("/{authorId}")
+    public ResponseEntity<AuthorDTO> updateAuthor(@PathVariable Long authorId,
+                                                  @Valid @RequestBody AuthorDTO authorDTO) {
+        return ResponseEntity.ok(authorService.updateAuthor(authorId, authorDTO));
+    }
+
+    // GET /api/authors/{authorId}/books
+    @GetMapping("/{authorId}/books")
+    public ResponseEntity<Set<BookSummaryDTO>> getBooksByAuthorId(@PathVariable Long authorId) {
+        Set<BookSummaryDTO> bookSummaryDTOS = authorService.getBooksByAuthor(authorId);
+        return ResponseEntity.ok(bookSummaryDTOS);
+    }
+
+
 
 }
