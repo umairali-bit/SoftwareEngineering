@@ -91,7 +91,7 @@ public class AuthorService {
 
     public AuthorDTO findAuthorByName(String name) {
 
-        AuthorEntity author = authorRepository.findByName(name)
+        AuthorEntity author = authorRepository.findByNameIgnoreCase(name)
                 .orElseThrow(() -> new AuthorNotFoundNameException(name));
 
         return Mapper.mapToDTO(author);
