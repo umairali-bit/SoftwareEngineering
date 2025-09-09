@@ -3,6 +3,7 @@ package com.example.libraryManagementSystem.LibraryManagementSystem.controller;
 
 import com.example.libraryManagementSystem.LibraryManagementSystem.dtos.AuthorDTO;
 import com.example.libraryManagementSystem.LibraryManagementSystem.services.AuthorService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +22,7 @@ public class AuthorController {
 
     //create a new AUTHOR
     @PostMapping
-    public ResponseEntity<AuthorDTO> createAuthor(@RequestBody AuthorDTO authorDTO) {
+    public ResponseEntity<AuthorDTO> createAuthor(@Valid @RequestBody AuthorDTO authorDTO) {
 
         AuthorDTO created = authorService.createAuthor(authorDTO);
 

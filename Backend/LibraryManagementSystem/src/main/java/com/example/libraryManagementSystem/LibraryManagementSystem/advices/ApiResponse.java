@@ -1,5 +1,6 @@
 package com.example.libraryManagementSystem.LibraryManagementSystem.advices;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -10,6 +11,7 @@ public class ApiResponse<T> {
     //    @JsonFormat(pattern = "hh:mm:ss dd-MM-yyyy")
     private LocalDateTime timeStamp;
     private T data;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private ApiError error;
 
     public ApiResponse() {
