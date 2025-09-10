@@ -34,7 +34,7 @@ public class BookService {
 
         // Fetch existing author instead of creating a new one
         if (bookDTO.getAuthor() == null || bookDTO.getAuthor().getId() == null) {
-            throw new AuthorNotFoundException(book.getAuthor().getId());
+            throw new AuthorNotFoundException();
         }
 
         AuthorEntity author = authorRepository.findById(bookDTO.getAuthor().getId())
