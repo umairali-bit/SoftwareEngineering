@@ -44,5 +44,11 @@ public class BookController {
         return ResponseEntity.ok(bookService.deleteBook(bookId));
     }
 
+    // GET /api/book/by-title/{title}
+    @GetMapping("/by-title/{title}")
+    public ResponseEntity<BookDTO>  getBooksByTitle(@PathVariable String title) {
+        return ResponseEntity.ok(bookService.getBookByTitle(title));
+    }
+
 
 }
