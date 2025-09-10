@@ -6,10 +6,7 @@ import com.example.libraryManagementSystem.LibraryManagementSystem.services.Book
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("api/books")
@@ -25,4 +22,13 @@ public class BookController {
         BookDTO newBook = bookService.createBook(bookDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(newBook);
     }
+
+    //UPDATE
+    @PutMapping("/{bookId}")
+    private ResponseEntity<BookDTO> updateBook(@PathVariable Long bookId,
+                                               @RequestBody BookDTO bookDTO) {
+        return ResponseEntity.ok(bookService.updateBook(bookId, bookDTO));
+    }
+
+
 }
