@@ -3,6 +3,7 @@ package com.example.libraryManagementSystem.LibraryManagementSystem.controller;
 
 import com.example.libraryManagementSystem.LibraryManagementSystem.dtos.BookDTO;
 import com.example.libraryManagementSystem.LibraryManagementSystem.services.BookService;
+import jakarta.validation.constraints.PastOrPresent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -55,7 +56,9 @@ public class BookController {
     // GET /api/books/published-after?date=2000-01-01
     @GetMapping("/published-after")
     public ResponseEntity<List<BookDTO>> getBooksPublishedAfter(
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+            @RequestParam
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+            @PastOrPresent LocalDate date) {
 
         // convert LocalDate to LocalDateTime (start of day)
         List<BookDTO> books = bookService.findBookPublishedAfter(date);
