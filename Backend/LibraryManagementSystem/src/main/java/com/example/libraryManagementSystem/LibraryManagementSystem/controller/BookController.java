@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("api/books")
 @RequiredArgsConstructor
@@ -21,6 +23,12 @@ public class BookController {
 
         BookDTO newBook = bookService.createBook(bookDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(newBook);
+    }
+
+    //GET allBooks
+    @GetMapping
+    public ResponseEntity<List<BookDTO>> getAllBooks() {
+        return  ResponseEntity.status(HttpStatus.OK).body(bookService.getAllBooks());
     }
 
     //UPDATE
