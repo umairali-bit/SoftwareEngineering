@@ -10,7 +10,7 @@ public class AuthorNameValidator implements ConstraintValidator<ValidateAuthorNa
         if (value == null) return false;
 
         // Business rule: at least 3 chars, letters & spaces only
-        return value.length() >= 3 && value.matches("^[A-Za-z ]+$");
+        return value.length() >= 3 && value.matches("^[A-Za-z .'-]+$");
 
 
     }
