@@ -4,10 +4,12 @@ package com.example.libraryManagementSystem.LibraryManagementSystem.controller;
 import com.example.libraryManagementSystem.LibraryManagementSystem.dtos.BookDTO;
 import com.example.libraryManagementSystem.LibraryManagementSystem.services.BookService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -50,5 +52,18 @@ public class BookController {
         return ResponseEntity.ok(bookService.getBookByTitle(title));
     }
 
+    // GET /api/books/published-after?date=2000-01-01
+    @GetMapping("/published-after")
+    public ResponseEntity<List<BookDTO>> getBooksPublishedAfter(
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
 
-}
+        // convert LocalDate to LocalDateTime (start of day)
+        List<BookDTO> books = bookService.findBookPublishedAfter(date);
+        return ResponseEntity.ok(books);
+    }
+
+    }
+
+
+
+
