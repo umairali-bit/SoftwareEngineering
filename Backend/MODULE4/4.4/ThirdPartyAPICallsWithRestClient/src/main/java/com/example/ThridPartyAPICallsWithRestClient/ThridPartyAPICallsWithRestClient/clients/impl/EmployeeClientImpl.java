@@ -46,4 +46,21 @@ public class EmployeeClientImpl implements EmployeeClient {
             throw new RuntimeException(e);
         }
     }
+
+    @Override
+    public EmployeeDTO createEmployee(EmployeeDTO employeeDTO) {
+        try{
+            ApiResponse<EmployeeDTO> employeeDTOApiResponse = restClient.post()
+                    .uri("employees")
+                    .body(employeeDTO)
+                    .retrieve()
+                    .body(new ParameterizedTypeReference<>() {
+                    });
+            return employeeDTOApiResponse.getData();
+
+        }
+        catch (Exception e){
+            throw new RuntimeException(e);
+        }
+    }
 }
