@@ -15,13 +15,13 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 public class RestClientConfig {
 
     @Value("${employeeService.base.url}")
-    private String baseUrl;
+    private String BASE_URL;
 
     @Bean
     @Qualifier("employeeRestClient")
     RestClient getEmployeeServiceRestClient() {
         return RestClient.builder()
-                .baseUrl(baseUrl)
+                .baseUrl(BASE_URL)
                 .defaultHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)
                 .build();
     }
