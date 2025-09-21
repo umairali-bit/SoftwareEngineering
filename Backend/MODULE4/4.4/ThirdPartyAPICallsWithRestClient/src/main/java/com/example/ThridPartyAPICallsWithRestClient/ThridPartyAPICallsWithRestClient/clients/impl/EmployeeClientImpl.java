@@ -3,8 +3,10 @@ package com.example.ThridPartyAPICallsWithRestClient.ThridPartyAPICallsWithRestC
 import com.example.ThridPartyAPICallsWithRestClient.ThridPartyAPICallsWithRestClient.advices.ApiResponse;
 import com.example.ThridPartyAPICallsWithRestClient.ThridPartyAPICallsWithRestClient.clients.EmployeeClient;
 import com.example.ThridPartyAPICallsWithRestClient.ThridPartyAPICallsWithRestClient.dtos.EmployeeDTO;
+import com.example.ThridPartyAPICallsWithRestClient.ThridPartyAPICallsWithRestClient.exceptions.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
@@ -54,6 +56,11 @@ public class EmployeeClientImpl implements EmployeeClient {
                     .uri("employees")
                     .body(employeeDTO)
                     .retrieve()
+                    .onStatus(HttpStatusCode::is4xxClientError, ((request, response) -> {
+                        //print all the errors - not recommended using sout
+                        System.out.println(new String(response.getBody().readAllBytes()));
+                        throw new ResourceNotFoundException("Employee could not be created");
+                    }))
                     .body(new ParameterizedTypeReference<>() {
                     });
             return employeeDTOApiResponse.getData();

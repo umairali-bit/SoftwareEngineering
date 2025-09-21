@@ -41,7 +41,7 @@ class ProdReadyFeaturesApplicationTests {
     void createEmployee() {
         EmployeeDTO employeeDTO = new EmployeeDTO();
         employeeDTO.setName("Saul");
-        employeeDTO.setAge(30);
+        employeeDTO.setAge(3);
         employeeDTO.setEmail("test@gmail.com");
         employeeDTO.setRole("USER");
         employeeDTO.setIsActive(true);
