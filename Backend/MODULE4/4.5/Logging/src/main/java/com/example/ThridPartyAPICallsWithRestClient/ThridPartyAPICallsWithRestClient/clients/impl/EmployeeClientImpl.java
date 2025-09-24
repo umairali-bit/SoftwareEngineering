@@ -25,22 +25,32 @@ public class EmployeeClientImpl implements EmployeeClient {
 
     @Override
     public List<EmployeeDTO> getAllEmployees() {
+//
+//        log.error("error log");
+//        log.info("info log");
+//        log.warn("warn log");
+//        log.debug("debug log");
+//        log.trace("trace log");
 
-        log.error("error log");
-        log.info("info log");
-        log.warn("warn log");
-        log.debug("debug log");
-        log.trace("trace log");
+        log.trace("getAllEmployees()");
 
         try{
             ApiResponse<List<EmployeeDTO>> employeeDTO = restClient.get()
                     .uri("employees")
                     .retrieve()
+                    .onStatus(HttpStatusCode::is4xxClientError, ((request, response) -> {
+                        //print all the errors - not recommended using sout
+                        log.error(new String(response.getBody().readAllBytes()));
+                        throw new ResourceNotFoundException("Employee could not be created");
+                    }))
                     .body(new ParameterizedTypeReference<>() {
                     });
-
+            log.debug("employee list retrieved");
+            log.trace("employee list retrieved : {}", employeeDTO.getData());
             return employeeDTO.getData();
+
         } catch (Exception e) {
+            log.error("Exception in EmployeeClientImpl.getAllEmployees", e);
             throw new RuntimeException(e);
         }
 
