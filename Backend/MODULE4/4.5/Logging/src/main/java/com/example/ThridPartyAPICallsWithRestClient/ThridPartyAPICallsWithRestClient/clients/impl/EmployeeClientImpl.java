@@ -79,22 +79,25 @@ public class EmployeeClientImpl implements EmployeeClient {
 
     @Override
     public EmployeeDTO createEmployee(EmployeeDTO employeeDTO) {
+        log.info("createEmployee({})", employeeDTO);
         try{
             ResponseEntity<ApiResponse<EmployeeDTO>> employeeDTOApiResponse = restClient.post()
                     .uri("employees")
                     .body(employeeDTO)
                     .retrieve()
                     .onStatus(HttpStatusCode::is4xxClientError, ((request, response) -> {
-                        //print all the errors - not recommended using sout
-                        System.out.println(new String(response.getBody().readAllBytes()));
+                        log.debug("4xxClientError {}", request.getURI());
+                        log.error(new String(response.getBody().readAllBytes()));
                         throw new ResourceNotFoundException("Employee could not be created");
                     }))
                     .toEntity(new ParameterizedTypeReference<>() {
                     });
+            log.trace("employee create {}", employeeDTOApiResponse.getBody().getData());
             return employeeDTOApiResponse.getBody().getData();
 
         }
         catch (Exception e){
+            log.error("Exception in EmployeeClientImpl.getAllEmployees", e);
             throw new RuntimeException(e);
         }
     }
