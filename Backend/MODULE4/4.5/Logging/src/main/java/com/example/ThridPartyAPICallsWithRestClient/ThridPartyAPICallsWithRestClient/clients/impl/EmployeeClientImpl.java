@@ -41,7 +41,7 @@ public class EmployeeClientImpl implements EmployeeClient {
                     .onStatus(HttpStatusCode::is4xxClientError, ((request, response) -> {
                         //print all the errors - not recommended using sout
                         log.error(new String(response.getBody().readAllBytes()));
-                        throw new ResourceNotFoundException("Employee could not be created");
+                        throw new ResourceNotFoundException("Employees could not be retrieved");
                     }))
                     .body(new ParameterizedTypeReference<>() {
                     });
@@ -58,14 +58,21 @@ public class EmployeeClientImpl implements EmployeeClient {
 
     @Override
     public EmployeeDTO getEmployeeById(Long employeeId) {
+        log.info("getEmployeeById({})", employeeId);
         try{
             ApiResponse<EmployeeDTO> employeeDTOApiResponse = restClient.get()
                     .uri("employees/{employeeId}", employeeId)
                     .retrieve()
+                    .onStatus(HttpStatusCode::is4xxClientError, ((request, response) -> {
+                        log.error(new String(response.getBody().readAllBytes()));
+                        throw new ResourceNotFoundException("Employee could not be found");
+                    }))
+
                     .body(new ParameterizedTypeReference<ApiResponse<EmployeeDTO>>() {
                     });
             return employeeDTOApiResponse.getData();
         } catch (Exception e) {
+            log.error("Exception in EmployeeClientImpl.getAllEmployees", e);
             throw new RuntimeException(e);
         }
     }
