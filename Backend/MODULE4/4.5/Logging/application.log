@@ -1,0 +1,66 @@
+2025-09-24T03:59:58.822-04:00  INFO 15488 --- [ThridPartyAPICallsWithRestClient] [main] .e.T.T.ProdReadyFeaturesApplicationTests : Starting ProdReadyFeaturesApplicationTests using Java 17.0.16 with PID 15488 (started by Umair in C:\Users\Umair\SoftwareEngineering\Backend\MODULE4\4.5\Logging)
+2025-09-24T03:59:58.823-04:00  INFO 15488 --- [ThridPartyAPICallsWithRestClient] [main] .e.T.T.ProdReadyFeaturesApplicationTests : No active profile set, falling back to 1 default profile: "default"
+2025-09-24T03:59:59.110-04:00  INFO 15488 --- [ThridPartyAPICallsWithRestClient] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-09-24T03:59:59.145-04:00  INFO 15488 --- [ThridPartyAPICallsWithRestClient] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 25 ms. Found 1 JPA repository interface.
+2025-09-24T03:59:59.410-04:00  INFO 15488 --- [ThridPartyAPICallsWithRestClient] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-09-24T03:59:59.441-04:00  INFO 15488 --- [ThridPartyAPICallsWithRestClient] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.18.Final
+2025-09-24T03:59:59.461-04:00  INFO 15488 --- [ThridPartyAPICallsWithRestClient] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-09-24T03:59:59.533-04:00  INFO 15488 --- [ThridPartyAPICallsWithRestClient] [main] o.h.e.boot.internal.EnversServiceImpl    : Envers integration enabled? : true
+2025-09-24T03:59:59.574-04:00  INFO 9512 --- [ThridPartyAPICallsWithRestClient] [restartedMain] c.e.T.T.ProdReadyFeaturesApplication     : Starting ProdReadyFeaturesApplication using Java 17.0.16 with PID 9512 (C:\Users\Umair\SoftwareEngineering\Backend\MODULE4\4.5\Logging\target\classes started by Umair in C:\Users\Umair\SoftwareEngineering\Backend\MODULE4\4.5\Logging)
+2025-09-24T03:59:59.574-04:00  INFO 9512 --- [ThridPartyAPICallsWithRestClient] [restartedMain] c.e.T.T.ProdReadyFeaturesApplication     : No active profile set, falling back to 1 default profile: "default"
+2025-09-24T03:59:59.625-04:00  INFO 9512 --- [ThridPartyAPICallsWithRestClient] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-09-24T03:59:59.631-04:00  INFO 9512 --- [ThridPartyAPICallsWithRestClient] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 5 ms. Found 1 JPA repository interface.
+2025-09-24T03:59:59.646-04:00  INFO 15488 --- [ThridPartyAPICallsWithRestClient] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-09-24T03:59:59.661-04:00  INFO 9512 --- [ThridPartyAPICallsWithRestClient] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 9000 (http)
+2025-09-24T03:59:59.662-04:00  INFO 9512 --- [ThridPartyAPICallsWithRestClient] [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-09-24T03:59:59.662-04:00  INFO 9512 --- [ThridPartyAPICallsWithRestClient] [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.42]
+2025-09-24T03:59:59.666-04:00  INFO 15488 --- [ThridPartyAPICallsWithRestClient] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-09-24T03:59:59.667-04:00  INFO 9512 --- [ThridPartyAPICallsWithRestClient] [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-09-24T03:59:59.668-04:00  INFO 9512 --- [ThridPartyAPICallsWithRestClient] [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 92 ms
+2025-09-24T03:59:59.677-04:00  INFO 9512 --- [ThridPartyAPICallsWithRestClient] [restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-09-24T03:59:59.680-04:00  INFO 9512 --- [ThridPartyAPICallsWithRestClient] [restartedMain] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-09-24T03:59:59.682-04:00  INFO 9512 --- [ThridPartyAPICallsWithRestClient] [restartedMain] o.h.e.boot.internal.EnversServiceImpl    : Envers integration enabled? : true
+2025-09-24T03:59:59.683-04:00  INFO 9512 --- [ThridPartyAPICallsWithRestClient] [restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-09-24T03:59:59.683-04:00  INFO 9512 --- [ThridPartyAPICallsWithRestClient] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-13 - Starting...
+2025-09-24T03:59:59.685-04:00  INFO 9512 --- [ThridPartyAPICallsWithRestClient] [restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-13 - Added connection com.mysql.cj.jdbc.ConnectionImpl@50401559
+2025-09-24T03:59:59.686-04:00  INFO 9512 --- [ThridPartyAPICallsWithRestClient] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-13 - Start completed.
+2025-09-24T03:59:59.686-04:00  INFO 9512 --- [ThridPartyAPICallsWithRestClient] [restartedMain] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-13)']
+	Database driver: undefined/unknown
+	Database version: 9.4
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-09-24T03:59:59.689-04:00  INFO 9512 --- [ThridPartyAPICallsWithRestClient] [restartedMain] o.h.e.c.i.m.AuditMetadataGenerator       : Adding properties for entity: com.example.ThridPartyAPICallsWithRestClient.ThridPartyAPICallsWithRestClient.entities.PostEntity
+2025-09-24T03:59:59.705-04:00  INFO 9512 --- [ThridPartyAPICallsWithRestClient] [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-09-24T03:59:59.750-04:00  INFO 9512 --- [ThridPartyAPICallsWithRestClient] [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-09-24T03:59:59.755-04:00  INFO 15488 --- [ThridPartyAPICallsWithRestClient] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@67e11bda
+2025-09-24T03:59:59.756-04:00  INFO 15488 --- [ThridPartyAPICallsWithRestClient] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-09-24T03:59:59.777-04:00  WARN 9512 --- [ThridPartyAPICallsWithRestClient] [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-09-24T03:59:59.794-04:00  INFO 9512 --- [ThridPartyAPICallsWithRestClient] [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2025-09-24T03:59:59.797-04:00  INFO 9512 --- [ThridPartyAPICallsWithRestClient] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 9000 (http) with context path '/'
+2025-09-24T03:59:59.799-04:00  INFO 9512 --- [ThridPartyAPICallsWithRestClient] [restartedMain] c.e.T.T.ProdReadyFeaturesApplication     : Started ProdReadyFeaturesApplication in 0.243 seconds (process running for 90396.214)
+2025-09-24T03:59:59.799-04:00  INFO 9512 --- [ThridPartyAPICallsWithRestClient] [restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+2025-09-24T03:59:59.803-04:00  INFO 15488 --- [ThridPartyAPICallsWithRestClient] [main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 9.4
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-09-24T03:59:59.898-04:00  INFO 15488 --- [ThridPartyAPICallsWithRestClient] [main] o.h.e.c.i.m.AuditMetadataGenerator       : Adding properties for entity: com.example.ThridPartyAPICallsWithRestClient.ThridPartyAPICallsWithRestClient.entities.PostEntity
+2025-09-24T04:00:00.220-04:00  INFO 15488 --- [ThridPartyAPICallsWithRestClient] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-09-24T04:00:00.275-04:00  INFO 15488 --- [ThridPartyAPICallsWithRestClient] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-09-24T04:00:00.528-04:00  WARN 15488 --- [ThridPartyAPICallsWithRestClient] [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-09-24T04:00:00.721-04:00  INFO 15488 --- [ThridPartyAPICallsWithRestClient] [main] .e.T.T.ProdReadyFeaturesApplicationTests : Started ProdReadyFeaturesApplicationTests in 2.076 seconds (process running for 2.607)
+2025-09-24T04:00:00.917-04:00  INFO 15488 --- [ThridPartyAPICallsWithRestClient] [main] c.e.T.T.clients.impl.EmployeeClientImpl  : createEmployee(EmployeeDTO(id=null, name=Saul, email=test@gmail.com, age=30, role=USER, dateOfJoining=null, isActive=true))
+2025-09-24T04:00:00.990-04:00 TRACE 15488 --- [ThridPartyAPICallsWithRestClient] [main] c.e.T.T.clients.impl.EmployeeClientImpl  : employee create EmployeeDTO(id=10, name=Saul, email=test@gmail.com, age=30, role=USER, dateOfJoining=null, isActive=true)
+2025-09-24T04:00:00.998-04:00  INFO 15488 --- [ThridPartyAPICallsWithRestClient] [main] c.e.T.T.clients.impl.EmployeeClientImpl  : getEmployeeById(1)
+2025-09-24T04:00:01.004-04:00 TRACE 15488 --- [ThridPartyAPICallsWithRestClient] [main] c.e.T.T.clients.impl.EmployeeClientImpl  : getAllEmployees()
+2025-09-24T04:00:01.009-04:00 DEBUG 15488 --- [ThridPartyAPICallsWithRestClient] [main] c.e.T.T.clients.impl.EmployeeClientImpl  : employee list retrieved
+2025-09-24T04:00:01.009-04:00 TRACE 15488 --- [ThridPartyAPICallsWithRestClient] [main] c.e.T.T.clients.impl.EmployeeClientImpl  : employee list retrieved : [EmployeeDTO(id=1, name=Saul, email=test@gmail.com, age=30, role=USER, dateOfJoining=null, isActive=true), EmployeeDTO(id=2, name=Saul, email=test@gmail.com, age=30, role=USER, dateOfJoining=null, isActive=true), EmployeeDTO(id=3, name=Saul, email=test@gmail.com, age=30, role=USER, dateOfJoining=null, isActive=true), EmployeeDTO(id=4, name=Saul, email=test@gmail.com, age=30, role=USER, dateOfJoining=null, isActive=true), EmployeeDTO(id=5, name=Saul, email=test@gmail.com, age=30, role=USER, dateOfJoining=null, isActive=true), EmployeeDTO(id=6, name=Saul, email=test@gmail.com, age=30, role=USER, dateOfJoining=null, isActive=true), EmployeeDTO(id=7, name=Saul, email=test@gmail.com, age=30, role=USER, dateOfJoining=null, isActive=true), EmployeeDTO(id=8, name=Saul, email=test@gmail.com, age=30, role=USER, dateOfJoining=null, isActive=true), EmployeeDTO(id=9, name=Saul, email=test@gmail.com, age=30, role=USER, dateOfJoining=null, isActive=true), EmployeeDTO(id=10, name=Saul, email=test@gmail.com, age=30, role=USER, dateOfJoining=null, isActive=true)]
+2025-09-24T04:00:01.013-04:00  INFO 15488 --- [ThridPartyAPICallsWithRestClient] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-09-24T04:00:01.015-04:00  INFO 15488 --- [ThridPartyAPICallsWithRestClient] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2025-09-24T04:00:01.018-04:00  INFO 15488 --- [ThridPartyAPICallsWithRestClient] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
