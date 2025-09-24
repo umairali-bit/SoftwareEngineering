@@ -64,3 +64,9 @@
 2025-09-24T04:00:01.013-04:00  INFO 15488 --- [ThridPartyAPICallsWithRestClient] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
 2025-09-24T04:00:01.015-04:00  INFO 15488 --- [ThridPartyAPICallsWithRestClient] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
 2025-09-24T04:00:01.018-04:00  INFO 15488 --- [ThridPartyAPICallsWithRestClient] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2025-09-24T04:07:37.337-04:00  INFO 9512 --- [ThridPartyAPICallsWithRestClient] [File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 2 class path changes (1 addition, 0 deletions, 1 modification)
+2025-09-24T04:07:37.338-04:00  INFO 9512 --- [ThridPartyAPICallsWithRestClient] [Thread-51] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2025-09-24T04:07:37.349-04:00  INFO 9512 --- [ThridPartyAPICallsWithRestClient] [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+2025-09-24T04:07:37.350-04:00  INFO 9512 --- [ThridPartyAPICallsWithRestClient] [Thread-51] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-09-24T04:07:37.350-04:00  INFO 9512 --- [ThridPartyAPICallsWithRestClient] [Thread-51] com.zaxxer.hikari.HikariDataSource       : HikariPool-13 - Shutdown initiated...
+2025-09-24T04:07:37.352-04:00  INFO 9512 --- [ThridPartyAPICallsWithRestClient] [Thread-51] com.zaxxer.hikari.HikariDataSource       : HikariPool-13 - Shutdown completed.
