@@ -30,7 +30,7 @@ class ProdReadyFeaturesApplicationTests {
 	@Test
     @org.junit.jupiter.api.Order(2)
 	void getEmployeeById() {
-		EmployeeDTO employeeDTO = employeeClient.getEmployeeById(100L); {
+		EmployeeDTO employeeDTO = employeeClient.getEmployeeById(1L); {
 			System.out.println(employeeDTO);
 
 		}
