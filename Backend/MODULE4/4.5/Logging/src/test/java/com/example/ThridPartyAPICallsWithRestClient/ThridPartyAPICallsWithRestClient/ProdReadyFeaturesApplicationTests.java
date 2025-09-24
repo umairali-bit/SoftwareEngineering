@@ -21,7 +21,7 @@ class ProdReadyFeaturesApplicationTests {
 	private EmployeeClient employeeClient;
 
 	@Test
-   @Order(1)
+   @Order(3)
 	void getAllEmployees() {
 		List<EmployeeDTO> employeeDTOList = employeeClient.getAllEmployees();
 		System.out.println(employeeDTOList);
@@ -41,7 +41,7 @@ class ProdReadyFeaturesApplicationTests {
     void createEmployee() {
         EmployeeDTO employeeDTO = new EmployeeDTO();
         employeeDTO.setName("Saul");
-        employeeDTO.setAge(3);
+        employeeDTO.setAge(30);
         employeeDTO.setEmail("test@gmail.com");
         employeeDTO.setRole("USER");
         employeeDTO.setIsActive(true);
