@@ -13,5 +13,5 @@ public class ConversionHistoryDTO {
     private double rate;
     private double convertedAmount;
     private String createdBy;
-    private LocalDateTime createdAt;
+    private LocalDateTime createdDate;
 }
