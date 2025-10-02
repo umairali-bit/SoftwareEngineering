@@ -39,12 +39,11 @@ public class EmployeeClientImpl implements EmployeeClient {
                     .uri("employees")
                     .retrieve()
                     .onStatus(HttpStatusCode::is4xxClientError, ((request, response) -> {
-                        //print all the errors - not recommended using sout
                         log.error(new String(response.getBody().readAllBytes()));
                         throw new ResourceNotFoundException("Employees could not be retrieved");
                     }))
-                    .body(new ParameterizedTypeReference<>() {
-                    });
+                    .body(new ParameterizedTypeReference<ApiResponse<List<EmployeeDTO>>>() {});
+
             log.debug("employee list retrieved");
             log.trace("employee list retrieved : {}", employeeDTO.getData());
             return employeeDTO.getData();
@@ -90,8 +89,8 @@ public class EmployeeClientImpl implements EmployeeClient {
                         log.error(new String(response.getBody().readAllBytes()));
                         throw new ResourceNotFoundException("Employee could not be created");
                     }))
-                    .toEntity(new ParameterizedTypeReference<>() {
-                    });
+                    .toEntity(new ParameterizedTypeReference<ApiResponse<EmployeeDTO>>() {});
+
             log.trace("employee create {}", employeeDTOApiResponse.getBody().getData());
             return employeeDTOApiResponse.getBody().getData();
 
