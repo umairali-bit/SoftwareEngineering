@@ -8,9 +8,17 @@ A Spring Boot application that integrates with **[FreeCurrencyAPI](https://freec
 
 - Convert between supported currencies using **FreeCurrencyAPI**  
 - Store each conversion in **MySQL** for auditing/history  
-- JPA **Auditing** support (`createdDate`, `createdBy`)  
-- Optional **Hibernate Envers** support for historical versions of conversions  
-- Global response wrapper (`ApiResponse`) and exception handling  
+- **Spring Data JPA Auditing**  
+  - Tracks `createdDate` and `createdBy`  
+  - `AuditorAwareImpl` returns `"system-user"` (can later be extended to authenticated users)  
+- **Global Response Wrapping**  
+  - All responses are wrapped in `ApiResponse<T>` with a timestamp and error structure  
+- **Centralized Exception Handling**  
+  - Via `GlobalExceptionHandler` (`RuntimeException`, `Validation`, and generic exceptions)  
+- **Logging**  
+  - SLF4J used across services/clients  
+  - Client logs calls to FreeCurrencyAPI (`➡️` for outgoing calls, `❌` for errors)  
+- Optional **Hibernate Envers** support for full historical entity versioning  
 - OpenAPI/Swagger integration-ready  
 
 ---
@@ -24,6 +32,7 @@ A Spring Boot application that integrates with **[FreeCurrencyAPI](https://freec
 - **Hibernate Envers** (for entity history)  
 - **Lombok**  
 - **ModelMapper**  
+- **Slf4j Logging**  
 
 ---
 
@@ -69,7 +78,7 @@ mvn spring-boot:run
 
 ## 📡 API Endpoints  
 
-### 1. Convert Currency (Query Params)
+### Convert Currency (Query Params)
 ```http
 GET /converterCurrency?fromCurrency=EUR&toCurrency=USD&units=5000
 ```
@@ -77,26 +86,17 @@ GET /converterCurrency?fromCurrency=EUR&toCurrency=USD&units=5000
 ✅ Example Response:
 ```json
 {
-  "fromCurrency": "EUR",
-  "toCurrency": "USD",
-  "units": 5000,
-  "rate": 1.05,
-  "convertedAmount": 5250.0,
-  "provider": "freecurrencyapi",
-  "timestamp": 1727746000
-}
-```
-
-### 2. Convert Currency (Request Body)  
-```http
-POST /converterCurrency
-Content-Type: application/json
-```
-```json
-{
-  "fromCurrency": "EUR",
-  "toCurrency": "USD",
-  "units": 5000
+  "timeStamp": "12:40:17 02-10-2025",
+  "data": {
+    "fromCurrency": "EUR",
+    "toCurrency": "USD",
+    "units": 5000,
+    "rate": 1.05,
+    "convertedAmount": 5250.0,
+    "provider": "freecurrencyapi",
+    "timestamp": 1727746000
+  },
+  "error": null
 }
 ```
 
@@ -104,7 +104,9 @@ Content-Type: application/json
 
 ## 🗄️ Database  
 
-Table: `conversion_history`  
+### Conversion History Entity  
+Stored in `conversion_history`:  
+
 ```sql
 CREATE TABLE conversion_history (
   id BIGINT AUTO_INCREMENT PRIMARY KEY,
@@ -118,7 +120,18 @@ CREATE TABLE conversion_history (
 );
 ```
 
-If **Hibernate Envers** is enabled, an audit table `conversion_history_aud` will also be created.  
+- **Auditing** auto-fills `created_date` and `created_by` (`system-user` by default).  
+- If **Envers** is enabled, an audit table `conversion_history_aud` will also be created for full history.  
+
+---
+
+## 📋 Logging  
+
+- Every API call to FreeCurrencyAPI logs:  
+  - `➡️ Calling FreeCurrencyAPI: base=EUR target=USD`  
+  - `❌ Client error from FreeCurrencyAPI: {error details}`  
+- Application startup logs confirm DB + auditing config:  
+  - `"API Key Loaded: fca_li*****"`  
 
 ---
 
@@ -128,6 +141,7 @@ If **Hibernate Envers** is enabled, an audit table `conversion_history_aud` will
 - Add **OpenAPI/Swagger UI** for API docs  
 - Add conversion history retrieval endpoint (`GET /history`)  
 - Add validation (reject negative amounts, invalid currency codes)  
+- Add caching layer for rates to reduce API calls  
 
 ---
 
