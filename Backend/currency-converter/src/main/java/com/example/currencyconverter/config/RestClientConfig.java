@@ -7,23 +7,17 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestClient;
 
 
-@Slf4j
 @Configuration
 public class RestClientConfig {
 
-    @Value("${freecurrency.api.base-url}")
-    private String BASE_URL;
-
-    @Value("${FREECURRENCY_API_KEY}")
-    private String API_KEY;
-
     @Bean
-    public RestClient currencyRestClient(RestClient.Builder builder) {
-        return builder
-                .baseUrl(BASE_URL)
-                .defaultHeader("apikey", API_KEY)
+    public RestClient currencyRestClient(
+            @Value("${freecurrency.api.base-url}") String baseUrl,
+            @Value("${freecurrency.api.key}") String apiKey) {
+
+        return RestClient.builder()
+                .baseUrl(baseUrl)
+                .defaultHeader("apikey", apiKey) // ✅ FreeCurrencyAPI expects this header
                 .build();
     }
-
-
 }
