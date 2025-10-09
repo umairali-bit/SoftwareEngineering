@@ -60,6 +60,7 @@ public class CurrencyConverterController {
 //    }
 
     // Example: GET /converterCurrency/fromCurrency=EURtoCurrency=USD&units=5000
+    //URL: http://localhost:8080/converterCurrency?fromCurrency=EUR&toCurrency=USD&units=5000
     @GetMapping
     public ConversionResponse convert(
             @RequestParam String fromCurrency,
