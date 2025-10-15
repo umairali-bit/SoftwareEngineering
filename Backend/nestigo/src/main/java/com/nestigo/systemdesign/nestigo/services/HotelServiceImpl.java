@@ -39,7 +39,7 @@ public class HotelServiceImpl implements HotelService{
 
     @Override
     public HotelDTO getHotelById(Long id) {
-        log.info("Getting the hotel with ID: {}", id);
+        log.info("Fetching the hotel with ID: {}", id);
         HotelEntity hotelEntity = hotelRepository.findById(id).
                 orElseThrow(() -> new ResourceNotFoundException("Hotel NOT found with ID:" + id));
 
@@ -50,7 +50,7 @@ public class HotelServiceImpl implements HotelService{
 
     @Override
     public HotelDTO updateHotel(Long id, HotelDTO hotelDTO) {
-        log.info("Getting the hotel with ID: {}", id);
+        log.info("Updating the hotel with ID: {}", id);
 
         //getting hotel by id
         HotelEntity existingHotel = hotelRepository
