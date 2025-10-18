@@ -38,7 +38,7 @@ public class HotelEntity {
     private LocalDateTime createdAt;
 
     @UpdateTimestamp
-    private LocalDateTime updatedAT;
+    private LocalDateTime updatedAt;
 
     @Embedded
     private HotelContactInfo contactInfo;
