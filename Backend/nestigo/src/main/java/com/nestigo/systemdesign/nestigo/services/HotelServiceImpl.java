@@ -21,7 +21,7 @@ public class HotelServiceImpl implements HotelService{
     private final InventoryService inventoryService;
     private final ModelMapper modelMapper;
 
-
+    @Transactional
     @Override
     public HotelDTO createHotel(HotelDTO hotelDTO) {
         log.info("Creating a new hotel with name: {}", hotelDTO.getName());
@@ -30,7 +30,7 @@ public class HotelServiceImpl implements HotelService{
         HotelEntity hotelEntity = modelMapper.map(hotelDTO,HotelEntity.class);
         hotelEntity.setActive(false);
         hotelEntity = hotelRepository.save(hotelEntity);
-        log.info("Created a new hotel with ID {}", hotelDTO.getId());
+        log.info("Created a new hotel with ID {}", hotelEntity.getId());
 
 
         //converting entity back to DTO
@@ -73,7 +73,7 @@ public class HotelServiceImpl implements HotelService{
                 .orElseThrow(() -> new ResourceNotFoundException("Hotel not found with ID" + id));
 
         hotelRepository.deleteById(id);
-        //TODO: Create inventory for all the rooms for this hotel - done
+        //TODO: delete future inventory for this hotel
 
 
         for(RoomEntity room: existingHotel.getRooms()){
