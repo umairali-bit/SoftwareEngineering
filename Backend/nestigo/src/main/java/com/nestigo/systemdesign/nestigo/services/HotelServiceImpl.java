@@ -5,6 +5,7 @@ import com.nestigo.systemdesign.nestigo.entities.HotelEntity;
 import com.nestigo.systemdesign.nestigo.entities.RoomEntity;
 import com.nestigo.systemdesign.nestigo.exceptions.ResourceNotFoundException;
 import com.nestigo.systemdesign.nestigo.repositories.HotelRepository;
+import com.nestigo.systemdesign.nestigo.repositories.RoomRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +21,7 @@ public class HotelServiceImpl implements HotelService{
     private final HotelRepository hotelRepository;
     private final InventoryService inventoryService;
     private final ModelMapper modelMapper;
+    private final RoomRepository roomRepository;
 
     @Transactional
     @Override
@@ -72,13 +74,16 @@ public class HotelServiceImpl implements HotelService{
                 .findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Hotel not found with ID" + id));
 
-        hotelRepository.deleteById(id);
+
         //TODO: delete future inventory for this hotel
 
 
         for(RoomEntity room: existingHotel.getRooms()){
-            inventoryService.deleteFutureInventories(room);
+            inventoryService.deleteAllInventories(room);
+            roomRepository.deleteById(room.getId());
         }
+
+        hotelRepository.deleteById(id);
 
 
         }
