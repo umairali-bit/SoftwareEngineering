@@ -1,10 +1,15 @@
 package com.nestigo.systemdesign.nestigo.services;
 
+import com.nestigo.systemdesign.nestigo.dtos.HotelDTO;
+import com.nestigo.systemdesign.nestigo.dtos.HotelSearchRequest;
 import com.nestigo.systemdesign.nestigo.entities.InventoryEntity;
 import com.nestigo.systemdesign.nestigo.repositories.InventoryRepository;
 import com.nestigo.systemdesign.nestigo.entities.RoomEntity;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -51,5 +56,11 @@ public class InventoryServiceImpl implements InventoryService{
 
         inventoryRepository.deleteByRoom(room);
 
+    }
+
+    @Override
+    public Page<HotelDTO> searchHotels(HotelSearchRequest hotelSearchRequest) {
+        Pageable pageable = PageRequest.of(hotelSearchRequest.getPage(), hotelSearchRequest.getPageSize());
+        return null;
     }
 }
