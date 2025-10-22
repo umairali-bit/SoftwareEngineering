@@ -32,7 +32,7 @@ public interface InventoryRepository extends JpaRepository<InventoryEntity, Long
             @Param("startDate") LocalDate startDate,
             @Param("endDate") LocalDate endDate,
             @Param("roomsCount") Integer roomsCount,
-            @Param("dateCount") Integer dateCount,
+            @Param("dateCount") Long dateCount,
             Pageable pageable
     );
 
