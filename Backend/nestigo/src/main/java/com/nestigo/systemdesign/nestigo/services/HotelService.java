@@ -1,6 +1,7 @@
 package com.nestigo.systemdesign.nestigo.services;
 
 import com.nestigo.systemdesign.nestigo.dtos.HotelDTO;
+import com.nestigo.systemdesign.nestigo.dtos.HotelInfoDTO;
 import com.nestigo.systemdesign.nestigo.entities.HotelEntity;
 
 public interface HotelService {
@@ -15,7 +16,5 @@ public interface HotelService {
 
     void activateHotel(Long id);
 
-
-
-
+    HotelInfoDTO getHotelInfoById(Long hotelId);
 }

@@ -1,6 +1,8 @@
 package com.nestigo.systemdesign.nestigo.services;
 
 import com.nestigo.systemdesign.nestigo.dtos.HotelDTO;
+import com.nestigo.systemdesign.nestigo.dtos.HotelInfoDTO;
+import com.nestigo.systemdesign.nestigo.dtos.RoomDTO;
 import com.nestigo.systemdesign.nestigo.entities.HotelEntity;
 import com.nestigo.systemdesign.nestigo.entities.RoomEntity;
 import com.nestigo.systemdesign.nestigo.exceptions.ResourceNotFoundException;
@@ -11,6 +13,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @Slf4j
@@ -107,6 +111,21 @@ public class HotelServiceImpl implements HotelService{
 
         }
 
+
+    }
+
+    @Override
+    public HotelInfoDTO getHotelInfoById(Long hotelId) {
+        HotelEntity existingHotel = hotelRepository
+                .findById(hotelId)
+                .orElseThrow(() -> new ResourceNotFoundException("Hotel not found with ID" + hotelId));
+
+        List<RoomDTO> rooms = existingHotel.getRooms()
+                .stream()
+                .map((i) -> modelMapper.map(i, RoomDTO.class))
+                .toList();
+
+        return new HotelInfoDTO(modelMapper.map(existingHotel, HotelDTO.class), rooms);
 
 
 
