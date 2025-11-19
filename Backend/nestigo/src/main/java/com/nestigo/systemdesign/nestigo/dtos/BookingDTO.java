@@ -5,25 +5,24 @@ import com.nestigo.systemdesign.nestigo.entities.HotelEntity;
 import com.nestigo.systemdesign.nestigo.entities.RoomEntity;
 import com.nestigo.systemdesign.nestigo.entities.UserEntity;
 import com.nestigo.systemdesign.nestigo.entities.enums.BookingStatus;
-import jakarta.persistence.*;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
+import lombok.Data;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
+@Data
 public class BookingDTO {
 
     private Long id;
 
-    private HotelEntity hotel;
+    private HotelDTO hotel;
 
-    private RoomEntity room;
+    private RoomDTO room;
 
 
-    private UserEntity user;
+    private UserDTO user;
 
 
     private Integer roomsCount;
@@ -38,14 +37,14 @@ public class BookingDTO {
     private LocalDateTime createdAt;
 
 
-    private LocalDateTime updatedAT;
+    private LocalDateTime updatedAt;
 
 
 
     private BookingStatus bookingStatus;
 
 
-    private Set<GuestEntity> guests = new HashSet<>();
+    private Set<GuestDTO> guests = new HashSet<>();
 
 
 }
