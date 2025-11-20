@@ -6,10 +6,7 @@ import com.nestigo.systemdesign.nestigo.dtos.HotelDTO;
 import com.nestigo.systemdesign.nestigo.entities.*;
 import com.nestigo.systemdesign.nestigo.entities.enums.BookingStatus;
 import com.nestigo.systemdesign.nestigo.exceptions.ResourceNotFoundException;
-import com.nestigo.systemdesign.nestigo.repositories.BookingRepository;
-import com.nestigo.systemdesign.nestigo.repositories.HotelRepository;
-import com.nestigo.systemdesign.nestigo.repositories.InventoryRepository;
-import com.nestigo.systemdesign.nestigo.repositories.RoomRepository;
+import com.nestigo.systemdesign.nestigo.repositories.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
@@ -34,6 +31,7 @@ public class BookingServiceImpl implements BookingService {
     private final RoomRepository roomRepository;
     private final HotelRepository hotelRepository;
     private final InventoryRepository inventoryRepository;
+    private final UserRepository userRepository;
     private final ModelMapper modelMapper;
 
     @Override
@@ -64,8 +62,9 @@ public class BookingServiceImpl implements BookingService {
 
          inventoryRepository.saveAll(inventoryList);
 
-        UserEntity user = new UserEntity();
-        user.setId(1L); //TODO: Remove Dummy User
+        UserEntity user = userRepository.findById(3L)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+        //TODO: Remove Dummy User
 
         //TODO: calculate the dynamic price
 
