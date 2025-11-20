@@ -3,11 +3,11 @@ package com.nestigo.systemdesign.nestigo.entities;
 
 import com.nestigo.systemdesign.nestigo.entities.enums.BookingStatus;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -16,6 +16,9 @@ import java.util.Set;
 @Entity
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "booking")
 public class BookingEntity {
 
@@ -63,6 +66,9 @@ public class BookingEntity {
             inverseJoinColumns = @JoinColumn(name = "guest_id")
     )
     private Set<GuestEntity> guests = new HashSet<>();
+
+    @Column(nullable = false, precision = 10, scale =2)
+    private BigDecimal price;
 
 
 
