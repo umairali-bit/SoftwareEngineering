@@ -36,7 +36,7 @@ public class EmployeeController {
         return ResponseEntity.ok(employeeService.getAllEmployees());
     }
 
-    @PostMapping("/createPostman")
+    @PostMapping
     public ResponseEntity<EmployeeDTO> createEmployee(@RequestBody @Valid EmployeeDTO employee) {
         EmployeeDTO savedEmployee = employeeService.createEmployee(employee);
         return new ResponseEntity<>(savedEmployee, HttpStatus.CREATED);
