@@ -10,7 +10,9 @@ import org.hibernate.annotations.UpdateTimestamp;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -54,7 +56,6 @@ public class BookingEntity {
     private LocalDateTime updatedAT;
 
 
-
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private BookingStatus bookingStatus;
@@ -65,7 +66,7 @@ public class BookingEntity {
             joinColumns = @JoinColumn(name = "booking_id"),
             inverseJoinColumns = @JoinColumn(name = "guest_id")
     )
-    private Set<GuestEntity> guests = new HashSet<>();
+    private List<GuestEntity> guests = new ArrayList<>();
 
     @Column(nullable = false, precision = 10, scale =2)
     private BigDecimal price;
