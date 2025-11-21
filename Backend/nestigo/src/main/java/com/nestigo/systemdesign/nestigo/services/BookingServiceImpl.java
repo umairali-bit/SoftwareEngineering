@@ -89,6 +89,7 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
+    @Transactional
     public BookingDTO addGuests(Long bookingId, List<GuestDTO> guestDtoList) {
         log.info("Adding guests for booking with id: {}", bookingId);
 
@@ -111,7 +112,7 @@ public class BookingServiceImpl implements BookingService {
             booking.getGuests().add(guest);
 
         }
-
+        booking.setBookingStatus(BookingStatus.GUEST_ADDED);
         booking = bookingRepository.save(booking);
         return modelMapper.map(booking, BookingDTO.class);
 
