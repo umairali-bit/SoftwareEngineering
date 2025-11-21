@@ -2,6 +2,7 @@ package com.nestigo.systemdesign.nestigo.services;
 
 import com.nestigo.systemdesign.nestigo.dtos.BookingDTO;
 import com.nestigo.systemdesign.nestigo.dtos.BookingRequestDTO;
+import com.nestigo.systemdesign.nestigo.dtos.GuestDTO;
 import com.nestigo.systemdesign.nestigo.dtos.HotelDTO;
 import com.nestigo.systemdesign.nestigo.entities.*;
 import com.nestigo.systemdesign.nestigo.entities.enums.BookingStatus;
@@ -18,6 +19,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
@@ -32,6 +35,7 @@ public class BookingServiceImpl implements BookingService {
     private final HotelRepository hotelRepository;
     private final InventoryRepository inventoryRepository;
     private final UserRepository userRepository;
+    private final GuestRepository guestRepository;
     private final ModelMapper modelMapper;
 
     @Override
@@ -62,9 +66,7 @@ public class BookingServiceImpl implements BookingService {
 
          inventoryRepository.saveAll(inventoryList);
 
-        UserEntity user = userRepository.findById(3L)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
-        //TODO: Remove Dummy User
+
 
         //TODO: calculate the dynamic price
 
@@ -75,7 +77,7 @@ public class BookingServiceImpl implements BookingService {
                 .room(room)
                 .checkInDate(bookingRequestDTO.getCheckInDate())
                 .checkOutDate(bookingRequestDTO.getCheckOutDate())
-                .user(user)
+                .user(getCurrentUser())
                 .roomsCount(bookingRequestDTO.getRoomsCount())
                 .price(BigDecimal.TEN)
                 .build();
@@ -85,4 +87,45 @@ public class BookingServiceImpl implements BookingService {
 
 
     }
+
+    @Override
+    public BookingDTO addGuests(Long bookingId, List<GuestDTO> guestDtoList) {
+        log.info("Adding guests for booking with id: {}", bookingId);
+
+        BookingEntity booking = bookingRepository.findById(bookingId).orElseThrow(() ->
+                new ResourceNotFoundException("Booking NOT found with id:"+ bookingId));
+
+        if(hasBookingExpired(booking)){
+            throw new IllegalStateException("Booking has expired");
+
+        }
+
+        if(booking.getBookingStatus() != BookingStatus.RESERVED){
+            throw new IllegalStateException("Booking is not under reserved state");
+        }
+
+        for (GuestDTO guestDTO : guestDtoList) {
+            GuestEntity guest = modelMapper.map(guestDTO, GuestEntity.class);
+            guest.setUser(getCurrentUser());
+            guest = guestRepository.save(guest);
+            booking.getGuests().add(guest);
+
+        }
+
+        booking = bookingRepository.save(booking);
+        return modelMapper.map(booking, BookingDTO.class);
+
+    }
+
+    public boolean hasBookingExpired(BookingEntity bookingDTO) {
+        return bookingDTO.getCreatedAt().plusMinutes(10).isBefore(LocalDateTime.now());
+    }
+
+    public UserEntity getCurrentUser() {
+        UserEntity user = new UserEntity();
+        user.setId(3L);
+        return user; //TODO: Remove Dummy User
+    }
+
+
 }
