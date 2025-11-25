@@ -2,6 +2,8 @@ package com.example.ThridPartyAPICallsWithRestClient.ThridPartyAPICallsWithRestC
 
 
 import jakarta.persistence.*;
+import lombok.NonNull;
+import org.hibernate.annotations.NotFound;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -32,6 +34,7 @@ public class UserEntity implements UserDetails {
     }
 
     @Override
+    @NonNull
     public String getUsername() {
         return this.email;
     }
