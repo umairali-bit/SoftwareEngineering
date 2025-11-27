@@ -18,6 +18,7 @@ public class WebSecurityConfig {
         http
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/posts/**").permitAll() //permit all requests
+                        .requestMatchers("/posts/**").hasAnyRole("ADMIN")
                         .anyRequest().authenticated())
                 .formLogin(Customizer.withDefaults());
 
