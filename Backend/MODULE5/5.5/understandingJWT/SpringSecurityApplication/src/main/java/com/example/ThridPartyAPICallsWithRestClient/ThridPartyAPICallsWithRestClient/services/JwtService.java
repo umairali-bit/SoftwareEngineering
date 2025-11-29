@@ -1,6 +1,7 @@
 package com.example.ThridPartyAPICallsWithRestClient.ThridPartyAPICallsWithRestClient.services;
 
 import com.example.ThridPartyAPICallsWithRestClient.ThridPartyAPICallsWithRestClient.entities.UserEntity;
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
@@ -42,5 +43,16 @@ public class JwtService {
 
 
 
+    }
+
+    // retrieving info from the token
+    public Long getUserIdFromJwtToken(String token) {
+        Claims claims = Jwts.parserBuilder()
+                .setSigningKey(jwtSecretKey.getBytes())
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+
+        return Long.parseLong(claims.getSubject());
     }
 }
