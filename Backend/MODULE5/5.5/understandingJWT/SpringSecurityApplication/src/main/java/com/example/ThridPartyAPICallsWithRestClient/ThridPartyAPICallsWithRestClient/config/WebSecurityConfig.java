@@ -26,9 +26,7 @@ public class WebSecurityConfig {
 
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/posts").permitAll() //permit all posts
-                        .requestMatchers("/posts/**").hasAnyRole("ADMIN")
-                        .anyRequest().authenticated())
+                        .anyRequest().permitAll())
                 .csrf(AbstractHttpConfigurer::disable) //disabling csrf token
                 .sessionManagement(sessionConfig -> sessionConfig
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)); //disabling the session
@@ -38,23 +36,23 @@ public class WebSecurityConfig {
     }
 
 
-    @Bean
-    UserDetailsService inMemoryUserDetailsService() {
-        UserDetails user = User
-                .withUsername("user")
-                .password(passwordEncoder().encode("pass"))
-                .roles("USER")
-                .build();
-
-        UserDetails admin = User
-                .withUsername("admin")
-                .password(passwordEncoder().encode("pass"))
-                .roles("ADMIN")
-                .build();
-
-        return new InMemoryUserDetailsManager(user, admin);
-
-    }
+//    @Bean
+//    UserDetailsService inMemoryUserDetailsService() {
+//        UserDetails user = User
+//                .withUsername("user")
+//                .password(passwordEncoder().encode("pass"))
+//                .roles("USER")
+//                .build();
+//
+//        UserDetails admin = User
+//                .withUsername("admin")
+//                .password(passwordEncoder().encode("pass"))
+//                .roles("ADMIN")
+//                .build();
+//
+//        return new InMemoryUserDetailsManager(user, admin);
+//
+//    }
 
     @Bean
     PasswordEncoder passwordEncoder() {

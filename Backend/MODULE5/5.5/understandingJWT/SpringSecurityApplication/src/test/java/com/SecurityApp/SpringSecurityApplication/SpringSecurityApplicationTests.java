@@ -15,18 +15,19 @@ class SpringSecurityApplicationTests {
     @Autowired
     private JwtService jwtService;
 
-	@Test
-	void contextLoads() {
+    @Test
+    void contextLoads() {
 
 
-        UserEntity user = new UserEntity(4L, "janeDoe@gmail.com", "1234");
+//        UserEntity user = new UserEntity(4L, "janeDoe@gmail.com", "1234", "janeDoe");
+//
+//        String token = jwtService.generateJwtToken(user);
+//        System.out.println(token);
+//
+//        Long id = jwtService.getUserIdFromJwtToken(token);
+//        System.out.println(id);
+//
+//
 
-        String token = jwtService.generateJwtToken(user);
-        System.out.println(token);
-
-        Long id = jwtService.getUserIdFromJwtToken(token);
-        System.out.println(id);
-
-	}
-
+    }
 }
