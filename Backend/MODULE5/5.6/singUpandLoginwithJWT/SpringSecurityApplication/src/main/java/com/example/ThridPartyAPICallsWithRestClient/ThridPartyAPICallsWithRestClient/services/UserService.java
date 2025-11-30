@@ -1,6 +1,7 @@
 package com.example.ThridPartyAPICallsWithRestClient.ThridPartyAPICallsWithRestClient.services;
 
 
+import com.example.ThridPartyAPICallsWithRestClient.ThridPartyAPICallsWithRestClient.dtos.LoginDTO;
 import com.example.ThridPartyAPICallsWithRestClient.ThridPartyAPICallsWithRestClient.dtos.SignUpDTO;
 import com.example.ThridPartyAPICallsWithRestClient.ThridPartyAPICallsWithRestClient.dtos.UserDto;
 import com.example.ThridPartyAPICallsWithRestClient.ThridPartyAPICallsWithRestClient.entities.UserEntity;
@@ -44,6 +45,13 @@ public class UserService implements UserDetailsService {
 
         UserEntity savingUser = userRepository.save(creatingUser);
         return modelMapper.map(savingUser, UserDto.class);
+
+
+
+    }
+
+    public String login(LoginDTO inputLogin) {
+
 
 
 
