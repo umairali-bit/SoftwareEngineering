@@ -32,7 +32,7 @@ public class AuthController {
         return ResponseEntity.ok(userDto);
     }
 
-    @PostMapping
+    @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody LoginDTO inputLogin) {
         String token = authService.login(inputLogin);
         return ResponseEntity.ok(token);
