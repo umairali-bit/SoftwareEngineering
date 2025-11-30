@@ -1,6 +1,7 @@
 package com.example.ThridPartyAPICallsWithRestClient.ThridPartyAPICallsWithRestClient.controllers;
 
 
+import com.example.ThridPartyAPICallsWithRestClient.ThridPartyAPICallsWithRestClient.dtos.LoginDTO;
 import com.example.ThridPartyAPICallsWithRestClient.ThridPartyAPICallsWithRestClient.dtos.SignUpDTO;
 import com.example.ThridPartyAPICallsWithRestClient.ThridPartyAPICallsWithRestClient.dtos.UserDto;
 import com.example.ThridPartyAPICallsWithRestClient.ThridPartyAPICallsWithRestClient.services.UserService;
@@ -27,8 +28,12 @@ public class AuthController {
 
         UserDto userDto = userService.singUp(inputSignUp);
         return ResponseEntity.ok(userDto);
+    }
 
-
+    @PostMapping
+    public ResponseEntity<String> login(@RequestBody LoginDTO inputLogin) {
+        String token = userService.login(inputLogin);
+        return ResponseEntity.ok(token);
     }
 
 
