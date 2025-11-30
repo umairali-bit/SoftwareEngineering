@@ -30,8 +30,6 @@ public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
     private final ModelMapper modelMapper;
     private final PasswordEncoder passwordEncoder;
-    private final AuthenticationManager authenticationManager;
-    private final JwtService jwtService;
 
     @Override
     @NonNull
@@ -56,19 +54,5 @@ public class UserService implements UserDetailsService {
 
     }
 
-    public String login(LoginDTO inputLogin) {
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(inputLogin.getEmail(), inputLogin.getPassword())
-        );
 
-        UserEntity user = (UserEntity) authentication.getPrincipal();
-
-        assert user != null;
-        return jwtService.generateJwtToken(user);
-
-
-
-
-
-    }
 }
