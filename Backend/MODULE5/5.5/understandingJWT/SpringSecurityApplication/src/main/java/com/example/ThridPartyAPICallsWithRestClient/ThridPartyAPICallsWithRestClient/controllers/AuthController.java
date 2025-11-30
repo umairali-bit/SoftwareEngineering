@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RequestMapping(path = "/auth")
 
-public class SingUpController {
+public class AuthController {
 
     private final UserService userService;
 
