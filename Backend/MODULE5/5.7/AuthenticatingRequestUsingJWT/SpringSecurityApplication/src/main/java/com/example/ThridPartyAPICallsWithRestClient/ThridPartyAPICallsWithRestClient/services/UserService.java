@@ -5,6 +5,7 @@ import com.example.ThridPartyAPICallsWithRestClient.ThridPartyAPICallsWithRestCl
 import com.example.ThridPartyAPICallsWithRestClient.ThridPartyAPICallsWithRestClient.dtos.SignUpDTO;
 import com.example.ThridPartyAPICallsWithRestClient.ThridPartyAPICallsWithRestClient.dtos.UserDto;
 import com.example.ThridPartyAPICallsWithRestClient.ThridPartyAPICallsWithRestClient.entities.UserEntity;
+import com.example.ThridPartyAPICallsWithRestClient.ThridPartyAPICallsWithRestClient.exceptions.ResourceNotFoundException;
 import com.example.ThridPartyAPICallsWithRestClient.ThridPartyAPICallsWithRestClient.repositories.UserRepository;
 import jakarta.validation.Valid;
 import lombok.NonNull;
@@ -32,11 +33,16 @@ public class UserService implements UserDetailsService {
     private final PasswordEncoder passwordEncoder;
 
     @Override
-    @NonNull
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository.findByEmail(username).orElseThrow(
                 () -> new UsernameNotFoundException("User not found with username: " + username));
     }
+
+    public UserEntity getUserById(Long userId) {
+        return userRepository.findById(userId).orElseThrow(
+                () -> new ResourceNotFoundException("User not found with userId: " + userId));
+    }
+
 
     public UserDto singUp(@Valid SignUpDTO inputSignUp) {
         Optional<UserEntity> user = userRepository.findByEmail(inputSignUp.getEmail());
