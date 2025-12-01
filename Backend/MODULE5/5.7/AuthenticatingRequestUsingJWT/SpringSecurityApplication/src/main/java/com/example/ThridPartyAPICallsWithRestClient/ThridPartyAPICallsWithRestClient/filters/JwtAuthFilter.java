@@ -32,7 +32,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         final String requestTokenHeader = request.getHeader("Authorization");
 
 //      if we dont get the token
-        if (requestTokenHeader != null && !requestTokenHeader.startsWith("Bearer ")) {
+        if (requestTokenHeader == null || !requestTokenHeader.startsWith("Bearer ")) {
 
             filterChain.doFilter(request, response);
 
@@ -41,7 +41,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         }
 
 //      if we get the token
-        String token = requestTokenHeader.split("Bearer ")[1];
+        String token = requestTokenHeader.substring(7);
         Long userId = jwtService.getUserIdFromJwtToken(token);
 
         if (userId != null && SecurityContextHolder.getContext().getAuthentication() == null) {
