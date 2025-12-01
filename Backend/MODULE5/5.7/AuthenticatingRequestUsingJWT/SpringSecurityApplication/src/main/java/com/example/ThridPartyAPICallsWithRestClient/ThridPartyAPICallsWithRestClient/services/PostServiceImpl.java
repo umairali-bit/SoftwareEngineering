@@ -2,15 +2,19 @@ package com.example.ThridPartyAPICallsWithRestClient.ThridPartyAPICallsWithRestC
 
 import com.example.ThridPartyAPICallsWithRestClient.ThridPartyAPICallsWithRestClient.dtos.PostDTO;
 import com.example.ThridPartyAPICallsWithRestClient.ThridPartyAPICallsWithRestClient.entities.PostEntity;
+import com.example.ThridPartyAPICallsWithRestClient.ThridPartyAPICallsWithRestClient.entities.UserEntity;
 import com.example.ThridPartyAPICallsWithRestClient.ThridPartyAPICallsWithRestClient.exceptions.ResourceNotFoundException;
 import com.example.ThridPartyAPICallsWithRestClient.ThridPartyAPICallsWithRestClient.repositories.PostRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 
+@Slf4j
 @Service
 public class PostServiceImpl implements PostService {
 
@@ -39,6 +43,9 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public PostDTO getPostById(Long postId) {
+        UserEntity user = (UserEntity) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        log.info("User {}", user);
         PostEntity postEntity = postRepository
                 .findById(postId)
                 .orElseThrow(() -> new ResourceNotFoundException("The ID:" + postId + " was not found "));
