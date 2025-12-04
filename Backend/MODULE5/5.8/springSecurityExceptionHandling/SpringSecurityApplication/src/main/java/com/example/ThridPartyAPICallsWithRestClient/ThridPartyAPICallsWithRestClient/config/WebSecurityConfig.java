@@ -33,17 +33,20 @@ public class WebSecurityConfig {
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
         http
+                .csrf(AbstractHttpConfigurer::disable)
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/posts", "/error", "/auth/**").permitAll()
-                        .anyRequest().authenticated())
-                .csrf(AbstractHttpConfigurer::disable) //disabling csrf token
-                .sessionManagement(sessionConfig -> sessionConfig
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)) //disabling the session
+                        .requestMatchers("/posts","/auth/**", "/error").permitAll()
+                        // optionally, make GET /posts public like the tutorial:
+                        // .requestMatchers(HttpMethod.GET, "/posts/**").permitAll()
+                        .anyRequest().authenticated()
+                )
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
-               // .formLogin(Customizer.withDefaults()); disabling login forms
 
         return http.build();
     }
+
 
     @Bean
     AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
