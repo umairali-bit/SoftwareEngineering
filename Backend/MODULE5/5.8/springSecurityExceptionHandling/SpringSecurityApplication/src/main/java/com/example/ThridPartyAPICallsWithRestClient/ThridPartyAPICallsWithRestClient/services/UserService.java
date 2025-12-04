@@ -36,7 +36,7 @@ public class UserService implements UserDetailsService {
     @NonNull
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository.findByEmail(username).orElseThrow(
-                () -> new UsernameNotFoundException("User not found with username: " + username));
+                () -> new ResourceNotFoundException("User not found with username: " + username));
     }
 
     public UserEntity getUserById(Long userId) {
