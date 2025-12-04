@@ -33,6 +33,23 @@ public class LoggingFilter extends OncePerRequestFilter {
             filterChain.doFilter(requestWrapper, responseWrapper);
         } finally {
             long duration = System.currentTimeMillis() - start;
+
+            //Log headers with masking
+            String headers = getHeadersWithMasking(requestWrapper);
+
+            String requestBody = getRequestBody(requestWrapper);
+            String responseBody = getResponseBody(responseWrapper);
+
+            log.info("REQUEST [{}] {} query={} headers={} body={}",
+                    request.getMethod(),
+                    request.getRequestURI(),
+                    request.getQueryString(),
+                    headers,
+                    requestBody
+
+            );
+
+            responseWrapper.copyBodyToResponse();
         }
 
 
