@@ -12,6 +12,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.core.Authentication;
@@ -36,7 +37,7 @@ public class UserService implements UserDetailsService {
     @NonNull
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository.findByEmail(username).orElseThrow(
-                () -> new ResourceNotFoundException("User not found with username: " + username));
+                () -> new BadCredentialsException("User not found with username: " + username));
     }
 
     public UserEntity getUserById(Long userId) {
