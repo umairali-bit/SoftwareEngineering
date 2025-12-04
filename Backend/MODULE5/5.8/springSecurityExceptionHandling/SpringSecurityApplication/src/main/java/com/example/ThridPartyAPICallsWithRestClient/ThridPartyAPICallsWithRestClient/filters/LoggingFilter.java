@@ -35,10 +35,10 @@ public class LoggingFilter extends OncePerRequestFilter {
             long duration = System.currentTimeMillis() - start;
 
             //Log headers with masking
-            String headers = getHeadersWithMasking(requestWrapper);
+            String headers = getHeadersWithMasking(requestWrapper); //://TODO
 
-            String requestBody = getRequestBody(requestWrapper);
-            String responseBody = getResponseBody(responseWrapper);
+            String requestBody = getRequestBody(requestWrapper); //://TODO
+            String responseBody = getResponseBody(responseWrapper);//://TODO
 
             log.info("REQUEST [{}] {} query={} headers={} body={}",
                     request.getMethod(),
