@@ -12,6 +12,7 @@ import org.springframework.web.util.ContentCachingResponseWrapper;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.Enumeration;
 
 @Slf4j
 @Component
@@ -72,6 +73,42 @@ public class LoggingFilter extends OncePerRequestFilter {
         return new String(buffer, StandardCharsets.UTF_8);
 
     }
+
+    private String getHeadersWithMasking(HttpServletRequest request) {
+        StringBuilder stringBuilder = new StringBuilder("{");
+        Enumeration<String> headerNames = request.getHeaderNames();
+        boolean first = true;
+
+        if(headerNames == null) return "{}";
+
+        while (headerNames.hasMoreElements()) {
+            String name = headerNames.nextElement();
+            String value = request.getHeader(name);
+
+            //Mask the Authorization header
+            if ("authorization".equalsIgnoreCase(name)) {
+                value = maskAuthorization(name);
+            }
+
+            if(!first) stringBuilder.append(", ");
+            first = false;
+            stringBuilder.append(name).append("=").append(value);
+        }
+
+        stringBuilder.append("}");
+        return stringBuilder.toString();
+    }
+
+    private String maskAuthorization(String value) {
+        if(value == null) return null;
+
+        int idx = value.indexOf(" ");
+        if(idx == -1) return value.substring(0, idx) + " *******";
+
+        return "******";
+    }
+
+
 
 
 }
