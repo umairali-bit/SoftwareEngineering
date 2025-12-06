@@ -55,5 +55,23 @@ public class LoggingFilter extends OncePerRequestFilter {
 
     }
 
+    private String getRequestBody(ContentCachingRequestWrapper requestWrapper) {
+        byte[] buffer = requestWrapper.getContentAsByteArray();
+        if (buffer.length == 0) {
+            return "";
+        }
+
+        return  new String(buffer, StandardCharsets.UTF_8);
+    }
+
+    private String getResponseBody(ContentCachingResponseWrapper responseWrapper) {
+        byte[] buffer = responseWrapper.getContentAsByteArray();
+        if (buffer.length == 0) {
+            return "";
+        }
+        return new String(buffer, StandardCharsets.UTF_8);
+
+    }
+
 
 }
