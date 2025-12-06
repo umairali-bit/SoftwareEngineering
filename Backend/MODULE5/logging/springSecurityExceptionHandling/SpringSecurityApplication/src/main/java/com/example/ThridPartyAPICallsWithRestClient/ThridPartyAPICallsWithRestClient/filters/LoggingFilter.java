@@ -30,30 +30,37 @@ public class LoggingFilter extends OncePerRequestFilter {
                 new ContentCachingResponseWrapper(response);
 
         long start = System.currentTimeMillis();
+
         try {
             filterChain.doFilter(requestWrapper, responseWrapper);
         } finally {
+
             long duration = System.currentTimeMillis() - start;
 
-            //Log headers with masking
-            String headers = getHeadersWithMasking(requestWrapper); //://TODO
+            String headers = getHeadersWithMasking(requestWrapper);
+            String requestBody = getRequestBody(requestWrapper);
+            String responseBody = getResponseBody(responseWrapper);
 
-            String requestBody = getRequestBody(requestWrapper); //://TODO
-            String responseBody = getResponseBody(responseWrapper);//://TODO
-
+            // REQUEST LOG
             log.info("REQUEST [{}] {} query={} headers={} body={}",
                     request.getMethod(),
                     request.getRequestURI(),
                     request.getQueryString(),
                     headers,
                     requestBody
+            );
 
+            // RESPONSE LOG
+            log.info("RESPONSE [{}] {} status={} duration={}ms body={}",
+                    request.getMethod(),
+                    request.getRequestURI(),
+                    responseWrapper.getStatus(),
+                    duration,
+                    responseBody
             );
 
             responseWrapper.copyBodyToResponse();
         }
-
-
     }
 
     private String getRequestBody(ContentCachingRequestWrapper requestWrapper) {
@@ -87,7 +94,7 @@ public class LoggingFilter extends OncePerRequestFilter {
 
             //Mask the Authorization header
             if ("authorization".equalsIgnoreCase(name)) {
-                value = maskAuthorization(name);
+                value = maskAuthorization(value);
             }
 
             if(!first) stringBuilder.append(", ");
@@ -100,11 +107,18 @@ public class LoggingFilter extends OncePerRequestFilter {
     }
 
     private String maskAuthorization(String value) {
-        if(value == null) return null;
+        if (value == null || value.isBlank()) {
+            return "******";
+        }
 
-        int idx = value.indexOf(" ");
-        if(idx == -1) return value.substring(0, idx) + " *******";
+        // Example: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+        int idx = value.indexOf(' ');
+        if (idx > 0) {
+            String scheme = value.substring(0, idx);  // "Bearer"
+            return scheme + " ******";                // "Bearer ******"
+        }
 
+        // If no space (weird format), just hide everything
         return "******";
     }
 
