@@ -44,7 +44,7 @@ public class WebSecurityConfig {
                         // .requestMatchers(HttpMethod.GET, "/posts/**").permitAll()
                         .anyRequest().authenticated()
                 )
-                .addFilterBefore(loggingFilter, JwtAuthFilter.class)
+                .addFilterBefore(loggingFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
