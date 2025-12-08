@@ -20,10 +20,11 @@ public class SessionService {
     public void createOrReplaceSession(UserEntity user, String token, Instant jwtExpiry) {
 
         //removing any existing sessions from this user
-        sessionRepository.deleteByUser(user);
+        sessionRepository.deleteByUserId(user.getId());
 
         //create new session
-        SessionEntity session = new SessionEntity();
+        SessionEntity session = sessionRepository.findByUserId(user.getId())
+                .orElse(new SessionEntity());
         session.setUser(user);
         session.setToken(token);
         session.setCreatedAt(Instant.now());
