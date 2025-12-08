@@ -9,12 +9,15 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
+
 @Service
 @RequiredArgsConstructor
 public class AuthService {
 
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
+    private final SessionService sessionService;
 
 
     public String login(LoginDTO inputLogin) {
@@ -23,6 +26,12 @@ public class AuthService {
         );
 
         UserEntity user = (UserEntity) authentication.getPrincipal();
+
+        String token = jwtService.generateJwtToken(user);
+
+        Instant expiry = jwtService.getExpirationTimeFromJwtToken(token);
+
+        sessionService.createOrReplaceSession(user, token, expiry);
 
         assert user != null;
         return jwtService.generateJwtToken(user);

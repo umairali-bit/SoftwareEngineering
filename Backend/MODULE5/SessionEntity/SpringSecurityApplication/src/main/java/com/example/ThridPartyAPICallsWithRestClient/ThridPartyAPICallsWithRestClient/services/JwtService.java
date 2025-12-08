@@ -8,15 +8,18 @@ import io.jsonwebtoken.SignatureAlgorithm;
 
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
+import lombok.Data;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
+import java.time.Instant;
 import java.util.Date;
 import java.util.Set;
 
 @Service
+@Data
 public class JwtService {
 
     @Value("${jwt.secretKey}")
@@ -54,5 +57,18 @@ public class JwtService {
                 .getBody();
 
         return Long.parseLong(claims.getSubject());
+    }
+
+    //retrieving expiry from JWT
+    public Instant getExpirationTimeFromJwtToken(String token) {
+        return Jwts.parserBuilder()
+                .setSigningKey(getSecretKey())
+                .build()
+                .parseClaimsJws(token)
+                .getBody()
+                .getExpiration()
+                .toInstant();
+
+
     }
 }
