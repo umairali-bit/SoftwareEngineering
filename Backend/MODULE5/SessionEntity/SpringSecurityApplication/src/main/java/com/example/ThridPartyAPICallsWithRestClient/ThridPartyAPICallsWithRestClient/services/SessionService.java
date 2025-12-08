@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -34,6 +35,14 @@ public class SessionService {
         sessionRepository.save(session);
 
 
+    }
+
+    @Transactional
+    public void revokeByToken(String token){
+        sessionRepository.findByToken(token).ifPresent(session -> {
+            session.setRevoked(true);
+            sessionRepository.save(session);
+        });
     }
 
 
