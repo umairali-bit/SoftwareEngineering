@@ -11,6 +11,6 @@ import java.util.Optional;
 @Repository
 public interface SessionRepository extends JpaRepository<SessionEntity, Long> {
 
-
-    void deleteByUser(UserEntity user);
+    Optional<SessionEntity> findByUserId(Long id);
+    void deleteByUserId(Long userId);
 }
