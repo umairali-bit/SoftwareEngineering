@@ -45,6 +45,13 @@ public class SessionService {
         });
     }
 
+    public boolean isTokenActive(String token){
+        return sessionRepository.findByToken(token)
+                .filter(s -> !s.isRevoked())
+                .filter(s-> s.getExpiresAt() == null || s.getExpiresAt().isAfter(Instant.now()))
+                .isPresent();
+    }
+
 
 
 }
