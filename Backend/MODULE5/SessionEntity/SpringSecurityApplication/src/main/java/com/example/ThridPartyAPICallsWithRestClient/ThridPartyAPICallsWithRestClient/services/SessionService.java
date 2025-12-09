@@ -45,11 +45,16 @@ public class SessionService {
         });
     }
 
-    public boolean isTokenActive(String token){
+    public boolean isTokenActive(String token) {
         return sessionRepository.findByToken(token)
-                .filter(s -> !s.isRevoked())
-                .filter(s-> s.getExpiresAt() == null || s.getExpiresAt().isAfter(Instant.now()))
-                .isPresent();
+                .map(s -> {
+                    System.out.println("Session in DB: revoked=" + s.isRevoked()
+                            + ", expiresAt=" + s.getExpiresAt()
+                            + ", now=" + Instant.now());
+                    return !s.isRevoked()
+                            && (s.getExpiresAt() == null || s.getExpiresAt().isAfter(Instant.now()));
+                })
+                .orElse(false);
     }
 
 
