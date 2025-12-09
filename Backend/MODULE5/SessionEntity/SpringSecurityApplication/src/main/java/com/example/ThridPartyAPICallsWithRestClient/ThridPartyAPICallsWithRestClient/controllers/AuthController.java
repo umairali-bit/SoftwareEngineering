@@ -5,6 +5,7 @@ import com.example.ThridPartyAPICallsWithRestClient.ThridPartyAPICallsWithRestCl
 import com.example.ThridPartyAPICallsWithRestClient.ThridPartyAPICallsWithRestClient.dtos.SignUpDTO;
 import com.example.ThridPartyAPICallsWithRestClient.ThridPartyAPICallsWithRestClient.dtos.UserDto;
 import com.example.ThridPartyAPICallsWithRestClient.ThridPartyAPICallsWithRestClient.services.AuthService;
+import com.example.ThridPartyAPICallsWithRestClient.ThridPartyAPICallsWithRestClient.services.SessionService;
 import com.example.ThridPartyAPICallsWithRestClient.ThridPartyAPICallsWithRestClient.services.UserService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -25,6 +26,7 @@ public class AuthController {
 
     private final UserService userService;
     private final AuthService authService;
+    private final SessionService sessionService;
 
 
 
@@ -45,6 +47,42 @@ public class AuthController {
 
 
         return ResponseEntity.ok(token);
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<String> logout(HttpServletRequest request, HttpServletResponse response) {
+
+        String token = null;
+
+        //1. Try extracting JWT token from Authorization header
+        String header = request.getHeader("Authorization");
+        if(header != null && header.startsWith("Bearer ")) {
+            token = header.substring(7);
+        }
+
+        //2. try to find it in cookie
+        if(token == null && request.getCookies() != null) {
+            for (Cookie cookie : request.getCookies()) {
+                if(cookie.getName().equals("token")) {
+                    token = cookie.getValue();
+                }
+            }
+        }
+
+        if (token != null) {
+            sessionService.revokeByToken(token);
+        }
+
+        //3 delete cookie
+        Cookie deleteCookie = new Cookie("token", null);
+        deleteCookie.setHttpOnly(true);
+        deleteCookie.setMaxAge(0);
+        deleteCookie.setPath("/");
+        response.addCookie(deleteCookie);
+
+
+        return ResponseEntity.ok("Logged out successfully");
+
     }
 
 

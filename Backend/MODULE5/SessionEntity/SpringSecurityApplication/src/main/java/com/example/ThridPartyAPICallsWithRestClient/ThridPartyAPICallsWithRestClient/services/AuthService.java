@@ -33,12 +33,14 @@ public class AuthService {
 
         sessionService.createOrReplaceSession(user, token, expiry);
 
-        assert user != null;
-        return jwtService.generateJwtToken(user);
-
-
+        return token;
 
 
 
     }
+
+    public void logout(String token) {
+        sessionService.revokeByToken(token);
+    }
+
 }
