@@ -124,7 +124,7 @@ public class BookingServiceImpl implements BookingService {
 
     public UserEntity getCurrentUser() {
         UserEntity user = new UserEntity();
-        user.setId(3L);
+        user.setId(1L);
         return user; //TODO: Remove Dummy User
     }
 
