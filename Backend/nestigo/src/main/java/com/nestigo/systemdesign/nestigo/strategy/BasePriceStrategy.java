@@ -9,6 +9,8 @@ public class BasePriceStrategy implements PricingStrategy {
 
     @Override
     public BigDecimal calculatePrice(InventoryEntity inventory) {
+
+
         return inventory.getPrice();
     }
 }
