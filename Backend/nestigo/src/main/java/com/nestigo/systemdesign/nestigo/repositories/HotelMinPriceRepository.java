@@ -1,6 +1,8 @@
 package com.nestigo.systemdesign.nestigo.repositories;
 
+import com.nestigo.systemdesign.nestigo.dtos.HotelPriceDTO;
 import com.nestigo.systemdesign.nestigo.entities.HotelEntity;
+import com.nestigo.systemdesign.nestigo.entities.HotelMinPriceEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -11,19 +13,17 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDate;
 
 @Repository
-public interface HotelMinPrice extends JpaRepository<HotelMinPrice, Integer> {
+public interface HotelMinPriceRepository extends JpaRepository<HotelMinPriceEntity, Integer> {
 
     @Query("""
-    SELECT DISTINCT i.hotel
-    FROM InventoryEntity i
-    WHERE i.city = :city
+    SELECT new com.nestigo.systemdesign.nestigo.dtos.HotelPriceDTO(i.hotel, AVG(i.price))
+    FROM HotelMinPriceEntity i
+    WHERE i.hotel.city = :city
       AND i.date BETWEEN :startDate AND :endDate
-      AND i.closed = false
-      AND (i.totalCount - i.bookedCount - i.reservedCount) >= :roomsCount
-    GROUP BY i.hotel, i.room
-    HAVING COUNT(i.date) = :dateCount
+      AND i.hotel.active = true
+    GROUP BY i.hotel
 """)
-    Page<HotelEntity> findHotelsWithAvailableInventory(
+    Page<HotelPriceDTO> findHotelsWithAvailableInventory(
             @Param("city") String city,
             @Param("startDate") LocalDate startDate,
             @Param("endDate") LocalDate endDate,

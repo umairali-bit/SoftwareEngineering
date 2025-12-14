@@ -12,10 +12,14 @@ import java.time.LocalDateTime;
 
 @Entity
 @Data
-public class HotelMinPrice {
+public class HotelMinPriceEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "hotel_id", nullable = false)
+    private HotelEntity hotel;
 
     @Column(nullable = false)
     private LocalDate date;

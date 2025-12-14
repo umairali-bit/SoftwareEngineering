@@ -1,9 +1,12 @@
 package com.nestigo.systemdesign.nestigo.services;
 
 import com.nestigo.systemdesign.nestigo.dtos.HotelDTO;
+import com.nestigo.systemdesign.nestigo.dtos.HotelPriceDTO;
 import com.nestigo.systemdesign.nestigo.dtos.HotelSearchRequest;
 import com.nestigo.systemdesign.nestigo.entities.HotelEntity;
+import com.nestigo.systemdesign.nestigo.entities.HotelMinPriceEntity;
 import com.nestigo.systemdesign.nestigo.entities.InventoryEntity;
+import com.nestigo.systemdesign.nestigo.repositories.HotelMinPriceRepository;
 import com.nestigo.systemdesign.nestigo.repositories.InventoryRepository;
 import com.nestigo.systemdesign.nestigo.entities.RoomEntity;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +29,7 @@ import java.time.temporal.ChronoUnit;
 public class InventoryServiceImpl implements InventoryService{
 
     private final InventoryRepository inventoryRepository;
+    private final HotelMinPriceRepository hotelMinPriceRepository;
     private final ModelMapper modelMapper;
 
 
@@ -65,7 +69,7 @@ public class InventoryServiceImpl implements InventoryService{
     }
 
     @Override
-    public Page<HotelDTO> searchHotels(HotelSearchRequest hotelSearchRequest) {
+    public Page<HotelPriceDTO> searchHotels(HotelSearchRequest hotelSearchRequest) {
         log.info("searchHotels for {} city, from {} to {}", hotelSearchRequest.getCity(),
                 hotelSearchRequest.getStartDate(), hotelSearchRequest.getEndDate());
         Pageable pageable = PageRequest.of(hotelSearchRequest.getPage(), hotelSearchRequest.getPageSize());
@@ -74,12 +78,12 @@ public class InventoryServiceImpl implements InventoryService{
                 hotelSearchRequest.getEndDate().plusDays(1)
         );
 
-
-       Page<HotelEntity> hotelPage = inventoryRepository.findHotelsWithAvailableInventory(hotelSearchRequest.getCity(),
+//      business logic - 90 days
+       Page<HotelPriceDTO> hotelPage = hotelMinPriceRepository.findHotelsWithAvailableInventory(hotelSearchRequest.getCity(),
                                                              hotelSearchRequest.getStartDate(),
                                                              hotelSearchRequest.getEndDate(),
                                                              hotelSearchRequest.getRoomCount(),
                                                              dateCount, pageable);
-        return hotelPage.map(hotel -> modelMapper.map(hotel, HotelDTO.class));
+        return hotelPage;
     }
 }
