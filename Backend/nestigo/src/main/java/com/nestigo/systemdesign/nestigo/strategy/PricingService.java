@@ -2,11 +2,13 @@ package com.nestigo.systemdesign.nestigo.strategy;
 
 
 import com.nestigo.systemdesign.nestigo.entities.InventoryEntity;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.List;
 
-
+@Service
 public class PricingService {
 
     public BigDecimal calculateDynamicPricing(InventoryEntity inventory) {
@@ -19,6 +21,5 @@ public class PricingService {
         pricingStrategy = new HolidayPricingStrategy(pricingStrategy);
 
         return pricingStrategy.calculatePrice(inventory);
-
     }
 }

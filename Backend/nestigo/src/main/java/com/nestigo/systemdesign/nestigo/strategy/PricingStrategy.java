@@ -8,5 +8,6 @@ import java.time.LocalDate;
 public interface PricingStrategy {
 
     BigDecimal calculatePrice(InventoryEntity inventory);
-
 }
+
+

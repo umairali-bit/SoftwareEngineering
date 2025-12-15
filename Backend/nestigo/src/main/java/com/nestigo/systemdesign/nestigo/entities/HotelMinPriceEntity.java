@@ -35,6 +35,7 @@ public class HotelMinPriceEntity {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
+    protected HotelMinPriceEntity() {}
 
     public HotelMinPriceEntity(HotelEntity hotel,  LocalDate date) {
         this.hotel = hotel;

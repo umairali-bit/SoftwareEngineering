@@ -1,6 +1,5 @@
 package com.nestigo.systemdesign.nestigo.entities;
 
-
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -13,24 +12,26 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @Setter
+@Table(
+        uniqueConstraints = @UniqueConstraint(
+                name = "unique_hotel_room_date",
+                columnNames = {"hotel_id", "room_id", "date"}
+        ))
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(
-        uniqueConstraints =  @UniqueConstraint(
-                name = "unique_hotel_room_date", columnNames = {"hotel_id", "room_id","date"}))
 public class InventoryEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "hotel_id", nullable = false)
     private HotelEntity hotel;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "room_id", nullable = false)
+    @JoinColumn(name= "room_id", nullable = false)
     private RoomEntity room;
 
     @Column(nullable = false)
@@ -49,7 +50,7 @@ public class InventoryEntity {
     private BigDecimal surgeFactor;
 
     @Column(nullable = false, precision = 10, scale = 2)
-    private BigDecimal price; //basePrice * surgeFactor
+    private BigDecimal price;
 
     @Column(nullable = false)
     private String city;
@@ -61,7 +62,5 @@ public class InventoryEntity {
     private LocalDateTime createdAt;
 
     @UpdateTimestamp
-    private LocalDateTime updatedAT;
-
-
+    private LocalDateTime updatedAt;
 }
