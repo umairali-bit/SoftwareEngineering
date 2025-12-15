@@ -58,6 +58,8 @@ public class PricingUpdateService {
         List<InventoryEntity> inventoryEntityList = inventoryRepository
                 .findByHotelAndDateBetween(hotelEntity, startDate, endDate);
 
+        updateInventoryPrices(inventoryEntityList);
+
         updateHotelMinPrices(hotelEntity,inventoryEntityList, startDate,endDate);
 
 
