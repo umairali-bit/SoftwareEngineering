@@ -8,6 +8,7 @@ import com.nestigo.systemdesign.nestigo.repositories.HotelMinPriceRepository;
 import com.nestigo.systemdesign.nestigo.repositories.HotelRepository;
 import com.nestigo.systemdesign.nestigo.repositories.InventoryRepository;
 import com.nestigo.systemdesign.nestigo.strategy.PricingService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -35,6 +36,8 @@ public class PricingUpdateService {
 
     @Scheduled(cron = "*/5 * * * * *")
 
+    @Transactional
+
     public void updatePrices() {
 
         int page = 0;
@@ -54,7 +57,7 @@ public class PricingUpdateService {
         }
     }
 
-
+@Transactional
     private void updateHotelPrices(HotelEntity hotelEntity) {
 
         log.info("Update hotel prices by hotel id {}", hotelEntity.getId());
@@ -71,7 +74,7 @@ public class PricingUpdateService {
 
 
     }
-
+@Transactional
     private void updateHotelMinPrices(HotelEntity hotelEntity, List<InventoryEntity> inventoryEntityList,
                                       LocalDate startDate, LocalDate endDate) {
 
