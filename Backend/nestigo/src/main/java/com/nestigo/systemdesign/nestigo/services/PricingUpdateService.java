@@ -16,7 +16,11 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -67,6 +71,19 @@ public class PricingUpdateService {
 
     private void updateHotelMinPrices(HotelEntity hotelEntity, List<InventoryEntity> inventoryEntityList, LocalDate startDate, LocalDate endDate) {
 
+        //Computer minimum price per day for the hotel
+
+        Map<LocalDate, BigDecimal> dailyMinPrice = inventoryEntityList.stream()
+                .collect(Collectors.groupingBy(
+                        inventory -> inventory.getDate(),
+                        Collectors.mapping(
+                                inventory -> inventory.getPrice(),
+                                Collectors.collectingAndThen(
+                                        Collectors.minBy((p1,p2) -> p1.compareTo(p2)),
+                                        opt -> opt.orElse(BigDecimal.ZERO)
+                                )
+                        )
+                ));
 
 
     }
@@ -78,6 +95,8 @@ public class PricingUpdateService {
 
             inventoryEntity.setPrice(dynamicPrice);
         });
+
+        inventoryRepository.saveAll(inventoryEntityList);
 
 
 
