@@ -25,6 +25,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Slf4j
+@Transactional
 public class PricingUpdateService {
 
     //schedular to update the inventory and hotelMinPrice every hour
@@ -35,8 +36,6 @@ public class PricingUpdateService {
     private final PricingService pricingService;
 
     @Scheduled(cron = "*/5 * * * * *")
-
-    @Transactional
 
     public void updatePrices() {
 
@@ -57,7 +56,7 @@ public class PricingUpdateService {
         }
     }
 
-@Transactional
+
     private void updateHotelPrices(HotelEntity hotelEntity) {
 
         log.info("Update hotel prices by hotel id {}", hotelEntity.getId());
@@ -74,7 +73,7 @@ public class PricingUpdateService {
 
 
     }
-@Transactional
+
     private void updateHotelMinPrices(HotelEntity hotelEntity, List<InventoryEntity> inventoryEntityList,
                                       LocalDate startDate, LocalDate endDate) {
 
