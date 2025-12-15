@@ -33,7 +33,7 @@ public class PricingUpdateService {
     private final HotelMinPriceRepository hotelMinPriceRepository;
     private final PricingService pricingService;
 
-    @Scheduled(cron = "0 0 * * * *")
+    @Scheduled(cron = "*/5 * * * * *")
 
     public void updatePrices() {
 
@@ -57,6 +57,8 @@ public class PricingUpdateService {
 
     private void updateHotelPrices(HotelEntity hotelEntity) {
 
+        log.info("Update hotel prices by hotel id {}", hotelEntity.getId());
+
         LocalDate startDate = LocalDate.now();
         LocalDate endDate = startDate.plusYears(1);
 
@@ -70,7 +72,10 @@ public class PricingUpdateService {
 
     }
 
-    private void updateHotelMinPrices(HotelEntity hotelEntity, List<InventoryEntity> inventoryEntityList, LocalDate startDate, LocalDate endDate) {
+    private void updateHotelMinPrices(HotelEntity hotelEntity, List<InventoryEntity> inventoryEntityList,
+                                      LocalDate startDate, LocalDate endDate) {
+
+
 
         //Computing minimum price per day for the hotel
 
