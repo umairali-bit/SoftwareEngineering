@@ -35,7 +35,8 @@ public class HotelMinPriceEntity {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
-    protected HotelMinPriceEntity() {}
+    protected HotelMinPriceEntity() {} // Required by JPA for entity instantiation
+
 
     public HotelMinPriceEntity(HotelEntity hotel,  LocalDate date) {
         this.hotel = hotel;
