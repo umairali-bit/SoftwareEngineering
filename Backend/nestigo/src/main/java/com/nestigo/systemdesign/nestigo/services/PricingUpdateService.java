@@ -2,6 +2,7 @@ package com.nestigo.systemdesign.nestigo.services;
 
 
 import com.nestigo.systemdesign.nestigo.entities.HotelEntity;
+import com.nestigo.systemdesign.nestigo.entities.HotelMinPriceEntity;
 import com.nestigo.systemdesign.nestigo.entities.InventoryEntity;
 import com.nestigo.systemdesign.nestigo.repositories.HotelMinPriceRepository;
 import com.nestigo.systemdesign.nestigo.repositories.HotelRepository;
@@ -16,10 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -71,7 +69,7 @@ public class PricingUpdateService {
 
     private void updateHotelMinPrices(HotelEntity hotelEntity, List<InventoryEntity> inventoryEntityList, LocalDate startDate, LocalDate endDate) {
 
-        //Computer minimum price per day for the hotel
+        //Computing minimum price per day for the hotel
 
         Map<LocalDate, BigDecimal> dailyMinPrice = inventoryEntityList.stream()
                 .collect(Collectors.groupingBy(
@@ -84,6 +82,17 @@ public class PricingUpdateService {
                                 )
                         )
                 ));
+
+        //Prepare HotelPrices entities in bulk
+        List<HotelMinPriceEntity> hotelPrices = new ArrayList<>();
+        dailyMinPrice.forEach((date, price) -> {
+            HotelMinPriceEntity hotelPrice = hotelMinPriceRepository.findByHotelAndDate(hotelEntity, date)
+                    .orElse(new HotelMinPriceEntity(hotelEntity, date));
+            hotelPrice.setPrice(price);
+            hotelPrices.add(hotelPrice);
+        });
+
+        hotelMinPriceRepository.saveAll(hotelPrices);
 
 
     }

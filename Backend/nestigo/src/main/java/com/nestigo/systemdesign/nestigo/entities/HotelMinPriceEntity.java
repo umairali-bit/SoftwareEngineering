@@ -2,7 +2,7 @@ package com.nestigo.systemdesign.nestigo.entities;
 
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -11,7 +11,9 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
-@Data
+@Getter
+@Setter
+
 public class HotelMinPriceEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,5 +34,11 @@ public class HotelMinPriceEntity {
 
     @UpdateTimestamp
     private LocalDateTime updatedAt;
+
+
+    public HotelMinPriceEntity(HotelEntity hotel,  LocalDate date) {
+        this.hotel = hotel;
+        this.date = date;
+    }
 
 }
