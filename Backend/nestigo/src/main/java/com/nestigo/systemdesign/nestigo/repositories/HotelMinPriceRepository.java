@@ -17,13 +17,14 @@ import java.util.Optional;
 public interface HotelMinPriceRepository extends JpaRepository<HotelMinPriceEntity, Integer> {
 
     @Query("""
-    SELECT new com.nestigo.systemdesign.nestigo.dtos.HotelPriceDTO(i.hotel, AVG(i.price))
-    FROM HotelMinPriceEntity i
-    WHERE i.hotel.city = :city
-      AND i.date BETWEEN :startDate AND :endDate
-      AND i.hotel.active = true
-    GROUP BY i.hotel
-""")
+            SELECT new com.nestigo.systemdesign.nestigo.dtos.HotelPriceDTO(i.hotel, AVG(i.price))
+            FROM HotelMinPriceEntity i
+            WHERE i.hotel.city = :city
+              AND i.date BETWEEN :startDate AND :endDate
+              AND i.hotel.active = true
+            GROUP BY i.hotel
+            HAVING COUNT(i.date) = :dateCount
+            """)
     Page<HotelPriceDTO> findHotelsWithAvailableInventory(
             @Param("city") String city,
             @Param("startDate") LocalDate startDate,
@@ -32,6 +33,7 @@ public interface HotelMinPriceRepository extends JpaRepository<HotelMinPriceEnti
             @Param("dateCount") Long dateCount,
             Pageable pageable
     );
+
 
     Optional<HotelMinPriceEntity> findByHotelAndDate(HotelEntity hotelEntity, LocalDate date);
 }
