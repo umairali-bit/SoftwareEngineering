@@ -2,10 +2,12 @@ package com.example.ThridPartyAPICallsWithRestClient.ThridPartyAPICallsWithRestC
 
 
 import com.example.ThridPartyAPICallsWithRestClient.ThridPartyAPICallsWithRestClient.dtos.LoginDTO;
+import com.example.ThridPartyAPICallsWithRestClient.ThridPartyAPICallsWithRestClient.dtos.LoginResponseDTO;
 import com.example.ThridPartyAPICallsWithRestClient.ThridPartyAPICallsWithRestClient.dtos.SignUpDTO;
 import com.example.ThridPartyAPICallsWithRestClient.ThridPartyAPICallsWithRestClient.dtos.UserDto;
 import com.example.ThridPartyAPICallsWithRestClient.ThridPartyAPICallsWithRestClient.services.AuthService;
 import com.example.ThridPartyAPICallsWithRestClient.ThridPartyAPICallsWithRestClient.services.UserService;
+import com.example.ThridPartyAPICallsWithRestClient.ThridPartyAPICallsWithRestClient.dtos.LoginResponseDTO;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -36,16 +38,19 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody LoginDTO inputLogin, HttpServletRequest request,
+    public ResponseEntity<LoginResponseDTO> login(@RequestBody LoginDTO inputLogin, HttpServletRequest request,
                                         HttpServletResponse response) {
-        String token = authService.login(inputLogin);
-        Cookie cookie = new Cookie("token", token);
+        LoginResponseDTO login = authService.login(inputLogin);
+        Cookie cookie = new Cookie("refreshToken", login.getRefreshToken());
         cookie.setHttpOnly(true);
         response.addCookie(cookie);
 
 
-        return ResponseEntity.ok(token);
+        return ResponseEntity.ok(login);
     }
+
+
+
 
 
 }

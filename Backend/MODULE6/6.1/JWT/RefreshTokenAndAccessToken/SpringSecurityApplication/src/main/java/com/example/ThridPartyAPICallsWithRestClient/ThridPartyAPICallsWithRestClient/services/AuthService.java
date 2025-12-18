@@ -2,6 +2,7 @@ package com.example.ThridPartyAPICallsWithRestClient.ThridPartyAPICallsWithRestC
 
 
 import com.example.ThridPartyAPICallsWithRestClient.ThridPartyAPICallsWithRestClient.dtos.LoginDTO;
+import com.example.ThridPartyAPICallsWithRestClient.ThridPartyAPICallsWithRestClient.dtos.LoginResponseDTO;
 import com.example.ThridPartyAPICallsWithRestClient.ThridPartyAPICallsWithRestClient.entities.UserEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -17,7 +18,7 @@ public class AuthService {
     private final JwtService jwtService;
 
 
-    public String login(LoginDTO inputLogin) {
+    public LoginResponseDTO login(LoginDTO inputLogin) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(inputLogin.getEmail(), inputLogin.getPassword())
         );
@@ -27,6 +28,10 @@ public class AuthService {
         assert user != null;
         String accessToken = jwtService.generateAccessJwtToken(user);
         String refreshToken = jwtService.generateRefreshJwtToken(user);
+
+        return new LoginResponseDTO(user.getId(), refreshToken, accessToken);
+
+
 
 
 
