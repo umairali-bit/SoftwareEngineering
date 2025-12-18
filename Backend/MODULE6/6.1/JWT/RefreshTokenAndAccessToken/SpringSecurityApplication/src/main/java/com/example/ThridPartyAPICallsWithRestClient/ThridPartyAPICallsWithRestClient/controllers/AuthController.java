@@ -13,6 +13,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,6 +32,8 @@ public class AuthController {
     private final UserService userService;
     private final AuthService authService;
 
+    @Value("${deploy.env}")
+    private String deployEnv;
 
 
     @PostMapping("/signUp")
@@ -46,6 +49,7 @@ public class AuthController {
         LoginResponseDTO login = authService.login(inputLogin);
         Cookie cookie = new Cookie("refreshToken", login.getRefreshToken());
         cookie.setHttpOnly(true);
+        cookie.setSecure("production".equals(deployEnv));
         response.addCookie(cookie);
 
 
