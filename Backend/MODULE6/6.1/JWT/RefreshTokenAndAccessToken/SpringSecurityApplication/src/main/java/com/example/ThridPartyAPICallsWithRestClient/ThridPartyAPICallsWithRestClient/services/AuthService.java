@@ -25,7 +25,10 @@ public class AuthService {
         UserEntity user = (UserEntity) authentication.getPrincipal();
 
         assert user != null;
-        return jwtService.generateJwtToken(user);
+        String accessToken = jwtService.generateAccessJwtToken(user);
+        String refreshToken = jwtService.generateRefreshJwtToken(user);
+
+
 
 
 

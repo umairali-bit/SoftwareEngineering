@@ -31,13 +31,24 @@ public class JwtService {
         return Keys.hmacShaKeyFor(jwtSecretKey.getBytes(StandardCharsets.UTF_8));
     }
 
-    public String generateJwtToken(UserEntity user){
+    public String generateAccessJwtToken(UserEntity user){
        return Jwts.builder()
                 .setSubject(user.getId().toString())
                 .claim("email", user.getEmail())
                 .claim("roles", Set.of("ADMIN","USER"))
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + 1000*60))
+                .signWith(getSecretKey())
+                .compact();
+
+
+
+    }
+    public String generateRefreshJwtToken(UserEntity user){
+        return Jwts.builder()
+                .setSubject(user.getId().toString())
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + 1000L *60*60*245*30*6))
                 .signWith(getSecretKey())
                 .compact();
 
