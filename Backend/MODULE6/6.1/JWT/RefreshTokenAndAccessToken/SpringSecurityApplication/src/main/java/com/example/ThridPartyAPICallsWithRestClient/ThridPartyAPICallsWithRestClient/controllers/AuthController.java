@@ -14,10 +14,13 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Arrays;
 
 @RestController
 @RequiredArgsConstructor
@@ -48,6 +51,22 @@ public class AuthController {
 
         return ResponseEntity.ok(login);
     }
+
+    @PostMapping("/refresh")
+    public ResponseEntity<LoginResponseDTO> refresh(HttpServletRequest request) {
+        Cookie[] cookies = request.getCookies();
+
+       String refreshToken = Arrays.stream(cookies)
+                .filter(cookie -> "refreshToken".equals(cookie.getName()))
+                .findFirst()
+                .map(cookie -> cookie.getValue())
+                .orElseThrow(() -> new AuthenticationServiceException("Refresh token not found"));
+
+       LoginResponseDTO loginResponseDTO = authService.refreshToken(refreshToken);
+
+       return ResponseEntity.ok(loginResponseDTO);
+    }
+
 
 
 
