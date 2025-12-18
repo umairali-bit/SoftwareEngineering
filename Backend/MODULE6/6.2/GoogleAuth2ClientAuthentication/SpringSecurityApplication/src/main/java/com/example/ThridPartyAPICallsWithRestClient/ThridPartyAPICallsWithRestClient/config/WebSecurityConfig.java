@@ -42,7 +42,9 @@ public class WebSecurityConfig {
                         // .requestMatchers(HttpMethod.GET, "/posts/**").permitAll()
                         .anyRequest().authenticated()
                 )
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+                .oauth2Login(oauth2Config -> oauth2Config
+                        .failureUrl("/login?error=true"));
 
         return http.build();
     }
