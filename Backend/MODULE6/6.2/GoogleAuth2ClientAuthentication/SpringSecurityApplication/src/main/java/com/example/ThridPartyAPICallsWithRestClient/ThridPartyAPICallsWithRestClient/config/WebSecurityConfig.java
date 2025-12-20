@@ -2,6 +2,7 @@ package com.example.ThridPartyAPICallsWithRestClient.ThridPartyAPICallsWithRestC
 
 
 import com.example.ThridPartyAPICallsWithRestClient.ThridPartyAPICallsWithRestClient.filters.JwtAuthFilter;
+import com.example.ThridPartyAPICallsWithRestClient.ThridPartyAPICallsWithRestClient.handlers.OAuth2SuccessHandler;
 import lombok.Generated;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -28,6 +29,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class WebSecurityConfig {
 
     private final JwtAuthFilter jwtAuthFilter;
+    private final OAuth2SuccessHandler  oAuth2SuccessHandler;
 
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -50,7 +52,7 @@ public class WebSecurityConfig {
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .oauth2Login(oauth2 -> oauth2
                         .failureUrl("/login?error=true")
-                        .successHandler()
+                        .successHandler(oAuth2SuccessHandler)
                 );
 
         return http.build();
