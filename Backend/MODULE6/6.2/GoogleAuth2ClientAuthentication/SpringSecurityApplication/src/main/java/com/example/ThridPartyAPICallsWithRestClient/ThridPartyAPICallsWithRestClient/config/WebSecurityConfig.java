@@ -34,17 +34,24 @@ public class WebSecurityConfig {
 
         http
                 .csrf(AbstractHttpConfigurer::disable)
-                .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .sessionManagement(session ->
+                        session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+                )
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/posts","/auth/**", "/error").permitAll()
-                        // optionally, make GET /posts public like the tutorial:
-                        // .requestMatchers(HttpMethod.GET, "/posts/**").permitAll()
+                        .requestMatchers(
+                                "/posts",
+                                "/auth/**",
+                                "/error",
+                                "/oauth2/**",
+                                "/login/oauth2/**"
+                        ).permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
-                .oauth2Login(oauth2Config -> oauth2Config
-                        .failureUrl("/login?error=true"));
+                .oauth2Login(oauth2 -> oauth2
+                        .defaultSuccessUrl("/posts", true)
+                        .failureUrl("/login?error=true")
+                );
 
         return http.build();
     }
