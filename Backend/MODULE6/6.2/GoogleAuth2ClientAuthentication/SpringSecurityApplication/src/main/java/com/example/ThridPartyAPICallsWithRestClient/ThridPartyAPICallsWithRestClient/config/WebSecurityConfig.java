@@ -49,8 +49,8 @@ public class WebSecurityConfig {
                 )
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .oauth2Login(oauth2 -> oauth2
-                        .defaultSuccessUrl("/posts", true)
                         .failureUrl("/login?error=true")
+                        .successHandler()
                 );
 
         return http.build();
