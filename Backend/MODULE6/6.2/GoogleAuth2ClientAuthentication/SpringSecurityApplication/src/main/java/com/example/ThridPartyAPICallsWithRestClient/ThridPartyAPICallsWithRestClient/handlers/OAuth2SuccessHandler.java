@@ -69,6 +69,12 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         response.addCookie(cookie);
 
 
+        //passing the token to frontend
+        String frontEndUrl = "http://localhost:8080/home.html?token="+accessToken;
+        getRedirectStrategy().sendRedirect(request, response, frontEndUrl);
+
+
+
 
 
 

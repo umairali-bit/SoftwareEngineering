@@ -45,7 +45,8 @@ public class WebSecurityConfig {
                                 "/auth/**",
                                 "/error",
                                 "/oauth2/**",
-                                "/login/oauth2/**"
+                                "/login/oauth2/**",
+                                "/home.html"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )

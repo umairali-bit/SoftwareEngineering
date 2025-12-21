@@ -46,7 +46,7 @@ public class UserService implements UserDetailsService {
     }
 
     public UserEntity  getUserByEmail(String email) {
-        return userRepository.findByEmail(email).orElseThrow(null);
+        return userRepository.findByEmail(email).orElse(null);
     }
 
 
