@@ -1,13 +1,16 @@
 package com.example.ThridPartyAPICallsWithRestClient.ThridPartyAPICallsWithRestClient.handlers;
 
 import com.example.ThridPartyAPICallsWithRestClient.ThridPartyAPICallsWithRestClient.entities.UserEntity;
+import com.example.ThridPartyAPICallsWithRestClient.ThridPartyAPICallsWithRestClient.services.JwtService;
 import com.example.ThridPartyAPICallsWithRestClient.ThridPartyAPICallsWithRestClient.services.UserService;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
@@ -20,9 +23,14 @@ import java.io.IOException;
 @Component
 @RequiredArgsConstructor
 @Slf4j
+
 public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
     private final UserService userService;
+    private final JwtService jwtService;
+
+    @Value("${deploy.env}")
+    private String deployEnv;
 
     @Override
     public void onAuthenticationSuccess(
@@ -43,7 +51,22 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
         if (user == null) {
 
+            UserEntity newUser = UserEntity.builder()
+                    .name(oAuth2User.getAttribute("name"))
+                    .email(email)
+                    .build();
+
+            user = userService.save(newUser);
+
         }
+
+        String accessToken = jwtService.generateAccessJwtToken(user);
+        String refreshToken = jwtService.generateRefreshJwtToken(user);
+
+        Cookie cookie = new Cookie("refreshToken", refreshToken);
+        cookie.setHttpOnly(true);
+        cookie.setSecure("production".equals(deployEnv));
+        response.addCookie(cookie);
 
 
 

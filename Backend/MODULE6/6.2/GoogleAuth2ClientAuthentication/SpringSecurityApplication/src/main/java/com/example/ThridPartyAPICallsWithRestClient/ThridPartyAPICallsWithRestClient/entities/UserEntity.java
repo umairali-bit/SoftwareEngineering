@@ -16,6 +16,7 @@ import java.util.List;
 @AllArgsConstructor
 @Setter
 @ToString
+@Builder
 public class UserEntity implements UserDetails {
 
     @Id
