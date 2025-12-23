@@ -13,6 +13,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationServiceException;
@@ -25,6 +26,7 @@ import java.util.Arrays;
 
 @RestController
 @RequiredArgsConstructor
+@Slf4j
 @RequestMapping(path = "/auth")
 
 public class AuthController {
@@ -49,6 +51,7 @@ public class AuthController {
         LoginResponseDTO login = authService.login(inputLogin);
         Cookie cookie = new Cookie("refreshToken", login.getRefreshToken());
         cookie.setHttpOnly(true);
+        cookie.setPath("/");
         cookie.setSecure("production".equals(deployEnv));
         response.addCookie(cookie);
 
@@ -58,15 +61,30 @@ public class AuthController {
 
     @PostMapping("/refresh")
     public ResponseEntity<LoginResponseDTO> refresh(HttpServletRequest request) {
+        log.info("deployEnv={}", deployEnv);
+
         Cookie[] cookies = request.getCookies();
 
-       String refreshToken = Arrays.stream(cookies)
+        if (cookies == null || cookies.length == 0) {
+            throw new AuthenticationServiceException("No cookies found on request");
+        }
+
+        for (Cookie c : cookies) {
+            log.info("Cookie received: name=[{}], value=[{}], path=[{}]",
+                    c.getName(), c.getValue(), c.getPath());
+        }
+
+
+        String refreshToken = Arrays.stream(cookies)
                 .filter(cookie -> "refreshToken".equals(cookie.getName()))
                 .findFirst()
                 .map(cookie -> cookie.getValue())
-                .orElseThrow(() -> new AuthenticationServiceException("Refresh token not found"));
 
-       LoginResponseDTO loginResponseDTO = authService.refreshToken(refreshToken);
+                .orElseThrow(() -> new AuthenticationServiceException("Refresh token not found"));
+        log.info("Refresh token from cookie = [{}], length={}", refreshToken, refreshToken.length());
+
+
+        LoginResponseDTO loginResponseDTO = authService.refreshToken(refreshToken);
 
        return ResponseEntity.ok(loginResponseDTO);
     }

@@ -5,6 +5,7 @@ import com.example.ThridPartyAPICallsWithRestClient.ThridPartyAPICallsWithRestCl
 import com.example.ThridPartyAPICallsWithRestClient.ThridPartyAPICallsWithRestClient.dtos.LoginResponseDTO;
 import com.example.ThridPartyAPICallsWithRestClient.ThridPartyAPICallsWithRestClient.entities.UserEntity;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class AuthService {
 
     private final AuthenticationManager authenticationManager;
@@ -39,16 +41,16 @@ public class AuthService {
 
     public LoginResponseDTO refreshToken(String refreshToken) {
 
-        Long userId = jwtService.getUserIdFromJwtToken(refreshToken);
+        log.info("Incoming refreshToken startsWith: {}", refreshToken.substring(0, 15));
+
+
         sessionService.validateSession(refreshToken);
 
+        Long userId = jwtService.getUserIdFromJwtToken(refreshToken);
         UserEntity user = userService.getUserById(userId);
 
         String accessToken = jwtService.generateAccessJwtToken(user);
-        return new LoginResponseDTO(user.getId(), accessToken, refreshToken);
 
-
-
-
+        return new LoginResponseDTO(user.getId(), refreshToken, accessToken);
     }
 }
