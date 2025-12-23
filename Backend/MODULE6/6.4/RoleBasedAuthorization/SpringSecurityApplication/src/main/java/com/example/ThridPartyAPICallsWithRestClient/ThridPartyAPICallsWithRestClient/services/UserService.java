@@ -53,7 +53,7 @@ public class UserService implements UserDetailsService {
     public UserDto singUp(@Valid SignUpDTO inputSignUp) {
         Optional<UserEntity> user = userRepository.findByEmail(inputSignUp.getEmail());
         if(user.isPresent()) {
-            throw new UsernameNotFoundException("Email already in use" + inputSignUp.getEmail());
+            throw new UsernameNotFoundException("Email already in use " + inputSignUp.getEmail());
         }
 
         UserEntity creatingUser = modelMapper.map(inputSignUp, UserEntity.class);

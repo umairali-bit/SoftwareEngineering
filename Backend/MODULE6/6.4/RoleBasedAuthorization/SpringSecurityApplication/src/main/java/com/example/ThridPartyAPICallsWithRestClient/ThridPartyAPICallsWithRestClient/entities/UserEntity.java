@@ -1,21 +1,22 @@
 package com.example.ThridPartyAPICallsWithRestClient.ThridPartyAPICallsWithRestClient.entities;
 
 
+import com.example.ThridPartyAPICallsWithRestClient.ThridPartyAPICallsWithRestClient.entities.enums.Role;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.NotFound;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 @Entity
-@Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@Setter
 @ToString
+@Getter
+@Setter
 @Builder
 public class UserEntity implements UserDetails {
 
@@ -29,6 +30,10 @@ public class UserEntity implements UserDetails {
     private String password;
 
     private String name;
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    @Enumerated(EnumType.STRING)
+    private Set<Role> roles;
 
 
     @Override
