@@ -54,14 +54,24 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             if (userId != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 UserEntity user = userService.getUserById(userId);
 
+                System.out.println("=== JWT DEBUG ===");
+                System.out.println("Request URI: " + request.getRequestURI());
+                System.out.println("User ID: " + userId);
+                System.out.println("User roles (DB): " + user.getRoles());
+                System.out.println("User authorities (Spring): " + user.getAuthorities());
+                System.out.println("================");
+
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken
-                        (user, null, null);
+                        (user, null, user.getAuthorities());
                 authentication.setDetails(
                         new WebAuthenticationDetailsSource().buildDetails(request)
                 );
 
                 SecurityContextHolder.getContext().setAuthentication((authentication));
             }
+
+
+
 
             filterChain.doFilter(request, response);
         } catch (Exception ex) {
