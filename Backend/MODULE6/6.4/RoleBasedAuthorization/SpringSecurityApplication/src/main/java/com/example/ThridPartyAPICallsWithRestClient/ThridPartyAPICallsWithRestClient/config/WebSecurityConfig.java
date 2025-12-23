@@ -23,6 +23,8 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import static com.example.ThridPartyAPICallsWithRestClient.ThridPartyAPICallsWithRestClient.entities.enums.Role.ADMIN;
+
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -30,6 +32,15 @@ public class WebSecurityConfig {
 
     private final JwtAuthFilter jwtAuthFilter;
     private final OAuth2SuccessHandler  oAuth2SuccessHandler;
+
+    private static final String[] publicRoutes = {
+            "/auth/**",
+            "/error",
+            "/oauth2/**",
+            "/login/oauth2/**",
+            "/home.html"
+
+    };
 
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -40,14 +51,8 @@ public class WebSecurityConfig {
                         session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
                 )
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(
-                                "/posts",
-                                "/auth/**",
-                                "/error",
-                                "/oauth2/**",
-                                "/login/oauth2/**",
-                                "/home.html"
-                        ).permitAll()
+                        .requestMatchers(publicRoutes).permitAll()
+                        .requestMatchers("/posts/**").hasRole(ADMIN.name())
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
