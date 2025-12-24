@@ -4,8 +4,8 @@ package com.example.ThridPartyAPICallsWithRestClient.ThridPartyAPICallsWithRestC
 import com.example.ThridPartyAPICallsWithRestClient.ThridPartyAPICallsWithRestClient.entities.enums.Role;
 import lombok.Data;
 import jakarta.validation.constraints.*;
-import org.aspectj.bridge.IMessage;
-
+import com.example.ThridPartyAPICallsWithRestClient
+        .ThridPartyAPICallsWithRestClient.entities.enums.Permissions;
 import java.util.Set;
 
 @Data
@@ -23,4 +23,6 @@ public class SignUpDTO {
     private String password;
 
     private Set<Role> roles;
+
+    private Set<Permissions> permissions;
 }
