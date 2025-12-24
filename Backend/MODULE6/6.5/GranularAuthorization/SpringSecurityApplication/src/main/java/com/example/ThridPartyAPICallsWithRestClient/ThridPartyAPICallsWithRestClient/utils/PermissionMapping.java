@@ -20,6 +20,10 @@ public class PermissionMapping {
             ADMIN, Set.of(USER_DELETE, USER_CREATE, POST_DELETE, POST_CREATE,USER_UPDATE, POST_UPDATE)
     );
 
+
+    // Converts a role's permissions into Spring Security GrantedAuthorities
+    // Tells Spring Security which permissions (authorities) a given role has
+
     public static Set<SimpleGrantedAuthority> getAuthoritiesForRole(Role role) {
         return permissions.get(role).stream()
                 .map(permission -> new SimpleGrantedAuthority(permission.name()))
