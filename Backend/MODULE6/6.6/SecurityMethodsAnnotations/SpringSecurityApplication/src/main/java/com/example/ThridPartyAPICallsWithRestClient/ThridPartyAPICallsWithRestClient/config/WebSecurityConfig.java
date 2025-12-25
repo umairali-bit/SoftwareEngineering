@@ -32,7 +32,7 @@ import static com.example.ThridPartyAPICallsWithRestClient.ThridPartyAPICallsWit
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
-@EnableMethodSecurity
+@EnableMethodSecurity(securedEnabled = true)
 public class WebSecurityConfig {
 
     private final JwtAuthFilter jwtAuthFilter;
