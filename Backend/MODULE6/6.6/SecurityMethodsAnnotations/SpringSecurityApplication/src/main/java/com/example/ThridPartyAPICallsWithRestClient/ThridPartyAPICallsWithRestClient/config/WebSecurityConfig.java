@@ -41,8 +41,6 @@ public class WebSecurityConfig {
     private static final String[] publicRoutes = {
             "/auth/**",
             "/error",
-            "/oauth2/**",
-            "/login/oauth2/**",
             "/home.html"
 
     };
