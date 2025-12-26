@@ -39,7 +39,8 @@ public class PostEntity {
 
     }
 
-    @ManyToOne
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "author_id", nullable = false)
     private UserEntity author;
 
 

@@ -12,7 +12,7 @@ public class PostDTO {
     private String title;
     private String description;
 
-    private UserDto userDto;
+    private UserDto author;
 
 }
 
