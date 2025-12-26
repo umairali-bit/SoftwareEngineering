@@ -26,7 +26,7 @@ public class PostController {
     }
 
     @GetMapping("/{postId}")
-    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')AND hasAuthority('POST_VIEW')")
     public PostDTO getPostById(@PathVariable Long postId) {
         return postService.getPostById(postId);
     }

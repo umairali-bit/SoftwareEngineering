@@ -39,5 +39,8 @@ public class PostEntity {
 
     }
 
+    @ManyToOne
+    private UserEntity author;
+
 
 }
