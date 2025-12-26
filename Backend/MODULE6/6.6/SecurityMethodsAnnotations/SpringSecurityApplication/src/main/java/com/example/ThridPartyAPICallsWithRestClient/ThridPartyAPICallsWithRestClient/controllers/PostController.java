@@ -19,7 +19,7 @@ public class PostController {
     }
 
     @GetMapping
-    @Secured("ROLE_USER")
+    @Secured({"ROLE_USER", "ROLE_ADMIN"})
     public List<PostDTO> getAllPosts() {
         return postService.getAllPosts();
     }
