@@ -27,7 +27,7 @@ public class PostController {
 
     @GetMapping("/{postId}")
   //  @PreAuthorize("hasAnyRole('USER', 'ADMIN')AND hasAuthority('POST_VIEW')")
-    @PreAuthorize("@postSecurity.isOwnerOfPost(#postId)")
+    @PreAuthorize("@postSecurity.isOwnerOfPost(#postId)") //you have to be the owner of the post to view
     public PostDTO getPostById(@PathVariable Long postId) {
         return postService.getPostById(postId);
     }
