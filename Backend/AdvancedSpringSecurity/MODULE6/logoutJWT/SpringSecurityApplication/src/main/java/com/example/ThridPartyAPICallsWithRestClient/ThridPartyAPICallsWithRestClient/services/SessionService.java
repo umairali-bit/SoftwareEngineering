@@ -47,4 +47,12 @@ public class SessionService {
         sessionRepository.save(session);
     }
 
+    public void deleteByRefreshToken(String refreshToken) {
+        sessionRepository.deleteByRefreshToken(refreshToken);
+    }
+
+    public void deleteAllByUserId(Long userId) {
+        sessionRepository.deleteAllByUserId(userId);
+    }
+
 }
