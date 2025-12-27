@@ -1,12 +1,14 @@
 
 package com.example.ThridPartyAPICallsWithRestClient.ThridPartyAPICallsWithRestClient.services;
 
+import com.example.ThridPartyAPICallsWithRestClient.ThridPartyAPICallsWithRestClient.dtos.LoginResponseDTO;
 import com.example.ThridPartyAPICallsWithRestClient.ThridPartyAPICallsWithRestClient.entities.SessionEntity;
 import com.example.ThridPartyAPICallsWithRestClient.ThridPartyAPICallsWithRestClient.entities.UserEntity;
 import com.example.ThridPartyAPICallsWithRestClient.ThridPartyAPICallsWithRestClient.repositories.SessionRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.web.authentication.session.SessionAuthenticationException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -21,6 +23,7 @@ public class SessionService {
     private final RefreshTokenHasher hasher;
 
 
+
     /**
      * Call this on LOGIN:
      * - kill all old sessions for this user
@@ -28,7 +31,8 @@ public class SessionService {
      */
 
     @Transactional
-    public void generateNewSession(UserEntity user,  String refreshToken) {
+    public void generateNewSession(UserEntity user,  String rawRefreshToken) {
+        String hash = hasher.sha256(rawRefreshToken);
 
         //remove all session by the user
         sessionRepository.deleteByUserId(user.getId());
@@ -36,13 +40,39 @@ public class SessionService {
 
         SessionEntity newSession = SessionEntity.builder()
                 .user(user)
-                .refreshTokenHash(hasher.sha256(refreshToken))
+                .refreshTokenHash(hasher.sha256(hash))
                 .lastUsedAt(LocalDateTime.now())
                 .build();
 
         sessionRepository.save(newSession);
 
     }
+
+
+    /**
+     * Rotate current Refresh Token
+     */
+    @Transactional
+    public LoginResponseDTO rotateRefreshToken(String rawRefreshToken) {
+
+        String hash = hasher.sha256(rawRefreshToken);
+
+        SessionEntity existing = sessionRepository.findByHashForUpdate(hash)
+                .orElseThrow(() -> new SessionAuthenticationException("Invalid refresh token"));
+
+        UserEntity user = existing.getUser();
+        String newAccess = jwtService.generateAccessJwtToken(user);
+        String newRefresh = jwtService.generateRefreshJwtToken(user);
+
+        sessionRepository.save(SessionEntity.builder()
+                .user(user)
+                .refreshTokenHash(hasher.sha256(newRefresh))
+                .lastUsedAt(LocalDateTime.now())
+                .build());
+
+        return new LoginResponseDTO(user.getId(), newAccess, newRefresh);
+    }
+
     /**
      * Logout using refresh token from cookie
      * - delete the session if token is present

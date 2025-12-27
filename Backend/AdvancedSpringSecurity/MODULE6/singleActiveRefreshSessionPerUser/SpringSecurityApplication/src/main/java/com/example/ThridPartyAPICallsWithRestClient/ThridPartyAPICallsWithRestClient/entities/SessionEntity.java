@@ -20,6 +20,9 @@ public class SessionEntity {
     @Column(nullable = false, unique = true, length = 64)
     private String refreshTokenHash;
 
+    @Column(nullable = false, unique = true, length = 64)
+    private String accessTokenHash;
+
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
