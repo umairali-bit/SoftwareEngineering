@@ -86,7 +86,6 @@ public class AuthController {
 
 
         LoginResponseDTO loginResponseDTO = authService.refreshToken(refreshToken);
-        loginResponseDTO.setRefreshToken(null);
 
 //      MINIMAL REQUIRED FOR ROTATION: overwrite cookie with NEW refresh token
         Cookie newCookie = new Cookie("refreshToken", loginResponseDTO.getRefreshToken());
