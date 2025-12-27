@@ -30,8 +30,4 @@ public class SessionEntity {
     @ManyToOne(optional = false)
     private UserEntity user;
 
-    @PrePersist
-    public void prePersist() {
-        if (lastUsedAt == null) lastUsedAt = LocalDateTime.now();
-    }
 }

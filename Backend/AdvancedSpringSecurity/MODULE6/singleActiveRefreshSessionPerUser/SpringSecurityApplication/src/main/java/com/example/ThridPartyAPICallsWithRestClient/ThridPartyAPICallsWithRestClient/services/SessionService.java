@@ -1,52 +1,50 @@
-package com.example.ThridPartyAPICallsWithRestClient.ThridPartyAPICallsWithRestClient.services;
 
+package com.example.ThridPartyAPICallsWithRestClient.ThridPartyAPICallsWithRestClient.services;
 
 import com.example.ThridPartyAPICallsWithRestClient.ThridPartyAPICallsWithRestClient.entities.SessionEntity;
 import com.example.ThridPartyAPICallsWithRestClient.ThridPartyAPICallsWithRestClient.entities.UserEntity;
-import com.example.ThridPartyAPICallsWithRestClient.ThridPartyAPICallsWithRestClient.exceptions.ResourceNotFoundException;
 import com.example.ThridPartyAPICallsWithRestClient.ThridPartyAPICallsWithRestClient.repositories.SessionRepository;
 import jakarta.transaction.Transactional;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.web.authentication.session.SessionAuthenticationException;
 import org.springframework.stereotype.Service;
 
-import java.time.Instant;
 import java.time.LocalDateTime;
-import java.util.Comparator;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class SessionService {
 
     private final SessionRepository sessionRepository;
     private final JwtService jwtService;
     private final RefreshTokenHasher hasher;
-    private final int SESSION_LIMIT = 2;
 
-    public void generateNewSession(UserEntity user, String refreshToken) {
-        List<SessionEntity> userSessions = sessionRepository.findByUser(user);
-        if (userSessions.size() == SESSION_LIMIT) {
-            userSessions.sort(Comparator.comparing(SessionEntity::getLastUsedAt));
 
-            SessionEntity leastRecentlyUsedSession = userSessions.get(0);
-            sessionRepository.delete(leastRecentlyUsedSession);
-        }
+    /**
+     * Call this on LOGIN:
+     * - kill all old sessions for this user
+     * -create fresh session wit new refresh token hash
+     */
+
+    @Transactional
+    public void generateNewSession(UserEntity user,  String refreshToken) {
+
+        //remove all session by the user
+        sessionRepository.deleteByUserId(user.getId());
+
 
         SessionEntity newSession = SessionEntity.builder()
                 .user(user)
-                .refreshTokenHash(refreshToken)
+                .refreshTokenHash(hasher.sha256(refreshToken))
+                .lastUsedAt(LocalDateTime.now())
                 .build();
+
         sessionRepository.save(newSession);
+
     }
 
-    public void validateSession(String refreshToken) {
-        SessionEntity session = sessionRepository.findByRefreshToken(refreshToken)
-                .orElseThrow(() -> new SessionAuthenticationException("Session not found for refreshToken: "+refreshToken));
-        session.setLastUsedAt(LocalDateTime.now());
-        sessionRepository.save(session);
-    }
+
+
 
 }

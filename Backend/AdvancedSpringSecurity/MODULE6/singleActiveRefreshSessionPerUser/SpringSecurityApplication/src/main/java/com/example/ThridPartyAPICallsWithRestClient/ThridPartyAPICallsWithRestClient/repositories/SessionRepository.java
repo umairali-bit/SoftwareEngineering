@@ -19,7 +19,7 @@ public interface SessionRepository extends JpaRepository<SessionEntity,Long> {
 
     List<SessionEntity> findByUser(UserEntity user);
 
-    Optional<SessionEntity> findByRefreshToken(String refreshToken);
+    Optional<SessionEntity> findByRefreshTokenHash(String refreshTokenHash);
 
     //single session
     @Modifying
@@ -29,5 +29,6 @@ public interface SessionRepository extends JpaRepository<SessionEntity,Long> {
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("select s from SessionEntity s where s.refreshTokenHash = :hash ")
     Optional<SessionEntity> findByHashForUpdate(@Param("hash") String hash);
+
 
 }
