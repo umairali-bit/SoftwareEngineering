@@ -87,4 +87,7 @@ public class UserEntity implements UserDetails {
     public String getUsername() {
         return this.email;
     }
+
+    @Column(nullable = false)
+    private Integer sessionLimitCount = 2;
 }

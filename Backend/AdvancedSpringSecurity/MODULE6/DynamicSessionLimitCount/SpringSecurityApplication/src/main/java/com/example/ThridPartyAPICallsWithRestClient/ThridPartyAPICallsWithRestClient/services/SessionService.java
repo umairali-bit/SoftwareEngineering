@@ -22,15 +22,26 @@ import java.util.List;
 public class SessionService {
 
     private final SessionRepository sessionRepository;
-    private final int SESSION_LIMIT = 2;
+
 
     public void generateNewSession(UserEntity user, String refreshToken) {
+
+
+        int limit = (user.getSessionLimitCount() == null || user.getSessionLimitCount() < 1 )
+                ? 1 :user.getSessionLimitCount();
+
         List<SessionEntity> userSessions = sessionRepository.findByUser(user);
-        if (userSessions.size() == SESSION_LIMIT) {
+
+
+        if (userSessions.size() >= limit) {
             userSessions.sort(Comparator.comparing(SessionEntity::getLastUsedAt));
 
-            SessionEntity leastRecentlyUsedSession = userSessions.get(0);
-            sessionRepository.delete(leastRecentlyUsedSession);
+            int toDelete = userSessions.size() - limit + 1; //make room for new session
+
+            for (int i = 0; i<toDelete; i++) {
+                sessionRepository.delete(userSessions.get(i));
+            }
+
         }
 
         SessionEntity newSession = SessionEntity.builder()
