@@ -43,6 +43,20 @@ public class SessionService {
         sessionRepository.save(newSession);
 
     }
+    /**
+     * Logout using refresh token from cookie
+     * - delete the session if token is present
+     */
+
+    @Transactional
+    public void logout(String rawRefreshToken) {
+        if (rawRefreshToken == null ||rawRefreshToken.isBlank()) return;
+
+        String hash = hasher.sha256(rawRefreshToken);
+        sessionRepository.findByRefreshTokenHash(hash).ifPresent(session -> {
+            sessionRepository.delete(session);
+        });
+    }
 
 
 
