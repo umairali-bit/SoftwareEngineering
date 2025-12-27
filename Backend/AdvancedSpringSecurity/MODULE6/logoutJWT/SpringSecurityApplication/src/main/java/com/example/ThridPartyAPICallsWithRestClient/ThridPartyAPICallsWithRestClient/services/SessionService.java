@@ -24,9 +24,10 @@ public class SessionService {
     private final SessionRepository sessionRepository;
     private final int SESSION_LIMIT = 2;
 
+    @Transactional
     public void generateNewSession(UserEntity user, String refreshToken) {
         List<SessionEntity> userSessions = sessionRepository.findByUser(user);
-        if (userSessions.size() == SESSION_LIMIT) {
+        if (userSessions.size() >= SESSION_LIMIT) {
             userSessions.sort(Comparator.comparing(SessionEntity::getLastUsedAt));
 
             SessionEntity leastRecentlyUsedSession = userSessions.get(0);
@@ -39,19 +40,19 @@ public class SessionService {
                 .build();
         sessionRepository.save(newSession);
     }
-
+    @Transactional
     public void validateSession(String refreshToken) {
         SessionEntity session = sessionRepository.findByRefreshToken(refreshToken)
-                .orElseThrow(() -> new SessionAuthenticationException("Session not found for refreshToken: "+refreshToken));
+                .orElseThrow(() -> new SessionAuthenticationException("Session not found for refreshToken: "));
         session.setLastUsedAt(LocalDateTime.now());
         sessionRepository.save(session);
     }
 
-    public void deleteByRefreshToken(String refreshToken) {
+    public void logout(String refreshToken) {
         sessionRepository.deleteByRefreshToken(refreshToken);
     }
 
-    public void deleteAllByUserId(Long userId) {
+    public void logoutAll(Long userId) {
         sessionRepository.deleteAllByUserId(userId);
     }
 
