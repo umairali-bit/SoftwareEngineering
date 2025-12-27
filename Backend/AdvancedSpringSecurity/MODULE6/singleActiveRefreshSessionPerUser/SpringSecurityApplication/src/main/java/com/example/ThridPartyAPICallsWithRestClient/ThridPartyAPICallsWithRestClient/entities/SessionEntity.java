@@ -17,8 +17,8 @@ public class SessionEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
-    private String refreshToken;
+    @Column(nullable = false, unique = true, length = 64)
+    private String refreshTokenHash;
 
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
