@@ -22,6 +22,8 @@ import java.util.List;
 public class SessionService {
 
     private final SessionRepository sessionRepository;
+    private final JwtService jwtService;
+    private final RefreshTokenHasher hasher;
     private final int SESSION_LIMIT = 2;
 
     public void generateNewSession(UserEntity user, String refreshToken) {
@@ -35,7 +37,7 @@ public class SessionService {
 
         SessionEntity newSession = SessionEntity.builder()
                 .user(user)
-                .refreshToken(refreshToken)
+                .refreshTokenHash(refreshToken)
                 .build();
         sessionRepository.save(newSession);
     }
