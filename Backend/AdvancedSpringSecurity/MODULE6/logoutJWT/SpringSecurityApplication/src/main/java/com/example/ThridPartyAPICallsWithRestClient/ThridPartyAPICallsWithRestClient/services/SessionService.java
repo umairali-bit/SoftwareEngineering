@@ -19,6 +19,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class SessionService {
 
     private final SessionRepository sessionRepository;
@@ -48,12 +49,24 @@ public class SessionService {
         sessionRepository.save(session);
     }
 
+    @Transactional
     public void logout(String refreshToken) {
+        log.info("logout() called. token present? {}", refreshToken != null && !refreshToken.isBlank());
+        if(refreshToken == null || refreshToken.isBlank()) return;
+
+
+        var sessionOpt = sessionRepository.findByRefreshToken(refreshToken);
+        log.info("Session exists in DB for that token? {}", sessionOpt.isPresent());
+
+        sessionOpt.ifPresent(s -> log.info("Deleting session id={}, userId={}", s.getId(), s.getUser().getId()));
+
         sessionRepository.deleteByRefreshToken(refreshToken);
+
+        boolean stillExists = sessionRepository.findByRefreshToken(refreshToken).isPresent();
+        log.info("Session still exists after delete? {}", stillExists);
+
+
     }
 
-    public void logoutAll(Long userId) {
-        sessionRepository.deleteAllByUserId(userId);
-    }
 
 }

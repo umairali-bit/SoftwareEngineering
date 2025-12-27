@@ -1,11 +1,9 @@
 package com.example.ThridPartyAPICallsWithRestClient.ThridPartyAPICallsWithRestClient.controllers;
 
 
-import com.example.ThridPartyAPICallsWithRestClient.ThridPartyAPICallsWithRestClient.dtos.LoginDTO;
-import com.example.ThridPartyAPICallsWithRestClient.ThridPartyAPICallsWithRestClient.dtos.LoginResponseDTO;
-import com.example.ThridPartyAPICallsWithRestClient.ThridPartyAPICallsWithRestClient.dtos.SignUpDTO;
-import com.example.ThridPartyAPICallsWithRestClient.ThridPartyAPICallsWithRestClient.dtos.UserDto;
+import com.example.ThridPartyAPICallsWithRestClient.ThridPartyAPICallsWithRestClient.dtos.*;
 import com.example.ThridPartyAPICallsWithRestClient.ThridPartyAPICallsWithRestClient.services.AuthService;
+import com.example.ThridPartyAPICallsWithRestClient.ThridPartyAPICallsWithRestClient.services.SessionService;
 import com.example.ThridPartyAPICallsWithRestClient.ThridPartyAPICallsWithRestClient.services.UserService;
 import com.example.ThridPartyAPICallsWithRestClient.ThridPartyAPICallsWithRestClient.dtos.LoginResponseDTO;
 import jakarta.servlet.http.Cookie;
@@ -33,6 +31,7 @@ public class AuthController {
 
     private final UserService userService;
     private final AuthService authService;
+    private final SessionService sessionService;
 
     @Value("${deploy.env}")
     private String deployEnv;
@@ -87,6 +86,31 @@ public class AuthController {
         LoginResponseDTO loginResponseDTO = authService.refreshToken(refreshToken);
 
        return ResponseEntity.ok(loginResponseDTO);
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<Void> logout(
+            @RequestBody LogoutDTO request,
+            HttpServletResponse response) {
+
+        log.info("LOGOUT endpoint hit");
+        log.info("Refresh token received in body: {}", request.getRefresh_token());
+
+
+        //deleting session from DB
+        sessionService.logout(request.getRefresh_token());
+
+        //remove refresh token cookie
+        Cookie deleteCookie = new Cookie("refreshToken", null);
+        deleteCookie.setHttpOnly(true);
+        deleteCookie.setSecure(true);
+        deleteCookie.setPath("/");
+        deleteCookie.setMaxAge(0);
+
+        response.addCookie(deleteCookie);
+        return ResponseEntity.ok().build();
+
+
     }
 
 
