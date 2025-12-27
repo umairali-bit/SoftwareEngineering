@@ -60,7 +60,8 @@ public class AuthController {
     }
 
     @PostMapping("/refresh")
-    public ResponseEntity<LoginResponseDTO> refresh(HttpServletRequest request) {
+    public ResponseEntity<LoginResponseDTO> refresh(HttpServletRequest request,
+                                                    HttpServletResponse response) {
         log.info("deployEnv={}", deployEnv);
 
         Cookie[] cookies = request.getCookies();
@@ -78,13 +79,21 @@ public class AuthController {
         String refreshToken = Arrays.stream(cookies)
                 .filter(cookie -> "refreshToken".equals(cookie.getName()))
                 .findFirst()
-                .map(cookie -> cookie.getValue())
-
+                .map(Cookie::getValue)
                 .orElseThrow(() -> new AuthenticationServiceException("Refresh token not found"));
+
         log.info("Refresh token from cookie = [{}], length={}", refreshToken, refreshToken.length());
 
 
         LoginResponseDTO loginResponseDTO = authService.refreshToken(refreshToken);
+        loginResponseDTO.setRefreshToken(null);
+
+//      MINIMAL REQUIRED FOR ROTATION: overwrite cookie with NEW refresh token
+        Cookie newCookie = new Cookie("refreshToken", loginResponseDTO.getRefreshToken());
+        newCookie.setHttpOnly(true);
+        newCookie.setSecure(true);
+        newCookie.setPath("/");
+        response.addCookie(newCookie);
 
        return ResponseEntity.ok(loginResponseDTO);
     }

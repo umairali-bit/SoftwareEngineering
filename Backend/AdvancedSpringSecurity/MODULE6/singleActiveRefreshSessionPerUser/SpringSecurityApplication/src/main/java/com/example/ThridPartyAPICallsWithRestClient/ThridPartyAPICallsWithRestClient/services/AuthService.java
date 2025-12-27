@@ -39,18 +39,7 @@ public class AuthService {
 
     }
 
-    public LoginResponseDTO refreshToken(String refreshToken) {
-
-        log.info("Incoming refreshToken startsWith: {}", refreshToken.substring(0, 15));
-
-
-        sessionService.validateSession(refreshToken);
-
-        Long userId = jwtService.getUserIdFromJwtToken(refreshToken);
-        UserEntity user = userService.getUserById(userId);
-
-        String accessToken = jwtService.generateAccessJwtToken(user);
-
-        return new LoginResponseDTO(user.getId(), refreshToken, accessToken);
+    public LoginResponseDTO refreshToken(String rawRefreshToken) {
+        return sessionService.rotateRefreshToken(rawRefreshToken);
     }
 }

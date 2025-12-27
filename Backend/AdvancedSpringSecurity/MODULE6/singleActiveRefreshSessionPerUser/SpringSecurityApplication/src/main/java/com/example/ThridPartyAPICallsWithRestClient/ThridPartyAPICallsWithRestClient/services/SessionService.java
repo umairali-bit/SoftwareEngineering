@@ -40,7 +40,7 @@ public class SessionService {
 
         SessionEntity newSession = SessionEntity.builder()
                 .user(user)
-                .refreshTokenHash(hasher.sha256(hash))
+                .refreshTokenHash(hash)
                 .lastUsedAt(LocalDateTime.now())
                 .build();
 
@@ -51,6 +51,7 @@ public class SessionService {
 
     /**
      * Rotate current Refresh Token
+     * Removing old sessions
      */
     @Transactional
     public LoginResponseDTO rotateRefreshToken(String rawRefreshToken) {
@@ -61,6 +62,10 @@ public class SessionService {
                 .orElseThrow(() -> new SessionAuthenticationException("Invalid refresh token"));
 
         UserEntity user = existing.getUser();
+
+        //strict rotation: remove old sessions immediately
+        sessionRepository.deleteByUserId(user.getId());
+
         String newAccess = jwtService.generateAccessJwtToken(user);
         String newRefresh = jwtService.generateRefreshJwtToken(user);
 
@@ -70,7 +75,8 @@ public class SessionService {
                 .lastUsedAt(LocalDateTime.now())
                 .build());
 
-        return new LoginResponseDTO(user.getId(), newAccess, newRefresh);
+        return new LoginResponseDTO(user.getId(), newRefresh, newAccess);
+
     }
 
     /**
