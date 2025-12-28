@@ -4,16 +4,15 @@ package com.umair.subscription.entities;
 import com.umair.subscription.entities.enums.PlanType;
 import com.umair.subscription.entities.enums.SubscriptionStatus;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
+@Setter
+@Getter
 @Builder
 @Table(name = "subscriptions")
 public class SubscriptionEntity {
@@ -37,6 +36,6 @@ public class SubscriptionEntity {
     @Column(nullable = false)
     private LocalDateTime startAt;
 
-    @Column(nullable = false)
+
     private LocalDateTime endAt;
 }
