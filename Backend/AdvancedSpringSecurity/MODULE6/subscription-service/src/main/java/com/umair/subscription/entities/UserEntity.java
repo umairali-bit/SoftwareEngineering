@@ -27,14 +27,4 @@ public class UserEntity {
 
     private String password;
 
-    @ElementCollection(fetch = FetchType.EAGER)
-    @Enumerated(EnumType.STRING)
-    private PlanType plan;
-
-    @PrePersist
-    public void prePersist() {
-        if(plan == null) {
-            plan = PlanType.FREE;
-        }
-    }
 }
