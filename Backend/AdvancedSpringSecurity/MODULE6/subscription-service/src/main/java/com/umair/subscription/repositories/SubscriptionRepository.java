@@ -12,21 +12,19 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Repository
-public interface SubscriptionRepository extends JpaRepository<SubscriptionEntity, Integer> {
+public interface SubscriptionRepository extends JpaRepository<SubscriptionEntity, Long> {
 
-    @Modifying
     @Query("""
-         select s from SubscriptionEntity s\s
-         where s.user.id = :userId
-         and s.subscriptionStatus in (
-            com.umair.subscription.entities.enums.SubscriptionStatus.ACTIVE,
-            com.umair.subscription.entities.enums.SubscriptionStatus.CANCELED
-            )
-           \s
-            and s.startAt <= now
-            and (s.endAt is null or s.endAt > : now)
-            order by s.startAt desc
-           \s""")
+        select s from SubscriptionEntity s
+        where s.user.id = :userId
+          and s.subscriptionStatus in (
+                com.umair.subscription.entities.enums.SubscriptionStatus.ACTIVE,
+                com.umair.subscription.entities.enums.SubscriptionStatus.CANCELED
+          )
+          and s.startAt <= :now
+          and (s.endAt is null or s.endAt > :now)
+        order by s.startAt desc
+    """)
     Optional <SubscriptionEntity> findCurrentEntitlement(Long userId, LocalDateTime now);
 
 

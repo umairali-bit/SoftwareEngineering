@@ -18,6 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -79,6 +80,44 @@ public class UserService {
 
     }
 
+    @Transactional
+    public SubscriptionEntity upgradeNow(Long userId, PlanType targetPlan) {
+
+        if (targetPlan == null || targetPlan == PlanType.FREE) {
+            throw new IllegalArgumentException("Target plan must be BASIC or PREMIUM");
+        }
+
+        LocalDateTime now = LocalDateTime.now();
+
+        Optional<SubscriptionEntity> currentOpt = subscriptionRepository.findCurrentEntitlement(userId, now);
+
+        // 1) Reject if already on this plan
+        if (currentOpt.isPresent() && currentOpt.get().getPlan() == targetPlan) {
+            throw new IllegalArgumentException("Already on this plan: " + targetPlan.name());
+        }
+
+        // 2) End current entitlement immediately (if any)
+        currentOpt.ifPresent(current -> {
+            current.setEndAt(now);
+            current.setSubscriptionStatus(SubscriptionStatus.EXPIRED); // optional but clear
+            subscriptionRepository.save(current);
+        });
+
+        // 3) Create new subscription starting now
+        UserEntity user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("User not found: " + userId));
+
+        SubscriptionEntity next = new SubscriptionEntity();
+        next.setUser(user);
+        next.setPlan(targetPlan);
+        next.setSubscriptionStatus(SubscriptionStatus.ACTIVE);
+        next.setStartAt(now);
+        next.setEndAt(now.plusDays(30));
+
+        return subscriptionRepository.save(next);
+    }
+
+    }
 
 
-}
+
