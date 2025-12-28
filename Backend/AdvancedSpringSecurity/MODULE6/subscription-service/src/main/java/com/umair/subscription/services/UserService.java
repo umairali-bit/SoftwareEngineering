@@ -12,6 +12,7 @@ import com.umair.subscription.repositories.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -23,6 +24,7 @@ public class UserService {
     private final SubscriptionRepository subscriptionRepository;
     private final UserRepository userRepository;
     private final ModelMapper modelMapper;
+    private final PasswordEncoder passwordEncoder;
 
     @Transactional
     public UserDTO registerWithFreePlan(SignupRequestDTO request) {
@@ -35,7 +37,7 @@ public class UserService {
         //Map DTO to Entity
         UserEntity user = modelMapper.map(request, UserEntity.class);
 
-        //TODO: replace with passwordEncoder.encode(request.getPassword())
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
 
         UserEntity savedUser = userRepository.save(user);
 
