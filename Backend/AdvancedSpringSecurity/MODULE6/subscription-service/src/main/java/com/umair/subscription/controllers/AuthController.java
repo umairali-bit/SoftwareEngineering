@@ -20,11 +20,10 @@ public class AuthController {
     private final UserService userService;
 
     @PostMapping("/signup")
-    public ResponseEntity<SignupRequestDTO> signup(@RequestBody @Valid SignupRequestDTO request) {
-        UserDTO user= userService.registerWithFreePlan(request);
-
-        return ResponseEntity.ok().body(request);
-
-
+    public ResponseEntity<UserDTO> signup(
+            @Valid @RequestBody SignupRequestDTO request
+    ) {
+        UserDTO user = userService.registerWithFreePlan(request);
+        return ResponseEntity.ok(user);
     }
 }

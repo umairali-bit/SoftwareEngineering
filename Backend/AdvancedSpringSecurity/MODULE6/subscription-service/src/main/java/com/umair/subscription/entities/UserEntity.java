@@ -3,14 +3,14 @@ package com.umair.subscription.entities;
 
 import com.umair.subscription.entities.enums.PlanType;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
+@Setter
 @Builder
 @Table(name = "users")
 

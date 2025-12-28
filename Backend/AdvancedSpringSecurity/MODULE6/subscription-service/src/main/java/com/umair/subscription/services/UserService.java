@@ -29,7 +29,7 @@ public class UserService {
 
         // validate the email
         if (userRepository.existsByEmail(request.getEmail())) {
-            throw new IllegalArgumentException("Email already in use" + request.getEmail());
+            throw new IllegalArgumentException("Email already in use " + request.getEmail());
         }
 
         //Map DTO to Entity
