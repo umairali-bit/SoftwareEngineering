@@ -69,7 +69,7 @@ public class UserService {
     }
 
     @Transactional
-    @Scheduled(cron = "0 0 * * * *")
+    @Scheduled(cron = "0 * * * * *")
     public void expireSubscriptions() {
         LocalDateTime now = LocalDateTime.now();
 
@@ -98,9 +98,11 @@ public class UserService {
 
         // 2) End current entitlement immediately (if any)
         currentOpt.ifPresent(current -> {
-            current.setEndAt(now);
-            current.setSubscriptionStatus(SubscriptionStatus.EXPIRED); // optional but clear
-            subscriptionRepository.save(current);
+            if (current.getPlan() != PlanType.FREE) {
+                current.setEndAt(now);
+                current.setSubscriptionStatus(SubscriptionStatus.EXPIRED);
+                subscriptionRepository.save(current);
+            }
         });
 
         // 3) Create new subscription starting now
