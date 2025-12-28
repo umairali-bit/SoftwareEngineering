@@ -14,6 +14,7 @@ import java.util.Optional;
 @Repository
 public interface SubscriptionRepository extends JpaRepository<SubscriptionEntity, Integer> {
 
+    @Modifying
     @Query("""
          select s from SubscriptionEntity s\s
          where s.user.id = :userId
@@ -27,4 +28,24 @@ public interface SubscriptionRepository extends JpaRepository<SubscriptionEntity
             order by s.startAt desc
            \s""")
     Optional <SubscriptionEntity> findCurrentEntitlement(Long userId, LocalDateTime now);
+
+
+
+    @Modifying
+    @Query("""
+            update SubscriptionEntity s\s
+            set s.subscriptionStatus = com.umair.subscription.entities.enums.SubscriptionStatus.EXPIRED
+            where s.subscriptionStatus in (
+             com.umair.subscription.entities.enums.SubscriptionStatus.ACTIVE,
+             com.umair.subscription.entities.enums.SubscriptionStatus.CANCELED
+             )
+              and s.endAt is not null
+              and s.endAt <= :now
+               \s
+           \s""")
+
+    int expireEndedSubscriptions(LocalDateTime now);
+
+
+
 }

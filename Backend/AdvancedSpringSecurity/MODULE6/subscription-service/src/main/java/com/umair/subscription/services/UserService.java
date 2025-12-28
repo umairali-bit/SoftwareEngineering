@@ -11,12 +11,15 @@ import com.umair.subscription.repositories.SubscriptionRepository;
 import com.umair.subscription.repositories.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 
+@Slf4j
 @Service
 @AllArgsConstructor
 public class UserService {
@@ -62,6 +65,18 @@ public class UserService {
         return subscriptionRepository.findCurrentEntitlement(userId, now)
                 .map(SubscriptionEntity -> SubscriptionEntity.getPlan())
                 .orElse(PlanType.FREE);
+    }
+
+    @Transactional
+    @Scheduled(cron = "0 0 * * * *")
+    public void expireSubscriptions() {
+        LocalDateTime now = LocalDateTime.now();
+
+        int updated = subscriptionRepository.expireEndedSubscriptions(now);
+
+        log.info("Expired {} subscriptions", updated);
+        System.out.println("Expired subscriptions updated: " + updated);
+
     }
 
 
