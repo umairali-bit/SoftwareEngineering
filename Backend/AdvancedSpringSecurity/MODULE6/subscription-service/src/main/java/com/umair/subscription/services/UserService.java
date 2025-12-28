@@ -56,6 +56,14 @@ public class UserService {
         return modelMapper.map(savedUser, UserDTO.class);
     }
 
+    public PlanType getEffectivePlan (Long userId) {
+        LocalDateTime  now = LocalDateTime.now();
+
+        return subscriptionRepository.findCurrentEntitlement(userId, now)
+                .map(SubscriptionEntity -> SubscriptionEntity.getPlan())
+                .orElse(PlanType.FREE);
+    }
+
 
 
 }
