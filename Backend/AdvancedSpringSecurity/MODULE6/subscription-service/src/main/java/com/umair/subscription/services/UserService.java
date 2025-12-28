@@ -1,7 +1,8 @@
 package com.umair.subscription.services;
 
 
-import com.umair.subscription.dto.SignupRequest;
+import com.umair.subscription.dto.SignupRequestDTO;
+import com.umair.subscription.dto.UserDTO;
 import com.umair.subscription.entities.SubscriptionEntity;
 import com.umair.subscription.entities.UserEntity;
 import com.umair.subscription.entities.enums.PlanType;
@@ -24,7 +25,7 @@ public class UserService {
     private final ModelMapper modelMapper;
 
     @Transactional
-    public UserEntity registerWithFreePlan(SignupRequest request) {
+    public UserDTO registerWithFreePlan(SignupRequestDTO request) {
 
         // validate the email
         if (userRepository.existsByEmail(request.getEmail())) {
@@ -48,9 +49,9 @@ public class UserService {
         subscription.setStartAt(now);
         subscription.setEndAt(null);
 
-        subscriptionRepository.save(subscription);
+       SubscriptionEntity savingSubscription = subscriptionRepository.save(subscription);
 
-        return savedUser;
+        return modelMapper.map(savedUser, UserDTO.class);
     }
 
 
