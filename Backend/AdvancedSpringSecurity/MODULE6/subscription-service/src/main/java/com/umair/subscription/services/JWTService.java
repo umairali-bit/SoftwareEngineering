@@ -3,7 +3,6 @@ package com.umair.subscription.services;
 
 import com.umair.subscription.entities.UserEntity;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
@@ -18,12 +17,12 @@ import java.util.Date;
 @RequiredArgsConstructor
 public class JWTService {
 
-    @Value("${jwt.secret}")
+    @Value("${jwt.secretKey}")
     private String jwtSecretKey;
 
     @PostConstruct
     public void testKey() {
-        System.out.println("JWT secret = " + jwtSecretKey);
+        System.out.println("JWT secret = " + jwtSecretKey);//remove this in production
     }
 
     private SecretKey getSecretKey() {
