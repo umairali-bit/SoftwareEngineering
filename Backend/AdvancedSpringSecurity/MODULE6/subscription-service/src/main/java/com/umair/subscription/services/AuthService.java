@@ -28,9 +28,13 @@ public class AuthService {
         );
 
         UserEntity user = (UserEntity) authentication.getPrincipal();
-        String accessToken = jwtService.generateAccessToken(user);
 
-        return new LoginResponseDTO(accessToken);
+
+        String accessToken = jwtService.generateAccessToken(user);
+        String refreshToken = jwtService.generateRefreshToken(user);
+
+
+        return new LoginResponseDTO(user.getId(), accessToken, refreshToken);
 
 
     }

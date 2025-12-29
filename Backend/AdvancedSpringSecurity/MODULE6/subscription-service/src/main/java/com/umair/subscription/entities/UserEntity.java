@@ -41,11 +41,11 @@ public class UserEntity implements UserDetails {
 
     @Override
     public String getUsername() {
-        return this.email;
+        return email;
     }
 
     @Override
     public String getPassword() {
-        return this.password;
+        return password;
     }
 }

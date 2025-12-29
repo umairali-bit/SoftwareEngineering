@@ -40,6 +40,15 @@ public class JWTService {
 
     }
 
+    public String generateRefreshToken(UserEntity user) {
+        return Jwts.builder()
+                .setSubject(String.valueOf(user.getId()))
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + 1000L *60*60*245*30*6))
+                .signWith(getSecretKey())
+                .compact();
+    }
+
 
 
 
