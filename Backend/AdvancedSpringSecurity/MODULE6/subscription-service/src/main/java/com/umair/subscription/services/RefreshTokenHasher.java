@@ -11,7 +11,7 @@ import java.util.HexFormat;
 @Service
 public class RefreshTokenHasher {
 
-    public String sha256(String token) {
+    public static String sha256(String token) {
         try {
             MessageDigest md = MessageDigest.getInstance("SHA-256");
             byte[] hash = md.digest(token.getBytes(StandardCharsets.UTF_8));
