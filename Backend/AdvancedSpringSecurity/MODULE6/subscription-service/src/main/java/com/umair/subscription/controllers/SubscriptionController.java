@@ -5,7 +5,6 @@ import com.umair.subscription.dto.UpgradeRequestDTO;
 import com.umair.subscription.dto.UpgradeResponseDTO;
 import com.umair.subscription.entities.SubscriptionEntity;
 import com.umair.subscription.entities.enums.PlanType;
-import com.umair.subscription.repositories.SubscriptionRepository;
 import com.umair.subscription.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

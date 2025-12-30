@@ -2,6 +2,7 @@ package com.umair.subscription.config;
 
 
 import com.umair.subscription.filters.JwtAuthenticationFilter;
+import com.umair.subscription.handler.OAuth2SuccessHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,6 +23,8 @@ public class SecurityConfig {
 
     private final AuthenticationConfiguration authenticationConfiguration;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final OAuth2SuccessHandler oAuth2SuccessHandler;
+
 
 
     @Bean
@@ -36,13 +39,15 @@ public class SecurityConfig {
                                 "/api/auth/login",
                                 "/api/auth/refresh",
                                 "/api/auth/logout",
-                                "/oauth2/**"
+                                "/oauth2/**",
+                                "/home.html"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .formLogin(form -> form.disable())
                 .httpBasic(basic -> basic.disable())
+                .oauth2Login(oauth -> oauth.successHandler(oAuth2SuccessHandler))
                 .build();
     }
 
