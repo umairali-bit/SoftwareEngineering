@@ -69,7 +69,7 @@ public class UserService {
     }
 
     @Transactional
-    @Scheduled(cron = "0 * * * * *")
+    @Scheduled(cron = "0 0 * * * *")
     public void expireSubscriptions() {
         LocalDateTime now = LocalDateTime.now();
 
