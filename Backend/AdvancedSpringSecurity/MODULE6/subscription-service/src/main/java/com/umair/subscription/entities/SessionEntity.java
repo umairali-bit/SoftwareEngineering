@@ -23,7 +23,7 @@ public class SessionEntity {
     @JoinColumn(name = "user_id", nullable = false)
     private UserEntity user;
 
-    @Column(nullable = false, unique = true, length = 64)
+    @Column(nullable = false, unique = true, length = 128)
     private String refreshTokenHash; // SHA-256 hex
 
     @Enumerated(EnumType.STRING)

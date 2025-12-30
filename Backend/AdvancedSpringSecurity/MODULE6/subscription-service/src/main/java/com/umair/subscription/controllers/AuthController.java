@@ -8,12 +8,10 @@ import com.umair.subscription.services.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.Response;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
@@ -51,10 +49,21 @@ public class AuthController {
 
     @PostMapping("/logout-all")
     public ResponseEntity<?> logoutAll(Authentication authentication) {
-        UserEntity user = (UserEntity) authentication.getPrincipal();
+
+        if (authentication == null || !(authentication.getPrincipal() instanceof UserEntity user)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(Map.of("message", "Not authenticated"));
+        }
+        user = (UserEntity) authentication.getPrincipal();
         int count = authService.logoutAllDevices(user.getId());
 
         return ResponseEntity.ok(Map.of("message", "Logged out from all devices", "revoked", String.valueOf(count)));
+    }
+
+    @PostMapping("/logout-all-test")
+    public ResponseEntity<?> logoutAllTest(@RequestParam Long userId) {
+        int count = authService.logoutAllDevices(userId);
+        return ResponseEntity.ok(Map.of("revoked", count));
     }
 
 }
