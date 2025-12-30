@@ -12,6 +12,7 @@ import com.umair.subscription.repositories.SessionRepository;
 import com.umair.subscription.repositories.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Session;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -25,6 +26,7 @@ import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class AuthService {
 
     private final JWTService jwtService;
@@ -71,6 +73,7 @@ public class AuthService {
             session.setStatus(SessionStatus.REVOKED);
             throw new  BadCredentialsException("Refresh token expired");
         }
+        log.info("Incoming refresh hash={}", hash);
 
         //rotate
         UserEntity user = session.getUser();

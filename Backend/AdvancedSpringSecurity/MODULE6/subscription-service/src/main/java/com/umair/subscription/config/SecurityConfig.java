@@ -24,12 +24,14 @@ public class SecurityConfig {
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .csrf(csrf -> csrf.disable())
-                .authorizeHttpRequests(auth-> auth
-                        .requestMatchers("/signup", "/api/auth/login", "/oauth2/**").permitAll()
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/signup", "/api/auth/login", "/api/auth/refresh", "/api/auth/logout", "/oauth2/**")
+                        .permitAll()
                         .anyRequest().authenticated()
                 )
-               // .oauth2Login(oauth ->{})
-    .build();
+                .formLogin(form -> form.disable())
+                .httpBasic(basic -> basic.disable())
+                .build();
     }
 
     @Bean

@@ -10,5 +10,5 @@ import java.util.Optional;
 @Repository
 public interface SessionRepository extends JpaRepository<SessionEntity,Long> {
 
-    Optional<SessionEntity> findByRefreshTokenHashAndStatus(String hash, SessionStatus sessionStatus);
+    Optional<SessionEntity> findByRefreshTokenHashAndStatus(String refreshTokenHash, SessionStatus sessionStatus);
 }
