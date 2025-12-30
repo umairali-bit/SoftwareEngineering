@@ -7,7 +7,6 @@ import com.umair.subscription.services.AuthService;
 import com.umair.subscription.services.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -57,13 +56,10 @@ public class AuthController {
         user = (UserEntity) authentication.getPrincipal();
         int count = authService.logoutAllDevices(user.getId());
 
-        return ResponseEntity.ok(Map.of("message", "Logged out from all devices", "revoked", String.valueOf(count)));
+        return ResponseEntity.ok(Map.of("message", "Logged out from all devices", "revoked"
+                , String.valueOf(count)));
     }
 
-    @PostMapping("/logout-all-test")
-    public ResponseEntity<?> logoutAllTest(@RequestParam Long userId) {
-        int count = authService.logoutAllDevices(userId);
-        return ResponseEntity.ok(Map.of("revoked", count));
-    }
+
 
 }
