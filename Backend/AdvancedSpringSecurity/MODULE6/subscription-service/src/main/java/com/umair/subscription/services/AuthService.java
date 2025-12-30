@@ -3,6 +3,7 @@ package com.umair.subscription.services;
 
 import com.umair.subscription.dto.LoginRequestDTO;
 import com.umair.subscription.dto.LoginResponseDTO;
+import com.umair.subscription.dto.RefreshRequestDTO;
 import com.umair.subscription.dto.RefreshResponseDTO;
 import com.umair.subscription.entities.SessionEntity;
 import com.umair.subscription.entities.UserEntity;
@@ -58,7 +59,7 @@ public class AuthService {
     }
 
     @Transactional
-    public RefreshResponseDTO refreshResponseDTO (RefreshResponseDTO request) {
+    public RefreshResponseDTO refresh (RefreshRequestDTO request) {
         String raw = request.refreshToken();
         String hash = RefreshTokenHasher.sha256(raw);
 
