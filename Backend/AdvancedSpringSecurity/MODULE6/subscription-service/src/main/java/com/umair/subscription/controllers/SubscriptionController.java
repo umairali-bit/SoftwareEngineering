@@ -46,14 +46,14 @@ public class SubscriptionController {
 
     @PreAuthorize("@subAuth.hasAtLeast(authentication, T(com.umair.subscription.entities.enums.PlanType).BASIC)")
     @GetMapping("/basic-feature")
-    public ResponseEntity<String> getBasicFeature(@RequestParam Long userId) {
+    public ResponseEntity<String> basicFeature() {
         return ResponseEntity.ok("BASIC+ access");
     }
 
-    @PreAuthorize("@subAuth.hasPlan(authentication, T(com.umair.subscription.entities.enums.PlanType).PREMIMUM")
+    @PreAuthorize("@subAuth.hasPlan(authentication, T(com.umair.subscription.entities.enums.PlanType).PREMIUM)")
     @GetMapping("/premium-feature")
-    public ResponseEntity<String> getPremiumFeature(@RequestParam Long userId) {
-        return ResponseEntity.ok("PREMIUM+ access");
+    public ResponseEntity<String> getPremiumFeature() {
+        return ResponseEntity.ok("PREMIUM only");
     }
 
 

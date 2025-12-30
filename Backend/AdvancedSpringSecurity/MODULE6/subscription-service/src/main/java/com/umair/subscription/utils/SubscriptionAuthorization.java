@@ -14,16 +14,16 @@ public class SubscriptionAuthorization {
 
     private final UserService userService;
 
-    public boolean hasAtLeast(Authentication authentication, PlanType planType) {
+    public boolean hasAtLeast(Authentication auth, PlanType planType) {
 
-        UserEntity user = (UserEntity) authentication.getPrincipal();
+        UserEntity user = (UserEntity) auth.getPrincipal();
         PlanType effective = userService.getEffectivePlan(user.getId());
 
         return effective.ordinal() >= planType.ordinal(); //FREE < BASIC < PREMIUM
     }
 
-    public boolean hasPlan(Authentication authentication, PlanType required) {
-        UserEntity user = (UserEntity) authentication.getPrincipal();
+    public boolean hasPlan(Authentication auth, PlanType required) {
+        UserEntity user = (UserEntity) auth.getPrincipal();
         return userService.getEffectivePlan(user.getId()) == required;
     }
 }
