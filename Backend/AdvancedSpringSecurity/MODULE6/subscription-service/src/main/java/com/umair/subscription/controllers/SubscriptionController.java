@@ -9,6 +9,7 @@ import com.umair.subscription.repositories.SubscriptionRepository;
 import com.umair.subscription.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -42,6 +43,19 @@ public class SubscriptionController {
                 saved.getEndAt()
         ));
     }
+
+    @PreAuthorize("@subAuth.hasAtLeast(authentication, T(com.umair.subscription.entities.enums.PlanType).BASIC)")
+    @GetMapping("/basic-feature")
+    public ResponseEntity<String> getBasicFeature(@RequestParam Long userId) {
+        return ResponseEntity.ok("BASIC+ access");
+    }
+
+    @PreAuthorize("@subAuth.hasPlan(authentication, T(com.umair.subscription.entities.enums.PlanType).PREMIMUM")
+    @GetMapping("/premium-feature")
+    public ResponseEntity<String> getPremiumFeature(@RequestParam Long userId) {
+        return ResponseEntity.ok("PREMIUM+ access");
+    }
+
 
 
 
