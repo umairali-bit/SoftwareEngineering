@@ -2,6 +2,7 @@ package com.umair.subscription.services;
 
 
 import com.umair.subscription.entities.UserEntity;
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
@@ -49,6 +50,16 @@ public class JWTService {
                 .compact();
     }
 
+    //retrieving info from the token
+    public Long getUserIdFromJwtToken(String token) {
+        Claims claims = Jwts.parserBuilder()
+                .setSigningKey(getSecretKey())
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+
+        return Long.parseLong(claims.getSubject());
+    }
 
 
 
