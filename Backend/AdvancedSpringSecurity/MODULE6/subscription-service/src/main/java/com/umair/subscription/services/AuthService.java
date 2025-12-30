@@ -100,5 +100,10 @@ public class AuthService {
         session.setLastUsedAt(LocalDateTime.now());
     }
 
+    @Transactional
+    public int logoutAllDevices(Long userId) {
+        return sessionRepository.revokeAllActiveSessions(userId);
+    }
+
 
 }
