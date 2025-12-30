@@ -119,7 +119,11 @@ public class UserService {
         return subscriptionRepository.save(next);
     }
 
+    public UserEntity getUserById(Long userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("User not found: " + userId));
     }
+}
 
 
 

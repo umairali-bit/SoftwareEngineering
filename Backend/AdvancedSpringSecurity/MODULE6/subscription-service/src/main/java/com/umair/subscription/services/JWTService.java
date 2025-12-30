@@ -50,7 +50,7 @@ public class JWTService {
                 .compact();
     }
 
-    //retrieving info from the token
+    // retrieving info from the token
     public Long getUserIdFromJwtToken(String token) {
         Claims claims = Jwts.parserBuilder()
                 .setSigningKey(getSecretKey())
