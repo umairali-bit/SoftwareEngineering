@@ -1,6 +1,7 @@
 package com.nestigo.systemdesign.nestigo.security;
 
 import com.nestigo.systemdesign.nestigo.entities.UserEntity;
+import com.nestigo.systemdesign.nestigo.services.UserService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -21,6 +22,7 @@ import java.io.IOException;
 public class JwtAuthFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
+    private final UserService userService;
 
 
 
@@ -30,28 +32,31 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                                     FilterChain filterChain) throws ServletException, IOException {
 
         final String authorizationHeader = request.getHeader("Authorization");
-        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+        if (authorizationHeader != null && !authorizationHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
             return;
         }
 
-        String token = authorizationHeader.split("Bearer ")[1];
-        Long userId = jwtService.getUserIdFromJwtToken(token);
+        String token = authorizationHeader.substring(7); // length of "Bearer "
+        Long userId;
 
-        if (userId == null && SecurityContextHolder.getContext().getAuthentication() == null) {
+        try {
+            userId = jwtService.getUserIdFromJwtToken(token);
+        }catch (Exception e) {
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid or expired token");
+            return;
+        }
+
+        if (userId != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserEntity user = userService.getUserById(userId);
+
             UsernamePasswordAuthenticationToken authentication =
                     new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
-            authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
+            authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
 
         filterChain.doFilter(request, response);
-
-
-
-
-
     }
 }
