@@ -1,4 +1,4 @@
-package com.nestigo.systemdesign.nestigo;
+package com.nestigo.systemdesign;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
