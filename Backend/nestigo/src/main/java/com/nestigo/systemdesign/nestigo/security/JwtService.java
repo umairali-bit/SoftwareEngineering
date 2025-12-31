@@ -27,11 +27,11 @@ public class JwtService {
 
     public String generateAccessToken(UserEntity  user) {
         return Jwts.builder()
-                .setSubject(user.getId().toString())
+                .subject(user.getId().toString())
                 .claim("email", user.getEmail())
                 .claim("roles", user.getRoles().toString())
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + 1000*60*10))
+                .issuedAt(new Date())
+                .expiration(new Date(System.currentTimeMillis() + 1000*60*10))
                 .signWith(getJwtSecretKey())
                 .compact();
 
@@ -39,21 +39,20 @@ public class JwtService {
 
     public String generateRefreshToken(UserEntity  user) {
         return Jwts.builder()
-                .setSubject(user.getId().toString())
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + 1000L *60*60*245*30*6))
+                .subject(user.getId().toString())
+                .issuedAt(new Date())
+                .expiration(new Date(System.currentTimeMillis() + 1000L *60*60*24*30*6))
                 .signWith(getJwtSecretKey())
                 .compact();
     }
 
     // retrieving info from the token
     public Long getUserIdFromJwtToken(String token) {
-        Claims claims = Jwts.parserBuilder()
-                .setSigningKey(getJwtSecretKey())
+        Claims claims = Jwts.parser()
+                .verifyWith(getJwtSecretKey())
                 .build()
-                .parseClaimsJws(token)
-                .getBody();
-
+                .parseSignedClaims(token)
+                .getPayload();
         return Long.parseLong(claims.getSubject());
     }
 }
