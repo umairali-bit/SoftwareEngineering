@@ -1,0 +1,66 @@
+package com.nestigo.systemdesign.nestigo.security;
+
+
+import com.nestigo.systemdesign.nestigo.entities.UserEntity;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.security.Keys;
+import lombok.RequiredArgsConstructor;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+
+import javax.crypto.SecretKey;
+import java.nio.charset.StandardCharsets;
+import java.util.Date;
+
+@Service
+@RequiredArgsConstructor
+public class JwtService {
+
+    @Value("${jwt.secretKey}")
+    private String jwtSecretKey;
+
+    private SecretKey getJwtSecretKey() {
+        return Keys.hmacShaKeyFor(jwtSecretKey.getBytes(StandardCharsets.UTF_8));
+    }
+
+    public String generateAccessToken(UserEntity  user) {
+        return Jwts.builder()
+                .setSubject(user.getId().toString())
+                .claim("email", user.getEmail())
+                .claim("roles", user.getRoles().toString())
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + 1000*60*10))
+                .signWith(getJwtSecretKey())
+                .compact();
+
+    }
+
+    public String generateRefreshToken(UserEntity  user) {
+        return Jwts.builder()
+                .setSubject(user.getId().toString())
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + 1000L *60*60*245*30*6))
+                .signWith(getJwtSecretKey())
+                .compact();
+    }
+
+    // retrieving info from the token
+    public Long getUserIdFromJwtToken(String token) {
+        Claims claims = Jwts.parserBuilder()
+                .setSigningKey(getJwtSecretKey())
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+
+        return Long.parseLong(claims.getSubject());
+    }
+}
+
+
+
+
+
+
+
