@@ -74,19 +74,20 @@ class TestingApplicationTests {
     }
 
     @Test
-    void divisionTest() {
+    void testDivideTwoNumbers_whenDenominatorIsZero_ThenArithmeticException() {
 
         int a = 5;
-        int b = 6;
+        int b = 0;
 
-        double result = divideTwoNumbers(a, b);
+        assertThatThrownBy(() -> divideTwoNumbers(a, b))
+                .isInstanceOf(ArithmeticException.class);
 
     }
 
 
     double divideTwoNumbers(int a, int b) {
         try {
-            return (double) a / b;
+            return a / b;
         } catch (ArithmeticException e) {
             throw new ArithmeticException(e.getMessage());
         }
