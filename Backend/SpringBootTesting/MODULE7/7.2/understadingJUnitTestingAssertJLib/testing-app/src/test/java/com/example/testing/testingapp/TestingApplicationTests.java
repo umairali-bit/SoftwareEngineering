@@ -34,6 +34,14 @@ class TestingApplicationTests {
         log.info("test is running");
 	}
 
+//  Assertions.assertEquals(expected, actual)
+    @Test
+    void testSum() {
+        int result = 2 + 3;
+
+    Assertions.assertEquals(5, result);
+
+    }
 
 
     @Test
