@@ -80,7 +80,8 @@ class TestingApplicationTests {
         int b = 0;
 
         assertThatThrownBy(() -> divideTwoNumbers(a, b))
-                .isInstanceOf(ArithmeticException.class);
+                .isInstanceOf(ArithmeticException.class)
+                .hasMessageContaining("divide by zero");
 
     }
 
@@ -89,7 +90,7 @@ class TestingApplicationTests {
         try {
             return a / b;
         } catch (ArithmeticException e) {
-            throw new ArithmeticException(e.getMessage());
+            throw new ArithmeticException("divide by zero");
         }
     }
 }
