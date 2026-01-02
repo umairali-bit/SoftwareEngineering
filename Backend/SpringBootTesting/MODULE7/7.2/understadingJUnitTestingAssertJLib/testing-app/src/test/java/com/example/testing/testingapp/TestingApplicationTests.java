@@ -1,6 +1,7 @@
 package com.example.testing.testingapp;
 
 import lombok.extern.slf4j.Slf4j;
+import org.assertj.core.data.Offset;
 import org.junit.jupiter.api.*;
 import org.springframework.boot.test.context.SpringBootTest;
 import static org.assertj.core.api.Assertions.*;
@@ -49,7 +50,13 @@ class TestingApplicationTests {
     @Test
     void assertj_example() {
         int sum = 2 + 3;
-        assertThat(sum).isEqualTo(5);
+        assertThat(sum).isEqualTo(5).isCloseTo(6, Offset.offset(1));
+
+        assertThat("Apple").isEqualTo("Apple")
+                .startsWith("App")
+                .endsWith("le")
+                .hasSize(5);
+
     }
 
 
