@@ -3,6 +3,8 @@ package com.example.testing.testingapp;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.*;
 import org.springframework.boot.test.context.SpringBootTest;
+import static org.assertj.core.api.Assertions.*;
+
 @Slf4j
 
 @SpringBootTest
@@ -34,7 +36,7 @@ class TestingApplicationTests {
         log.info("test is running");
 	}
 
-//  Assertions.assertEquals(expected, actual)
+//  Assertions.assertEquals(expected, actual) (JUnit)
     @Test
     void testSum() {
         int result = 2 + 3;
@@ -42,6 +44,14 @@ class TestingApplicationTests {
     Assertions.assertEquals(5, result);
 
     }
+
+//  AssertJ
+    @Test
+    void assertj_example() {
+        int sum = 2 + 3;
+        assertThat(sum).isEqualTo(5);
+    }
+
 
 
     @Test
