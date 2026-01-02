@@ -12,41 +12,41 @@ import static org.assertj.core.api.Assertions.*;
 class TestingApplicationTests {
 
     @BeforeEach
-    void setUp () {
+    void setUp() {
         log.info("running beforeEach");
     }
 
     @AfterEach
-    void tearDown () {
+    void tearDown() {
         log.info("running afterEach");
     }
 
     @BeforeAll
-    static void beforeAll () {
+    static void beforeAll() {
         log.info("running beforeAll");
     }
 
     @AfterAll
-    static void tearDownAll () {
+    static void tearDownAll() {
         log.info("running afterAll");
     }
 
 
-	@Test
-	void contextLoads() {
+    @Test
+    void contextLoads() {
         log.info("test is running");
-	}
+    }
 
-//  Assertions.assertEquals(expected, actual) (JUnit)
+    //  Assertions.assertEquals(expected, actual) (JUnit)
     @Test
     void testSum() {
         int result = 2 + 3;
 
-    Assertions.assertEquals(5, result);
+        Assertions.assertEquals(5, result);
 
     }
 
-//  AssertJ
+    //  AssertJ
     @Test
     void assertj_example() {
         int sum = 2 + 3;
@@ -58,7 +58,6 @@ class TestingApplicationTests {
                 .hasSize(5);
 
     }
-
 
 
     @Test
@@ -74,6 +73,28 @@ class TestingApplicationTests {
 
     }
 
+    @Test
+    void divisionTest() {
+
+        int a = 5;
+        int b = 6;
+
+        double result = divideTwoNumbers(a, b);
+
+    }
 
 
+    double divideTwoNumbers(int a, int b) {
+        try {
+            return (double) a / b;
+        } catch (ArithmeticException e) {
+            throw new ArithmeticException(e.getMessage());
+        }
+    }
 }
+
+
+
+
+
+
