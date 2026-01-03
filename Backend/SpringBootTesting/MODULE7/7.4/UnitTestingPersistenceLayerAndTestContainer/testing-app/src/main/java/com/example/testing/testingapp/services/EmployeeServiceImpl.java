@@ -24,12 +24,12 @@ public class EmployeeServiceImpl implements EmployeeService {
     public EmployeeDto getEmployeeById(Long id) {
         Employee employee  = employeeRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Employee not found with id " + id));
-
+//     Entity to DTO
         EmployeeDto employeeDto = new EmployeeDto();
-        employeeDto.setId(employeeDto.getId());
-        employeeDto.setName(employeeDto.getName());
-        employeeDto.setEmail(employeeDto.getEmail());
-        employeeDto.setSalary(employeeDto.getSalary());
+        employeeDto.setId(employee.getId());
+        employeeDto.setName(employee.getName());
+        employeeDto.setEmail(employee.getEmail());
+        employeeDto.setSalary(employee.getSalary());
 
         return employeeDto;
 
@@ -39,17 +39,19 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public EmployeeDto createNewEmployee(EmployeeDto employeeDto) {
+    public EmployeeDto createNewEmployee(EmployeeDto dto) {
         Employee employee = new Employee();
-        EmployeeDto dto= new EmployeeDto();
 
+
+//     DTO to Entity
         employee.setName(dto.getName());
         employee.setEmail(dto.getEmail());
         employee.setSalary(dto.getSalary());
-        employeeDto.setId(dto.getId());
+
 
         Employee savedEmployee = employeeRepository.save(employee);
 
+//     Entity to DTO
         dto.setId(savedEmployee.getId());
         dto.setName(savedEmployee.getName());
         dto.setEmail(savedEmployee.getEmail());
@@ -72,6 +74,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         Employee savedEmployee = employeeRepository.save(employee);
 
+//     Entity to DTO
         EmployeeDto dto = new EmployeeDto();
         dto.setId(savedEmployee.getId());
         dto.setName(savedEmployee.getName());
