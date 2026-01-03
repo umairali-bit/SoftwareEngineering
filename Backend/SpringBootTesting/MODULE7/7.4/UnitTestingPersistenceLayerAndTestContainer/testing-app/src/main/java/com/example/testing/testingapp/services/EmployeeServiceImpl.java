@@ -40,7 +40,22 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public EmployeeDto createNewEmployee(EmployeeDto employeeDto) {
-        return null;
+        Employee employee = new Employee();
+        EmployeeDto dto= new EmployeeDto();
+
+        employee.setName(dto.getName());
+        employee.setEmail(dto.getEmail());
+        employee.setSalary(dto.getSalary());
+        employeeDto.setId(dto.getId());
+
+        Employee savedEmployee = employeeRepository.save(employee);
+
+        dto.setId(savedEmployee.getId());
+        dto.setName(savedEmployee.getName());
+        dto.setEmail(savedEmployee.getEmail());
+        dto.setSalary(savedEmployee.getSalary());
+
+        return dto;
     }
 
     @Override
