@@ -94,3 +94,88 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     }
 }
+
+/*
+public class EmployeeServiceImpl implements EmployeeService {
+
+    private final EmployeeRepository employeeRepository;
+
+    // ---------- Mapping helpers ----------
+    // Entity -> DTO
+    private EmployeeDto mapToDto(Employee employee) {
+        EmployeeDto dto = new EmployeeDto();
+        dto.setId(employee.getId());
+        dto.setName(employee.getName());
+        dto.setEmail(employee.getEmail());
+        dto.setSalary(employee.getSalary());
+        return dto;
+    }
+
+    // DTO -> Entity (for create/update)
+    private void mapToEntity(EmployeeDto dto, Employee employee) {
+        employee.setName(dto.getName());
+        employee.setEmail(dto.getEmail());
+        employee.setSalary(dto.getSalary());
+    }
+
+    @Override
+    public EmployeeDto getEmployeeById(Long id) {
+
+        // 1) Fetch from DB
+        Employee employee = employeeRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Employee not found with id " + id));
+
+        // 2) Convert Entity -> DTO and return
+        return mapToDto(employee);
+    }
+
+    @Override
+    public EmployeeDto createNewEmployee(EmployeeDto employeeDto) {
+
+        // 1) Create a new Entity from incoming DTO
+        Employee employee = new Employee();
+        mapToEntity(employeeDto, employee);
+
+        // 2) Save to DB (DB will generate the ID)
+        Employee savedEmployee = employeeRepository.save(employee);
+
+        // 3) Return saved Entity as DTO
+        return mapToDto(savedEmployee);
+    }
+
+    @Override
+    public EmployeeDto updateEmployeeById(Long id, EmployeeDto employeeDto) {
+
+        // 1) Fetch existing Entity
+        Employee employee = employeeRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Employee not found with id " + id));
+
+        // 2) Business rule (your rule): name must match
+        if (!employee.getName().equals(employeeDto.getName())) {
+            throw new RuntimeException("Employee name does not match");
+        }
+
+        // 3) Update allowed fields from DTO -> existing Entity
+        // (name not changed because of your rule)
+        employee.setEmail(employeeDto.getEmail());
+        employee.setSalary(employeeDto.getSalary());
+
+        // 4) Save updated Entity
+        Employee savedEmployee = employeeRepository.save(employee);
+
+        // 5) Return updated DTO
+        return mapToDto(savedEmployee);
+    }
+
+    @Override
+    public void deleteEmployeeById(Long id) {
+
+        // 1) Ensure employee exists
+        Employee employee = employeeRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Employee not found with id " + id));
+
+        // 2) Delete
+        employeeRepository.delete(employee);
+    }
+}
+ */
