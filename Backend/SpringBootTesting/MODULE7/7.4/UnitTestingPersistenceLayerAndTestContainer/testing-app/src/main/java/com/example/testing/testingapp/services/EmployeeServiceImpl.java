@@ -60,11 +60,34 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public EmployeeDto updateEmployeeById(Long id, EmployeeDto employeeDto) {
-        return null;
+        Employee employee  = employeeRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Employee not found with id " + id));
+
+        if(!employee.getName().equals(employeeDto.getName())) {
+            throw new RuntimeException("Employee name does not match");
+        }
+
+        employee.setEmail(employeeDto.getEmail());
+        employee.setSalary(employeeDto.getSalary());
+
+        Employee savedEmployee = employeeRepository.save(employee);
+
+        EmployeeDto dto = new EmployeeDto();
+        dto.setId(savedEmployee.getId());
+        dto.setName(savedEmployee.getName());
+        dto.setEmail(savedEmployee.getEmail());
+        dto.setSalary(savedEmployee.getSalary());
+
+
+        return dto;
     }
 
     @Override
     public void deleteEmployeeById(Long id) {
+        Employee employee  = employeeRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Employee not found with id " + id));
+
+        employeeRepository.delete(employee);
 
     }
 }
