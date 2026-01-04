@@ -1,12 +1,26 @@
 package com.example.testing.testingapp.repositories;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+
+@SpringBootTest
 class EmployeeRepositoryTest {
 
+    @Autowired
+    private EmployeeRepository employeeRepository;
+
+
     @Test
-    void findByEmail() {
+    void testFindByEmail_whenEmailIsValid_thenReturnEmployee() {
+
+
+    }
+
+    @Test
+    void testFindByEmail_whenEmailIsNotValid_thenReturnEmptyEmployee() {
     }
 }
