@@ -51,11 +51,29 @@ class EmployeeRepositoryTest {
         assertThat(employeeList).isNotNull();
         assertThat(employeeList).isNotEmpty();
 
-        assertThat(employeeList.get(0).getEmail()).isEqualTo(employee.getEmail());
+        assertThat(employeeList.get(0).getEmail()).isEqualTo(employee.getEmail()); //going to be rolled back
+
+        System.out.println(employeeList);
 
     }
 
     @Test
     void testFindByEmail_whenEmailIsNotValid_thenReturnEmptyEmployee() {
+
+//  Arrange
+
+        String email = "Invalid@example.com";
+
+
+
+//  Act
+        List<Employee> employeeList = employeeRepository.findByEmail(email);
+
+
+//  Assert
+        assertThat(employeeList).isNotNull();
+        assertThat(employeeList).isEmpty();
+        System.out.println(employeeList);
+
     }
 }
