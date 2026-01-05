@@ -51,6 +51,7 @@ class EmployeeRepositoryTest {
         assertThat(employeeList).isNotNull();
         assertThat(employeeList).isNotEmpty();
 
+        assertThat(employeeList.get(0).getEmail()).isEqualTo(employee.getEmail());
 
     }
 
