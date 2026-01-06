@@ -20,20 +20,23 @@ public class EmployeeServiceImpl implements EmployeeService {
     private final EmployeeRepository employeeRepository;
 
 
+    private final ModelMapper modelMapper;
+
+
     @Override
     public EmployeeDto getEmployeeById(Long id) {
         Employee employee  = employeeRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Employee not found with id " + id));
-//     Entity to DTO
-        EmployeeDto employeeDto = new EmployeeDto();
-        employeeDto.setId(employee.getId());
-        employeeDto.setName(employee.getName());
-        employeeDto.setEmail(employee.getEmail());
-        employeeDto.setSalary(employee.getSalary());
+////     Entity to DTO
+//        EmployeeDto employeeDto = new EmployeeDto();
+//        employeeDto.setId(employee.getId());
+//        employeeDto.setName(employee.getName());
+//        employeeDto.setEmail(employee.getEmail());
+//        employeeDto.setSalary(employee.getSalary());
+//
+//        return employeeDto;
 
-        return employeeDto;
-
-        //return ModelMapper.map(employee, EmployeeDTO.class)
+        return modelMapper.map(employee, EmployeeDto.class);
 
 
     }
