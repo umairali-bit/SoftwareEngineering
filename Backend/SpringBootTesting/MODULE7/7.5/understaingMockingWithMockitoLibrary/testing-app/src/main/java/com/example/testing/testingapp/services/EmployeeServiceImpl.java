@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 
@@ -25,76 +26,64 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public EmployeeDto getEmployeeById(Long id) {
-        Employee employee  = employeeRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Employee not found with id " + id));
-////     Entity to DTO
-//        EmployeeDto employeeDto = new EmployeeDto();
-//        employeeDto.setId(employee.getId());
-//        employeeDto.setName(employee.getName());
-//        employeeDto.setEmail(employee.getEmail());
-//        employeeDto.setSalary(employee.getSalary());
-//
-//        return employeeDto;
-
+        log.info("Fetching employee with id: {}", id);
+        Employee employee = employeeRepository.findById(id)
+                .orElseThrow(() -> {
+                    log.error("Employee not found with id: {}", id);
+                    return new ResourceNotFoundException("Employee not found with id: " + id);
+                });
+        log.info("Successfully fetched employee with id: {}", id);
         return modelMapper.map(employee, EmployeeDto.class);
-
-
     }
 
     @Override
-    public EmployeeDto createNewEmployee(EmployeeDto dto) {
-        Employee employee = new Employee();
+    public EmployeeDto createNewEmployee(EmployeeDto employeeDto) {
+        log.info("Creating new employee with email: {}", employeeDto.getEmail());
+        List<Employee> existingEmployees = employeeRepository.findByEmail(employeeDto.getEmail());
 
-
-//     DTO to Entity
-        employee.setName(dto.getName());
-        employee.setEmail(dto.getEmail());
-        employee.setSalary(dto.getSalary());
-
-
-        Employee savedEmployee = employeeRepository.save(employee);
-
-//     Entity to DTO
-        dto.setId(savedEmployee.getId());
-        dto.setName(savedEmployee.getName());
-        dto.setEmail(savedEmployee.getEmail());
-        dto.setSalary(savedEmployee.getSalary());
-
-        return dto;
+        if (!existingEmployees.isEmpty()) {
+            log.error("Employee already exists with email: {}", employeeDto.getEmail());
+            throw new RuntimeException("Employee already exists with email: " + employeeDto.getEmail());
+        }
+        Employee newEmployee = modelMapper.map(employeeDto, Employee.class);
+        Employee savedEmployee = employeeRepository.save(newEmployee);
+        log.info("Successfully created new employee with id: {}", savedEmployee.getId());
+        return modelMapper.map(savedEmployee, EmployeeDto.class);
     }
 
     @Override
-    public EmployeeDto updateEmployeeById(Long id, EmployeeDto employeeDto) {
-        Employee employee  = employeeRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Employee not found with id " + id));
+    public EmployeeDto updateEmployee(Long id, EmployeeDto employeeDto) {
+        log.info("Updating employee with id: {}", id);
+        Employee employee = employeeRepository.findById(id)
+                .orElseThrow(() -> {
+                    log.error("Employee not found with id: {}", id);
+                    return new ResourceNotFoundException("Employee not found with id: " + id);
+                });
 
-        if(!employee.getName().equals(employeeDto.getName())) {
-            throw new RuntimeException("Employee name does not match");
+        if (!employee.getEmail().equals(employeeDto.getEmail())) {
+            log.error("Attempted to update email for employee with id: {}", id);
+            throw new RuntimeException("The email of the employee cannot be updated");
         }
 
-        employee.setEmail(employeeDto.getEmail());
-        employee.setSalary(employeeDto.getSalary());
+        modelMapper.map(employeeDto, employee);
+        employee.setId(id);
 
         Employee savedEmployee = employeeRepository.save(employee);
-
-//     Entity to DTO
-        EmployeeDto dto = new EmployeeDto();
-        dto.setId(savedEmployee.getId());
-        dto.setName(savedEmployee.getName());
-        dto.setEmail(savedEmployee.getEmail());
-        dto.setSalary(savedEmployee.getSalary());
-
-
-        return dto;
+        log.info("Successfully updated employee with id: {}", id);
+        return modelMapper.map(savedEmployee, EmployeeDto.class);
     }
 
     @Override
-    public void deleteEmployeeById(Long id) {
-        Employee employee  = employeeRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Employee not found with id " + id));
+    public void deleteEmployee(Long id) {
+        log.info("Deleting employee with id: {}", id);
+        boolean exists = employeeRepository.existsById(id);
+        if (!exists) {
+            log.error("Employee not found with id: {}", id);
+            throw new ResourceNotFoundException("Employee not found with id: " + id);
+        }
 
-        employeeRepository.delete(employee);
-
+        employeeRepository.deleteById(id);
+        log.info("Successfully deleted employee with id: {}", id);
     }
 }
 
