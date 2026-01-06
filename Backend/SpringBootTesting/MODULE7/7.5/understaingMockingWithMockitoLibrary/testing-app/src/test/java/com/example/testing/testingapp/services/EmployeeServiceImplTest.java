@@ -18,6 +18,7 @@ import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 
@@ -57,9 +58,18 @@ class EmployeeServiceImplTest {
         EmployeeDto employeeDto = employeeServiceImplTest.getEmployeeById(1L);
 
 
-
+        //assert
         assertThat(employeeDto.getId()).isEqualTo(id);
         assertThat(employeeDto.getEmail()).isEqualTo(mockEmployee.getEmail());
+
+        verify(employeeRepository).findById(id);
+
+        /*
+        verify(employeeRepository, times(2)).findById(id);
+        verify(employeeRepository, atLeast(1)).findById(id);
+        verify(employeeRepository, atMost(1)).findById(id);
+        verify(employeeRepository, only()).findById(id);
+         */
     }
 
 
