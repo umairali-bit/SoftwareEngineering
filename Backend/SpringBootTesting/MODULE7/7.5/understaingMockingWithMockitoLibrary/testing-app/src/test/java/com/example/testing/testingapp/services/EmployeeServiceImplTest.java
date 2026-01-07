@@ -7,6 +7,7 @@ import com.example.testing.testingapp.repositories.EmployeeRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
@@ -34,7 +35,7 @@ class EmployeeServiceImplTest {
     private EmployeeRepository employeeRepository;
 
     @InjectMocks
-    private EmployeeService employeeService;
+    private EmployeeServiceImpl employeeService;
 
     @Spy
     private ModelMapper modelMapper;
@@ -78,6 +79,7 @@ class EmployeeServiceImplTest {
 
 
 //      assert
+        assertThat(employeeDto).isNotNull();
         assertThat(employeeDto.getId()).isEqualTo(id);
         assertThat(employeeDto.getEmail()).isEqualTo(mockEmployee.getEmail());
 
@@ -103,6 +105,16 @@ class EmployeeServiceImplTest {
         EmployeeDto employeeDto = employeeService.createNewEmployee(mockEmployeeDto);
 
 //         assert
+        assertThat(employeeDto).isNotNull();
+        assertThat(employeeDto.getEmail()).isEqualTo(mockEmployeeDto.getEmail());
+
+        //verify(employeeRepository).save(any(Employee.class));
+
+        ArgumentCaptor<Employee> captor = ArgumentCaptor.forClass(Employee.class);
+        verify(employeeRepository).save(captor.capture());
+
+        Employee capturedEmployee = captor.getValue();
+        assertThat(capturedEmployee.getEmail()).isEqualTo(mockEmployee.getEmail());
 
 
 
