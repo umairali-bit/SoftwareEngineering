@@ -208,7 +208,7 @@ class EmployeeServiceImplTest {
 
         when(employeeRepository.save(any(Employee.class))).thenReturn(newEmployee);
 //   act
-        EmployeeDto updatedEmployeeDto = employeeService.updateEmployee(1L,mockEmployeeDto);
+        EmployeeDto updatedEmployeeDto = employeeService.updateEmployee(mockEmployeeDto.getId(),mockEmployeeDto);
 
 
         assertThat(updatedEmployeeDto).isEqualTo(mockEmployeeDto);
