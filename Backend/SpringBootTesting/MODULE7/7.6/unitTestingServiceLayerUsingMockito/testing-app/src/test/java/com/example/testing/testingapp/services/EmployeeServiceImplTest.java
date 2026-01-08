@@ -174,10 +174,12 @@ class EmployeeServiceImplTest {
     @Test
     void testUpdateEmployee_WhenEmailCannotBeUpdated_ThenThrowException()
     {
+//      arrange
         when(employeeRepository.findById(mockEmployeeDto.getId())).thenReturn(Optional.of(mockEmployee));
         mockEmployeeDto.setName("random");
         mockEmployeeDto.setEmail("random@xyz.com");
 
+//      act and assert
         assertThatThrownBy(() -> employeeService.updateEmployee(1L,mockEmployeeDto))
                 .isInstanceOf(RuntimeException.class)
                 .hasMessage("The email of the employee cannot be updated");
@@ -185,6 +187,40 @@ class EmployeeServiceImplTest {
         verify(employeeRepository).findById(1L);
         verify(employeeRepository,never()).save(any());
     }
+
+    @Test
+    void testUpdateEmployee_WhenEmployeeIsPresent_ThenUpdateEmployeeDto() {
+
+//   arrange
+        when(employeeRepository.findById(mockEmployeeDto.getId())).thenReturn(Optional.of(mockEmployee));
+        mockEmployeeDto.setName("random");
+        mockEmployeeDto.setSalary(90_000L);
+
+        Employee newEmployee = Employee.builder()
+                .id(mockEmployeeDto.getId())
+                .email(mockEmployeeDto.getEmail())
+                .name(mockEmployeeDto.getName())
+                .salary(mockEmployeeDto.getSalary())
+                .build();
+
+        //or
+        // Employee newEmployee = modelMapper.map(mockEmployeeDto. Employee.class);
+
+        when(employeeRepository.save(any(Employee.class))).thenReturn(newEmployee);
+//   act
+        EmployeeDto updatedEmployeeDto = employeeService.updateEmployee(1L,mockEmployeeDto);
+
+
+        assertThat(updatedEmployeeDto).isEqualTo(mockEmployeeDto);
+
+        verify(employeeRepository).findById(1L);
+        verify(employeeRepository).save(any());
+
+
+
+    }
+
+
 
 
 
