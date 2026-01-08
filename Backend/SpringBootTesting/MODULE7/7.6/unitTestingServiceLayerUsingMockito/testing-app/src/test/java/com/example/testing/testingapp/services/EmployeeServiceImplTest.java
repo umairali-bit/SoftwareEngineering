@@ -154,6 +154,19 @@ class EmployeeServiceImplTest {
         verify(employeeRepository,never()).save(any());
     }
 
+    @Test
+    void testUpdateEmployee_WhenEmployeeIsNotPresent_ThenThrowException()
+    {
+        when(employeeRepository.findById(1L)).thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> employeeService.updateEmployee(1L,mockEmployeeDto))
+                .isInstanceOf(ResourceNotFoundException.class)
+                .hasMessage("Employee not found with id: 1");
+
+        verify(employeeRepository).findById(1L);
+        verify(employeeRepository,never()).save(any());
+    }
+
 
 
 }
