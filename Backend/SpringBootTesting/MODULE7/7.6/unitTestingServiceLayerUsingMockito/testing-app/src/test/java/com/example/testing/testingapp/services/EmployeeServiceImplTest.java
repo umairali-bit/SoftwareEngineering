@@ -3,6 +3,7 @@ package com.example.testing.testingapp.services;
 import com.example.testing.testingapp.TestContainerConfiguration;
 import com.example.testing.testingapp.dto.EmployeeDto;
 import com.example.testing.testingapp.entities.Employee;
+import com.example.testing.testingapp.exceptions.ResourceNotFoundException;
 import com.example.testing.testingapp.repositories.EmployeeRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,11 +16,13 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.context.annotation.Import;
-import static org.mockito.ArgumentMatchers.any;
+
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
+
 import java.util.List;
 import java.util.Optional;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -65,6 +68,22 @@ class EmployeeServiceImplTest {
       //  mockEmployeeDto = modelMapper.map(mockEmployee, EmployeeDto.class);
 
     }
+
+    @Test
+    void testGetEmployeeById_whenEmployeeIsNotPresent_thenThrowException()
+    {
+//  assign
+        when(employeeRepository.findById(anyLong())).thenReturn(Optional.empty());
+//  act and assert
+        assertThatThrownBy(() -> employeeService.getEmployeeById(1L))
+                .isInstanceOf(ResourceNotFoundException.class)
+                .hasMessage("Employee not found with id: 1");
+
+        verify(employeeRepository).findById(1L);
+
+
+    }
+
 
 
     @Test
