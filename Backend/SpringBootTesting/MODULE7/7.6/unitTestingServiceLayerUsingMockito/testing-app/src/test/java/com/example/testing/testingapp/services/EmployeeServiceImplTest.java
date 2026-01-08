@@ -23,8 +23,7 @@ import java.util.List;
 import java.util.Optional;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 
 @Import(TestContainerConfiguration.class)
@@ -137,6 +136,22 @@ class EmployeeServiceImplTest {
 
 
 
+    }
+
+    @Test
+    void testCreateEmployee_whenEmployeeIsPresent_thenThrowException()
+    {
+ //  assign
+        when(employeeRepository.findByEmail(mockEmployeeDto.getEmail())).thenReturn(List.of(mockEmployee));
+
+//   act and assert
+
+        assertThatThrownBy(() -> employeeService.createNewEmployee(mockEmployeeDto))
+                .isInstanceOf(RuntimeException.class)
+                .hasMessage("Employee already exists with email: " + mockEmployeeDto.getEmail());
+
+        verify(employeeRepository).findByEmail(mockEmployeeDto.getEmail());
+        verify(employeeRepository,never()).save(any());
     }
 
 
