@@ -157,8 +157,11 @@ class EmployeeServiceImplTest {
     @Test
     void testUpdateEmployee_WhenEmployeeIsNotPresent_ThenThrowException()
     {
-        when(employeeRepository.findById(1L)).thenReturn(Optional.empty());
 
+//  assign
+    when(employeeRepository.findById(1L)).thenReturn(Optional.empty());
+
+//   act and assert
         assertThatThrownBy(() -> employeeService.updateEmployee(1L,mockEmployeeDto))
                 .isInstanceOf(ResourceNotFoundException.class)
                 .hasMessage("Employee not found with id: 1");
@@ -166,6 +169,23 @@ class EmployeeServiceImplTest {
         verify(employeeRepository).findById(1L);
         verify(employeeRepository,never()).save(any());
     }
+
+
+    @Test
+    void testUpdateEmployee_WhenEmailCannotBeUpdated_ThenThrowException()
+    {
+        when(employeeRepository.findById(mockEmployeeDto.getId())).thenReturn(Optional.of(mockEmployee));
+        mockEmployeeDto.setName("random");
+        mockEmployeeDto.setEmail("random@xyz.com");
+
+        assertThatThrownBy(() -> employeeService.updateEmployee(1L,mockEmployeeDto))
+                .isInstanceOf(RuntimeException.class)
+                .hasMessage("The email of the employee cannot be updated");
+
+        verify(employeeRepository).findById(1L);
+        verify(employeeRepository,never()).save(any());
+    }
+
 
 
 
