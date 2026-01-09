@@ -156,6 +156,13 @@ class EmployeeControllerTestIT {
                 .exchange()
                 .expectStatus().isNoContent()
                 .expectBody(Void.class);
+
+//        checking if id is actually deleted
+        webTestClient.delete()
+                .uri("/employees/{id}", savedEmployee.getId())
+                .exchange()
+                .expectStatus().isNotFound();
+
     }
 
 
