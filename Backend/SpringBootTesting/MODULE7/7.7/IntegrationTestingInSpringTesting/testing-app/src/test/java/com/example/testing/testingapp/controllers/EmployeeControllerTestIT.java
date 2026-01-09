@@ -18,34 +18,14 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 
-@AutoConfigureWebTestClient(timeout = "100000")
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@Import(TestContainerConfiguration.class)
-class EmployeeControllerTestIT {
 
-    @Spy
-    private ModelMapper modelMapper;
-
-    @Autowired
-    private WebTestClient webTestClient;
+class EmployeeControllerTestIT extends AbstractIntegrationTest {
 
     @Autowired
     private EmployeeRepository employeeRepository;
 
-    private Employee employee;
-    private EmployeeDto employeeDto;
-
     @BeforeEach
     void setUp() {
-        employee = Employee.builder()
-                .id(1L)
-                .name("Walter White")
-                .salary(90_000L)
-                .email("ww@xyz.com")
-                .build();
-
-        employeeDto = modelMapper.map(employee, EmployeeDto.class);
-
         employeeRepository.deleteAll();
     }
 
