@@ -88,6 +88,19 @@ class EmployeeControllerTestIT {
                 .expectStatus().is5xxServerError();
     }
 
+    @Test
+    void testCreateEmployee() {
+        webTestClient.post()
+                .uri("/employees")
+                .bodyValue(employeeDto)
+                .exchange()
+                .expectStatus().isCreated()
+                .expectBody()
+                .jsonPath("$.email").isEqualTo(employee.getEmail())
+                .jsonPath("$.name").isEqualTo(employee.getName());
+
+    }
+
 
 
 
