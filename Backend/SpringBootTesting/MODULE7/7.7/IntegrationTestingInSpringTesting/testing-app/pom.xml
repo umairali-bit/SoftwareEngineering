@@ -54,10 +54,10 @@
         </dependency>
 
         <!-- Security (only if you use it) -->
-        <dependency>
+        <!--<dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
-        </dependency>
+        </dependency>-->
 
         <!-- Database driver -->
         <dependency>
