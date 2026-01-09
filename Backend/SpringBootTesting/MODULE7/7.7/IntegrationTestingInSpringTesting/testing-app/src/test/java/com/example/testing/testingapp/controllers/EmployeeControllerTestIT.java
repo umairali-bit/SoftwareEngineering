@@ -44,6 +44,8 @@ class EmployeeControllerTestIT {
                 .build();
 
         employeeDto = modelMapper.map(employee, EmployeeDto.class);
+
+        employeeRepository.deleteAll();
     }
 
     @Test
