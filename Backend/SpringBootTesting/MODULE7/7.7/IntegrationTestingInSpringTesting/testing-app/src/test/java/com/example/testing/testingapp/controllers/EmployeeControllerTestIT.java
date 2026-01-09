@@ -101,6 +101,17 @@ class EmployeeControllerTestIT {
 
     }
 
+    @Test
+    void testUpdateEmployee_IfEmployeeDoesNotExists_ThrowException() {
+        webTestClient.put()
+                .uri("/employees/222")
+                .bodyValue(employeeDto)
+                .exchange()
+                .expectStatus().isNotFound();
+    }
+
+
+
 
 
 
