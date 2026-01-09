@@ -147,5 +147,16 @@ class EmployeeControllerTestIT {
                 .expectStatus().isNotFound();
     }
 
+    @Test
+    void testDeleteEmployee_whenEmployeeIsValid_DeleteEmployee() {
+        Employee savedEmployee = employeeRepository.save(employee);
+
+        webTestClient.delete()
+                .uri("/employees/{id}", savedEmployee.getId())
+                .exchange()
+                .expectStatus().isNoContent()
+                .expectBody(Void.class);
+    }
+
 
 }
