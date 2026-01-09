@@ -137,7 +137,14 @@ class EmployeeControllerTestIT {
                 .isEqualTo(employeeDto);
 
 
+    }
 
+    @Test
+    void testDeleteEmployee_whenEmployeeDoesNotExist_ThrowException() {
+        webTestClient.delete()
+                .uri("/employees/1")
+                .exchange()
+                .expectStatus().isNotFound();
     }
 
 
