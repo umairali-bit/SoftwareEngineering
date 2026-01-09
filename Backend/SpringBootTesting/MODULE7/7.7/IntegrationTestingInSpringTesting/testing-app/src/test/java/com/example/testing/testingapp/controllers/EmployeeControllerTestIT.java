@@ -34,6 +34,7 @@ class EmployeeControllerTestIT {
 
     private Employee employee;
     private EmployeeDto employeeDto;
+
     @BeforeEach
     void setUp() {
         employee = Employee.builder()
@@ -60,13 +61,9 @@ class EmployeeControllerTestIT {
                 .expectBody(EmployeeDto.class)
 //                .isEqualTo(employeeDto);
                 .value(employeeDto -> {
-                   assertThat(employeeDto.getEmail()).isEqualTo(savedEmployee.getEmail());
-                   assertThat(employeeDto.getId()).isEqualTo(savedEmployee.getId());
+                    assertThat(employeeDto.getEmail()).isEqualTo(savedEmployee.getEmail());
+                    assertThat(employeeDto.getId()).isEqualTo(savedEmployee.getId());
                 });
-
-
-
-
     }
 
     @Test
@@ -110,12 +107,21 @@ class EmployeeControllerTestIT {
                 .expectStatus().isNotFound();
     }
 
+    @Test
+    void testUpdateEmployee_whenUpdatingEmail_ThrowException() {
+        Employee savedEmployee = employeeRepository.save(employee);
+
+        employeeDto.setName("Random");
+        employeeDto.setEmail("random@xyz.com");
+
+        webTestClient.put()
+                .uri("/employees/{id}", savedEmployee.getId())
+                .bodyValue(employeeDto)
+                .exchange()
+                .expectStatus().is5xxServerError();
 
 
-
-
-
-
+    }
 
 
 }
