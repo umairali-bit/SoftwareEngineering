@@ -77,6 +77,19 @@ class EmployeeControllerTestIT {
                 .expectStatus().isNotFound();
     }
 
+    @Test
+    void testCreateEmployee_IfEmployeeExists_ThrowException() {
+        Employee savedEmployee = employeeRepository.save(employee);
+
+        webTestClient.post()
+                .uri("/employees")
+                .bodyValue(employeeDto)
+                .exchange()
+                .expectStatus().is5xxServerError();
+    }
+
+
+
 
 
 
