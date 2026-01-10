@@ -105,7 +105,7 @@ public class AuthorService {
                 .orElseThrow(() -> new AuthorNotFoundException(authorId));
 
         // 2. Update simple fields
-        author.setName(authorDTO.getName());
+        author.setName(authorDTO.getName()); //dto -> entity
 
         // 3. Update books
         if(authorDTO.getBooks() != null) {
@@ -120,14 +120,14 @@ public class AuthorService {
                     .peek(bookEntity -> bookEntity.setAuthor(author))
                     .collect(Collectors.toSet());
 
-            author.setBooks(updatedBooks);
+            author.setBooks(updatedBooks);// DTO book IDs -> fetch BookEntity -> attach to author (dto->entity + relationship)
 
         }
         // 4. Save the updated author
         AuthorEntity savedAuthor = authorRepository.save(author);
 
         // 5. Convert back to DTO
-        return Mapper.mapToDTO(savedAuthor);
+        return Mapper.mapToDTO(savedAuthor);//entity->dto
     }
 
     public Set<BookSummaryDTO> getBooksByAuthor(Long authorId) {
