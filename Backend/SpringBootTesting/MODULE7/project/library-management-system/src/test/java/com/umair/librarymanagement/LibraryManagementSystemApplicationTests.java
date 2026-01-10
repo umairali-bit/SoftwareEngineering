@@ -1,15 +1,13 @@
-package com.example.libraryManagementSystem.LibraryManagementSystem;
+package com.umair.librarymanagement;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
 
 @SpringBootTest
 class LibraryManagementSystemApplicationTests {
 
 	@Test
 	void contextLoads() {
-
 	}
 
 }
