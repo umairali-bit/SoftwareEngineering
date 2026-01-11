@@ -1,29 +1,35 @@
 package com.umair.librarymanagement.services;
 
-import com.umair.librarymanagement.LibraryManagementSystemTestConfiguration;
 import com.umair.librarymanagement.dtos.AuthorDTO;
 import com.umair.librarymanagement.dtos.BookSummaryDTO;
 import com.umair.librarymanagement.entities.AuthorEntity;
 import com.umair.librarymanagement.entities.BookEntity;
 import com.umair.librarymanagement.repositories.AuthorRepository;
+import com.umair.librarymanagement.repositories.BookRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.context.annotation.Import;
+
 
 import java.time.LocalDate;
-
+import java.util.Optional;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class AuthorServiceTest {
 
     @Mock
     private AuthorRepository authorRepository;
+    @Mock
+    private BookRepository bookRepository;
 
     @InjectMocks
     private AuthorService authorService;
@@ -65,7 +71,26 @@ class AuthorServiceTest {
 
 
     @Test
-    void createAuthor() {
+    void testCreateAuthor() {
+
+        when(bookRepository.findById(anyLong())).thenReturn(Optional.of(mockBookEntity));
+        when(authorRepository.save(any(AuthorEntity.class))).thenReturn(mockAuthorEntity);
+
+        AuthorDTO authorDto = authorService.createAuthor(mockAuthorDto);
+
+        assertThat(authorDto).isNotNull();
+        assertThat(authorDto.getName()).isEqualTo(mockAuthorEntity.getName());
+
+        ArgumentCaptor<AuthorEntity> captor = ArgumentCaptor.forClass(AuthorEntity.class);
+        verify(authorRepository).save(captor.capture());
+        verify(bookRepository).findById(anyLong());
+
+        AuthorEntity capturedAuthor = captor.getValue();
+        assertThat(capturedAuthor.getName()).isEqualTo(mockAuthorEntity.getName());
+
+        assertThat(capturedAuthor.getBooks().size()).isEqualTo(1);
+        assertThat(capturedAuthor.getBooks().iterator().next().getId()).isEqualTo(mockBookEntity.getId());
+
     }
 
     @Test
