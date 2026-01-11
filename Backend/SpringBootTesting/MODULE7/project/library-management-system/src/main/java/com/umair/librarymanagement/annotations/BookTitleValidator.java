@@ -7,6 +7,7 @@ import org.springframework.validation.beanvalidation.SpringConstraintValidatorFa
 public class BookTitleValidator implements ConstraintValidator<ValidateBookTitle, String> {
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
-        return value != null && value.length() >= 3;
+        if (value == null) return true; // let @NotBlank handle null
+        return value.trim().length() >= 3;
     }
 }

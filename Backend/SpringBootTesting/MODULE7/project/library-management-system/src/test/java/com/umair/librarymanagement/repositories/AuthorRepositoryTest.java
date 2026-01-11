@@ -49,4 +49,5 @@ class AuthorRepositoryTest {
                 .extracting(s-> s.getName())
                 .isEqualTo(author.getName());
     }
+
 }
