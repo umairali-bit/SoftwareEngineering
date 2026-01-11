@@ -5,6 +5,7 @@ import com.umair.librarymanagement.dtos.BookSummaryDTO;
 import com.umair.librarymanagement.entities.AuthorEntity;
 import com.umair.librarymanagement.entities.BookEntity;
 import com.umair.librarymanagement.exception.AuthorNotFoundException;
+import com.umair.librarymanagement.exception.BookNotFoundException;
 import com.umair.librarymanagement.repositories.AuthorRepository;
 import com.umair.librarymanagement.repositories.BookRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,14 +17,14 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 
+import java.awt.print.Book;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class AuthorServiceTest {
@@ -109,25 +110,49 @@ class AuthorServiceTest {
 
     }
 
+
+    @Test
+    void createAuthor_whenBookNotFound_shouldThrowAndNotSaveAuthor() {
+//      Arrange
+        Long missingBookId = 1L;
+
+        BookSummaryDTO missingBookSummaryDTO = new BookSummaryDTO();
+        missingBookSummaryDTO.setId(missingBookId);
+
+        AuthorDTO dto = new AuthorDTO();
+        dto.setName("Walter White");
+        dto.getBooks().add(missingBookSummaryDTO);
+
+        when(bookRepository.findById(missingBookId)).thenReturn(Optional.empty());
+//      Act + Assert
+        assertThatThrownBy(() -> authorService.createAuthor(dto)).isInstanceOf(BookNotFoundException.class);
+
+//      Verify: author save should never happen
+        verify(authorRepository,never()).save(any(AuthorEntity.class));
+
+//      Verify: book lookup was attempted
+        verify(bookRepository).findById(missingBookId);
+    }
+
     @Test
     void getAllAuthors() {
 
-// creating an additional author
-    AuthorEntity authorEntity2 = new AuthorEntity();
-    authorEntity2.setId(2L);
-    authorEntity2.setName("Walter White");
+//    creating an additional author
+        AuthorEntity authorEntity2 = new AuthorEntity();
+        authorEntity2.setId(2L);
+        authorEntity2.setName("Walter White");
 
-    when(authorRepository.findAll()).thenReturn(List.of(authorEntity2, mockAuthorEntity));
+        when(authorRepository.findAll()).thenReturn(List.of(authorEntity2, mockAuthorEntity));
 
-    List<AuthorDTO> result = authorService.getAllAuthors();
+        List<AuthorDTO> result = authorService.getAllAuthors();
 
-    assertThat(result)
-            .isNotNull()
-            .hasSize(2);
+        assertThat(result)
+                .isNotNull()
+                .hasSize(2);
 
-    assertThat(result)
-            .extracting(authorDTOS-> authorDTOS.getName())
-            .containsExactly("Walter White", "Jessie Pinkman");
+        assertThat(result)
+                .extracting(authorDTOS-> authorDTOS.getName())
+                .containsExactly("Walter White", "Jessie Pinkman");
     }
 
     @Test
