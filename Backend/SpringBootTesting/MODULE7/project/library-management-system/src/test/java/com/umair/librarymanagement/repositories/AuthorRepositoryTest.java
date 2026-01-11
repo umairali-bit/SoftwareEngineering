@@ -44,7 +44,7 @@ class AuthorRepositoryTest {
 
         assertThat(result)
                 .isPresent()
-                .isNotEmpty()
+//                .isNotEmpty()
                 .get()
                 .extracting(s-> s.getName())
                 .isEqualTo(author.getName());

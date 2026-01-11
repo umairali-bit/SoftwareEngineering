@@ -1,7 +1,6 @@
 package com.umair.librarymanagement.repositories;
 
 import com.umair.librarymanagement.LibraryManagementSystemTestConfiguration;
-import com.umair.librarymanagement.entities.AuthorEntity;
 import com.umair.librarymanagement.entities.BookEntity;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -10,10 +9,10 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 
 @Import(LibraryManagementSystemTestConfiguration.class)
@@ -39,7 +38,7 @@ class BookRepositoryTest {
 
         assertThat(result)
                 .isPresent()
-                .isNotEmpty()
+//                .isNotEmpty() - redundant after .isPresent()
                 .get()
                 .extracting(b-> b.getTitle())
                 .isEqualTo(book.getTitle());
@@ -48,5 +47,19 @@ class BookRepositoryTest {
 
     @Test
     void findByPublishedDateAfter() {
+        bookRepository.save(book);
+
+        BookEntity futureBook = BookEntity.builder()
+                .title("Better Call Saul")
+                .publishedDate(book.getPublishedDate().plusDays(1))
+                .build();
+
+        bookRepository.save(futureBook);
+
+        List<BookEntity> booksPublishedAfter = bookRepository.findByPublishedDateAfter(book.getPublishedDate());
+
+        assertThat(booksPublishedAfter)
+        .isNotEmpty().allMatch(b -> b.getTitle().equals(futureBook.getTitle()));
+
     }
 }
