@@ -16,9 +16,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -109,6 +109,23 @@ class AuthorServiceTest {
 
     @Test
     void getAllAuthors() {
+
+// creating an additional author
+    AuthorEntity authorEntity2 = new AuthorEntity();
+    authorEntity2.setId(2L);
+    authorEntity2.setName("Walter White");
+
+    when(authorRepository.findAll()).thenReturn(List.of(authorEntity2, mockAuthorEntity));
+
+    List<AuthorDTO> result = authorService.getAllAuthors();
+
+    assertThat(result)
+            .isNotNull()
+            .hasSize(2);
+
+    assertThat(result)
+            .extracting(authorDTOS-> authorDTOS.getName())
+            .containsExactly("Walter White", "Jessie Pinkman");
     }
 
     @Test
