@@ -4,6 +4,7 @@ import com.umair.librarymanagement.dtos.AuthorDTO;
 import com.umair.librarymanagement.dtos.BookSummaryDTO;
 import com.umair.librarymanagement.entities.AuthorEntity;
 import com.umair.librarymanagement.entities.BookEntity;
+import com.umair.librarymanagement.exception.AuthorNotFoundException;
 import com.umair.librarymanagement.repositories.AuthorRepository;
 import com.umair.librarymanagement.repositories.BookRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,6 +20,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -126,6 +128,15 @@ class AuthorServiceTest {
     assertThat(result)
             .extracting(authorDTOS-> authorDTOS.getName())
             .containsExactly("Walter White", "Jessie Pinkman");
+    }
+
+    @Test
+    void testGetAuthorById_ThrowsException() {
+        when(authorRepository.findById(anyLong())).thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> authorService.getAuthor(1L)).isInstanceOf(AuthorNotFoundException.class);
+
+        verify(authorRepository).findById(1L);
     }
 
     @Test
