@@ -73,21 +73,35 @@ class AuthorServiceTest {
     @Test
     void testCreateAuthor() {
 
-        when(bookRepository.findById(anyLong())).thenReturn(Optional.of(mockBookEntity));
+//     Stub the BookRepository to simulate an existing book in the system.
+//     When the service looks up a book by ID, return the mockBookEntity.
+       when(bookRepository.findById(anyLong())).thenReturn(Optional.of(mockBookEntity));
+
+//     Stub the AuthorRepository save call.
+//     When the service looks up a book by ID, return the mockBookEntity.
         when(authorRepository.save(any(AuthorEntity.class))).thenReturn(mockAuthorEntity);
+
+//     Call the service method under test.
+//      This should:
+        // 1. Fetch the book by ID
+        // 2. Attach the book to the new author
+        // 3. Save the author
+        // 4. Return an AuthorDTO
 
         AuthorDTO authorDto = authorService.createAuthor(mockAuthorDto);
 
         assertThat(authorDto).isNotNull();
+//      Verify the author's name in the response matches the saved author
         assertThat(authorDto.getName()).isEqualTo(mockAuthorEntity.getName());
 
+//      Capture the AuthorEntity passed to the save() method
         ArgumentCaptor<AuthorEntity> captor = ArgumentCaptor.forClass(AuthorEntity.class);
         verify(authorRepository).save(captor.capture());
         verify(bookRepository).findById(anyLong());
-
         AuthorEntity capturedAuthor = captor.getValue();
         assertThat(capturedAuthor.getName()).isEqualTo(mockAuthorEntity.getName());
 
+//      verify books attached + owning side set
         assertThat(capturedAuthor.getBooks().size()).isEqualTo(1);
         assertThat(capturedAuthor.getBooks().iterator().next().getId()).isEqualTo(mockBookEntity.getId());
 
