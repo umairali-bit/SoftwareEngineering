@@ -130,6 +130,18 @@ class AuthorServiceTest {
 
     @Test
     void getAuthor() {
+
+        Long id  = mockAuthorEntity.getId();
+
+        when(authorRepository.findById(id)).thenReturn(Optional.of(mockAuthorEntity));
+
+        AuthorDTO authorDto = authorService.getAuthor(1L);
+
+        assertThat(authorDto).isNotNull();
+        assertThat(authorDto.getId()).isEqualTo(mockAuthorEntity.getId());
+
+        verify(authorRepository).findById(id);
+
     }
 
     @Test
