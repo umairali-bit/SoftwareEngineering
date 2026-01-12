@@ -185,18 +185,19 @@ class AuthorServiceTest {
     }
 
     @Test
-    void deleteAuthor() {
-//      Arrange
-        AuthorEntity authorEntity = new AuthorEntity();
-        authorEntity.setId(1L);
-        authorEntity.setName("Walter White");
+    void deleteAuthor_shouldUnlinkBooksAndDeleteAuthor() {
 
-        when(authorRepository.findById(1L)).thenReturn(Optional.of(authorEntity));
+        when(authorRepository.findById(1L)).thenReturn(Optional.of(mockAuthorEntity));
+
+        authorService.deleteAuthor(1L);
 
 //      Act + Assert
-        assertThatCode(() -> authorService.deleteAuthor(1L)).doesNotThrowAnyException();
         verify(authorRepository).findById(1L);
-        verify(authorRepository).delete(authorEntity);
+        verify(authorRepository).delete(mockAuthorEntity);
+
+        assertThat(mockBookEntity.getAuthor()).isNull();
+        assertThat(mockAuthorEntity.getBooks()).isEmpty();
+
     }
 
     @Test
@@ -207,6 +208,12 @@ class AuthorServiceTest {
         assertThatThrownBy(() -> authorService.deleteAuthor(1L)).isInstanceOf(AuthorNotFoundException.class);
         verify(authorRepository).findById(1L);
         verify(authorRepository, never()).delete(any());
+
+//      deleteById() must also NOT be called
+        verify(authorRepository, never()).deleteById(anyLong());
+
+//      BookRepository must not be touched at all
+        verifyNoInteractions(bookRepository);
     }
 
 
