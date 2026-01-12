@@ -293,6 +293,19 @@ class AuthorServiceTest {
         verify(bookRepository).findById(100L);
         verify(authorRepository).save(existingAuthor);
 
+//        Assert: state changes on entity before save
+        assertThat(existingAuthor.getName()).isEqualTo(updatedAuthor.getName());
+//        old book should be unlinked
+        assertThat(oldBook.getAuthor()).isNull();
+//        new book should be linked
+        assertThat(existingAuthor.getBooks()).hasSize(1);
+        BookEntity attached = existingAuthor.getBooks().iterator().next();
+        assertThat(attached.getId()).isEqualTo(100L);
+        assertThat(attached.getAuthor()).isSameAs(existingAuthor);
+//      returned DTO
+        assertThat(result).isNotNull();
+        assertThat(result.getName()).isEqualTo(updatedAuthor.getName());
+
 
 
 
