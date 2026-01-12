@@ -261,6 +261,23 @@ class AuthorServiceTest {
         oldBook.setPublishedDate(LocalDate.now());
         oldBook.setAuthor(existingAuthor);
 
+        existingAuthor.getBooks().add(oldBook);
+
+        AuthorDTO updatedAuthor = new AuthorDTO();
+        updatedAuthor.setName("New Author");
+
+        BookEntity newBook = new BookEntity();
+        newBook.setId(100L);
+        newBook.setTitle("New Book");
+        newBook.setPublishedDate(LocalDate.now());
+
+        BookSummaryDTO newBookSummaryDTO = new BookSummaryDTO();
+        newBookSummaryDTO.setId(100L);
+
+        updatedAuthor.getBooks().add(newBookSummaryDTO);
+
+
+
 
     }
 
