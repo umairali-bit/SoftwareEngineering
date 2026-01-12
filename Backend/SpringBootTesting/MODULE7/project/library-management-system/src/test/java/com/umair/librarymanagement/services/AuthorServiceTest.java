@@ -22,6 +22,7 @@ import java.awt.print.Book;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
@@ -70,7 +71,9 @@ class AuthorServiceTest {
 
 //      attach both sides (needed for deleteAuthor logic)
         mockBookEntity.setAuthor(mockAuthorEntity);
+        mockBookEntity2.setAuthor(mockAuthorEntity);
         mockAuthorEntity.getBooks().add(mockBookEntity);
+        mockAuthorEntity.getBooks().add(mockBookEntity2);
 
 
 //      DTO coming from API
@@ -359,5 +362,18 @@ class AuthorServiceTest {
 
     @Test
     void getBooksByAuthor() {
+
+        when(authorRepository.findById(mockAuthorEntity.getId())).thenReturn(Optional.of(mockAuthorEntity));
+
+        Set<BookSummaryDTO> result =  authorService.getBooksByAuthor(mockAuthorEntity.getId());
+
+        assertThat(result)
+                .isNotNull()
+                .hasSize(2);
+
+        // Verify repository interaction
+        verify(authorRepository).findById(mockAuthorEntity.getId());
+        verifyNoMoreInteractions(authorRepository);
+        verifyNoInteractions(bookRepository);
     }
 }
