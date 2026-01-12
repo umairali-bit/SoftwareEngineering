@@ -21,8 +21,8 @@ import java.awt.print.Book;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
+import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
@@ -182,7 +182,20 @@ class AuthorServiceTest {
 
     @Test
     void deleteAuthor() {
+//      Arrange
+        AuthorEntity authorEntity = new AuthorEntity();
+        authorEntity.setId(1L);
+        authorEntity.setName("Walter White");
+
+        when(authorRepository.findById(1L)).thenReturn(Optional.of(authorEntity));
+
+//      Act + Assert
+        assertThatCode(() -> authorService.deleteAuthor(1L)).doesNotThrowAnyException();
+        verify(authorRepository).findById(1L);
+        verify(authorRepository).delete(authorEntity);
     }
+
+
 
     @Test
     void findAuthorByName() {
