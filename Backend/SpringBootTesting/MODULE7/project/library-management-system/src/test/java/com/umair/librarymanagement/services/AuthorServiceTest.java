@@ -16,9 +16,6 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-
-import java.awt.print.Book;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -354,9 +351,6 @@ class AuthorServiceTest {
         assertThat(oldBook.getAuthor()).isSameAs(existingAuthor);
 
         assertThat(result.getName()).isEqualTo("New Author");
-
-
-
 
     }
 
