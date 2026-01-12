@@ -276,6 +276,23 @@ class AuthorServiceTest {
 
         updatedAuthor.getBooks().add(newBookSummaryDTO);
 
+//      Stub
+        when(authorRepository.findById(authorId)).thenReturn(Optional.of(existingAuthor));
+        when(bookRepository.findById(100L)).thenReturn(Optional.of(newBook));
+
+//      returns the exact same argument that was saved
+        when(authorRepository.save(any(AuthorEntity.class)))
+                .thenAnswer(inv -> inv.getArgument(0));
+
+
+//        Act
+        AuthorDTO result = authorService.updateAuthor(authorId, updatedAuthor);
+
+//        Assert - repo interactions
+        verify(authorRepository).findById(authorId);
+        verify(bookRepository).findById(100L);
+        verify(authorRepository).save(existingAuthor);
+
 
 
 
