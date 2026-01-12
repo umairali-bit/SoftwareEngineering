@@ -42,6 +42,8 @@ class AuthorServiceTest {
     private AuthorDTO mockAuthorDto;
 
     private BookEntity mockBookEntity;
+    private BookEntity mockBookEntity2;
+
     private BookSummaryDTO mockBookSummaryDTO;
 
     @BeforeEach
@@ -52,6 +54,13 @@ class AuthorServiceTest {
         mockBookEntity.setId(1L);
         mockBookEntity.setTitle("Breaking Bad");
         mockBookEntity.setPublishedDate(LocalDate.now());
+
+//      Book 2 entity
+        mockBookEntity2 = new BookEntity();
+        mockBookEntity2.setId(2L);
+        mockBookEntity2.setTitle("Better Call Saul");
+        mockBookEntity2.setPublishedDate(LocalDate.now());
+        mockBookEntity2.setAuthor(mockAuthorEntity);
 
 
 //      Author Entity
