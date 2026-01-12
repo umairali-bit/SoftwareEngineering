@@ -58,6 +58,10 @@ class AuthorServiceTest {
         mockAuthorEntity.setId(1L);
         mockAuthorEntity.setName("Jessie Pinkman");
 
+//      attach both sides (needed for deleteAuthor logic)
+        mockBookEntity.setAuthor(mockAuthorEntity);
+        mockAuthorEntity.getBooks().add(mockBookEntity);
+
 
 //      DTO coming from API
         mockBookSummaryDTO = new BookSummaryDTO();
@@ -195,6 +199,15 @@ class AuthorServiceTest {
         verify(authorRepository).delete(authorEntity);
     }
 
+    @Test
+    void deleteAuthor_whenAuthorNotFound_shouldThrowAndNotSaveAuthor() {
+        when(authorRepository.findById(anyLong())).thenReturn(Optional.empty());
+
+//      Act + Assert
+        assertThatThrownBy(() -> authorService.deleteAuthor(1L)).isInstanceOf(AuthorNotFoundException.class);
+        verify(authorRepository).findById(1L);
+        verify(authorRepository, never()).delete(any());
+    }
 
 
     @Test
