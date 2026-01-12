@@ -107,7 +107,7 @@ public class AuthorService {
         author.setName(authorDTO.getName()); //dto -> entity
 
         // 3. Update books
-        if(authorDTO.getBooks() != null) {
+        if(authorDTO.getBooks() != null) { //if null. only updates name, does NOT touch books
             // Clear old associations
             author.getBooks().forEach(bookEntity -> bookEntity.setAuthor(null));
             author.getBooks().clear();

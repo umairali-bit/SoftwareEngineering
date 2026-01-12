@@ -306,6 +306,43 @@ class AuthorServiceTest {
         assertThat(result).isNotNull();
         assertThat(result.getName()).isEqualTo(updatedAuthor.getName());
 
+    }
+
+    @Test
+    void updateAuthor_whenBooksNullInDTO_shouldUpdateOnlyName(){
+        Long authorId = 1L;
+        AuthorEntity existingAuthor = new AuthorEntity();
+        existingAuthor.setId(authorId);
+        existingAuthor.setName("Old Author");
+
+        BookEntity oldBook = new BookEntity();
+        oldBook.setId(100L);
+        oldBook.setAuthor(existingAuthor);
+        existingAuthor.getBooks().add(oldBook);
+
+        AuthorDTO updatedAuthor = new AuthorDTO();
+        updatedAuthor.setName("New Author");
+        updatedAuthor.setBooks(null);
+
+        when(authorRepository.findById(authorId)).thenReturn(Optional.of(existingAuthor));
+
+//      returns the exact same argument that was saved
+        when(authorRepository.save(any(AuthorEntity.class)))
+                .thenAnswer(inv -> inv.getArgument(0));
+
+
+        AuthorDTO result = authorService.updateAuthor(authorId, updatedAuthor);
+        verify(authorRepository).findById(authorId);
+        verify(authorRepository).save(existingAuthor);
+        verifyNoInteractions(bookRepository); //no book lookups
+
+        assertThat(existingAuthor.getName()).isEqualTo(updatedAuthor.getName());
+
+        assertThat(existingAuthor.getBooks()).hasSize(1);
+        assertThat(oldBook.getAuthor()).isSameAs(existingAuthor);
+
+        assertThat(result.getName()).isEqualTo("New Author");
+
 
 
 
