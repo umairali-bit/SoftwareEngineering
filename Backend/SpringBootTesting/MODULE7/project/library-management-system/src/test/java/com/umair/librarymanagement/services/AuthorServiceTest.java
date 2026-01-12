@@ -219,6 +219,20 @@ class AuthorServiceTest {
 
     @Test
     void findAuthorByName() {
+//      Assign
+        when(authorRepository.findByNameIgnoreCase(anyString())).thenReturn(Optional.of(mockAuthorEntity));
+
+        AuthorDTO authorDto = authorService.findAuthorByName("Walter White");
+
+//      Act + Assert
+        assertThat(authorDto).isNotNull();
+        assertThat(authorDto.getName()).isEqualTo(mockAuthorEntity.getName());
+
+        verify(authorRepository).findByNameIgnoreCase("Walter White");
+        verifyNoMoreInteractions(authorRepository);
+
+
+
     }
 
     @Test
