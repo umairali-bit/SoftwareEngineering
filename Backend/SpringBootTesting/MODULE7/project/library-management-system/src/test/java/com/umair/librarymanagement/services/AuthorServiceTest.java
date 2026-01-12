@@ -5,6 +5,7 @@ import com.umair.librarymanagement.dtos.BookSummaryDTO;
 import com.umair.librarymanagement.entities.AuthorEntity;
 import com.umair.librarymanagement.entities.BookEntity;
 import com.umair.librarymanagement.exception.AuthorNotFoundException;
+import com.umair.librarymanagement.exception.AuthorNotFoundNameException;
 import com.umair.librarymanagement.exception.BookNotFoundException;
 import com.umair.librarymanagement.repositories.AuthorRepository;
 import com.umair.librarymanagement.repositories.BookRepository;
@@ -231,8 +232,17 @@ class AuthorServiceTest {
         verify(authorRepository).findByNameIgnoreCase("Walter White");
         verifyNoMoreInteractions(authorRepository);
 
+    }
 
+    @Test
+    void findAuthorByName_whenNotFound_shouldThrow() {
+        when(authorRepository.findByNameIgnoreCase(anyString())).thenReturn(Optional.empty());
 
+        assertThatThrownBy(() -> authorService.findAuthorByName("Walter White"))
+                .isInstanceOf(AuthorNotFoundNameException.class)
+                .hasMessage("Author not found with the name: Walter White");
+
+        verify(authorRepository).findByNameIgnoreCase("Walter White");
     }
 
     @Test
