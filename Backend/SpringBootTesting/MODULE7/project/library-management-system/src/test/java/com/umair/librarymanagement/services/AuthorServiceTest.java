@@ -246,7 +246,22 @@ class AuthorServiceTest {
     }
 
     @Test
-    void updateAuthor() {
+    void updateAuthor_shouldUpdateNameAndReplaceBooks() {
+
+//        Arrange
+        Long authorId = 1L;
+
+        AuthorEntity existingAuthor = new AuthorEntity();
+        existingAuthor.setId(authorId);
+        existingAuthor.setName("Old Author");
+
+        BookEntity oldBook = new BookEntity();
+        oldBook.setId(100L);
+        oldBook.setTitle("Old Book");
+        oldBook.setPublishedDate(LocalDate.now());
+        oldBook.setAuthor(existingAuthor);
+
+
     }
 
     @Test
