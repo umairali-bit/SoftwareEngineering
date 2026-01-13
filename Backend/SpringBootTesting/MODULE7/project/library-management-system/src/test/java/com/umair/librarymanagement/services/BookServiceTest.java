@@ -190,6 +190,7 @@ class BookServiceTest {
     @Test
     void updateBook_shouldUpdateFields_andMoveBookToNewAuthor() {
 
+//         Arrange: existing book is linked to an old author, and request updates fields + author
         Long bookId = 100L;
 
         AuthorEntity existingAuthor = new AuthorEntity();
@@ -212,54 +213,42 @@ class BookServiceTest {
         updateBook.setTitle("New Book");
         updateBook.setPublishedDate(LocalDate.of(2020, 5, 5));
 
-
         AuthorSummaryDTO authorSummaryDTO = new AuthorSummaryDTO();
         authorSummaryDTO.setId(2L);
         authorSummaryDTO.setName("New Author");
-
         updateBook.setAuthor(authorSummaryDTO);
-
-
 
         when(bookRepository.findById(bookId)).thenReturn(Optional.of(book));
         when(authorRepository.findById(2L)).thenReturn(Optional.of(newAuthor));
-
         when(bookRepository.save(same(book))).thenAnswer(inv -> inv.getArgument(0));
 
+//         Act: call service method under test
         BookDTO result = bookService.updateBook(bookId, updateBook);
 
+//         Assert: fields updated + book moved from old author to new author (bidirectional)
         assertThat(book.getTitle()).isEqualTo("New Book");
         assertThat(book.getPublishedDate()).isEqualTo(LocalDate.of(2020, 5, 5));
-
         assertThat(existingAuthor.getBooks()).doesNotContain(book);
-
-
         assertThat(book.getAuthor()).isSameAs(newAuthor);
         assertThat(newAuthor.getBooks()).contains(book);
 
+//         Verify: correct repository interactions happened
         verify(bookRepository).findById(bookId);
         verify(authorRepository).findById(2L);
         verify(bookRepository).save(book);
 
         assertThat(result).isNotNull();
-
-
-
-
-
     }
 
     @Test
     void updateBook_shouldChangeAuthor_andUnlinkFromOldAuthor() {
+
+//         Arrange: DTO author is null so author-update block is skipped
         Long bookId = 100L;
 
         AuthorEntity existingAuthor = new AuthorEntity();
         existingAuthor.setId(1L);
         existingAuthor.setName("Old Author");
-
-        AuthorEntity newAuthor = new AuthorEntity();
-        newAuthor.setId(2L);
-        newAuthor.setName("New Author");
 
         BookEntity book = new BookEntity();
         book.setId(bookId);
@@ -272,33 +261,27 @@ class BookServiceTest {
         BookDTO updateBook = new BookDTO();
         updateBook.setTitle("New Book");
         updateBook.setPublishedDate(LocalDate.of(2020, 5, 5));
-        updateBook.setAuthor(null); //outer IF is FALSE
-
-        AuthorSummaryDTO authorSummaryDTO = new AuthorSummaryDTO();
-        authorSummaryDTO.setId(2L);
-        authorSummaryDTO.setName("New Author");
+        updateBook.setAuthor(null); // outer IF is FALSE
 
         when(bookRepository.findById(bookId)).thenReturn(Optional.of(book));
-
         when(bookRepository.save(same(book))).thenAnswer(inv -> inv.getArgument(0));
 
+//         Act: call service method under test
         bookService.updateBook(bookId, updateBook);
 
-        // author stays the same, no unlinking
+//         Assert: author stays the same (no unlinking / no reassignment)
         assertThat(book.getAuthor()).isSameAs(existingAuthor);
         assertThat(existingAuthor.getBooks()).contains(book);
 
-        //authorRepository should not be called at all
+//         Verify: authorRepository should not be called at all
         verifyNoInteractions(authorRepository);
     }
 
     @Test
     void updateBook_whenBookHasNoOldAuthor_shouldNotUnlinkButShouldAssignNewAuthor() {
-        Long bookId = 100L;
 
-        AuthorEntity existingAuthor = new AuthorEntity();
-        existingAuthor.setId(1L);
-        existingAuthor.setName("Old Author");
+//         Arrange: book has no current author, but DTO provides a new author (inner IF false, outer IF true)
+        Long bookId = 100L;
 
         AuthorEntity newAuthor = new AuthorEntity();
         newAuthor.setId(2L);
@@ -308,34 +291,32 @@ class BookServiceTest {
         book.setId(bookId);
         book.setTitle("Old Book");
         book.setPublishedDate(LocalDate.of(2020, 1, 1));
-        book.setAuthor(null);// inner IF is FALSE
+        book.setAuthor(null); // inner IF is FALSE
 
         BookDTO updateBook = new BookDTO();
         updateBook.setTitle("New Book");
         updateBook.setPublishedDate(LocalDate.of(2020, 5, 5));
 
-
         AuthorSummaryDTO authorSummaryDTO = new AuthorSummaryDTO();
         authorSummaryDTO.setId(2L);
         authorSummaryDTO.setName("New Author");
-
         updateBook.setAuthor(authorSummaryDTO); // outer IF is TRUE
 
         when(bookRepository.findById(bookId)).thenReturn(Optional.of(book));
         when(authorRepository.findById(2L)).thenReturn(Optional.of(newAuthor));
-
         when(bookRepository.save(any(BookEntity.class))).thenAnswer(inv -> inv.getArgument(0));
 
+//         Act: call service method under test
         bookService.updateBook(bookId, updateBook);
 
+//         Assert: book gets assigned to new author (no unlinking needed since there was no old author)
         assertThat(book.getAuthor()).isSameAs(newAuthor);
         assertThat(newAuthor.getBooks()).contains(book);
 
+//         Verify: new author was looked up
         verify(authorRepository).findById(2L);
-
-
-
     }
+
 
 
     @Test
