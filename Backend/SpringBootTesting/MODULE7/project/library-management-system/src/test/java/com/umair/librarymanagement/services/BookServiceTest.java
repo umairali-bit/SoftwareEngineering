@@ -14,8 +14,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Sort;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
@@ -34,43 +37,67 @@ class BookServiceTest {
     @InjectMocks
     private BookService bookService;
 
-    private BookEntity book;
-    private AuthorEntity author;
+    private BookEntity book, book2;
+    private AuthorEntity author, author2;
+    private BookDTO bookDTO, bookDTO2;
+    private List<AuthorSummaryDTO> authorSummaryDto;
 
-    private BookDTO bookDTO;
-    private BookSummaryDTO bookSummaryDto;
-
-    private AuthorSummaryDTO authorSummaryDto;
 
     @BeforeEach
     void setUp() {
 
         LocalDate date = LocalDate.of(2020, 1, 1);
+        LocalDate date2 = LocalDate.of(2020, 5, 5);
+
+//      Author Entity
+        author = new AuthorEntity();
+        author.setId(1L);
+        author.setName("Jessie Pinkman");
+        author.getBooks().add(book);
 
 //      Book Entity
         book = new BookEntity();
         book.setId(1L);
         book.setTitle("Breaking Bad");
         book.setPublishedDate(date);
+        book.setAuthor(author);
 
 //      Author Entity
-        author = new AuthorEntity();
-        author.setId(1L);
-        author.setName("Jessie Pinkman");
+        author2 = new AuthorEntity();
+        author2.setId(2L);
+        author2.setName("Walter White");
+        author2.getBooks().add(book2);
+
+//      Book Entity
+        book2 = new BookEntity();
+        book2.setId(2L);
+        book2.setTitle("Better Call Saul");
+        book2.setPublishedDate(date2);
+        book2.setAuthor(author2);
+
 
 //      Author summary for dto
-        authorSummaryDto = new AuthorSummaryDTO();
-        authorSummaryDto.setId(author.getId());
-        authorSummaryDto.setName(author.getName());
+
+        authorSummaryDto = new ArrayList<>(List.of(new AuthorSummaryDTO(), new AuthorSummaryDTO()));
+
+        authorSummaryDto.get(0).setId(author.getId());
+        authorSummaryDto.get(0).setName(author.getName());
+
+        authorSummaryDto.get(1).setId(author2.getId());
+        authorSummaryDto.get(1).setName(author2.getName());
+
 
 
 //      Book dto
         bookDTO = new BookDTO();
-        bookDTO.setAuthor(authorSummaryDto);
+        bookDTO.setAuthor(authorSummaryDto.get(0));
         bookDTO.setTitle("Breaking Bad");
         bookDTO.setPublishedDate(date);
 
-
+        bookDTO2 = new BookDTO();
+        bookDTO2.setAuthor(authorSummaryDto.get(1));
+        bookDTO2.setTitle("Better Call Saul");
+        bookDTO2.setPublishedDate(date2);
 
     }
 
@@ -138,6 +165,28 @@ class BookServiceTest {
 
     @Test
     void getAllBooks() {
+
+//      Important: repository returns in desired order already
+        when(bookRepository.findAll(Sort.by(Sort.Direction.DESC, "publishedDate")))
+                .thenReturn(List.of(book2, book));
+//      Act
+        List<BookDTO> result = bookService.getAllBooks();
+
+//      Assert: repo called with correct sort
+        verify(bookRepository).findAll(Sort.by(Sort.Direction.DESC, "publishedDate"));
+
+//      Assert: mapping + order
+        assertThat(result).hasSize(2);
+        assertThat(result.get(0).getId()).isEqualTo(2L);
+        assertThat(result.get(0).getTitle()).isEqualTo("Better Call Saul");
+        assertThat(result.get(0).getPublishedDate())
+                .isEqualTo(book2.getPublishedDate());
+        assertThat(result.get(0).getAuthor().getId()).isEqualTo(2L);
+
+        assertThat(result.get(1).getId()).isEqualTo(1L);
+        assertThat(result.get(1).getTitle()).isEqualTo("Breaking Bad");
+        assertThat(result.get(1).getPublishedDate()).isEqualTo(LocalDate.of(2020, 1, 1));
+        assertThat(result.get(1).getAuthor().getId()).isEqualTo(1L);
     }
 
     @Test
