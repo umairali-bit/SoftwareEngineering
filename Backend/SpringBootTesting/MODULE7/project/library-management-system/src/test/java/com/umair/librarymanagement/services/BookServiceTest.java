@@ -54,20 +54,25 @@ class BookServiceTest {
         author = new AuthorEntity();
         author.setId(1L);
         author.setName("Jessie Pinkman");
-        author.getBooks().add(book);
+
 
 //      Book Entity
         book = new BookEntity();
         book.setId(1L);
         book.setTitle("Breaking Bad");
         book.setPublishedDate(date);
+
+//      linking both sides
         book.setAuthor(author);
+        author.getBooks().add(book);
+
 
 //      Author Entity
         author2 = new AuthorEntity();
         author2.setId(2L);
         author2.setName("Walter White");
         author2.getBooks().add(book2);
+
 
 //      Book Entity
         book2 = new BookEntity();
@@ -102,7 +107,7 @@ class BookServiceTest {
     @Test
     void testCreateBook() {
 
-        when(authorRepository.findById(1L)).thenReturn(Optional.of(author));
+        when(authorRepository.findById(author.getId())).thenReturn(Optional.of(author));
 
 //      returns the exact object that your service passed into save() in this call.
         when(bookRepository.save(any(BookEntity.class)))
@@ -320,7 +325,24 @@ class BookServiceTest {
 
 
     @Test
-    void deleteBook() {
+    void deleteBook_shouldUnlinkAuthorAndDeleteBook() {
+
+//      Arrange
+        assertThat(book.getAuthor()).isSameAs(author);
+        assertThat(author.getBooks()).contains(book);
+
+        when(bookRepository.findById(book.getId())).thenReturn(Optional.of(book));
+//      Act
+        bookService.deleteBook(book.getId());
+//      Assert: repo interactions
+        verify(bookRepository).findById(book.getId());
+        verify(bookRepository).delete(book);
+
+//      Assert linking happened
+        assertThat(book.getAuthor()).isNull();
+        assertThat(author.getBooks()).doesNotContain(book); //book is a set<>
+
+
     }
 
     @Test
