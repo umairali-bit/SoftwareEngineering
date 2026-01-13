@@ -21,7 +21,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
@@ -379,5 +378,35 @@ class BookServiceTest {
 
     @Test
     void findBookPublishedAfter() {
+
+        LocalDate cutOff = book.getPublishedDate();
+
+        when(bookRepository.findByPublishedDateAfter(cutOff))
+                .thenReturn(List.of(book, book2));
+
+
+//        ACT
+        List<BookDTO> result = bookService.findBookPublishedAfter(cutOff);
+
+//        Assert: repo called correctly
+        verify(bookRepository).findByPublishedDateAfter(cutOff);
+
+//        Assert: mapping + data
+        assertThat(result).hasSize(2);
+
+        assertThat(result.get(0).getTitle()).isEqualTo(book.getTitle());
+        assertThat(result.get(0).getId()).isEqualTo(book.getId());
+        assertThat(result.get(0).getPublishedDate()).isEqualTo(book.getPublishedDate());
+        assertThat(result.get(0).getAuthor()).isEqualTo(bookDTO.getAuthor());
+
+        assertThat(result.get(1).getTitle()).isEqualTo(book2.getTitle());
+        assertThat(result.get(1).getId()).isEqualTo(book2.getId());
+        assertThat(result.get(1).getPublishedDate()).isEqualTo(book2.getPublishedDate());
+        assertThat(result.get(1).getAuthor()).isEqualTo(bookDTO2.getAuthor());
+
+
+
+
+
     }
 }
