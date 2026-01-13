@@ -53,18 +53,18 @@ class BookServiceTest {
         book.setTitle("Breaking Bad");
         book.setPublishedDate(date);
 
-        //      Author Entity
+//      Author Entity
         author = new AuthorEntity();
         author.setId(1L);
         author.setName("Jessie Pinkman");
 
-
+//      Author summary for dto
         authorSummaryDto = new AuthorSummaryDTO();
         authorSummaryDto.setId(author.getId());
         authorSummaryDto.setName(author.getName());
 
 
-
+//      Book dto
         bookDTO = new BookDTO();
         bookDTO.setAuthor(authorSummaryDto);
         bookDTO.setTitle("Breaking Bad");
@@ -85,7 +85,7 @@ class BookServiceTest {
 
         BookDTO result = bookService.createBook(bookDTO);
 
-        // Assert
+//      Assert
         assertThat(result).isNotNull();
         assertThat(result.getTitle()).isEqualTo("Breaking Bad");
         assertThat(result.getPublishedDate()).isEqualTo(bookDTO.getPublishedDate());

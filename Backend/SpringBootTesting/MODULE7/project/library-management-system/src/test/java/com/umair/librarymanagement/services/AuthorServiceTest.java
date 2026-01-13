@@ -37,6 +37,7 @@ class AuthorServiceTest {
     private AuthorService authorService;
 
     private AuthorEntity mockAuthorEntity;
+    private AuthorEntity mockAuthorEntity2;
     private AuthorDTO mockAuthorDto;
 
     private BookEntity mockBookEntity;
@@ -65,6 +66,11 @@ class AuthorServiceTest {
         mockAuthorEntity = new AuthorEntity();
         mockAuthorEntity.setId(1L);
         mockAuthorEntity.setName("Jessie Pinkman");
+
+//      Author Entity 2
+        mockAuthorEntity2 = new AuthorEntity();
+        mockAuthorEntity2.setId(2L);
+        mockAuthorEntity2.setName("Walter White");
 
 //      attach both sides (needed for deleteAuthor logic)
         mockBookEntity.setAuthor(mockAuthorEntity);
@@ -127,36 +133,22 @@ class AuthorServiceTest {
 
     @Test
     void createAuthor_whenBookNotFound_shouldThrowAndNotSaveAuthor() {
-//      Arrange
-        Long missingBookId = 1L;
 
-        BookSummaryDTO missingBookSummaryDTO = new BookSummaryDTO();
-        missingBookSummaryDTO.setId(missingBookId);
-
-        AuthorDTO dto = new AuthorDTO();
-        dto.setName("Walter White");
-        dto.getBooks().add(missingBookSummaryDTO);
-
-        when(bookRepository.findById(missingBookId)).thenReturn(Optional.empty());
+        when(bookRepository.findById(1L)).thenReturn(Optional.empty());
 //      Act + Assert
-        assertThatThrownBy(() -> authorService.createAuthor(dto)).isInstanceOf(BookNotFoundException.class);
+        assertThatThrownBy(() -> authorService.createAuthor(mockAuthorDto)).isInstanceOf(BookNotFoundException.class);
 
 //      Verify: author save should never happen
         verify(authorRepository,never()).save(any(AuthorEntity.class));
 
 //      Verify: book lookup was attempted
-        verify(bookRepository).findById(missingBookId);
+        verify(bookRepository).findById(1L);
     }
 
     @Test
     void getAllAuthors() {
 
-//    creating an additional author
-        AuthorEntity authorEntity2 = new AuthorEntity();
-        authorEntity2.setId(2L);
-        authorEntity2.setName("Walter White");
-
-        when(authorRepository.findAll()).thenReturn(List.of(authorEntity2, mockAuthorEntity));
+        when(authorRepository.findAll()).thenReturn(List.of(mockAuthorEntity2, mockAuthorEntity));
 
         List<AuthorDTO> result = authorService.getAllAuthors();
 
@@ -181,16 +173,14 @@ class AuthorServiceTest {
     @Test
     void getAuthor() {
 
-        Long id  = mockAuthorEntity.getId();
-
-        when(authorRepository.findById(id)).thenReturn(Optional.of(mockAuthorEntity));
+        when(authorRepository.findById(mockAuthorEntity.getId())).thenReturn(Optional.of(mockAuthorEntity));
 
         AuthorDTO authorDto = authorService.getAuthor(1L);
 
         assertThat(authorDto).isNotNull();
         assertThat(authorDto.getId()).isEqualTo(mockAuthorEntity.getId());
 
-        verify(authorRepository).findById(id);
+        verify(authorRepository).findById(mockAuthorEntity.getId());
 
     }
 
