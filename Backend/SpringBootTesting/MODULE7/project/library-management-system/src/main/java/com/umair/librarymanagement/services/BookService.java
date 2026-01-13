@@ -31,7 +31,7 @@ public class BookService {
     public BookDTO createBook(BookDTO bookDTO) {
         BookEntity book = new BookEntity();
 
-        // Fetch existing author instead of creating a new one
+//      Validate that an existing author ID is provided
         if (bookDTO.getAuthor() == null || bookDTO.getAuthor().getId() == null) {
             throw new AuthorNotFoundException();
         }

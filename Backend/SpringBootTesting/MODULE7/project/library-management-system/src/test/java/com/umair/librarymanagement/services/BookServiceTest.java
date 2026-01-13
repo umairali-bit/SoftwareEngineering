@@ -5,6 +5,7 @@ import com.umair.librarymanagement.dtos.BookDTO;
 import com.umair.librarymanagement.dtos.BookSummaryDTO;
 import com.umair.librarymanagement.entities.AuthorEntity;
 import com.umair.librarymanagement.entities.BookEntity;
+import com.umair.librarymanagement.exception.AuthorNotFoundException;
 import com.umair.librarymanagement.repositories.AuthorRepository;
 import com.umair.librarymanagement.repositories.BookRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -48,6 +49,7 @@ class BookServiceTest {
 
 //      Book Entity
         book = new BookEntity();
+        book.setId(1L);
         book.setTitle("Breaking Bad");
         book.setPublishedDate(date);
 
@@ -92,8 +94,46 @@ class BookServiceTest {
         verify(authorRepository).findById(author.getId());
         verify(bookRepository).save(any(BookEntity.class));
 
+    }
 
 
+    @Test
+    void createBook_whenAuthorIsNull_shouldThrowAuthorNotFound() {
+//      Arrange
+        BookDTO dto = new BookDTO();
+        dto.setTitle("Breaking Bad");
+        dto.setPublishedDate(LocalDate.of(2020, 1, 1));
+        dto.setAuthor(null); // triggers first condition
+
+
+//      Act + Assert
+        assertThatThrownBy(() -> bookService.createBook(dto))
+                .isInstanceOf(AuthorNotFoundException.class);
+
+//      No DB calls should happen
+        verifyNoInteractions(authorRepository);
+        verifyNoInteractions(bookRepository);
+    }
+
+    @Test
+    void createBook_whenAuthorIdIsNull_shouldThrowAuthorNotFound() {
+//      Arrange
+        BookDTO dto = new BookDTO();
+        dto.setTitle("Breaking Bad");
+        dto.setPublishedDate(LocalDate.of(2020, 1, 1));
+
+        AuthorSummaryDTO authorSummary = new AuthorSummaryDTO();
+        authorSummary.setId(null); // triggers second condition
+        authorSummary.setName("Jessie Pinkman");
+        dto.setAuthor(authorSummary);
+
+//      Act + Assert
+        assertThatThrownBy(() -> bookService.createBook(dto))
+                .isInstanceOf(AuthorNotFoundException.class);
+
+//      No DB calls should happen
+        verifyNoInteractions(authorRepository);
+        verifyNoInteractions(bookRepository);
     }
 
     @Test
