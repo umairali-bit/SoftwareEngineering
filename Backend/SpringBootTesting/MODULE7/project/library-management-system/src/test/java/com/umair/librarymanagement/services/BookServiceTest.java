@@ -211,11 +211,13 @@ class BookServiceTest {
         BookDTO updateBook = new BookDTO();
         updateBook.setTitle("New Book");
         updateBook.setPublishedDate(LocalDate.of(2020, 5, 5));
-        updateBook.setAuthor(null); //outer IF is FALSE
+
 
         AuthorSummaryDTO authorSummaryDTO = new AuthorSummaryDTO();
         authorSummaryDTO.setId(2L);
         authorSummaryDTO.setName("New Author");
+
+        updateBook.setAuthor(authorSummaryDTO);
 
 
 
@@ -270,7 +272,7 @@ class BookServiceTest {
         BookDTO updateBook = new BookDTO();
         updateBook.setTitle("New Book");
         updateBook.setPublishedDate(LocalDate.of(2020, 5, 5));
-        updateBook.setAuthor(null);
+        updateBook.setAuthor(null); //outer IF is FALSE
 
         AuthorSummaryDTO authorSummaryDTO = new AuthorSummaryDTO();
         authorSummaryDTO.setId(2L);
@@ -288,6 +290,51 @@ class BookServiceTest {
 
         //authorRepository should not be called at all
         verifyNoInteractions(authorRepository);
+    }
+
+    @Test
+    void updateBook_whenBookHasNoOldAuthor_shouldNotUnlinkButShouldAssignNewAuthor() {
+        Long bookId = 100L;
+
+        AuthorEntity existingAuthor = new AuthorEntity();
+        existingAuthor.setId(1L);
+        existingAuthor.setName("Old Author");
+
+        AuthorEntity newAuthor = new AuthorEntity();
+        newAuthor.setId(2L);
+        newAuthor.setName("New Author");
+
+        BookEntity book = new BookEntity();
+        book.setId(bookId);
+        book.setTitle("Old Book");
+        book.setPublishedDate(LocalDate.of(2020, 1, 1));
+        book.setAuthor(null);// inner IF is FALSE
+
+        BookDTO updateBook = new BookDTO();
+        updateBook.setTitle("New Book");
+        updateBook.setPublishedDate(LocalDate.of(2020, 5, 5));
+
+
+        AuthorSummaryDTO authorSummaryDTO = new AuthorSummaryDTO();
+        authorSummaryDTO.setId(2L);
+        authorSummaryDTO.setName("New Author");
+
+        updateBook.setAuthor(authorSummaryDTO); // outer IF is TRUE
+
+        when(bookRepository.findById(bookId)).thenReturn(Optional.of(book));
+        when(authorRepository.findById(2L)).thenReturn(Optional.of(newAuthor));
+
+        when(bookRepository.save(any(BookEntity.class))).thenAnswer(inv -> inv.getArgument(0));
+
+        bookService.updateBook(bookId, updateBook);
+
+        assertThat(book.getAuthor()).isSameAs(newAuthor);
+        assertThat(newAuthor.getBooks()).contains(book);
+
+        verify(authorRepository).findById(2L);
+
+
+
     }
 
 
