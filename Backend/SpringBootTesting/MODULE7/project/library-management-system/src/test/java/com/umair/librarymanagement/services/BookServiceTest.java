@@ -21,6 +21,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
@@ -346,7 +347,34 @@ class BookServiceTest {
     }
 
     @Test
+    void deleteBook_whenBookHasNoAuthor_shouldJustDelete(){
+//      Arrange
+        book.setAuthor(null);//author is null
+        when(bookRepository.findById(book.getId())).thenReturn(Optional.of(book));
+
+//        Act
+        bookService.deleteBook(book.getId());
+
+//        Assert
+        assertThat(book.getAuthor()).isNull();
+        verify(bookRepository).delete(book);
+
+    }
+
+    @Test
     void getBookByTitle() {
+
+        when(bookRepository.findByTitle(book.getTitle())).thenReturn(Optional.of(book));
+
+        BookDTO result = bookService.getBookByTitle(book.getTitle());
+
+        assertThat(result)
+                .isNotNull();
+
+        verify(bookRepository).findByTitle(book.getTitle());
+        verifyNoMoreInteractions(bookRepository);
+        verifyNoInteractions(authorRepository);
+
     }
 
     @Test
