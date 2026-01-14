@@ -142,6 +142,27 @@ public class BookControllerTestIT extends AbstractIntegrationTest{
                 .returnResult()
                 .getResponseBody();
 
+//        Assert: wrapper + list order
+        assertThat(response).isNotNull();
+        assertThat(response.getData()).isNotNull();
+
+        List<BookDTO> result = response.getData();
+        assertThat(result).isNotNull();
+        assertThat(result.size()).isEqualTo(2);
+
+//        Newest first (DESC publishedDate)
+        assertThat(result.get(0).getTitle()).isEqualTo("Better Call Saul");
+        assertThat(result.get(0).getPublishedDate()).isEqualTo(LocalDate.of(2020,5,5));
+        assertThat(result.get(0).getAuthor()).isNotNull();
+        assertThat(result.get(0).getAuthor().getId()).isEqualTo(authorId2);
+
+        assertThat(result.get(1).getTitle()).isEqualTo("Breaking Bad");
+        assertThat(result.get(1).getPublishedDate()).isEqualTo(LocalDate.of(2020, 1, 1));
+        assertThat(result.get(1).getAuthor()).isNotNull();
+        assertThat(result.get(1).getAuthor().getId()).isEqualTo(authorId1);
+
+
+
 
 
 
