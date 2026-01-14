@@ -4,21 +4,17 @@ import com.umair.librarymanagement.advices.ApiResponse;
 import com.umair.librarymanagement.dtos.AuthorDTO;
 import com.umair.librarymanagement.dtos.AuthorSummaryDTO;
 import com.umair.librarymanagement.dtos.BookDTO;
+import com.umair.librarymanagement.dtos.BookSummaryDTO;
 import com.umair.librarymanagement.repositories.AuthorRepository;
 import com.umair.librarymanagement.repositories.BookRepository;
-import org.checkerframework.checker.units.qual.A;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpStatus;
-
-import java.awt.print.Book;
 import java.time.LocalDate;
 import java.util.List;
+import static org.assertj.core.api.Assertions.assertThat;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class BookControllerTestIT extends AbstractIntegrationTest{
 
@@ -225,7 +221,7 @@ public class BookControllerTestIT extends AbstractIntegrationTest{
                 .build();
 
 //        Act
-        ApiResponse<BookDTO> updatedBookResp = webTestClient.post()
+        ApiResponse<BookDTO> updatedBookResp = webTestClient.put()
                 .uri("/api/books/{id}", bookId)
                 .bodyValue(updateReq)
                 .exchange()
@@ -244,6 +240,23 @@ public class BookControllerTestIT extends AbstractIntegrationTest{
         assertThat(updatedBook.getPublishedDate()).isEqualTo(LocalDate.of(2022,5,5));
         assertThat(updatedBook.getAuthor()).isNotNull();
         assertThat(updatedBook.getAuthor().getId()).isEqualTo(newAuthorId);
+
+//        checking if old author no longer has the book
+        ApiResponse<AuthorDTO> oldAuthorAfter = webTestClient.get()
+                .uri("/api/authors/{id}", oldAuthorId)
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody(new ParameterizedTypeReference<ApiResponse<AuthorDTO>>() {})
+                .returnResult()
+                .getResponseBody();
+
+        assertThat(oldAuthorAfter).isNotNull();
+        assertThat(oldAuthorAfter.getData()).isNotNull();
+        assertThat(oldAuthorAfter.getData().getBooks())
+                .isNotNull()
+                .noneMatch(b -> b.getId().equals(bookId));
+
+
 
 
 
