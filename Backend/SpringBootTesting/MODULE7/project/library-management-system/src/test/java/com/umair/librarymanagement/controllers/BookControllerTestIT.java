@@ -161,6 +161,63 @@ public class BookControllerTestIT extends AbstractIntegrationTest{
         assertThat(result.get(1).getAuthor()).isNotNull();
         assertThat(result.get(1).getAuthor().getId()).isEqualTo(authorId1);
 
+    }
+
+    @Test
+    void updateBook_shouldUpdateTitleAndDate() {
+//        Arrange
+        ApiResponse<AuthorDTO> createdAuthor = webTestClient.post()
+                .uri("/api/authors")
+                .bodyValue(authorCreateDTO)
+                .exchange()
+                .expectStatus().isCreated()
+                .expectBody(new ParameterizedTypeReference<ApiResponse<AuthorDTO>>() {})
+                .returnResult()
+                .getResponseBody();
+
+        ApiResponse<AuthorDTO> createdAuthor2 = webTestClient.post()
+                .uri("/api/authors")
+                .bodyValue(authorCreateDTO2)
+                .exchange()
+                .expectStatus().isCreated()
+                .expectBody(new ParameterizedTypeReference<ApiResponse<AuthorDTO>>() {})
+                .returnResult()
+                .getResponseBody();
+
+        assertThat(createdAuthor).isNotNull();
+        assertThat(createdAuthor.getData()).isNotNull();
+
+        assertThat(createdAuthor2).isNotNull();
+        assertThat(createdAuthor2.getData()).isNotNull();
+
+        Long  oldAuthorId = createdAuthor.getData().getId();
+        Long  newAuthorId = createdAuthor2.getData().getId();
+
+
+
+//        Create Book
+        BookDTO createReq  = BookDTO.builder()
+                .title("Old Book")
+                .publishedDate(LocalDate.of(2020,1,1))
+                .author(AuthorSummaryDTO.builder().id(oldAuthorId).build())
+                .build();
+
+
+        ApiResponse<BookDTO> createdBookResp = webTestClient.post()
+                .uri("/api/books")
+                .bodyValue(createReq)
+                .exchange()
+                .expectStatus().isCreated()
+                .expectBody(new ParameterizedTypeReference<ApiResponse<BookDTO>>() {})
+                .returnResult()
+                .getResponseBody();
+
+        assertThat(createdBookResp).isNotNull();
+        assertThat(createdBookResp.getData()).isNotNull();
+
+        Long bookId = createdBookResp.getData().getId();
+
+
 
 
 
@@ -170,6 +227,8 @@ public class BookControllerTestIT extends AbstractIntegrationTest{
 
 
     }
+
+
 
 
 }
