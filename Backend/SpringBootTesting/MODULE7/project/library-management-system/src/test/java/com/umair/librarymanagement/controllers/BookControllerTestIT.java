@@ -43,15 +43,38 @@ public class BookControllerTestIT extends AbstractIntegrationTest{
         assertThat(authorDTOApiResponse).isNotNull();
         assertThat(authorDTOApiResponse.getData()).isNotNull();
 
-        AuthorDTO authorDTO = authorDTOApiResponse.getData();
-        assertThat(authorDTO).isNotNull();
+        AuthorDTO createdAuthor = authorDTOApiResponse.getData();
+        assertThat(createdAuthor).isNotNull();
 
 //   Attaching authorId to book create payload
         bookCreateDTO.setAuthor(
                 AuthorSummaryDTO.builder()
-                        .id(authorDTO.getId())
+                        .id(createdAuthor.getId())
                         .build()
         );
+
+//        create book and assert response
+        ApiResponse<BookDTO> bookDTOApiResponse = webTestClient.post()
+                .uri("/api/books")
+                .bodyValue(bookCreateDTO)
+                .exchange()
+                .expectStatus().isCreated()
+                .expectBody(new ParameterizedTypeReference<ApiResponse<BookDTO>>() {})
+                .returnResult()
+                .getResponseBody();
+        assertThat(bookDTOApiResponse).isNotNull();
+        assertThat(bookDTOApiResponse.getData()).isNotNull();
+
+        BookDTO createdBook = bookDTOApiResponse.getData();
+        assertThat(createdBook.getId()).isNotNull();
+        assertThat(createdBook.getTitle()).isEqualTo(bookCreateDTO.getTitle());
+        assertThat(createdBook.getPublishedDate()).isEqualTo(bookCreateDTO.getPublishedDate());
+
+        assertThat(createdBook.getAuthor()).isNotNull();
+        assertThat(createdBook.getAuthor().getId()).isEqualTo(createdAuthor.getId());
+
+
+
 
 
     }
