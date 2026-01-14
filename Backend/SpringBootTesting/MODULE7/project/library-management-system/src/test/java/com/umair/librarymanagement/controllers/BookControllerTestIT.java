@@ -293,11 +293,60 @@ public class BookControllerTestIT extends AbstractIntegrationTest{
 
         Long authorId = createdAuthor.getData().getId();
 
+//        creating book
+        BookDTO createReq  = BookDTO.builder()
+                .title("Old Book")
+                .publishedDate(LocalDate.of(2020,1,1))
+                .author(AuthorSummaryDTO.builder().id(authorId).build())
+                .build();
 
+        ApiResponse<BookDTO> createdBookResp = webTestClient.post()
+                .uri("/api/books")
+                .bodyValue(createReq)
+                .exchange()
+                .expectStatus().isCreated()
+                .expectBody(new ParameterizedTypeReference<ApiResponse<BookDTO>>() {})
+                .returnResult()
+                .getResponseBody();
 
+            assertThat(createdBookResp ).isNotNull();
+            assertThat(createdBookResp .getData()).isNotNull();
+            Long bookId =  createdBookResp.getData().getId();
 
+//            Act
+        ApiResponse<Boolean> deleteResp = webTestClient.delete()
+                .uri("/api/books/{id}", bookId)
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody(new ParameterizedTypeReference<ApiResponse<Boolean>>() {})
+                .returnResult()
+                .getResponseBody();
 
+//        Assert: api says success
+        assertThat(deleteResp).isNotNull();
+        assertThat(deleteResp.getData()).isTrue();
 
+//      @GetMapping("/by-title/{title}")
+        webTestClient.get()
+                .uri("/api/books/by-title/{title}", "Old Book")
+                .exchange()
+                .expectStatus().isNotFound();
+
+//        Assert: author no longer lists the book
+        ApiResponse<AuthorDTO> authorAfter = webTestClient.get()
+                .uri("/api/authors/{id}", authorId)
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody(new ParameterizedTypeReference<ApiResponse<AuthorDTO>>() {})
+                .returnResult()
+                .getResponseBody();
+
+        assertThat(authorAfter).isNotNull();
+        assertThat(authorAfter.getData()).isNotNull();
+
+        assertThat(authorAfter.getData().getBooks())
+                .extracting(b-> b.getId())
+                .doesNotContain(bookId);
 
     }
 
