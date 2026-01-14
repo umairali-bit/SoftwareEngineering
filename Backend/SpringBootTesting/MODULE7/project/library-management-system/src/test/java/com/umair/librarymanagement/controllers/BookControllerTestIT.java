@@ -16,7 +16,6 @@ import java.time.LocalDate;
 import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class BookControllerTestIT extends AbstractIntegrationTest{
 
     @Autowired
