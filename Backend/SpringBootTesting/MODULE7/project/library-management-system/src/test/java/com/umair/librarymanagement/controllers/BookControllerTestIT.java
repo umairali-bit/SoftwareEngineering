@@ -6,11 +6,14 @@ import com.umair.librarymanagement.dtos.AuthorSummaryDTO;
 import com.umair.librarymanagement.dtos.BookDTO;
 import com.umair.librarymanagement.repositories.AuthorRepository;
 import com.umair.librarymanagement.repositories.BookRepository;
+import org.checkerframework.checker.units.qual.A;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
+
+import java.time.LocalDate;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
@@ -78,7 +81,7 @@ public class BookControllerTestIT extends AbstractIntegrationTest{
     @Test
     void getAllBooks_shouldReturnBooksSortedByPublishedDateDesc() {
 //    creating authors
-        ApiResponse<AuthorDTO> authorDTOApiResponse1 = webTestClient.post()
+        ApiResponse<AuthorDTO> a1Resp = webTestClient.post()
                 .uri("/api/authors")
                 .bodyValue(authorCreateDTO)
                 .exchange()
@@ -87,7 +90,7 @@ public class BookControllerTestIT extends AbstractIntegrationTest{
                 .returnResult()
                 .getResponseBody();
 
-        ApiResponse<AuthorDTO> authorDTOApiResponse2 = webTestClient.post()
+        ApiResponse<AuthorDTO> a2Resp = webTestClient.post()
                 .uri("/api/authors")
                 .bodyValue(authorCreateDTO2)
                 .exchange()
@@ -96,8 +99,26 @@ public class BookControllerTestIT extends AbstractIntegrationTest{
                 .returnResult()
                 .getResponseBody();
 
-        assertThat(authorDTOApiResponse1.getData().getName()).isEqualTo("Jessie Pinkman");
-        assertThat(authorDTOApiResponse2.getData().getName()).isEqualTo("Walter White");
+        assertThat(a1Resp.getData().getName()).isEqualTo("Jessie Pinkman");
+        assertThat(a2Resp.getData().getName()).isEqualTo("Walter White");
+
+        Long authorId1 = a1Resp.getData().getId();
+        Long authorId2 = a1Resp.getData().getId();
+
+//        creating books with different dates
+        BookDTO oldBookReq = BookDTO.builder()
+                .title("Breaking Bad")
+                .publishedDate(LocalDate.of(2020,1,1))
+                .author(AuthorSummaryDTO.builder().id(authorId1).build())
+                .build();
+
+        BookDTO newBookReq = BookDTO.builder()
+                .title("Better Call Saul")
+                .publishedDate(LocalDate.of(2020,5,5))
+                .author(AuthorSummaryDTO.builder().id(authorId2).build())
+                .build()
+
+
 
     }
 
