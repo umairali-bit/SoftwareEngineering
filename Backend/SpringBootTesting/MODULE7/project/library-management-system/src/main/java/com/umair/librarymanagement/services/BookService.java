@@ -73,14 +73,11 @@ public class BookService {
 
         //3. Update author
         if (bookDTO.getAuthor() != null) {
-            AuthorEntity oldAuthor = book.getAuthor();
-
-            if (oldAuthor != null) {
-                oldAuthor.getBooks().removeIf(b -> b.getId().equals(book.getId()));
+            if (book.getAuthor() != null) {
+                book.getAuthor().getBooks().remove(book);
                 book.setAuthor(null);
+
             }
-
-
 
             // find the new author
             AuthorEntity newAuthor = authorRepository.findById(bookDTO.getAuthor().getId())
