@@ -234,6 +234,18 @@ public class BookControllerTestIT extends AbstractIntegrationTest{
                 .returnResult()
                 .getResponseBody();
 
+//        Assertions
+        assertThat(updatedBookResp).isNotNull();
+        assertThat(updatedBookResp.getData()).isNotNull();
+
+        BookDTO updatedBook = updatedBookResp.getData();
+        assertThat(updatedBook.getId()).isEqualTo(bookId);
+        assertThat(updatedBook.getTitle()).isEqualTo("New Book");
+        assertThat(updatedBook.getPublishedDate()).isEqualTo(LocalDate.of(2022,5,5));
+        assertThat(updatedBook.getAuthor()).isNotNull();
+        assertThat(updatedBook.getAuthor().getId()).isEqualTo(newAuthorId);
+
+
 
 
 
