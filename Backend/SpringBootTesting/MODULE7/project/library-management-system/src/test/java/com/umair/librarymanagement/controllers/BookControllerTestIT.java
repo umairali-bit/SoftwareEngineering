@@ -217,6 +217,24 @@ public class BookControllerTestIT extends AbstractIntegrationTest{
 
         Long bookId = createdBookResp.getData().getId();
 
+//        arrange: update payload
+        BookDTO updateReq = BookDTO.builder()
+                .title("New Book")
+                .publishedDate(LocalDate.of(2022,5,5))
+                .author(AuthorSummaryDTO.builder().id(newAuthorId).build())
+                .build();
+
+//        Act
+        ApiResponse<BookDTO> updatedBookResp = webTestClient.post()
+                .uri("/api/books/{id}", bookId)
+                .bodyValue(updateReq)
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody(new ParameterizedTypeReference<ApiResponse<BookDTO>>() {})
+                .returnResult()
+                .getResponseBody();
+
+
 
 
 
