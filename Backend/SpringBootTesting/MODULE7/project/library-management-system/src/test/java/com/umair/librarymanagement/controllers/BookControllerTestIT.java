@@ -12,8 +12,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpStatus;
 
+import java.awt.print.Book;
 import java.time.LocalDate;
+import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
@@ -116,7 +119,32 @@ public class BookControllerTestIT extends AbstractIntegrationTest{
                 .title("Better Call Saul")
                 .publishedDate(LocalDate.of(2020,5,5))
                 .author(AuthorSummaryDTO.builder().id(authorId2).build())
-                .build()
+                .build();
+
+        webTestClient.post()
+                .uri("/api/books")
+                .bodyValue(oldBookReq)
+                .exchange()
+                .expectStatus().isCreated();
+
+        webTestClient.post()
+                .uri("/api/books")
+                .bodyValue(newBookReq)
+                .exchange()
+                .expectStatus().isCreated();
+
+//        GET all books
+        ApiResponse<List<BookDTO>> response = webTestClient.get()
+                .uri("/api/books")
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody(new ParameterizedTypeReference<ApiResponse<List<BookDTO>>>() {})
+                .returnResult()
+                .getResponseBody();
+
+
+
+
 
 
 
