@@ -4,7 +4,6 @@ import com.umair.librarymanagement.advices.ApiResponse;
 import com.umair.librarymanagement.dtos.AuthorDTO;
 import com.umair.librarymanagement.dtos.AuthorSummaryDTO;
 import com.umair.librarymanagement.dtos.BookDTO;
-import com.umair.librarymanagement.dtos.BookSummaryDTO;
 import com.umair.librarymanagement.repositories.AuthorRepository;
 import com.umair.librarymanagement.repositories.BookRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -273,6 +272,31 @@ public class BookControllerTestIT extends AbstractIntegrationTest{
                 .toList();
 
         assertThat(newAuthorBookIds).contains(bookId);
+
+
+    }
+
+    @Test
+    void deleteBook_shouldDeleteBook_UnlinkFromAuthor() {
+//      Arrange
+        ApiResponse<AuthorDTO> createdAuthor = webTestClient.post()
+                .uri("/api/authors")
+                .bodyValue(authorCreateDTO)
+                .exchange()
+                .expectStatus().isCreated()
+                .expectBody(new ParameterizedTypeReference<ApiResponse<AuthorDTO>>() {})
+                .returnResult()
+                .getResponseBody();
+
+        assertThat(createdAuthor).isNotNull();
+        assertThat(createdAuthor.getData()).isNotNull();
+
+        Long authorId = createdAuthor.getData().getId();
+
+
+
+
+
 
 
     }
