@@ -11,11 +11,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.test.annotation.DirtiesContext;
+
 import java.time.LocalDate;
 import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
-
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class BookControllerTestIT extends AbstractIntegrationTest{
 
     @Autowired
@@ -257,16 +259,20 @@ public class BookControllerTestIT extends AbstractIntegrationTest{
                 .noneMatch(b -> b.getId().equals(bookId));
 
 
+//      verify new author now contains the book
+        ApiResponse<AuthorDTO> newAuthorAfter = webTestClient.get()
+                .uri("/api/authors/{id}", newAuthorId)
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody(new ParameterizedTypeReference<ApiResponse<AuthorDTO>>() {})
+                .returnResult()
+                .getResponseBody();
 
+        List<Long> newAuthorBookIds = newAuthorAfter.getData().getBooks().stream()
+                .map(b-> b.getId())
+                .toList();
 
-
-
-
-
-
-
-
-
+        assertThat(newAuthorBookIds).contains(bookId);
 
 
     }
