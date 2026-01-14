@@ -73,9 +73,33 @@ public class BookControllerTestIT extends AbstractIntegrationTest{
         assertThat(createdBook.getAuthor()).isNotNull();
         assertThat(createdBook.getAuthor().getId()).isEqualTo(createdAuthor.getId());
 
+    }
 
+    @Test
+    void getAllBooks_shouldReturnBooksSortedByPublishedDateDesc() {
+//    creating authors
+        ApiResponse<AuthorDTO> authorDTOApiResponse1 = webTestClient.post()
+                .uri("/api/authors")
+                .bodyValue(authorCreateDTO)
+                .exchange()
+                .expectStatus().isCreated()
+                .expectBody(new ParameterizedTypeReference<ApiResponse<AuthorDTO>>() {})
+                .returnResult()
+                .getResponseBody();
 
+        ApiResponse<AuthorDTO> authorDTOApiResponse2 = webTestClient.post()
+                .uri("/api/authors")
+                .bodyValue(authorCreateDTO2)
+                .exchange()
+                .expectStatus().isCreated()
+                .expectBody(new ParameterizedTypeReference<ApiResponse<AuthorDTO>>() {})
+                .returnResult()
+                .getResponseBody();
 
+        assertThat(authorDTOApiResponse1.getData().getName()).isEqualTo("Jessie Pinkman");
+        assertThat(authorDTOApiResponse2.getData().getName()).isEqualTo("Walter White");
 
     }
+
+
 }
