@@ -367,6 +367,41 @@ public class BookControllerTestIT extends AbstractIntegrationTest{
 
         Long authorId =  createdAuthor.getData().getId();
 
+//        creating book with the same author
+        String title = "Breaking Bad";
+        BookDTO createReq  = BookDTO.builder()
+                .title(title)
+                .publishedDate(LocalDate.of(2020,1,1))
+                .author(AuthorSummaryDTO.builder().id(authorId).build())
+                .build();
+
+        ApiResponse<BookDTO> fetchedResp = webTestClient.post()
+                .uri("/api/books")
+                .bodyValue(createReq)
+                .exchange()
+                .expectStatus().isCreated()
+                .expectBody(new ParameterizedTypeReference<ApiResponse<BookDTO>>() {})
+                .returnResult()
+                .getResponseBody();
+
+        assertThat(fetchedResp).isNotNull();
+        assertThat(fetchedResp.getData()).isNotNull();
+
+        Long bookId = fetchedResp.getData().getId();
+
+        BookDTO fetchedBook = fetchedResp.getData();
+        assertThat(fetchedBook.getId()).isEqualTo(bookId);
+        assertThat(fetchedBook.getTitle()).isEqualTo(title);
+        assertThat(fetchedBook.getPublishedDate()).isEqualTo(LocalDate.of(2020,1,1));
+        assertThat(fetchedBook.getAuthor()).isNotNull();
+        assertThat(fetchedBook.getAuthor().getId()).isEqualTo(authorId);
+
+
+
+
+
+
+
 
 
     }
