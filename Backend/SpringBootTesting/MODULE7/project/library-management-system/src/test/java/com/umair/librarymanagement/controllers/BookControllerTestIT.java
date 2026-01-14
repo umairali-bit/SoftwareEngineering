@@ -394,10 +394,73 @@ public class BookControllerTestIT extends AbstractIntegrationTest{
         assertThat(fetchedBook.getPublishedDate()).isEqualTo(LocalDate.of(2020,1,1));
         assertThat(fetchedBook.getAuthor()).isNotNull();
         assertThat(fetchedBook.getAuthor().getId()).isEqualTo(authorId);
+    }
 
+    @Test
+    void getBooksPublishedAfter_shouldReturnOnlyBooksAfterDate() {
 
+//      Arrange
+        ApiResponse<AuthorDTO> authorResp = webTestClient.post()
+                .uri("/api/authors")
+                .bodyValue(authorCreateDTO)
+                .exchange()
+                .expectStatus().isCreated()
+                .expectBody(new ParameterizedTypeReference<ApiResponse<AuthorDTO>>() {})
+                .returnResult()
+                .getResponseBody();
 
+        assertThat(authorResp).isNotNull();
+        assertThat(authorResp.getData()).isNotNull();
+        AuthorDTO createdAuthor = authorResp.getData();
+        assertThat(createdAuthor).isNotNull();
 
+//      creating books with different dates
+        BookDTO oldBookReq = BookDTO.builder()
+                .id(null)
+                .title("Breaking Bad")
+                .publishedDate(LocalDate.of(1999, 1, 1))
+                .author(AuthorSummaryDTO.builder().id(createdAuthor.getId()).build())
+                .build();
+
+        BookDTO newBookReq = BookDTO.builder()
+                .title("Better Call Saul")
+                .publishedDate(LocalDate.of(2020,5,5))
+                .author(AuthorSummaryDTO.builder().id(createdAuthor.getId()).build())
+                .build();
+
+        webTestClient.post()
+                .uri("/api/books")
+                .bodyValue(oldBookReq)
+                .exchange()
+                .expectStatus().isCreated();
+
+        webTestClient.post()
+                .uri("/api/books")
+                .bodyValue(newBookReq)
+                .exchange()
+                .expectStatus().isCreated();
+
+//      Act
+        LocalDate queryDate = LocalDate.of(2000, 1, 1);
+
+        ApiResponse<List<BookDTO>> response = webTestClient.get()
+                .uri(uriBuilder -> uriBuilder
+                        .path("/api/books/published-after")
+                        .queryParam("date", queryDate.toString())
+                        .build())
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody(new ParameterizedTypeReference<ApiResponse<List<BookDTO>>>() {})
+                .returnResult()
+                .getResponseBody();
+
+                assertThat(response).isNotNull();
+                List<BookDTO> result = response.getData();
+                assertThat(result).isNotNull();
+
+        assertThat(result.size()).isEqualTo(1);
+        assertThat(result.get(0).getTitle()).isEqualTo("Better Call Saul");
+        assertThat(result.get(0).getPublishedDate()).isAfter(queryDate);
 
 
 
