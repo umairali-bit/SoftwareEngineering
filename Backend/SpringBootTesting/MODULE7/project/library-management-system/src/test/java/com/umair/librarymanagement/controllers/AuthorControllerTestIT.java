@@ -10,12 +10,14 @@ import com.umair.librarymanagement.dtos.BookDTO;
 import com.umair.librarymanagement.dtos.BookSummaryDTO;
 import com.umair.librarymanagement.repositories.AuthorRepository;
 import com.umair.librarymanagement.repositories.BookRepository;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpStatus;
 
+import java.awt.print.Book;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
@@ -261,7 +263,8 @@ public class AuthorControllerTestIT extends AbstractIntegrationTest {
 
     @Test
     void deleteAuthorById_shouldDeleteAuthor() {
-//        creating author
+
+//         create author
         ApiResponse<AuthorDTO> a1 = webTestClient.post()
                 .uri("/api/authors")
                 .bodyValue(authorCreateDTO)
@@ -274,13 +277,12 @@ public class AuthorControllerTestIT extends AbstractIntegrationTest {
 
         assertThat(a1).isNotNull();
         assertThat(a1.getData()).isNotNull();
-
         Long authorId = a1.getData().getId();
 
-//        attaching the book to author
+//         attach author to book request
         bookCreateDTO.setAuthor(AuthorSummaryDTO.builder().id(authorId).build());
 
-//        creating book
+//         create book
         ApiResponse<BookDTO> book = webTestClient.post()
                 .uri("/api/books")
                 .bodyValue(bookCreateDTO)
@@ -293,10 +295,46 @@ public class AuthorControllerTestIT extends AbstractIntegrationTest {
 
         assertThat(book).isNotNull();
         assertThat(book.getData()).isNotNull();
+        Long bookId = book.getData().getId();
+        assertThat(bookId).isNotNull();
 
 
+//         delete author (204 = no body)
+        webTestClient.delete()
+                .uri("/api/authors/{id}", authorId)
+                .exchange()
+                .expectStatus().isNoContent()
+                .expectBody().isEmpty();
 
+//         assert author is gone
+        webTestClient.get()
+                .uri("/api/authors/{id}", authorId)
+                .exchange()
+                .expectStatus().isNotFound();
+
+// since GET /api/books/{id} does not exist, fetch all books and find ours
+        ApiResponse<List<BookDTO>> booksAfterResp = webTestClient.get()
+                .uri("/api/books")
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody(new ParameterizedTypeReference<ApiResponse<List<BookDTO>>>() {
+                })
+                .returnResult()
+                .getResponseBody();
+
+        assertThat(booksAfterResp).isNotNull();
+        assertThat(booksAfterResp.getData()).isNotNull();
+
+        List<BookDTO> booksAfter = booksAfterResp.getData();
+
+        BookDTO fetchedBook = booksAfter.stream()
+                .filter(b -> bookId.equals(b.getId()))
+                .findFirst()
+                .orElseThrow(() -> new AssertionError("Expected book with id " + bookId + " to still exist"));
+
+        assertThat(fetchedBook.getAuthor()).isNull();
     }
-
-
 }
+
+
+
