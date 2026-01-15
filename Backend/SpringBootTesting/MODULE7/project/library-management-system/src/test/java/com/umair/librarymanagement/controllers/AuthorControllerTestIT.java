@@ -13,6 +13,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpStatus;
 
 import java.time.LocalDate;
 import java.util.Set;
@@ -129,6 +130,17 @@ public class AuthorControllerTestIT extends AbstractIntegrationTest{
                 .bodyValue(author2)
                 .exchange()
                 .expectStatus().isCreated();
+
+//        GET all authors
+        ApiResponse<AuthorDTO> response = webTestClient.get()
+                .uri("/api/authors")
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody(new ParameterizedTypeReference<ApiResponse<AuthorDTO>>() {})
+                .returnResult()
+                .getResponseBody();
+
+
 
 
 
