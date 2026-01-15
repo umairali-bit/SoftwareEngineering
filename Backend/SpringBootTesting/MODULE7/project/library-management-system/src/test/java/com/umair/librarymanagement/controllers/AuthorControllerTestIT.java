@@ -200,6 +200,22 @@ public class AuthorControllerTestIT extends AbstractIntegrationTest{
 
         Long authorId = a1.getData().getId();
 
+//        attaching the book to author
+        bookCreateDTO.setAuthor(AuthorSummaryDTO.builder().id(authorId).build());
+
+//        creating book
+        ApiResponse<BookDTO> book = webTestClient.post()
+                .uri("/api/books")
+                .bodyValue(bookCreateDTO)
+                .exchange()
+                .expectStatus().isCreated()
+                .expectBody(new ParameterizedTypeReference<ApiResponse<BookDTO>>() {})
+                .returnResult()
+                .getResponseBody();
+
+        assertThat(book).isNotNull();
+        assertThat(book.getData()).isNotNull();
+
 
     }
 
