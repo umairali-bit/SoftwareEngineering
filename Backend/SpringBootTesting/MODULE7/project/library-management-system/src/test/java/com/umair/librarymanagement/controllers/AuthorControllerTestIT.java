@@ -181,18 +181,27 @@ public class AuthorControllerTestIT extends AbstractIntegrationTest{
                 .isNotNull()
                 .extracting(BookSummaryDTO::getTitle)
                 .contains("Better Call Saul");
+    }
 
+    @Test
+    void getAuthorById_shouldReturnAuthor(){
+//        creating author
+        ApiResponse<AuthorDTO> a1 = webTestClient.post()
+                .uri("/api/authors")
+                .bodyValue(authorCreateDTO)
+                .exchange()
+                .expectStatus().isCreated()
+                .expectBody(new ParameterizedTypeReference<ApiResponse<AuthorDTO>>() {})
+                .returnResult()
+                .getResponseBody();
 
+        assertThat(a1).isNotNull();
+        assertThat(a1.getData()).isNotNull();
 
-
-
-
-
-
-
-
+        Long authorId = a1.getData().getId();
 
 
     }
+
 
 }
