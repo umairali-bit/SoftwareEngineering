@@ -77,4 +77,61 @@ public class AuthorControllerTestIT extends AbstractIntegrationTest{
 
     }
 
+    @Test
+    void getAllAuthors_shouldReturnAllAuthors(){
+
+//        creating authors
+        ApiResponse<AuthorDTO> author1 = webTestClient.post()
+                .uri("/api/authors")
+                .bodyValue(authorCreateDTO)
+                .exchange()
+                .expectStatus().isCreated()
+                .expectBody(new ParameterizedTypeReference<ApiResponse<AuthorDTO>>() {})
+                .returnResult()
+                .getResponseBody();
+
+        ApiResponse<AuthorDTO> author2 = webTestClient.post()
+                .uri("/api/authors")
+                .bodyValue(authorCreateDTO)
+                .exchange()
+                .expectStatus().isCreated()
+                .expectBody(new ParameterizedTypeReference<ApiResponse<AuthorDTO>>() {})
+                .returnResult()
+                .getResponseBody();
+
+        assertThat(author1.getData().getName()).isEqualTo("Jessie Pinkman");
+        assertThat(author2.getData().getName()).isEqualTo("Walter White");
+
+        Long authorId1 = author1.getData().getId();
+        Long authorId2 = author2.getData().getId();
+
+//         creating books with different dates
+        BookDTO oldBookReq = BookDTO.builder()
+                .title("Breaking Bad")
+                .publishedDate(LocalDate.of(2020,1,1))
+                .author(AuthorSummaryDTO.builder().id(authorId1).build())
+                .build();
+
+        BookDTO newBookReq = BookDTO.builder()
+                .title("Better Call Saul")
+                .publishedDate(LocalDate.of(2020,5,5))
+                .author(AuthorSummaryDTO.builder().id(authorId2).build())
+                .build();
+
+        webTestClient.post()
+                .uri("/api/authors")
+                .bodyValue(author1)
+                .exchange()
+                .expectStatus().isCreated();
+
+        webTestClient.post()
+                .uri("/api/authors")
+                .bodyValue(author2)
+                .exchange()
+                .expectStatus().isCreated();
+
+
+
+    }
+
 }
