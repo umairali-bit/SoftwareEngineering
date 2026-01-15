@@ -20,7 +20,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 
-public class AuthorControllerTestIT extends AbstractIntegrationTest{
+public class AuthorControllerTestIT extends AbstractIntegrationTest {
     @Autowired
     private AuthorRepository authorRepository;
 
@@ -32,15 +32,17 @@ public class AuthorControllerTestIT extends AbstractIntegrationTest{
         bookRepository.deleteAll();
         authorRepository.deleteAll();
     }
+
     @Test
-    void createAuthor_shouldCreateAuthorWithBook(){
+    void createAuthor_shouldCreateAuthorWithBook() {
 //        Arrange: creating author and book
         ApiResponse<AuthorDTO> createdAuthorResp = webTestClient.post()
                 .uri("/api/authors")
                 .bodyValue(authorCreateDTO)
                 .exchange()
                 .expectStatus().isCreated()
-                .expectBody(new ParameterizedTypeReference<ApiResponse<AuthorDTO>>() {})
+                .expectBody(new ParameterizedTypeReference<ApiResponse<AuthorDTO>>() {
+                })
                 .returnResult()
                 .getResponseBody();
 
@@ -63,7 +65,8 @@ public class AuthorControllerTestIT extends AbstractIntegrationTest{
                 .bodyValue(bookCreateDTO)
                 .exchange()
                 .expectStatus().isCreated()
-                .expectBody(new ParameterizedTypeReference<ApiResponse<BookDTO>>() {})
+                .expectBody(new ParameterizedTypeReference<ApiResponse<BookDTO>>() {
+                })
                 .returnResult()
                 .getResponseBody();
 
@@ -81,7 +84,7 @@ public class AuthorControllerTestIT extends AbstractIntegrationTest{
     }
 
     @Test
-    void getAllAuthors_shouldReturnAllAuthors(){
+    void getAllAuthors_shouldReturnAllAuthors() {
 
 //        creating authors
         ApiResponse<AuthorDTO> author1 = webTestClient.post()
@@ -89,7 +92,8 @@ public class AuthorControllerTestIT extends AbstractIntegrationTest{
                 .bodyValue(authorCreateDTO)
                 .exchange()
                 .expectStatus().isCreated()
-                .expectBody(new ParameterizedTypeReference<ApiResponse<AuthorDTO>>() {})
+                .expectBody(new ParameterizedTypeReference<ApiResponse<AuthorDTO>>() {
+                })
                 .returnResult()
                 .getResponseBody();
 
@@ -98,36 +102,39 @@ public class AuthorControllerTestIT extends AbstractIntegrationTest{
                 .bodyValue(authorCreateDTO2)
                 .exchange()
                 .expectStatus().isCreated()
-                .expectBody(new ParameterizedTypeReference<ApiResponse<AuthorDTO>>() {})
+                .expectBody(new ParameterizedTypeReference<ApiResponse<AuthorDTO>>() {
+                })
                 .returnResult()
                 .getResponseBody();
 
-            assertThat(author1).isNotNull();
-            assertThat(author2).isNotNull();
-            assertThat(author1.getData()).isNotNull();
-            assertThat(author2.getData()).isNotNull();
+        assertThat(author1).isNotNull();
+        assertThat(author2).isNotNull();
+        assertThat(author1.getData()).isNotNull();
+        assertThat(author2.getData()).isNotNull();
 
-            Long authorId1 = author1.getData().getId();
-            Long authorId2 = author2.getData().getId();
+        Long authorId1 = author1.getData().getId();
+        Long authorId2 = author2.getData().getId();
 
-            bookCreateDTO.setAuthor(AuthorSummaryDTO.builder().id(authorId1).build());
-            bookCreateDTO2.setAuthor(AuthorSummaryDTO.builder().id(authorId2).build());
+        bookCreateDTO.setAuthor(AuthorSummaryDTO.builder().id(authorId1).build());
+        bookCreateDTO2.setAuthor(AuthorSummaryDTO.builder().id(authorId2).build());
 
 //        creating books
-       ApiResponse<BookDTO> book1 = webTestClient.post()
-               .uri("/api/books")
-               .bodyValue(bookCreateDTO)
-               .exchange()
-               .expectStatus().isCreated()
-               .expectBody(new ParameterizedTypeReference<ApiResponse<BookDTO>>() {})
-               .returnResult()
-               .getResponseBody();
+        ApiResponse<BookDTO> book1 = webTestClient.post()
+                .uri("/api/books")
+                .bodyValue(bookCreateDTO)
+                .exchange()
+                .expectStatus().isCreated()
+                .expectBody(new ParameterizedTypeReference<ApiResponse<BookDTO>>() {
+                })
+                .returnResult()
+                .getResponseBody();
         ApiResponse<BookDTO> book2 = webTestClient.post()
                 .uri("/api/books")
                 .bodyValue(bookCreateDTO2)
                 .exchange()
                 .expectStatus().isCreated()
-                .expectBody(new ParameterizedTypeReference<ApiResponse<BookDTO>>() {})
+                .expectBody(new ParameterizedTypeReference<ApiResponse<BookDTO>>() {
+                })
                 .returnResult()
                 .getResponseBody();
 
@@ -143,7 +150,8 @@ public class AuthorControllerTestIT extends AbstractIntegrationTest{
                 .uri("/api/authors")
                 .exchange()
                 .expectStatus().isOk()
-                .expectBody(new ParameterizedTypeReference<ApiResponse<List<AuthorDTO>>>() {})
+                .expectBody(new ParameterizedTypeReference<ApiResponse<List<AuthorDTO>>>() {
+                })
                 .returnResult()
                 .getResponseBody();
 
@@ -185,14 +193,15 @@ public class AuthorControllerTestIT extends AbstractIntegrationTest{
     }
 
     @Test
-    void getAuthorById_shouldReturnAuthor(){
+    void getAuthorById_shouldReturnAuthor() {
 //        creating author
         ApiResponse<AuthorDTO> a1 = webTestClient.post()
                 .uri("/api/authors")
                 .bodyValue(authorCreateDTO)
                 .exchange()
                 .expectStatus().isCreated()
-                .expectBody(new ParameterizedTypeReference<ApiResponse<AuthorDTO>>() {})
+                .expectBody(new ParameterizedTypeReference<ApiResponse<AuthorDTO>>() {
+                })
                 .returnResult()
                 .getResponseBody();
 
@@ -210,7 +219,8 @@ public class AuthorControllerTestIT extends AbstractIntegrationTest{
                 .bodyValue(bookCreateDTO)
                 .exchange()
                 .expectStatus().isCreated()
-                .expectBody(new ParameterizedTypeReference<ApiResponse<BookDTO>>() {})
+                .expectBody(new ParameterizedTypeReference<ApiResponse<BookDTO>>() {
+                })
                 .returnResult()
                 .getResponseBody();
 
@@ -222,7 +232,8 @@ public class AuthorControllerTestIT extends AbstractIntegrationTest{
                 .uri("/api/authors/{id}", authorId)
                 .exchange()
                 .expectStatus().isOk()
-                .expectBody(new ParameterizedTypeReference<ApiResponse<AuthorDTO>>() {})
+                .expectBody(new ParameterizedTypeReference<ApiResponse<AuthorDTO>>() {
+                })
                 .returnResult()
                 .getResponseBody();
 
@@ -232,9 +243,9 @@ public class AuthorControllerTestIT extends AbstractIntegrationTest{
         assertThat(author.getId()).isEqualTo(authorId);
         assertThat(author.getBooks())
                 .extracting(
-                        a-> a.getId(),
-                        b-> b.getTitle(),
-                        c-> c.getPublishedDate()
+                        a -> a.getId(),
+                        b -> b.getTitle(),
+                        c -> c.getPublishedDate()
                 )
                 .containsExactly(
                         tuple(
@@ -244,6 +255,44 @@ public class AuthorControllerTestIT extends AbstractIntegrationTest{
 
                         )
                 );
+
+
+    }
+
+    @Test
+    void deleteAuthorById_shouldDeleteAuthor() {
+//        creating author
+        ApiResponse<AuthorDTO> a1 = webTestClient.post()
+                .uri("/api/authors")
+                .bodyValue(authorCreateDTO)
+                .exchange()
+                .expectStatus().isCreated()
+                .expectBody(new ParameterizedTypeReference<ApiResponse<AuthorDTO>>() {
+                })
+                .returnResult()
+                .getResponseBody();
+
+        assertThat(a1).isNotNull();
+        assertThat(a1.getData()).isNotNull();
+
+        Long authorId = a1.getData().getId();
+
+//        attaching the book to author
+        bookCreateDTO.setAuthor(AuthorSummaryDTO.builder().id(authorId).build());
+
+//        creating book
+        ApiResponse<BookDTO> book = webTestClient.post()
+                .uri("/api/books")
+                .bodyValue(bookCreateDTO)
+                .exchange()
+                .expectStatus().isCreated()
+                .expectBody(new ParameterizedTypeReference<ApiResponse<BookDTO>>() {
+                })
+                .returnResult()
+                .getResponseBody();
+
+        assertThat(book).isNotNull();
+        assertThat(book.getData()).isNotNull();
 
 
 
