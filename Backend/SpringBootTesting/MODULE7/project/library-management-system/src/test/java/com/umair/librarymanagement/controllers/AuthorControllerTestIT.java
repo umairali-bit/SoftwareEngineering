@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.umair.librarymanagement.advices.ApiResponse;
 import com.umair.librarymanagement.dtos.AuthorDTO;
+import com.umair.librarymanagement.dtos.AuthorSummaryDTO;
 import com.umair.librarymanagement.dtos.BookDTO;
 import com.umair.librarymanagement.dtos.BookSummaryDTO;
 import com.umair.librarymanagement.repositories.AuthorRepository;
@@ -45,6 +46,15 @@ public class AuthorControllerTestIT extends AbstractIntegrationTest{
 
         AuthorDTO createdAuthor = createdAuthorResp.getData();
         assertThat(createdAuthor).isNotNull();
+
+//        attaching authorId to book request
+        bookCreateDTO.setAuthor(
+                AuthorSummaryDTO.builder()
+                        .id(createdAuthor.getId())
+                        .build()
+        );
+
+
 
 
 
