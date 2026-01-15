@@ -1,6 +1,7 @@
 package com.umair.librarymanagement.controllers;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.tuple;
 
 import com.umair.librarymanagement.advices.ApiResponse;
 import com.umair.librarymanagement.dtos.AuthorDTO;
@@ -215,6 +216,35 @@ public class AuthorControllerTestIT extends AbstractIntegrationTest{
 
         assertThat(book).isNotNull();
         assertThat(book.getData()).isNotNull();
+
+
+        ApiResponse<AuthorDTO> response = webTestClient.get()
+                .uri("/api/authors/{id}", authorId)
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody(new ParameterizedTypeReference<ApiResponse<AuthorDTO>>() {})
+                .returnResult()
+                .getResponseBody();
+
+        assertThat(response).isNotNull();
+        assertThat(response.getData()).isNotNull();
+        AuthorDTO author = response.getData();
+        assertThat(author.getId()).isEqualTo(authorId);
+        assertThat(author.getBooks())
+                .extracting(
+                        a-> a.getId(),
+                        b-> b.getTitle(),
+                        c-> c.getPublishedDate()
+                )
+                .containsExactly(
+                        tuple(
+                                book.getData().getId(),
+                                book.getData().getTitle(),
+                                book.getData().getPublishedDate()
+
+                        )
+                );
+
 
 
     }
