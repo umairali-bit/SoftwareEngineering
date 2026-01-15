@@ -16,6 +16,7 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpStatus;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Set;
 
 public class AuthorControllerTestIT extends AbstractIntegrationTest{
@@ -93,52 +94,100 @@ public class AuthorControllerTestIT extends AbstractIntegrationTest{
 
         ApiResponse<AuthorDTO> author2 = webTestClient.post()
                 .uri("/api/authors")
-                .bodyValue(authorCreateDTO)
+                .bodyValue(authorCreateDTO2)
                 .exchange()
                 .expectStatus().isCreated()
                 .expectBody(new ParameterizedTypeReference<ApiResponse<AuthorDTO>>() {})
                 .returnResult()
                 .getResponseBody();
 
-        assertThat(author1.getData().getName()).isEqualTo("Jessie Pinkman");
-        assertThat(author2.getData().getName()).isEqualTo("Walter White");
+            assertThat(author1).isNotNull();
+            assertThat(author2).isNotNull();
+            assertThat(author1.getData()).isNotNull();
+            assertThat(author2.getData()).isNotNull();
 
-        Long authorId1 = author1.getData().getId();
-        Long authorId2 = author2.getData().getId();
+            Long authorId1 = author1.getData().getId();
+            Long authorId2 = author2.getData().getId();
 
-//         creating books with different dates
-        BookDTO oldBookReq = BookDTO.builder()
-                .title("Breaking Bad")
-                .publishedDate(LocalDate.of(2020,1,1))
-                .author(AuthorSummaryDTO.builder().id(authorId1).build())
-                .build();
+            bookCreateDTO.setAuthor(AuthorSummaryDTO.builder().id(authorId1).build());
+            bookCreateDTO2.setAuthor(AuthorSummaryDTO.builder().id(authorId2).build());
 
-        BookDTO newBookReq = BookDTO.builder()
-                .title("Better Call Saul")
-                .publishedDate(LocalDate.of(2020,5,5))
-                .author(AuthorSummaryDTO.builder().id(authorId2).build())
-                .build();
-
-        webTestClient.post()
-                .uri("/api/authors")
-                .bodyValue(author1)
+//        creating books
+       ApiResponse<BookDTO> book1 = webTestClient.post()
+               .uri("/api/books")
+               .bodyValue(bookCreateDTO)
+               .exchange()
+               .expectStatus().isCreated()
+               .expectBody(new ParameterizedTypeReference<ApiResponse<BookDTO>>() {})
+               .returnResult()
+               .getResponseBody();
+        ApiResponse<BookDTO> book2 = webTestClient.post()
+                .uri("/api/books")
+                .bodyValue(bookCreateDTO2)
                 .exchange()
-                .expectStatus().isCreated();
+                .expectStatus().isCreated()
+                .expectBody(new ParameterizedTypeReference<ApiResponse<BookDTO>>() {})
+                .returnResult()
+                .getResponseBody();
 
-        webTestClient.post()
-                .uri("/api/authors")
-                .bodyValue(author2)
-                .exchange()
-                .expectStatus().isCreated();
+
+        assertThat(book1).isNotNull();
+        assertThat(book2).isNotNull();
+        assertThat(book1.getData()).isNotNull();
+        assertThat(book2.getData()).isNotNull();
+
 
 //        GET all authors
-        ApiResponse<AuthorDTO> response = webTestClient.get()
+        ApiResponse<List<AuthorDTO>> response = webTestClient.get()
                 .uri("/api/authors")
                 .exchange()
                 .expectStatus().isOk()
-                .expectBody(new ParameterizedTypeReference<ApiResponse<AuthorDTO>>() {})
+                .expectBody(new ParameterizedTypeReference<ApiResponse<List<AuthorDTO>>>() {})
                 .returnResult()
                 .getResponseBody();
+
+
+//        Assert
+        assertThat(response).isNotNull();
+        assertThat(response.getData()).isNotNull();
+
+        List<AuthorDTO> result = response.getData();
+        assertThat(result)
+                .isNotNull()
+                .hasSize(2)
+                .extracting(AuthorDTO::getName)
+                .containsExactlyInAnyOrder(
+                        "Jessie Pinkman",
+                        "Walter White"
+                );
+
+//         Assert books are attached to the right authors
+        AuthorDTO jessie = result.stream()
+                .filter(a -> "Jessie Pinkman".equals(a.getName()))
+                .findFirst()
+                .orElseThrow();
+
+        AuthorDTO walter = result.stream()
+                .filter(a -> "Walter White".equals(a.getName()))
+                .findFirst()
+                .orElseThrow();
+
+        assertThat(jessie.getBooks())
+                .isNotNull()
+                .extracting(BookSummaryDTO::getTitle)
+                .contains("Breaking Bad");
+
+        assertThat(walter.getBooks())
+                .isNotNull()
+                .extracting(BookSummaryDTO::getTitle)
+                .contains("Better Call Saul");
+
+
+
+
+
+
+
 
 
 
