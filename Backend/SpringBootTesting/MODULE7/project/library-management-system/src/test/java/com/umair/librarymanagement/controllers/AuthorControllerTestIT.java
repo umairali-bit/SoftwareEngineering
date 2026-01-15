@@ -68,12 +68,12 @@ public class AuthorControllerTestIT extends AbstractIntegrationTest{
         BookDTO createdBook = bookResp.getData();
         assertThat(createdBook).isNotNull();
 
-
-
-
-
-
-
+//        Assertions
+        assertThat(createdBook.getId()).isNotNull();
+        assertThat(createdBook.getTitle()).isEqualTo(bookCreateDTO.getTitle());
+        assertThat(createdBook.getPublishedDate()).isEqualTo(bookCreateDTO.getPublishedDate());
+        assertThat(createdBook.getAuthor()).isNotNull();
+        assertThat(createdBook.getAuthor().getId()).isEqualTo(createdAuthor.getId());
 
     }
 
