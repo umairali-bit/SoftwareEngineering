@@ -2,6 +2,7 @@ package com.umair.librarymanagement.controllers;
 
 
 
+import com.umair.librarymanagement.advices.ApiResponse;
 import com.umair.librarymanagement.dtos.AuthorDTO;
 import com.umair.librarymanagement.dtos.BookSummaryDTO;
 import com.umair.librarymanagement.services.AuthorService;
@@ -34,21 +35,27 @@ public class AuthorController {
 
     //GET all authors
     @GetMapping
-    public ResponseEntity<List<AuthorDTO>> getAllAuthors() {
+    public ResponseEntity<ApiResponse<List<AuthorDTO>>> getAllAuthors() {
 
-      //  List<AuthorDTO> getAll = authorService.getAllAuthors();
-        return ResponseEntity.ok(authorService.getAllAuthors());
+        List<AuthorDTO> authors = authorService.getAllAuthors();
+
+        ApiResponse<List<AuthorDTO>> response = new ApiResponse<>();
+        response.setData(authors);
+
+        return ResponseEntity.ok(response);
     }
 
-    //GET /api/authors/{id}
     @GetMapping("/{id}")
-    public ResponseEntity<AuthorDTO> getAuthor(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<AuthorDTO>> getAuthor(@PathVariable Long id) {
 
-        //AuthorDTO author = authorService.getAuthorById(id);
-        return ResponseEntity.ok(authorService.getAuthor(id));
+        AuthorDTO author = authorService.getAuthor(id);
+
+        ApiResponse<AuthorDTO> response = new ApiResponse<>();
+        response.setData(author);
+
+        return ResponseEntity.ok(response);
     }
 
-    //DELETE mapping
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteAuthor(@PathVariable Long id) {
 
@@ -56,25 +63,40 @@ public class AuthorController {
         return ResponseEntity.noContent().build();
     }
 
-    // GET /api/authors/by-name/{name}
     @GetMapping("/by-name/{name}")
-    public ResponseEntity<AuthorDTO> getAuthorByName(@PathVariable String name) {
-        AuthorDTO authorDTO = authorService.findAuthorByName(name);
-        return ResponseEntity.ok(authorDTO);
+    public ResponseEntity<ApiResponse<AuthorDTO>> getAuthorByName(@PathVariable String name) {
+
+        AuthorDTO author = authorService.findAuthorByName(name);
+
+        ApiResponse<AuthorDTO> response = new ApiResponse<>();
+        response.setData(author);
+
+        return ResponseEntity.ok(response);
     }
 
-    // UPDATE Author
     @PutMapping("/{authorId}")
-    public ResponseEntity<AuthorDTO> updateAuthor(@PathVariable Long authorId,
-                                                  @Valid @RequestBody AuthorDTO authorDTO) {
-        return ResponseEntity.ok(authorService.updateAuthor(authorId, authorDTO));
+    public ResponseEntity<ApiResponse<AuthorDTO>> updateAuthor(
+            @PathVariable Long authorId,
+            @Valid @RequestBody AuthorDTO authorDTO) {
+
+        AuthorDTO updated = authorService.updateAuthor(authorId, authorDTO);
+
+        ApiResponse<AuthorDTO> response = new ApiResponse<>();
+        response.setData(updated);
+
+        return ResponseEntity.ok(response);
     }
 
-    // GET /api/authors/{authorId}/books
     @GetMapping("/{authorId}/books")
-    public ResponseEntity<Set<BookSummaryDTO>> getBooksByAuthorId(@PathVariable Long authorId) {
-        Set<BookSummaryDTO> bookSummaryDTOS = authorService.getBooksByAuthor(authorId);
-        return ResponseEntity.ok(bookSummaryDTOS);
+    public ResponseEntity<ApiResponse<Set<BookSummaryDTO>>> getBooksByAuthorId(
+            @PathVariable Long authorId) {
+
+        Set<BookSummaryDTO> books = authorService.getBooksByAuthor(authorId);
+
+        ApiResponse<Set<BookSummaryDTO>> response = new ApiResponse<>();
+        response.setData(books);
+
+        return ResponseEntity.ok(response);
     }
 
 
