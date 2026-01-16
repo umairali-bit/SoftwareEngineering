@@ -507,6 +507,188 @@ public class AuthorControllerTestIT extends AbstractIntegrationTest {
 
 
 
+    }
+
+    @Test
+    void updateAuthor_shouldReplaceBooks_whenBooksProvided() {
+
+//         create author
+        ApiResponse<AuthorDTO> a1 = webTestClient.post()
+                .uri("/api/authors")
+                .bodyValue(authorCreateDTO)
+                .exchange()
+                .expectStatus().isCreated()
+                .expectBody(new ParameterizedTypeReference<ApiResponse<AuthorDTO>>() {
+                })
+                .returnResult()
+                .getResponseBody();
+
+        assertThat(a1).isNotNull();
+        assertThat(a1.getData()).isNotNull();
+
+        AuthorDTO createdAuthor = a1.getData();
+        Long authorId = createdAuthor.getId();
+        assertThat(authorId).isNotNull();
+
+        bookCreateDTO.setAuthor(AuthorSummaryDTO.builder().id(authorId).build());
+        bookCreateDTO2.setAuthor(AuthorSummaryDTO.builder().id(authorId).build());
+
+//          create book
+        ApiResponse<BookDTO> book1 = webTestClient.post()
+                .uri("/api/books")
+                .bodyValue(bookCreateDTO)
+                .exchange()
+                .expectStatus().isCreated()
+                .expectBody(new ParameterizedTypeReference<ApiResponse<BookDTO>>() {
+                })
+                .returnResult()
+                .getResponseBody();
+
+        assertThat(book1).isNotNull();
+        assertThat(book1.getData()).isNotNull();
+
+        ApiResponse<BookDTO> book2 = webTestClient.post()
+                .uri("/api/books")
+                .bodyValue(bookCreateDTO2)
+                .exchange()
+                .expectStatus().isCreated()
+                .expectBody(new ParameterizedTypeReference<ApiResponse<BookDTO>>() {
+                })
+                .returnResult()
+                .getResponseBody();
+
+        assertThat(book2).isNotNull();
+        assertThat(book2.getData()).isNotNull();
+
+        Long book1Id = book1.getData().getId();
+        Long book2Id = book2.getData().getId();
+        assertThat(book1Id).isNotNull();
+        assertThat(book2Id).isNotNull();
+
+        ApiResponse<AuthorDTO> tempAuthorResp = webTestClient.post()
+                .uri("/api/authors")
+                .bodyValue(authorCreateDTO2) // a different author payload
+                .exchange()
+                .expectStatus().isCreated()
+                .expectBody(new ParameterizedTypeReference<ApiResponse<AuthorDTO>>() {})
+                .returnResult()
+                .getResponseBody();
+
+        assertThat(tempAuthorResp).isNotNull();
+        assertThat(tempAuthorResp.getData()).isNotNull();
+
+        Long tempAuthorId = tempAuthorResp.getData().getId();
+        assertThat(tempAuthorId).isNotNull();
+
+//        Create Book 3
+        BookDTO bookCreateDTO3  = BookDTO.builder()
+                .title("Old Book")
+                .publishedDate(LocalDate.of(2020,1,1))
+                .author(AuthorSummaryDTO.builder().id(tempAuthorId).build())
+                .build();
+
+
+        ApiResponse<BookDTO> book3Resp = webTestClient.post()
+                .uri("/api/books")
+                .bodyValue(bookCreateDTO3)
+                .exchange()
+                .expectStatus().isCreated()
+                .expectBody(new ParameterizedTypeReference<ApiResponse<BookDTO>>() {})
+                .returnResult()
+                .getResponseBody();
+
+        assertThat(book3Resp).isNotNull();
+        assertThat(book3Resp.getData()).isNotNull();
+
+        BookDTO createdBook3 = book3Resp.getData();
+        Long book3Id = createdBook3.getId();
+        assertThat(book3Id).isNotNull();
+
+//          Build the "books" update payload using BookSummaryDTO ids
+        BookSummaryDTO book3Summary = BookSummaryDTO.builder()
+                .id(book3Id)
+                .title(createdBook3.getTitle())
+                .publishedDate(createdBook3.getPublishedDate())
+                .build();
+
+//          Act: replace books with ONLY book3 ----------
+        AuthorDTO updateReq = AuthorDTO.builder()
+                .name("New Name")
+                .books(Set.of(book3Summary)) // NOT NULL -> triggers replace logic
+                .build();
+
+        ApiResponse<AuthorDTO> updateResp = webTestClient.put()
+                .uri("/api/authors/{authorId}", authorId)
+                .bodyValue(updateReq)
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody(new ParameterizedTypeReference<ApiResponse<AuthorDTO>>() {})
+                .returnResult()
+                .getResponseBody();
+
+        assertThat(updateResp).isNotNull();
+        assertThat(updateResp.getData()).isNotNull();
+
+//          Assert: author now contains ONLY book3
+        ApiResponse<AuthorDTO> fetchedAuthorResp = webTestClient.get()
+                .uri("/api/authors/{id}", authorId)
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody(new ParameterizedTypeReference<ApiResponse<AuthorDTO>>() {})
+                .returnResult()
+                .getResponseBody();
+
+        assertThat(fetchedAuthorResp).isNotNull();
+        assertThat(fetchedAuthorResp.getData()).isNotNull();
+        assertThat(fetchedAuthorResp.getData().getBooks()).isNotNull();
+
+        assertThat(fetchedAuthorResp.getData().getName()).isEqualTo("New Name");
+        assertThat(fetchedAuthorResp.getData().getBooks())
+                .extracting(BookSummaryDTO::getId)
+                .containsExactly(book3Id);
+
+//          Assert: old books are unlinked
+        // No GET /api/books/{id} exists; use GET /api/books and filter.
+        ApiResponse<List<BookDTO>> booksAfterResp = webTestClient.get()
+                .uri("/api/books")
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody(new ParameterizedTypeReference<ApiResponse<List<BookDTO>>>() {})
+                .returnResult()
+                .getResponseBody();
+
+
+
+        assertThat(booksAfterResp).isNotNull();
+        assertThat(booksAfterResp.getData()).isNotNull();
+
+        List<BookDTO> booksAfter = booksAfterResp.getData();
+        assertThat(booksAfter).isNotEmpty();
+
+        BookDTO book1After = booksAfter.stream()
+                .filter(b -> book1Id.equals(b.getId()))
+                .findFirst()
+                .orElseThrow(() -> new AssertionError("Expected book1 to exist"));
+
+        BookDTO book2After = booksAfter.stream()
+                .filter(b -> book2Id.equals(b.getId()))
+                .findFirst()
+                .orElseThrow(() -> new AssertionError("Expected book2 to exist"));
+
+        BookDTO book3After = booksAfter.stream()
+                .filter(b -> book3Id.equals(b.getId()))
+                .findFirst()
+                .orElseThrow(() -> new AssertionError("Expected book3 to exist"));
+
+//          after replacement, book1/book2 should be unlinked
+        assertThat(book1After.getAuthor()).isNull();
+        assertThat(book2After.getAuthor()).isNull();
+
+//          and book3 should now be linked to the updated author
+        assertThat(book3After.getAuthor()).isNotNull();
+        assertThat(book3After.getAuthor().getId()).isEqualTo(authorId);
+    }
+
 
 
 
@@ -515,8 +697,6 @@ public class AuthorControllerTestIT extends AbstractIntegrationTest {
 
     }
 
-
-}
 
 
 
