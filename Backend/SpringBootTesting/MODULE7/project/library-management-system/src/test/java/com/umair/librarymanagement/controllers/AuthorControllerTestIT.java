@@ -412,7 +412,7 @@ public class AuthorControllerTestIT extends AbstractIntegrationTest {
     }
 
     @Test
-    void updateAuthor_shouldUpdateAuthor() {
+    void updateAuthor_shouldUpdateNameOnly_whenBooksIsNull() {
 //         create author
         ApiResponse<AuthorDTO> a1 = webTestClient.post()
                 .uri("/api/authors")
@@ -432,8 +432,9 @@ public class AuthorControllerTestIT extends AbstractIntegrationTest {
         assertThat(authorId).isNotNull();
 
         bookCreateDTO.setAuthor(AuthorSummaryDTO.builder().id(authorId).build());
+        bookCreateDTO2.setAuthor(AuthorSummaryDTO.builder().id(authorId).build());
 
-//          create book
+        //          create book
         ApiResponse<BookDTO> book = webTestClient.post()
                 .uri("/api/books")
                 .bodyValue(bookCreateDTO)
@@ -446,10 +447,75 @@ public class AuthorControllerTestIT extends AbstractIntegrationTest {
 
         assertThat(book).isNotNull();
         assertThat(book.getData()).isNotNull();
+        Long book1Id = book.getData().getId();
+        assertThat(book1Id).isNotNull();
+
+        ApiResponse<BookDTO> book2 = webTestClient.post()
+                .uri("/api/books")
+                .bodyValue(bookCreateDTO2)
+                .exchange()
+                .expectStatus().isCreated()
+                .expectBody(new ParameterizedTypeReference<ApiResponse<BookDTO>>() {
+                })
+                .returnResult()
+                .getResponseBody();
+
+        assertThat(book2).isNotNull();
+        assertThat(book2.getData()).isNotNull();
+        Long book2Id = book2.getData().getId();
+        assertThat(book2Id).isNotNull();
+
+
+
+//          ACT
+        AuthorDTO updateReq = AuthorDTO.builder()
+                .name("New Name")
+                .books(null)
+                .build();
+
+        ApiResponse<AuthorDTO> updateAuthor = webTestClient.put()
+                .uri("/api/authors/{authorId}", authorId)
+                .bodyValue(updateReq)
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody(new ParameterizedTypeReference<ApiResponse<AuthorDTO>>() {})
+                .returnResult()
+                .getResponseBody();
+
+//          Assert
+        assertThat(updateAuthor).isNotNull();
+        assertThat(updateAuthor.getData()).isNotNull();
+
+        assertThat(updateAuthor.getData().getId()).isEqualTo(authorId);
+        assertThat(updateAuthor.getData().getName()).isEqualTo("New Name");
+
+        ApiResponse<AuthorDTO> fetchedAuthorResp = webTestClient.get()
+                .uri("/api/authors/{id}", authorId)
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody(new ParameterizedTypeReference<ApiResponse<AuthorDTO>>() {})
+                .returnResult()
+                .getResponseBody();
+
+        assertThat(fetchedAuthorResp).isNotNull();
+        assertThat(fetchedAuthorResp.getData()).isNotNull();
+        assertThat(fetchedAuthorResp.getData().getBooks()).isNotNull();
+
+        assertThat(fetchedAuthorResp.getData().getBooks())
+                .extracting(BookSummaryDTO::getId)
+                .containsExactly(book1Id, book2Id);
+
+
+
+
+
+
 
 
 
     }
+
+
 }
 
 
