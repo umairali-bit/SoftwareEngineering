@@ -410,6 +410,46 @@ public class AuthorControllerTestIT extends AbstractIntegrationTest {
                 );
 
     }
+
+    @Test
+    void updateAuthor_shouldUpdateAuthor() {
+//         create author
+        ApiResponse<AuthorDTO> a1 = webTestClient.post()
+                .uri("/api/authors")
+                .bodyValue(authorCreateDTO)
+                .exchange()
+                .expectStatus().isCreated()
+                .expectBody(new ParameterizedTypeReference<ApiResponse<AuthorDTO>>() {
+                })
+                .returnResult()
+                .getResponseBody();
+
+        assertThat(a1).isNotNull();
+        assertThat(a1.getData()).isNotNull();
+
+        AuthorDTO createdAuthor = a1.getData();
+        Long authorId = createdAuthor.getId();
+        assertThat(authorId).isNotNull();
+
+        bookCreateDTO.setAuthor(AuthorSummaryDTO.builder().id(authorId).build());
+
+//          create book
+        ApiResponse<BookDTO> book = webTestClient.post()
+                .uri("/api/books")
+                .bodyValue(bookCreateDTO)
+                .exchange()
+                .expectStatus().isCreated()
+                .expectBody(new ParameterizedTypeReference<ApiResponse<BookDTO>>() {
+                })
+                .returnResult()
+                .getResponseBody();
+
+        assertThat(book).isNotNull();
+        assertThat(book.getData()).isNotNull();
+
+
+
+    }
 }
 
 
