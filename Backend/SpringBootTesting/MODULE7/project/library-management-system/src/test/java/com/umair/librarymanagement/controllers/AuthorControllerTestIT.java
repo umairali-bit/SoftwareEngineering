@@ -334,6 +334,82 @@ public class AuthorControllerTestIT extends AbstractIntegrationTest {
 
         assertThat(fetchedBook.getAuthor()).isNull();
     }
+
+    @Test
+    void getAuthorByName_shouldReturnAuthor() {
+
+//         create author
+        ApiResponse<AuthorDTO> a1 = webTestClient.post()
+                .uri("/api/authors")
+                .bodyValue(authorCreateDTO)
+                .exchange()
+                .expectStatus().isCreated()
+                .expectBody(new ParameterizedTypeReference<ApiResponse<AuthorDTO>>() {
+                })
+                .returnResult()
+                .getResponseBody();
+
+        assertThat(a1).isNotNull();
+        assertThat(a1.getData()).isNotNull();
+
+        AuthorDTO createdAuthor = a1.getData();
+        Long authorId = createdAuthor.getId();
+        String authorName = createdAuthor.getName();
+
+        assertThat(authorId).isNotNull();
+        assertThat(authorName).isNotBlank();
+
+        bookCreateDTO.setAuthor(AuthorSummaryDTO.builder().id(authorId).build());
+
+
+//         create book
+        ApiResponse<BookDTO> book = webTestClient.post()
+                .uri("/api/books")
+                .bodyValue(bookCreateDTO)
+                .exchange()
+                .expectStatus().isCreated()
+                .expectBody(new ParameterizedTypeReference<ApiResponse<BookDTO>>() {
+                })
+                .returnResult()
+                .getResponseBody();
+
+        assertThat(book).isNotNull();
+        assertThat(book.getData()).isNotNull();
+
+        BookDTO fetchedBook = book.getData();
+
+        ApiResponse<AuthorDTO> fetchedAuthor = webTestClient.get()
+                .uri("/api/authors/by-name/{name}", authorName)
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody(new ParameterizedTypeReference<ApiResponse<AuthorDTO>>() {})
+                .returnResult()
+                .getResponseBody();
+
+
+
+//        Assertions
+        assertThat(fetchedAuthor).isNotNull();
+        assertThat(fetchedAuthor.getData().getId()).isEqualTo(authorId);
+        assertThat(fetchedAuthor.getData().getName()).isEqualTo(authorName);
+
+//        verify books exist + contain the created one (id/title/date)
+        assertThat(fetchedAuthor.getData().getBooks())
+                .isNotNull()
+                .extracting(
+                        b-> b.getId(),
+                        b-> b.getTitle(),
+                        b-> b.getPublishedDate()
+                )
+                .contains(
+                        tuple(
+                                fetchedBook.getId(),
+                                fetchedBook.getTitle(),
+                                fetchedBook.getPublishedDate()
+                        )
+                );
+
+    }
 }
 
 
