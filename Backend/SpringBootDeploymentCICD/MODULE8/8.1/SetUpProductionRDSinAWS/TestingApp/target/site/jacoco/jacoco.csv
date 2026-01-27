@@ -1,0 +1,11 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+TestingApp,com.codingshuttle.TestingApp.dto,EmployeeDto,29,37,6,6,1,3,7,1,1,1
+TestingApp,com.codingshuttle.TestingApp.services.impl,DataServiceImplDev,5,0,0,0,2,0,2,0,2,0
+TestingApp,com.codingshuttle.TestingApp.services.impl,DataServiceImplProd,5,0,0,0,2,0,2,0,2,0
+TestingApp,com.codingshuttle.TestingApp.services.impl,EmployeeServiceImpl,0,182,0,6,0,38,0,10,0,7
+TestingApp,com.codingshuttle.TestingApp.advices,GlobalExceptionHandler,9,0,0,0,3,0,3,0,3,0
+TestingApp,com.codingshuttle.TestingApp.config,AppConfig,7,0,0,0,2,0,2,0,2,0
+TestingApp,com.codingshuttle.TestingApp.controllers,HealthCheckController,6,0,0,0,2,0,2,0,2,0
+TestingApp,com.codingshuttle.TestingApp.controllers,EmployeeController,35,0,0,0,8,0,4,0,4,0
+TestingApp,com.codingshuttle.TestingApp,TestingAppApplication,5,6,0,0,2,2,1,1,1,1
+TestingApp,com.codingshuttle.TestingApp.exceptions,ResourceNotFoundException,5,4,0,0,2,2,1,1,1,1

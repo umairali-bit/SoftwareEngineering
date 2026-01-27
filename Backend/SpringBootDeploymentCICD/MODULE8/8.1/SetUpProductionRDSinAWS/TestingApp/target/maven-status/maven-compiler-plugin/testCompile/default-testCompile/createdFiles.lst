@@ -1,0 +1,6 @@
+com/codingshuttle/TestingApp/controllers/EmployeeControllerTestIT.class
+com/codingshuttle/TestingApp/services/impl/EmployeeServiceImplTest.class
+com/codingshuttle/TestingApp/TestContainerConfiguration.class
+com/codingshuttle/TestingApp/TestingAppApplicationTests.class
+com/codingshuttle/TestingApp/repositories/EmployeeRepositoryTest.class
+com/codingshuttle/TestingApp/controllers/AbstractIntegrationTest.class
