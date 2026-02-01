@@ -7,73 +7,53 @@ import org.springframework.boot.test.context.SpringBootTest;
 import static org.assertj.core.api.Assertions.*;
 
 @Slf4j
-
-@SpringBootTest
-class TestingApplicationTests {
+class TestingAppApplicationTests {
 
     @BeforeEach
     void setUp() {
-        log.info("running beforeEach");
+        log.info("Starting the method, setting up config");
     }
 
     @AfterEach
     void tearDown() {
-        log.info("running afterEach");
+        log.info("Tearing down the method");
     }
 
     @BeforeAll
-    static void beforeAll() {
-        log.info("running beforeAll");
+    static void setUpOnce() {
+        log.info("Setup Once...");
     }
 
     @AfterAll
-    static void tearDownAll() {
-        log.info("running afterAll");
+    static void tearDownOnce() {
+        log.info("Tearing down all...");
     }
 
-
     @Test
-    void contextLoads() {
-        log.info("test is running");
-    }
+//	@Disabled
+    void testNumberOne() {
+        int a = 5;
+        int b = 3;
 
-    //  Assertions.assertEquals(expected, actual) (JUnit)
-    @Test
-    void testSum() {
-        int result = 2 + 3;
+        int result = addTwoNumbers(a, b);
 
-        Assertions.assertEquals(5, result);
+//		Assertions.assertEquals(8, result);
+//		Assertions.
 
-    }
+//		assertThat(result)
+//				.isEqualTo(7)
+//				.isCloseTo(9, Offset.offset(1));
 
-    //  AssertJ
-    @Test
-    void assertj_example() {
-        int sum = 2 + 3;
-        assertThat(sum).isEqualTo(5).isCloseTo(6, Offset.offset(1));
-
-        assertThat("Apple").isEqualTo("Apple")
-                .startsWith("App")
-                .endsWith("le")
-                .hasSize(5);
-
-    }
-
-
-    @Test
-    @DisplayName("secondTest")
-    void displayName() {
-        log.info("the other test is running");
+//		assertThat("Apple")
+//				.isEqualTo("Apple")
+//				.startsWith("App")
+//				.endsWith("l")
+//				.hasSize(3);
 
     }
 
     @Test
-    @Disabled
-    void disableTest() {
-
-    }
-
-    @Test
+//	@DisplayName("displayTestNameTwo")
     void testDivideTwoNumbers_whenDenominatorIsZero_ThenArithmeticException() {
 
         int a = 5;
@@ -81,18 +61,23 @@ class TestingApplicationTests {
 
         assertThatThrownBy(() -> divideTwoNumbers(a, b))
                 .isInstanceOf(ArithmeticException.class)
-                .hasMessageContaining("divide by zero");
+                .hasMessage("Tried to divide by zero");
 
     }
 
+    int addTwoNumbers(int a, int b) {
+        return a+b;
+    }
 
     double divideTwoNumbers(int a, int b) {
         try {
-            return a / b;
+            return a/b;
         } catch (ArithmeticException e) {
-            throw new ArithmeticException("divide by zero");
+            log.error("Arithmentic excepiton occured: "+e.getLocalizedMessage());
+            throw new ArithmeticException("Tried to divide by zero");
         }
     }
+
 }
 
 

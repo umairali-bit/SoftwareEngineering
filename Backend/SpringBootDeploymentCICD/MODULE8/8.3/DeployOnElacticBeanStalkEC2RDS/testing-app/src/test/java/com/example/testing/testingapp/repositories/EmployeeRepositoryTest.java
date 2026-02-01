@@ -31,54 +31,35 @@ class EmployeeRepositoryTest {
     @BeforeEach
     void setUp() {
         employee = Employee.builder()
-                .id(1L)
-                .name("Walter White")
-                .email("ww@example.com")
-                .salary(80_000L)
+//                .id(1L)
+                .name("Anuj")
+                .email("anuj@gmail.com")
+                .salary(100L)
                 .build();
     }
 
-
     @Test
     void testFindByEmail_whenEmailIsPresent_thenReturnEmployee() {
- // Arrange
+//        Arrange, Given
+        employeeRepository.save(employee);
 
-    employeeRepository.save(employee);
-
-
-
- // Act
+//        Act, When
         List<Employee> employeeList = employeeRepository.findByEmail(employee.getEmail());
 
-
- // Assert
+//        Assert, Then
         assertThat(employeeList).isNotNull();
         assertThat(employeeList).isNotEmpty();
-
-        assertThat(employeeList.get(0).getEmail()).isEqualTo(employee.getEmail()); //going to be rolled back
-
-        System.out.println(employeeList);
-
+        assertThat(employeeList.get(0).getEmail()).isEqualTo(employee.getEmail());
     }
 
     @Test
-    void testFindByEmail_whenEmailIsNotValid_thenReturnEmptyEmployee() {
-
-//  Arrange
-
-        String email = "Invalid@example.com";
-
-
-
-//  Act
+    void testFindByEmail_whenEmailIsNotFound_thenReturnEmptyEmployeeList() {
+//        Given
+        String email = "notPresent.123@gmail.com";
+//        When
         List<Employee> employeeList = employeeRepository.findByEmail(email);
-
-
-//  Assert
-
+//        Then
         assertThat(employeeList).isNotNull();
         assertThat(employeeList).isEmpty();
-        System.out.println(employeeList);
-
     }
 }
