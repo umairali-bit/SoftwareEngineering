@@ -4,10 +4,6 @@ phases:
   install:
     runtime-versions:
       java: corretto21
-    commands:
-      - echo "Installing zip..."
-      - yum -y install zip unzip || true
-      - zip -v || true
 
   pre_build:
     commands:
@@ -21,20 +17,21 @@ phases:
       - ls -la
       - mvn -v
 
-build:
-  commands:
-    - mvn clean package -DskipTests
-    - ls -la target
-    - cp target/*.jar app.jar
-    - 'echo "web: java -jar app.jar" > Procfile'
-    - ls -la
+  build:
+    commands:
+      - mvn clean package -DskipTests
+      - echo "Target contents:"
+      - ls -la target
+      - cp target/*.jar app.jar
+      - echo "web: java -jar app.jar" > Procfile
+      - echo "Created files:"
+      - ls -la app.jar Procfile
 
 artifacts:
   base-directory: Backend/SpringBootDeploymentCICD/MODULE8/8.4/AWScodePipelineAndGithubHooks/testing-app
   files:
     - app.jar
     - Procfile
-
 
 cache:
   paths:
