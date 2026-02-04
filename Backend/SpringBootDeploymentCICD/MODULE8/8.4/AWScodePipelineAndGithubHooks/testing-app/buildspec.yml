@@ -9,6 +9,9 @@ phases:
     commands:
       - pwd
       - ls -la
+      - cd Backend/SpringBootDeploymentCICD/MODULE8/8.4/AWScodePipelineAndGithubHooks/testing-app
+      - pwd
+      - ls -la
       - mvn -v
 
   build:
@@ -19,8 +22,5 @@ artifacts:
   files:
     - target/*.jar
 
-cache:
-  paths:
-    - '/root/.m2/**/*'
 
 
