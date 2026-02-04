@@ -28,13 +28,14 @@ phases:
       - ls -la target
       - rm -f deploy.zip
       - mkdir -p bundle
-      - cp target/*-SNAPSHOT.jar bundle/app.jar
-      - echo "web: java -jar app.jar" > bundle/Procfile
+      - cp target/*.jar bundle/app.jar
+      - 'echo "web: java -jar app.jar" > bundle/Procfile'
       - cd bundle
       - zip -r ../deploy.zip .
       - cd ..
       - echo "deploy.zip created?"
       - ls -la deploy.zip
+
 
 artifacts:
   files:
