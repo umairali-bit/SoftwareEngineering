@@ -5,13 +5,18 @@ phases:
     runtime-versions:
       java: corretto21
     commands:
-      - yum install -y zip
+      - echo "Installing zip..."
+      - yum -y install zip unzip || true
+      - zip -v || true
 
   pre_build:
     commands:
+      - echo "Repo root:"
       - pwd
       - ls -la
+      - echo "Going to app folder..."
       - cd Backend/SpringBootDeploymentCICD/MODULE8/8.4/AWScodePipelineAndGithubHooks/testing-app
+      - echo "Now in:"
       - pwd
       - ls -la
       - mvn -v
@@ -19,13 +24,22 @@ phases:
   build:
     commands:
       - mvn clean package -DskipTests
+      - echo "Target contents:"
+      - ls -la target
       - rm -f deploy.zip
       - mkdir -p bundle
-      - cp target/*.jar bundle/app.jar
+      - cp target/*-SNAPSHOT.jar bundle/app.jar
       - echo "web: java -jar app.jar" > bundle/Procfile
       - cd bundle
       - zip -r ../deploy.zip .
+      - cd ..
+      - echo "deploy.zip created?"
+      - ls -la deploy.zip
 
 artifacts:
   files:
     - Backend/SpringBootDeploymentCICD/MODULE8/8.4/AWScodePipelineAndGithubHooks/testing-app/deploy.zip
+
+cache:
+  paths:
+    - "/root/.m2/**/*"
