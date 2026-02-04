@@ -1,0 +1,33 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      java: corretto21
+
+  pre_build:
+    commands:
+      - echo "Entering testing-app directory..."
+      - cd Backend/SpringBootDeploymentCICD/MODULE8/8.4/AWSCodePipelineAndGithubHooks/testing-app
+      - mvn -v
+
+  build:
+    commands:
+      - echo "Running tests and building the application..."
+      - mvn -B clean verify
+
+  post_build:
+    commands:
+      - echo "Build completed on $(date)"
+      - echo "Listing generated artifacts:"
+      - ls -lh target
+      - echo "Post-build phase finished successfully"
+
+artifacts:
+  files:
+    - Backend/SpringBootDeploymentCICD/MODULE8/8.4/AWSCodePipelineAndGithubHooks/testing-app/target/*.jar
+
+cache:
+  paths:
+    - '/root/.m2/**/*'
+
