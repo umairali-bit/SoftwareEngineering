@@ -4,11 +4,11 @@ phases:
   install:
     runtime-versions:
       java: corretto21
-    commands:
-      - yum install -y zip unzip
 
   pre_build:
     commands:
+      - pwd
+      - ls -la
       - cd Backend/SpringBootDeploymentCICD/MODULE8/8.4/AWScodePipelineAndGithubHooks/testing-app
       - pwd
       - ls -la
@@ -17,19 +17,8 @@ phases:
   build:
     commands:
       - mvn clean package -DskipTests
-      - rm -f deploy.zip
-      - mkdir -p bundle
-      - cp target/*-SNAPSHOT.jar bundle/app.jar
-      - echo "web: java -jar app.jar" > bundle/Procfile
-      - cd bundle
-      - zip -r ../deploy.zip .
 
 artifacts:
+  base-directory: Backend/SpringBootDeploymentCICD/MODULE8/8.4/AWScodePipelineAndGithubHooks/testing-app/target
   files:
-    - Backend/SpringBootDeploymentCICD/MODULE8/8.4/AWScodePipelineAndGithubHooks/testing-app/deploy.zip
-
-cache:
-  paths:
-    - "/root/.m2/**/*"
-
-
+    - '*.jar'
