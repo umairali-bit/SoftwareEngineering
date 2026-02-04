@@ -23,7 +23,7 @@ phases:
       - echo "Target contents:"
       - ls -la target
       - cp target/*.jar app.jar
-      - echo "web: java -jar app.jar" > Procfile
+      - 'echo "web: java -jar app.jar" > Procfile'
       - echo "Created files:"
       - ls -la app.jar Procfile
 
