@@ -21,26 +21,20 @@ phases:
       - ls -la
       - mvn -v
 
-  build:
-    commands:
-      - mvn clean package -DskipTests
-      - echo "Target contents:"
-      - ls -la target
-      - rm -f deploy.zip
-      - mkdir -p bundle
-      - cp target/*.jar bundle/app.jar
-      - 'echo "web: java -jar app.jar" > bundle/Procfile'
-      - cd bundle
-      - zip -r ../deploy.zip .
-      - cd ..
-      - echo "deploy.zip created?"
-      - ls -la deploy.zip
-
+build:
+  commands:
+    - mvn clean package -DskipTests
+    - ls -la target
+    - cp target/*.jar app.jar
+    - 'echo "web: java -jar app.jar" > Procfile'
+    - ls -la
 
 artifacts:
   base-directory: Backend/SpringBootDeploymentCICD/MODULE8/8.4/AWScodePipelineAndGithubHooks/testing-app
   files:
-    - deploy.zip
+    - app.jar
+    - Procfile
+
 
 cache:
   paths:
