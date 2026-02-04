@@ -38,8 +38,9 @@ phases:
 
 
 artifacts:
+  base-directory: Backend/SpringBootDeploymentCICD/MODULE8/8.4/AWScodePipelineAndGithubHooks/testing-app
   files:
-    - Backend/SpringBootDeploymentCICD/MODULE8/8.4/AWScodePipelineAndGithubHooks/testing-app/deploy.zip
+    - deploy.zip
 
 cache:
   paths:
