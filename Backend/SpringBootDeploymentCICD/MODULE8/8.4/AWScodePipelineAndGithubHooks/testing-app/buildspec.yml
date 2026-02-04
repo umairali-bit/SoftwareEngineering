@@ -19,7 +19,7 @@ phases:
 
   build:
     commands:
-      - mvn clean package -DskipTests
+      - mvn clean package
       - echo "Target contents:"
       - ls -la target
       - cp target/*.jar app.jar
