@@ -7,21 +7,21 @@ phases:
 
   pre_build:
     commands:
-      - pwd
-      - ls -la
       - cd Backend/SpringBootDeploymentCICD/MODULE8/8.4/AWScodePipelineAndGithubHooks/testing-app
-      - pwd
-      - ls -la
-      - mvn -v
 
   build:
     commands:
       - mvn clean package -DskipTests
+      - mkdir -p bundle
+      - cp target/*-SNAPSHOT.jar bundle/app.jar
+      - printf "web: java -jar app.jar\n" > bundle/Procfile
+      - cd bundle
+      - zip -r ../deploy.zip .
 
 artifacts:
-  base-directory: Backend/SpringBootDeploymentCICD/MODULE8/8.4/AWScodePipelineAndGithubHooks/testing-app/target
   files:
-    - '*.jar'
+    - Backend/SpringBootDeploymentCICD/MODULE8/8.4/AWScodePipelineAndGithubHooks/testing-app/deploy.zip
+
 
 
 
