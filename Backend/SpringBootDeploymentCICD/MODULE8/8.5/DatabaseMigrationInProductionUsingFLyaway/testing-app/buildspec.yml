@@ -1,0 +1,46 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      java: corretto21
+
+  pre_build:
+    commands:
+      - 'echo "Logging into Docker Hub"'
+      - echo "$DOCKERHUB_PASSWORD" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
+
+      - 'echo "Repo root:"'
+      - pwd
+      - ls -la
+
+      - 'echo "Going to app folder..."'
+      - cd Backend/SpringBootDeploymentCICD/MODULE8/8.4/AWScodePipelineAndGithubHooks/testing-app
+
+      - 'echo "Now in:"'
+      - pwd
+      - ls -la
+      - mvn -v
+
+  build:
+    commands:
+      - mvn clean package
+
+      - 'echo "Target contents:"'
+      - ls -la target
+
+      - cp target/*.jar app.jar
+      - 'echo "web: java -jar app.jar" > Procfile'
+
+      - 'echo "Created files:"'
+      - ls -la app.jar Procfile
+
+artifacts:
+  base-directory: Backend/SpringBootDeploymentCICD/MODULE8/8.4/AWScodePipelineAndGithubHooks/testing-app
+  files:
+    - app.jar
+    - Procfile
+
+cache:
+  paths:
+    - "/root/.m2/**/*"
