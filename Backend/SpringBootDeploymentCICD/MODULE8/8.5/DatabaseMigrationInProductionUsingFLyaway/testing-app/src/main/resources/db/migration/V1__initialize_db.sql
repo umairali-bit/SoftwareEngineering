@@ -1,0 +1,9 @@
+CREATE TABLE employee (
+    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    full_name VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    salary BIGINT
+);
+ALTER TABLE employee ADD CONSTRAINT uq_employee_email UNIQUE (email);
+
+
