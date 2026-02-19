@@ -9,9 +9,9 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class AiService {
 
-    private ChatClient chatClient;
+    private final ChatClient chatClient;
 
-    private String getJoke(String topic) {
+   public String getJoke(String topic) {
        return chatClient.prompt()
                 .user("Give me a joke on the topic: " +topic)
                 .call()
