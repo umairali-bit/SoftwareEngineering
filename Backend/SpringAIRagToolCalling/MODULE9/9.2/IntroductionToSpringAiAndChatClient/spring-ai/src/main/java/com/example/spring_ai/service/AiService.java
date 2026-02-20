@@ -1,6 +1,7 @@
 package com.example.spring_ai.service;
 
 
+import com.example.spring_ai.dto.Joke;
 import lombok.RequiredArgsConstructor;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
@@ -35,9 +36,10 @@ public class AiService {
                         new SimpleLoggerAdvisor()
                 )
                 .call()
-                .chatClientResponse(); //to get metadata
+//                .chatClientResponse(); //to get metadata
+                .entity(Joke.class);
 
-        return response.chatResponse().getResult().getOutput().getText();
+        return response.text();
     }
 
 }
