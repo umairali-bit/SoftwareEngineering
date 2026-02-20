@@ -29,10 +29,12 @@ public class AiService {
 //       replace placeholders inside the prompt template with actual values
        String renderedText = promptTemplate.render(Map.of("topic", topic));
 
-       return chatClient.prompt()
+       var response =  chatClient.prompt()
                 .user(renderedText)
                 .call()
-                .content();
+                .chatClientResponse(); //to get metadata
+
+       return response.chatResponse().getResult().getOutput().getText();
     }
 
 }
