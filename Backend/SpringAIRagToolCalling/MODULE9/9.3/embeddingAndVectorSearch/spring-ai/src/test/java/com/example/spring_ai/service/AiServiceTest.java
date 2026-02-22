@@ -18,4 +18,14 @@ public class AiServiceTest {
         System.out.println(joke);
     }
 
+    @Test
+    public void testEmbedText(){
+        var embed = aiService.getEmbedding("There is no embedding");
+        System.out.println(embed.length);
+
+        for(float e : embed){
+            System.out.print(e + " ");
+        }
+    }
+
 }
