@@ -6,10 +6,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
 import org.springframework.ai.chat.prompt.PromptTemplate;
+import org.springframework.ai.document.Document;
 import org.springframework.ai.embedding.Embedding;
 import org.springframework.ai.embedding.EmbeddingModel;
+import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -17,12 +20,17 @@ import java.util.Map;
 public class AiService {
 
     private final ChatClient chatClient;
-
     private final EmbeddingModel embeddingModel;
+    private final VectorStore vectorStore;
 
     public float[] getEmbedding(String text) {
         return embeddingModel.embed(text);
 
+    }
+
+    public void ingestDataToVectorStore(String text) {
+        Document document = new Document(text);
+        vectorStore.add(List.of(document));
     }
 
 

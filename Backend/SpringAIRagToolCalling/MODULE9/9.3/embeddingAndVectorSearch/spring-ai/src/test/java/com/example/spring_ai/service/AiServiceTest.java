@@ -14,18 +14,28 @@ public class AiServiceTest {
 
     @Test
     public void testGetJoke(){
-        var joke = aiService.getJoke("Programmer");
+        var joke = aiService.getJoke("Breaking Bad");
         System.out.println(joke);
     }
 
     @Test
     public void testEmbedText(){
-        var embed = aiService.getEmbedding("There is no embedding");
+        var embed = aiService.getEmbedding("Stay out of my territory.");
         System.out.println(embed.length);
 
         for(float e : embed){
             System.out.print(e + " ");
         }
+    }
+
+    @Test
+    public void testStoreData(){
+        aiService.ingestDataToVectorStore(
+                """ 
+                    I am not in danger, Skyler. I am the danger. A guy opens " +
+                    "his door and gets shot, and you think that of me? No. I am the one who knocks!
+                    """);
+
     }
 
 }
