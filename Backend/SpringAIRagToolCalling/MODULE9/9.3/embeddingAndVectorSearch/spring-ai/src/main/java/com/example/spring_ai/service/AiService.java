@@ -28,10 +28,48 @@ public class AiService {
 
     }
 
-    public void ingestDataToVectorStore(String text) {
-        Document document = new Document(text);
-        vectorStore.add(List.of(document));
+//    public void ingestDataToVectorStore(String text) {
+//        Document document = new Document(text);
+//        vectorStore.add(List.of(document));
+
+    public void ingestDataToVectorStore() {
+
+        List<Document> breakingBadUniverse = List.of(
+
+                new Document(
+                        "Breaking Bad is a crime drama about a high school chemistry teacher who turns into a methamphetamine kingpin.",
+                        Map.of(
+                                "title", "Breaking Bad",
+                                "genre", "Crime, Drama, Thriller",
+                                "year", 2008
+                        )
+                ),
+
+                new Document(
+                        "Better Call Saul follows the transformation of Jimmy McGill into the morally challenged lawyer Saul Goodman.",
+                        Map.of(
+                                "title", "Better Call Saul",
+                                "genre", "Crime, Drama",
+                                "year", 2015
+                        )
+                ),
+
+                new Document(
+                        "El Camino continues Jesse Pinkman's story after the events of Breaking Bad.",
+                        Map.of(
+                                "title", "El Camino: A Breaking Bad Movie",
+                                "genre", "Crime, Drama, Thriller",
+                                "year", 2019
+                        )
+                )
+        );
+
+        vectorStore.add(breakingBadUniverse);
     }
+
+
+
+
 
 
 

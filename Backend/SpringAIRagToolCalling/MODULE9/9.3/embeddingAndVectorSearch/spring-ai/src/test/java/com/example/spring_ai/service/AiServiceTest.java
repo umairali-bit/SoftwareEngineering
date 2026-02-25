@@ -30,11 +30,13 @@ public class AiServiceTest {
 
     @Test
     public void testStoreData(){
-        aiService.ingestDataToVectorStore(
-                """ 
-                    I am not in danger, Skyler. I am the danger. A guy opens " +
-                    "his door and gets shot, and you think that of me? No. I am the one who knocks!
-                    """);
+//        aiService.ingestDataToVectorStore(
+//                """
+//                    I am not in danger, Skyler. I am the danger. A guy opens " +
+//                    "his door and gets shot, and you think that of me? No. I am the one who knocks!
+//                    """);
+
+        aiService.ingestDataToVectorStore();
 
     }
 
