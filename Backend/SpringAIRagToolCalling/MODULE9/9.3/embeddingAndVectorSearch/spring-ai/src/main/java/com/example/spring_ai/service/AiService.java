@@ -9,6 +9,7 @@ import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.ai.document.Document;
 import org.springframework.ai.embedding.Embedding;
 import org.springframework.ai.embedding.EmbeddingModel;
+import org.springframework.ai.vectorstore.SearchRequest;
 import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.stereotype.Service;
 
@@ -67,11 +68,18 @@ public class AiService {
         vectorStore.add(breakingBadUniverse);
     }
 
+//    similarity search
+//    public void similaritySearch(String text) {
+//        vectorStore.similaritySearch(text);
+    public List<Document> similaritySearch(String text) {
+//        return vectorStore.similaritySearch(text);
+        return vectorStore.similaritySearch(SearchRequest.builder()
+                .query(text)
+                .topK(3)
+                .similarityThreshold(0.3)
+                .build());
 
-
-
-
-
+    }
 
 
     public String getJoke(String topic) {

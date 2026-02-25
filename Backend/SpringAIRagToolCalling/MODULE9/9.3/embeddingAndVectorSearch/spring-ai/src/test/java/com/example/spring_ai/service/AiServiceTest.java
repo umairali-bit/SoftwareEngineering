@@ -40,4 +40,13 @@ public class AiServiceTest {
 
     }
 
+    @Test
+    public void testSimilaritySearch(){
+        var resp = aiService.similaritySearch("drug kingpin");
+        for (var doc : resp){
+            System.out.println(doc);
+        }
+
+    }
+
 }
