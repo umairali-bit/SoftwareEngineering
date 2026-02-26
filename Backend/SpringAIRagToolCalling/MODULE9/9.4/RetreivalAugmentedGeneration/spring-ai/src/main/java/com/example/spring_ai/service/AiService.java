@@ -81,6 +81,14 @@ public class AiService {
 
     }
 
+    public String askAI(String prompt) {
+
+        return chatClient.prompt()
+                .user(prompt)
+                .call()
+                .content();
+    }
+
 
     public String getJoke(String topic) {
 
