@@ -13,6 +13,13 @@ public class AiServiceTest {
 
 
     @Test
+    public void testAskAI(){
+        var response = aiService.askAI("Walter White");
+        System.out.println(response);
+    }
+
+
+    @Test
     public void testGetJoke(){
         var joke = aiService.getJoke("Breaking Bad");
         System.out.println(joke);
@@ -48,5 +55,6 @@ public class AiServiceTest {
         }
 
     }
+
 
 }
