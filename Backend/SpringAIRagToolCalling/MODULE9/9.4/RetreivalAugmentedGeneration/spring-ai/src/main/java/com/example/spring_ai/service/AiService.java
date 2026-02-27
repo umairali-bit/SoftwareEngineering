@@ -105,7 +105,7 @@ public class AiService {
         List<Document> documents = vectorStore.similaritySearch(SearchRequest.builder()
                 .query(prompt)
                 .topK(2)
-                        .similarityThreshold(0.5)
+                .similarityThreshold(0.5)
                 .filterExpression("topic == 'ai' or topic == 'vectorstore'")
                 .build());
 
@@ -125,6 +125,8 @@ public class AiService {
                 .call()
                 .content();
     }
+
+
 
     public static List<Document> springAiComedyDocs() {
         return List.of(
