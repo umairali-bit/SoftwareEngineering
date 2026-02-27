@@ -48,9 +48,9 @@ public class RAGService {
 
         List<Document> documents = vectorStore.similaritySearch(SearchRequest.builder()
                 .query(prompt)
-                .topK(2)
-                .similarityThreshold(0.5)
-                .filterExpression("topic == 'ai' or topic == 'vectorstore'")
+                .topK(5)
+                .similarityThreshold(0.4)
+                        .filterExpression("file_name == 'Breaking_Bad_FAQ.pdf'")
                 .build());
 
         String context = documents.stream()
@@ -75,52 +75,58 @@ public class RAGService {
         List<Document> page = reader.get();
 
         TokenTextSplitter  splitter = TokenTextSplitter.builder()
-                .withChunkSize(200)
+                .withChunkSize(120)
                 .build();
 
         List<Document> chunks = splitter.apply(page);
+
+//        to see chunks
+        for (int i = 0; i < Math.min(10, chunks.size()); i++) {
+            System.out.println("CHUNK " + i + ":\n" + chunks.get(i).getText());
+            System.out.println("-----");
+        }
         vectorStore.add(chunks);
     }
 
-    public static List<Document> springAiComedyDocs() {
-        return List.of(
-
-                new Document(
-                        "Spring AI is like a translator between humans and robots, except robots still don’t understand sarcasm.",
-                        Map.of("topic", "ai")
-                ),
-
-                new Document(
-                        "A VectorStore is basically a very fancy filing cabinet where even your embarrassing search history could be stored… if it had feelings.",
-                        Map.of("topic", "vectorstore")
-                ),
-
-                new Document(
-                        "Retrieval Augmented Generation is when AI does open-book exams while humans still struggle with closed-book tests.",
-                        Map.of("topic", "vectorstore")
-                ),
-
-                new Document(
-                        "PgVector stores embeddings in PostgreSQL so your database finally feels important in the AI world.",
-                        Map.of("topic", "vectorstore")
-                ),
-
-                new Document(
-                        "ChatClient lets you talk to AI models like OpenAI or Ollama, which means you now have someone who replies instantly… unlike your friends.",
-                        Map.of("topic", "ai")
-                ),
-
-                new Document(
-                        "Embeddings convert text into numbers so machines understand meaning — basically turning words into math homework.",
-                        Map.of("topic", "embedding")
-                ),
-
-                new Document(
-                        "Spring AI saves developers from writing boring code, but sadly it cannot fix your life choices.",
-                        Map.of("topic", "ai")
-                )
-        );
-    }
+//    public static List<Document> springAiComedyDocs() {
+//        return List.of(
+//
+//                new Document(
+//                        "Spring AI is like a translator between humans and robots, except robots still don’t understand sarcasm.",
+//                        Map.of("topic", "ai")
+//                ),
+//
+//                new Document(
+//                        "A VectorStore is basically a very fancy filing cabinet where even your embarrassing search history could be stored… if it had feelings.",
+//                        Map.of("topic", "vectorstore")
+//                ),
+//
+//                new Document(
+//                        "Retrieval Augmented Generation is when AI does open-book exams while humans still struggle with closed-book tests.",
+//                        Map.of("topic", "vectorstore")
+//                ),
+//
+//                new Document(
+//                        "PgVector stores embeddings in PostgreSQL so your database finally feels important in the AI world.",
+//                        Map.of("topic", "vectorstore")
+//                ),
+//
+//                new Document(
+//                        "ChatClient lets you talk to AI models like OpenAI or Ollama, which means you now have someone who replies instantly… unlike your friends.",
+//                        Map.of("topic", "ai")
+//                ),
+//
+//                new Document(
+//                        "Embeddings convert text into numbers so machines understand meaning — basically turning words into math homework.",
+//                        Map.of("topic", "embedding")
+//                ),
+//
+//                new Document(
+//                        "Spring AI saves developers from writing boring code, but sadly it cannot fix your life choices.",
+//                        Map.of("topic", "ai")
+//                )
+//        );
+//    }
 
 
 }
