@@ -1,12 +1,15 @@
 package com.example.spring_ai.service;
 
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
 import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.ai.document.Document;
 import org.springframework.ai.vectorstore.SearchRequest;
 import org.springframework.ai.vectorstore.VectorStore;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,6 +22,9 @@ public class RAGService {
 
     private final ChatClient chatClient;
     private final VectorStore vectorStore;
+
+    @Value("classpath:Breaking_Bad_FAQ.pdf")
+    private Resource pdfFile;
 
     public String askAI(String prompt) {
 
