@@ -5,6 +5,7 @@ import com.example.spring_ai.dto.Joke;
 import lombok.RequiredArgsConstructor;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
+import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.ai.document.Document;
 import org.springframework.ai.embedding.Embedding;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -66,9 +68,10 @@ public class AiService {
         );
 
         vectorStore.add(breakingBadUniverse);
+        vectorStore.add(springAiComedyDocs());
     }
 
-//    similarity search
+    //    similarity search
 //    public void similaritySearch(String text) {
 //        vectorStore.similaritySearch(text);
     public List<Document> similaritySearch(String text) {
@@ -83,10 +86,80 @@ public class AiService {
 
     public String askAI(String prompt) {
 
+        String template = """
+                You are an AI assistant helping a developer.
+                
+                Rules:
+                - Use ONLY the information provided in the context
+                - You MAY rephrase, summarize, and explain in natural language
+                - Do NOT introduce new concepts or facts
+                - If multiple context sections are relevant, combine them into a single explanation
+                - If the answer is not present, say "I don't know"
+                
+                Context:
+                {context}
+                
+                Answer in a friendly, conversational tone.
+                """;
+
+        List<Document> documents = vectorStore.similaritySearch(SearchRequest.builder()
+                .query(prompt)
+                .topK(2)
+                .filterExpression("topic == 'ai' or topic == 'vectorstore'")
+                .build());
+
+        String context = documents.stream()
+                .map(document -> document.getText())
+                .collect(Collectors.joining("\n\n"));
+
+        PromptTemplate promptTemplate = new PromptTemplate(template);
+        String systemPrompt = promptTemplate.render(Map.of("context", context));
+
         return chatClient.prompt()
+                .system(systemPrompt)
                 .user(prompt)
                 .call()
                 .content();
+    }
+
+    public static List<Document> springAiComedyDocs() {
+        return List.of(
+
+                new Document(
+                        "Spring AI is like a translator between humans and robots, except robots still don’t understand sarcasm.",
+                        Map.of("topic", "ai")
+                ),
+
+                new Document(
+                        "A VectorStore is basically a very fancy filing cabinet where even your embarrassing search history could be stored… if it had feelings.",
+                        Map.of("topic", "vectorstore")
+                ),
+
+                new Document(
+                        "Retrieval Augmented Generation is when AI does open-book exams while humans still struggle with closed-book tests.",
+                        Map.of("topic", "vectorstore")
+                ),
+
+                new Document(
+                        "PgVector stores embeddings in PostgreSQL so your database finally feels important in the AI world.",
+                        Map.of("topic", "vectorstore")
+                ),
+
+                new Document(
+                        "ChatClient lets you talk to AI models like OpenAI or Ollama, which means you now have someone who replies instantly… unlike your friends.",
+                        Map.of("topic", "ai")
+                ),
+
+                new Document(
+                        "Embeddings convert text into numbers so machines understand meaning — basically turning words into math homework.",
+                        Map.of("topic", "embedding")
+                ),
+
+                new Document(
+                        "Spring AI saves developers from writing boring code, but sadly it cannot fix your life choices.",
+                        Map.of("topic", "ai")
+                )
+        );
     }
 
 
