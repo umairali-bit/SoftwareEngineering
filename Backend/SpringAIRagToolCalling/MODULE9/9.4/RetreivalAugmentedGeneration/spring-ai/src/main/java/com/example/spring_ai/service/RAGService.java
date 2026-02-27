@@ -6,6 +6,8 @@ import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
 import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.ai.document.Document;
+import org.springframework.ai.reader.pdf.PagePdfDocumentReader;
+import org.springframework.ai.transformer.splitter.TokenTextSplitter;
 import org.springframework.ai.vectorstore.SearchRequest;
 import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.beans.factory.annotation.Value;
@@ -66,6 +68,18 @@ public class RAGService {
                 )
                 .call()
                 .content();
+    }
+
+    public void ingestPdfToVectorStore() {
+        PagePdfDocumentReader reader = new PagePdfDocumentReader(pdfFile);
+        List<Document> page = reader.get();
+
+        TokenTextSplitter  splitter = TokenTextSplitter.builder()
+                .withChunkSize(200)
+                .build();
+
+        List<Document> chunks = splitter.apply(page);
+        vectorStore.add(chunks);
     }
 
     public static List<Document> springAiComedyDocs() {
