@@ -30,6 +30,7 @@ public class RAGService {
 
     public String askAI(String prompt) {
 
+//         retrieving the data
         String template = """
                 You are an AI assistant helping a developer.
                 
@@ -53,6 +54,7 @@ public class RAGService {
                         .filterExpression("file_name == 'Breaking_Bad_FAQ.pdf'")
                 .build());
 
+//      Augment
         String context = documents.stream()
                 .map(document -> document.getText())
                 .collect(Collectors.joining("\n\n"));
@@ -60,6 +62,8 @@ public class RAGService {
         PromptTemplate promptTemplate = new PromptTemplate(template);
         String systemPrompt = promptTemplate.render(Map.of("context", context));
 
+
+//        generated response
         return chatClient.prompt()
                 .system(systemPrompt)
                 .user(prompt)
