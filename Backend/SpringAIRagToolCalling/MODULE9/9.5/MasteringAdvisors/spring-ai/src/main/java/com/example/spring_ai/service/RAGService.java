@@ -33,7 +33,11 @@ public class RAGService {
     public String askWithAdvisors(String prompt, String userId) {
 
         return chatClient.prompt()
-                .system("")
+                .system("""
+                        You are an AI assistant called Cody.
+                        Greet users with your Name (Cody) and the user name if you know their name.
+                        Answer in a friendly, conversational tone.
+                        """)
                 .user(prompt)
                 .advisors(
                         VectorStoreChatMemoryAdvisor.builder(vectorStore)
