@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
+import org.springframework.ai.chat.client.advisor.vectorstore.VectorStoreChatMemoryAdvisor;
 import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.ai.document.Document;
 import org.springframework.ai.reader.pdf.PagePdfDocumentReader;
@@ -28,7 +29,27 @@ public class RAGService {
     @Value("classpath:Breaking_Bad_FAQ.pdf")
     private Resource pdfFile;
 
+//  using advisors the retrieve the data
+    public String askWithAdvisors(String prompt, String userId) {
+
+        return chatClient.prompt()
+                .system("")
+                .user(prompt)
+                .advisors(
+                        VectorStoreChatMemoryAdvisor.builder(vectorStore)
+                                .conversationId(userId)
+                                .defaultTopK(4)
+                                .build()
+
+                )
+                .call()
+                .content();
+
+
+    }
+
     public String askAI(String prompt) {
+
 
 //         retrieving the data
         String template = """
@@ -53,6 +74,8 @@ public class RAGService {
                 .similarityThreshold(0.4)
                         .filterExpression("file_name == 'Breaking_Bad_FAQ.pdf'")
                 .build());
+
+
 
 //      Augment
         String context = documents.stream()
