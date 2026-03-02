@@ -3,8 +3,10 @@ package com.example.spring_ai.service;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
 import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
 import org.springframework.ai.chat.client.advisor.vectorstore.VectorStoreChatMemoryAdvisor;
+import org.springframework.ai.chat.memory.ChatMemory;
 import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.ai.document.Document;
 import org.springframework.ai.reader.pdf.PagePdfDocumentReader;
@@ -25,11 +27,12 @@ public class RAGService {
 
     private final ChatClient chatClient;
     private final VectorStore vectorStore;
+    private final ChatMemory chatMemory;
 
     @Value("classpath:Breaking_Bad_FAQ.pdf")
     private Resource pdfFile;
 
-//  using advisors the retrieve the data
+    //  using advisors the retrieve the data
     public String askWithAdvisors(String prompt, String userId) {
 
         return chatClient.prompt()
@@ -40,6 +43,10 @@ public class RAGService {
                         """)
                 .user(prompt)
                 .advisors(
+                        MessageChatMemoryAdvisor.builder(chatMemory)
+                                .conversationId(userId)
+                                .build(),
+
                         VectorStoreChatMemoryAdvisor.builder(vectorStore)
                                 .conversationId(userId)
                                 .defaultTopK(4)
@@ -76,9 +83,8 @@ public class RAGService {
                 .query(prompt)
                 .topK(5)
                 .similarityThreshold(0.4)
-                        .filterExpression("file_name == 'Breaking_Bad_FAQ.pdf'")
+                .filterExpression("file_name == 'Breaking_Bad_FAQ.pdf'")
                 .build());
-
 
 
 //      Augment
@@ -105,7 +111,7 @@ public class RAGService {
         PagePdfDocumentReader reader = new PagePdfDocumentReader(pdfFile);
         List<Document> page = reader.get();
 
-        TokenTextSplitter  splitter = TokenTextSplitter.builder()
+        TokenTextSplitter splitter = TokenTextSplitter.builder()
                 .withChunkSize(120)
                 .build();
 
