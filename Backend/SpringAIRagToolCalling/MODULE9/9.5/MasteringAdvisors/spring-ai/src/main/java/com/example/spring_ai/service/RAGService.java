@@ -56,6 +56,7 @@ public class RAGService {
                         QuestionAnswerAdvisor.builder(vectorStore)
                                 .searchRequest(SearchRequest.builder()
                                         .filterExpression("file_name == 'Breaking_Bad_FAQ.pdf'")
+                                        .topK(4)
                                         .build())
                                 .build()
 
