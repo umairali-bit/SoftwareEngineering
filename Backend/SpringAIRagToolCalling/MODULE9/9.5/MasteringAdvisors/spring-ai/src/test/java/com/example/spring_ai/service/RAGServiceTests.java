@@ -11,7 +11,7 @@ public class RAGServiceTests {
     private RAGService ragService;
 
     @Test
-    public void                                                           testIngest() {
+    public void testIngest() {
         var resp = ragService.askAI("How many seasons does breaking bad has?");
         System.out.println(resp);
     }
@@ -24,7 +24,7 @@ public class RAGServiceTests {
 
     @Test
     public void testAskAIWithAdvisor() {
-        var resp = ragService.askWithAdvisors("what is my name?", "umair123");
+        var resp = ragService.askWithAdvisors("what is spring-ai", "umair123");
         System.out.println(resp);
     }
 }
