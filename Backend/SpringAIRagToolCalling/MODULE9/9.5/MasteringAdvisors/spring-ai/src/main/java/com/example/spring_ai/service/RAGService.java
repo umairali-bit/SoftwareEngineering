@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
+import org.springframework.ai.chat.client.advisor.SafeGuardAdvisor;
 import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
 import org.springframework.ai.chat.client.advisor.vectorstore.QuestionAnswerAdvisor;
 import org.springframework.ai.chat.client.advisor.vectorstore.VectorStoreChatMemoryAdvisor;
@@ -44,15 +45,21 @@ public class RAGService {
                         """)
                 .user(prompt)
                 .advisors(
+
+//                        safeguard advisor
+                        new SafeGuardAdvisor(List.of("Politics", "Gaming")),
+
+//                        short term memory
                         MessageChatMemoryAdvisor.builder(chatMemory)
                                 .conversationId(userId)
                                 .build(),
 
+//                         long term memory
                         VectorStoreChatMemoryAdvisor.builder(vectorStore)
                                 .conversationId(userId)
                                 .defaultTopK(4)
                                 .build(),
-
+//                          RAG
                         QuestionAnswerAdvisor.builder(vectorStore)
                                 .searchRequest(SearchRequest.builder()
                                         .filterExpression("file_name == 'Breaking_Bad_FAQ.pdf'")
