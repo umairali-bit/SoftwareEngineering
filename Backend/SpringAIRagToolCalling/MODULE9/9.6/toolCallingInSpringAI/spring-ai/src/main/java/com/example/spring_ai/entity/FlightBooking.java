@@ -28,5 +28,5 @@ public class FlightBooking {
     Instant departureTime;
 
     @CreationTimestamp
-    Instant BookedAt;
+    Instant bookedAt;
 }
