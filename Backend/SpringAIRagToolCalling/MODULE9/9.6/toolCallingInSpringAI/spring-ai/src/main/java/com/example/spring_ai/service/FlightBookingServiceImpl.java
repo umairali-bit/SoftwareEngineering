@@ -41,7 +41,7 @@ public class FlightBookingServiceImpl implements BookingService {
 
     @Override
     public List<FlightBooking> getUserBookings(String userId) {
-        return List.of();
+        return flightBookingRepository.findByUserIdOrderByDepartureTimeDesc(userId);
     }
 
     @Override
