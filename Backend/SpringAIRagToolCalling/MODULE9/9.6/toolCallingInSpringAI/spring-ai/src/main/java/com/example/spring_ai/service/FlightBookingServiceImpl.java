@@ -46,6 +46,13 @@ public class FlightBookingServiceImpl implements BookingService {
 
     @Override
     public FlightBooking updateFlightBooking(Long bookingId, String userId, BookingStatus newStatus) {
-        return null;
+        FlightBooking booking = flightBookingRepository.findById(bookingId).orElseThrow(
+                () -> new IllegalArgumentException("booking id not found"));
+
+        if(!booking.getUserId().equals(userId)){
+            throw new IllegalArgumentException("booking id not found");
+        }
+        booking.setBookingStatus(newStatus);
+        return flightBookingRepository.save(booking);
     }
 }
