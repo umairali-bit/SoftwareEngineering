@@ -4,7 +4,10 @@ import com.example.spring_ai.entity.FlightBooking;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.time.Instant;
+
 @Repository
 public interface FlightBookingRepository extends JpaRepository<FlightBooking,Long> {
 
+    boolean existsByUserIdAndDestinationAndDepartureTime(String userId, String destination, Instant departureTime);
 }

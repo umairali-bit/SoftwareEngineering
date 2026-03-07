@@ -11,14 +11,32 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class BookingServiceImpl implements BookingService {
+public class FlightBookingServiceImpl implements BookingService {
 
     private final FlightBookingRepository flightBookingRepository;
 
 
     @Override
     public FlightBooking createFlightBooking(String userId, String destination, Instant departureTime) {
-        return null;
+//        if booking exists
+        boolean exists = flightBookingRepository.existsByUserIdAndDestinationAndDepartureTime(
+                userId,destination,departureTime
+        );
+
+        if (exists) {
+            throw new IllegalArgumentException("booking already exists for " + destination);
+        }
+
+        FlightBooking booking = FlightBooking.builder()
+                .userId(userId)
+                .destination(destination)
+                .departureTime(departureTime)
+                .bookingStatus(BookingStatus.CONFIRMED)
+                .build();
+
+
+
+        return flightBookingRepository.save(booking);
     }
 
     @Override

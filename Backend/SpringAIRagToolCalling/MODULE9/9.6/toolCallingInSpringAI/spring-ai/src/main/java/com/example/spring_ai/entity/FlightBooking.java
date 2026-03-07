@@ -29,4 +29,7 @@ public class FlightBooking {
 
     @CreationTimestamp
     Instant bookedAt;
+
+    @Enumerated(EnumType.STRING)
+    BookingStatus bookingStatus;
 }
