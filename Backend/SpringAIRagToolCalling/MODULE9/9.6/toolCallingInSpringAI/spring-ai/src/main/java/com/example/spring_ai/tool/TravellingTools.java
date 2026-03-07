@@ -12,8 +12,8 @@ public class TravellingTools {
     public String getWeather(@ToolParam(description = "Name of the city", required = true) String city){
 
         return switch (city) {
-            case "NewYork City" -> "Sunny, 50 degrees";
-            case "London City" -> "Cloudy, 30 degrees";
+            case "New York City" -> "Sunny, 50 degrees";
+            case "London" -> "Cloudy, 30 degrees";
             default -> "Cannot find the city";
         };
     }

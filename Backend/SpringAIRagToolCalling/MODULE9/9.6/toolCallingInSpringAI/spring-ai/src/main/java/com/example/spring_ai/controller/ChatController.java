@@ -18,6 +18,11 @@ public class ChatController {
     @PostMapping("/chat")
     public String chat(@RequestBody String message) {
         return chatClient.prompt()
+//                .system("""
+//            You are an assistant.
+//            If the user asks about weather,
+//            always use the weather tool.
+//        """)
                 .user(message)
                 .tools(travellingTools)
                 .call()
