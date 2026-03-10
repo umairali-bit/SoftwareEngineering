@@ -1,6 +1,6 @@
 package com.example.spring_ai.tool;
 
-import com.example.spring_ai.entity.FlightBooking;
+
 import com.example.spring_ai.dto.BookingResponse;
 import com.example.spring_ai.service.FlightBookingServiceImpl;
 import lombok.RequiredArgsConstructor;
