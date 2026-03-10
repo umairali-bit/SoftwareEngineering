@@ -1,7 +1,7 @@
 package com.example.spring_ai.tool;
 
 import com.example.spring_ai.entity.FlightBooking;
-import com.example.spring_ai.repository.FlightBookingRepository;
+import com.example.spring_ai.dto.BookingResponse;
 import com.example.spring_ai.service.FlightBookingServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.ai.tool.annotation.Tool;
@@ -20,7 +20,7 @@ public class FlightBookingTools {
             description = "Create a new flight booking for a user"
 
     )
-    public FlightBooking createFlightBooking(
+    public BookingResponse createFlightBooking(
             @ToolParam(description = "Unique user id")
             String userId,
             @ToolParam(description = "destination")
@@ -30,7 +30,7 @@ public class FlightBookingTools {
 
         var flightBooking = flightBookingService.createFlightBooking(userId, destination, departureTime);
 
-        return new BookingReponse(
+        return new BookingResponse(
                 flightBooking.getId(),
                 flightBooking.getDestination(),
                 flightBooking.getDepartureTime(),
