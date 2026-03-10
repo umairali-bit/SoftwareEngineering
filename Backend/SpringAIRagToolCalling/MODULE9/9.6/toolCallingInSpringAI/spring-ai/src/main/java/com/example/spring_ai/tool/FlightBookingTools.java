@@ -1,14 +1,20 @@
 package com.example.spring_ai.tool;
 
 
+import com.example.spring_ai.dto.BookingListResponse;
 import com.example.spring_ai.dto.BookingResponse;
+import com.example.spring_ai.entity.FlightBooking;
 import com.example.spring_ai.service.FlightBookingServiceImpl;
 import lombok.RequiredArgsConstructor;
+import org.apache.logging.log4j.message.StringFormattedMessage;
 import org.springframework.ai.tool.annotation.Tool;
 import org.springframework.ai.tool.annotation.ToolParam;
 import org.springframework.stereotype.Component;
 
+import javax.crypto.spec.DESedeKeySpec;
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -41,4 +47,34 @@ public class FlightBookingTools {
 
 
     }
+
+    @Tool(
+            name = "get_user_booking",
+            description = "Retreive all flight bookings for the current user, sorted by departure time (most recent first)."
+    )
+    public BookingListResponse getUserBooking(
+            @ToolParam(description = "The unique user ID")
+            String userId ) {
+        List<FlightBooking> bookings = flightBookingService.getUserBookings(userId);
+
+        List<BookingResponse> responses = bookings.stream()
+                .map(b -> new BookingResponse(
+                        b.getId(),
+                        b.getDestination(),
+                        b.getDepartureTime(),
+                        b.getBookingStatus()
+
+                ))
+                .toList();
+
+        String message = bookings.isEmpty() ? "You have no upcoming flight bookings." : "Here are your current flight bookings";
+
+        return new BookingListResponse(responses, message);
+
+
+
+    }
+
+
+
 }
