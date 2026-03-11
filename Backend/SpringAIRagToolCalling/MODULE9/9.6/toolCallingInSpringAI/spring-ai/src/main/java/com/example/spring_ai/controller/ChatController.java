@@ -1,5 +1,6 @@
 package com.example.spring_ai.controller;
 
+import com.example.spring_ai.tool.FlightBookingTools;
 import com.example.spring_ai.tool.TravellingTools;
 import lombok.RequiredArgsConstructor;
 import org.springframework.ai.chat.client.ChatClient;
@@ -14,17 +15,18 @@ public class ChatController {
 
     private final ChatClient chatClient;
     private final TravellingTools travellingTools;
+    private final FlightBookingTools flightBookingTools;
 
     @PostMapping("/chat")
     public String chat(@RequestBody String message) {
         return chatClient.prompt()
 //                .system("""
 //            You are an assistant.
-//            If the user asks about weather,
+//            If the user asks about weather
 //            always use the weather tool.
 //        """)
                 .user(message)
-                .tools(travellingTools)
+                .tools(travellingTools, flightBookingTools)
                 .call()
                 .content();
     }
