@@ -45,17 +45,17 @@ public class FlightBookingTools {
         );
 
 
-
-
     }
 
     @Tool(
-            name = "get_user_booking",
-            description = "Retrieve all flight bookings for the current user, sorted by departure time (most recent first)."
+            name = "get_user_bookings",
+            description = "Retrieve all flight bookings for the current user, sorted by departure time (most recent first). " +
+                    "Returns an empty list message if none exist."
     )
-    public BookingListResponse getUserBooking(
+    public BookingListResponse getUserBookings(
             @ToolParam(description = "The unique user ID")
-            String userId ) {
+            String userId
+    ) {
         List<FlightBooking> bookings = flightBookingService.getUserBookings(userId);
 
         List<BookingResponse> responses = bookings.stream()
@@ -64,20 +64,20 @@ public class FlightBookingTools {
                         b.getDestination(),
                         b.getDepartureTime(),
                         b.getBookingStatus()
-
                 ))
                 .toList();
 
-        String message = bookings.isEmpty() ? "You have no upcoming flight bookings." : "Here are your current flight bookings";
+        String message = bookings.isEmpty()
+                ? "You have no upcoming flight bookings."
+                : "Here are your current flight bookings:";
 
         return new BookingListResponse(responses, message);
-
-
     }
+
 
     @Tool(
             name = "update_booking_status",
-            description ="Update the status of an existing flight booking (e.g., cancel it)." +
+            description = "Update the status of an existing flight booking (e.g., cancel it)." +
                     "Only the owner of the booking can modify it." +
                     "Common use: set status to CANCELLED."
     )
@@ -100,7 +100,6 @@ public class FlightBookingTools {
                 updated.getBookingStatus()
         );
     }
-
 
 
 }

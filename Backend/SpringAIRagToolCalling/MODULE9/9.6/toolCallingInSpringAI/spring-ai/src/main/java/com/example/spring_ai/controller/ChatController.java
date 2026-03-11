@@ -18,13 +18,20 @@ public class ChatController {
     private final FlightBookingTools flightBookingTools;
 
     @PostMapping("/chat")
-    public String chat(@RequestBody String message) {
+    public String chat(@RequestBody String message, @RequestParam String userId) {
+
+        String systemPrompt = String.format("""
+                You are a friendly flight booking assistant.
+                Use the available tools to create, view, or update bookings.
+                Always confirm actions with the user when possible.
+                
+                IMPORTANT: The current user ID is "%s".
+                When calling tools that require a userId, always use this exact value.
+                
+                Always use the weather tool when answering weather-related questions.
+                """, userId);
         return chatClient.prompt()
-//                .system("""
-//            You are an assistant.
-//            If the user asks about weather
-//            always use the weather tool.
-//        """)
+                .system(systemPrompt)
                 .user(message)
                 .tools(travellingTools, flightBookingTools)
                 .call()
