@@ -4,6 +4,8 @@ import com.example.spring_ai.tool.FlightBookingTools;
 import com.example.spring_ai.tool.TravellingTools;
 import lombok.RequiredArgsConstructor;
 import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
+import org.springframework.ai.chat.memory.ChatMemory;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -16,6 +18,7 @@ public class ChatController {
     private final ChatClient chatClient;
     private final TravellingTools travellingTools;
     private final FlightBookingTools flightBookingTools;
+    private final ChatMemory chatMemory;
 
     @PostMapping("/chat")
     public String chat(@RequestBody String message, @RequestParam String userId) {
@@ -34,6 +37,11 @@ public class ChatController {
                 .system(systemPrompt)
                 .user(message)
                 .tools(travellingTools, flightBookingTools)
+                .advisors(
+                        MessageChatMemoryAdvisor.builder(chatMemory)
+                                .conversationId(userId)
+                                .build()
+                )
                 .call()
                 .content();
     }
