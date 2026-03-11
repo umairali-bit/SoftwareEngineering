@@ -3,6 +3,7 @@ package com.example.spring_ai.tool;
 
 import com.example.spring_ai.dto.BookingListResponse;
 import com.example.spring_ai.dto.BookingResponse;
+import com.example.spring_ai.entity.BookingStatus;
 import com.example.spring_ai.entity.FlightBooking;
 import com.example.spring_ai.service.FlightBookingServiceImpl;
 import lombok.RequiredArgsConstructor;
@@ -50,7 +51,7 @@ public class FlightBookingTools {
 
     @Tool(
             name = "get_user_booking",
-            description = "Retreive all flight bookings for the current user, sorted by departure time (most recent first)."
+            description = "Retrieve all flight bookings for the current user, sorted by departure time (most recent first)."
     )
     public BookingListResponse getUserBooking(
             @ToolParam(description = "The unique user ID")
@@ -72,7 +73,32 @@ public class FlightBookingTools {
         return new BookingListResponse(responses, message);
 
 
+    }
 
+    @Tool(
+            name = "update_booking_status",
+            description ="Update the status of an existing flight booking (e.g., cancel it)." +
+                    "Only the owner of the booking can modify it." +
+                    "Common use: set status to CANCELLED."
+    )
+    public BookingResponse updateBookingStatus(
+            @ToolParam(description = "The booking ID returned from create or get bookings", required = true)
+            Long bookingId,
+
+            @ToolParam(description = "The user ID who owns the booking", required = true)
+            String userId,
+
+            @ToolParam(description = "New status: CONFIRMED, CANCELLED, or PENDING", required = true)
+            BookingStatus newStatus
+
+    ) {
+        FlightBooking updated = flightBookingService.updateFlightBooking(bookingId, userId, newStatus);
+        return new BookingResponse(
+                updated.getId(),
+                updated.getDestination(),
+                updated.getDepartureTime(),
+                updated.getBookingStatus()
+        );
     }
 
 
