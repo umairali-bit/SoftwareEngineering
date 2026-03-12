@@ -1,22 +1,9 @@
 spring:
   application:
     name: sarcastic-poet
-
-  ai:
-    ollama:
-      base-url: http://localhost:11434
-      chat:
-        options:
-          model: qwen3:30b
-
-    openai:
-      api-key: ${OPENAI_API_KEY}
-      chat:
-        options:
-          model: gpt-4o-mini
-          temperature: 0.9
+  profiles:
+    default: ollama
 
 logging:
   level:
-    org.springframework.ai:
-      chat.client: DEBUG
+    org.springframework.ai.chat.client: DEBUG
