@@ -217,7 +217,7 @@ Make sure Ollama is running:
 
 ## Run with OpenAI
 
-    mvn spring-boot:run -Dspring-boot.run.profiles=openai
+    mvn spring-boot:run "-Dspring-boot.run.profiles=openai"                                                                     
 
 Set your API key.
 
