@@ -3,6 +3,7 @@ package com.example.ai.vibe.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.ai.document.Document;
 import org.springframework.ai.embedding.EmbeddingModel;
+import org.springframework.ai.vectorstore.SearchRequest;
 import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.stereotype.Service;
 
@@ -30,7 +31,7 @@ public class AiService {
                         Map.of(
                                 "title", "Fix You",
                                 "artist", "Coldplay",
-                                "genre", "Rock"
+                                "genre", "rock"
 
                         )
                 ),
@@ -109,5 +110,16 @@ public class AiService {
 
 
         );
+        vectorStore.add(songList);
+    }
+
+    public List<Document> similaritySearch(String text) {
+//        return vectorStore.similaritySearch(text);
+        return vectorStore.similaritySearch(SearchRequest.builder()
+                .query(text)
+                .topK(3)
+                .similarityThreshold(0.3)
+                .build());
+
     }
 }

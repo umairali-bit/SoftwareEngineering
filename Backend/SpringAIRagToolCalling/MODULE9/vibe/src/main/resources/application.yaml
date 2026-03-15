@@ -1,3 +1,24 @@
 spring:
   application:
-    name: vibe
+    name: spring-ai
+
+  ai:
+    openai:
+      api-key: ${OPENAI_API_KEY}
+      embedding:
+        options:
+          model: text-embedding-3-small
+
+    vectorstore:
+      pgvector:
+        initialize-schema: true
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/pgvector_test
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+
+logging:
+  level:
+    org.springframework.ai: DEBUG
