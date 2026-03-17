@@ -25,8 +25,9 @@ public class vibeController {
     }
 
     @GetMapping("/match-vibe")
-    public List<SongMatchResponse>  matchVibe(@RequestParam String feeling) {
-        List<Document> matches = aiService.similaritySearch(feeling);
+    public List<SongMatchResponse>  matchVibe(@RequestParam String feeling,
+                                              @RequestParam(defaultValue = "3") int limit) {
+        List<Document> matches = aiService.similaritySearch(feeling, limit);
 
         return matches.stream()
                 .map(document -> new SongMatchResponse(

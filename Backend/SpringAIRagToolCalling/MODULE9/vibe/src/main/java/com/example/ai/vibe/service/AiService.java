@@ -125,12 +125,12 @@ public class AiService {
         return "songs ingested successfully";
     }
 
-    public List<Document> similaritySearch(String text) {
-//        return vectorStore.similaritySearch(text);
+    public List<Document> similaritySearch(String text, int limit) {
+        int safeLimit = Math.min(Math.max(limit, 1), 10);
         return vectorStore.similaritySearch(SearchRequest.builder()
                 .query(text)
-                .topK(3)
-                .similarityThreshold(0.3)
+                .topK(safeLimit)
+                .similarityThreshold(0.2)
                 .build());
 
     }
