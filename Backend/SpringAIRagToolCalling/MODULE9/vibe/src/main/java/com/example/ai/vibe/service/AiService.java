@@ -21,7 +21,18 @@ public class AiService {
         return embeddingModel.embed(text);
     }
 
-    public void ingestDataToVectorStore() {
+    public String ingestDataToVectorStore() {
+
+        List<Document> existing = vectorStore.similaritySearch(
+                SearchRequest.builder()
+                        .query("test")
+                        .topK(1)
+                        .build()
+        );
+
+        if (!existing.isEmpty()) {
+            return "Songs already ingested, skipping";
+        }
         List<Document> songList = List.of(
 
                 new Document(
@@ -111,6 +122,7 @@ public class AiService {
 
         );
         vectorStore.add(songList);
+        return "songs ingested successfully";
     }
 
     public List<Document> similaritySearch(String text) {
