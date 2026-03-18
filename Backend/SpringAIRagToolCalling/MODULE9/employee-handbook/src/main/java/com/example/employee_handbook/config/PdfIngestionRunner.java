@@ -1,5 +1,6 @@
 package com.example.employee_handbook.config;
 
+import com.example.employee_handbook.service.RagService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.ai.vectorstore.SearchRequest;
 import org.springframework.ai.vectorstore.VectorStore;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Component;
 public class PdfIngestionRunner implements CommandLineRunner {
 
     private final VectorStore vectorStore;
+    private final RagService ragService;
 
     @Override
     public void run(String... args) throws Exception {
@@ -31,6 +33,7 @@ public class PdfIngestionRunner implements CommandLineRunner {
         // vectorStore.add(...)
 
         System.out.println("Starting PDF ingestion...");
+        ragService.ingestPdfToVectorStore();
 
         System.out.println("PDF ingestion complete");
     }
