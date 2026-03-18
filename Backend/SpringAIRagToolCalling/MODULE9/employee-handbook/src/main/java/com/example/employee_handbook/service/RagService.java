@@ -47,7 +47,7 @@ public class RagService {
 //        Build Context from Documents
 
         List<Document> documents = vectorStore.similaritySearch(SearchRequest.builder()
-                .query("policy")
+                .query(prompt)
                 .topK(5)
                 .similarityThreshold(0.4)
                         .filterExpression("file_name == 'policy.pdf'")
