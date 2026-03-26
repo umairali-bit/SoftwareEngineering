@@ -12,4 +12,16 @@ public class StockTraderTools {
 //        stimulate the price -> range = 100 - 250
         return 100 + Math.random() * 150;
     }
+
+    @Tool(description = "Buy stock with given quantity")
+    public String buyStock(
+            @ToolParam(description = "Stock ticker like AAPL", required = true)
+            String ticker,
+
+            @ToolParam(description = "Number of shares to buy", required = true)
+            int quantity
+
+    ) {
+        return "Bought" + quantity + " shares of " + ticker;
+    }
 }
