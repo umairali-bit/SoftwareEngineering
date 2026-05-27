@@ -1,9 +1,0 @@
-spring:
-  application:
-    name: sarcastic-poet
-  profiles:
-    default: ollama
-
-logging:
-  level:
-    org.springframework.ai.chat.client: DEBUG
