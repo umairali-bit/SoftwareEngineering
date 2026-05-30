@@ -12,5 +12,9 @@ public class AIServiceTests {
     private AIService aiService;
 
     @Test
-    public void testGetJoke() {}
+    public void testGetJoke() {
+
+        var joke = aiService.getJoke("Dogs");
+        System.out.println(joke);
+    }
 }

@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class AIService {
 
-    private ChatClient chatClient;
+    private final ChatClient chatClient;
 
     public String getJoke(String topic) {
         return chatClient.prompt()
