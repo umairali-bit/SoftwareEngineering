@@ -3,6 +3,7 @@ package com.example.spring_ai.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.prompt.PromptTemplate;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
@@ -12,6 +13,7 @@ import java.util.Map;
 public class AIService {
 
     private final ChatClient chatClient;
+
 
     public String getJoke(String topic) {
 //    system prompt
@@ -24,11 +26,13 @@ public class AIService {
     PromptTemplate promptTemplate = new PromptTemplate(systemPrompt);
     String renderText = promptTemplate.render(Map.of("topic", topic));
 
-        return chatClient.prompt()
+        var response = chatClient.prompt()
                 .user(renderText)
                 .call()
-                .content();
+//                .content();
+                .chatClientResponse();
 
+        return response.chatResponse().getResult().getOutput().getText();
 
 //    public String getJoke(String topic) {
 //        return chatClient.prompt()

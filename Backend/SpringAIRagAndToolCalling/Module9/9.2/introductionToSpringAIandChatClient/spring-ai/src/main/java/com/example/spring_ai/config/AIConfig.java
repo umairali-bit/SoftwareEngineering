@@ -3,15 +3,21 @@ package com.example.spring_ai.config;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.ai.openai.OpenAiChatModel;
+import org.springframework.ai.ollama.OllamaChatModel;
+import org.springframework.context.annotation.Primary;
 
 @Configuration
 public class AIConfig {
 
     @Bean
-    public ChatClient chatClient(ChatClient.Builder chatClientBuilder) {
-        return  chatClientBuilder
+    @Primary
+    public ChatClient openAiChatClient(OpenAiChatModel model) {
+        return ChatClient.create(model);
+    }
 
-
-                .build();
+    @Bean
+    public ChatClient ollamaChatClient(OllamaChatModel model) {
+        return ChatClient.create(model);
     }
 }
