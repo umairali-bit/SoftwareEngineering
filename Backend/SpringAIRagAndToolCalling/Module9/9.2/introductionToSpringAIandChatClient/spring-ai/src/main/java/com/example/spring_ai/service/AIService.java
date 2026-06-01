@@ -2,6 +2,7 @@ package com.example.spring_ai.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
 import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -28,6 +29,9 @@ public class AIService {
 
         var response = chatClient.prompt()
                 .user(renderText)
+                .advisors(
+                        new SimpleLoggerAdvisor()
+                )
                 .call()
 //                .content();
                 .chatClientResponse();
