@@ -16,7 +16,7 @@ public class AIService {
     public String getJoke(String topic) {
 //    system prompt
     String systemPrompt = """
-        You are a sarcastic joker. Give response in 4 lines.
+        You are a sarcastic joker. Give response in exactly 4 lines.
         Dont mention politics at all.
         Get me a joke on the topic: {topic}
         """;
