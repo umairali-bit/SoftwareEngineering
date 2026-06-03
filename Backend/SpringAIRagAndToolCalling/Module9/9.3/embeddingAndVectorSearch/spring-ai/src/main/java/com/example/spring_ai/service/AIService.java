@@ -82,6 +82,10 @@ public class AIService {
         vectorStore.add(movies);
     }
 
+    public List<Document> similaritySearch(String text) {
+        return vectorStore.similaritySearch(text);
+    }
+
 
     public String getJoke(String topic) {
 //    system prompt

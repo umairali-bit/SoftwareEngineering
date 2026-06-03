@@ -33,4 +33,12 @@ public class AIServiceTests {
 //        aiService.ingestDataToVector("This is a test");
         aiService.ingestDataToVector();
     }
+
+    @Test
+    public void testSimilaritySearch() {
+        var resp = aiService.similaritySearch("Lawyer");
+        System.out.println(resp);
+    }
+
+
 }
