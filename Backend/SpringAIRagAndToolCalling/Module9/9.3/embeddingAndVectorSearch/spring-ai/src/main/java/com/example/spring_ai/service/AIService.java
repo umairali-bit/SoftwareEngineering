@@ -29,7 +29,8 @@ public class AIService {
 
 
 
-    private float[] getEmbedding(String text) {
+    public float[] getEmbedding(String text) {
+        return embeddingModel.embed(text);
 
     };
 
