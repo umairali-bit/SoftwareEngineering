@@ -28,10 +28,58 @@ public class AIService {
 
     };
 
-    public void ingestDataToVector(String text) {
-        Document document = new Document(text);
+    public void ingestDataToVector(/*String text*/) {
+//        Document document = new Document(text);
 
-        vectorStore.add(List.of(document));
+        List<Document> movies = List.of(
+
+                new Document("""
+                Title: Breaking Bad
+                Genre: Crime Drama
+                Year: 2008
+
+                A high school chemistry teacher diagnosed with cancer
+                turns to manufacturing methamphetamine with a former student.
+                """),
+
+                new Document("""
+                Title: Better Call Saul
+                Genre: Legal Drama
+                Year: 2015
+
+                The story follows Jimmy McGill's transformation into
+                criminal lawyer Saul Goodman before the events of Breaking Bad.
+                """),
+
+                new Document("""
+                Title: El Camino: A Breaking Bad Movie
+                Genre: Crime Drama
+                Year: 2019
+
+                Jesse Pinkman attempts to escape his past and
+                build a new future after the events of Breaking Bad.
+                """),
+
+                new Document("""
+                Title: Slippin' Jimmy
+                Genre: Animated Comedy
+                Year: 2022
+
+                An animated series following Jimmy McGill's childhood
+                adventures before becoming Saul Goodman.
+                """),
+
+                new Document("""
+                Title: American Greed: James McGill
+                Genre: Mockumentary Crime
+                Year: 2022
+
+                A fictional documentary examining the rise and fall
+                of Saul Goodman and his criminal connections.
+                """)
+        );
+
+        vectorStore.add(movies);
     }
 
 
