@@ -7,14 +7,31 @@ import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
 import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.ai.embedding.EmbeddingModel;
+
 
 import java.util.Map;
 
+//not using lombok because doesn't handle field-level qualifier well for constructor injection.
 @Service
-@RequiredArgsConstructor
 public class AIService {
 
     private final ChatClient chatClient;
+    private final EmbeddingModel embeddingModel;
+
+    public AIService(
+            @Qualifier("openAiChatClient") ChatClient chatClient,
+            @Qualifier("openAiEmbeddingModel") EmbeddingModel embeddingModel) {
+
+        this.chatClient = chatClient;
+        this.embeddingModel = embeddingModel;
+    }
+
+
+
+    private float[] getEmbedding(String text) {
+
+    };
 
 
     public String getJoke(String topic) {
