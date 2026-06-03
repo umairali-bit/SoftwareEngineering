@@ -87,6 +87,7 @@ public class AIService {
         return vectorStore.similaritySearch(SearchRequest.builder()
                         .query(text)
                         .topK(2) // the number of result
+                        .similarityThreshold(0.2) // confidence on the result
 
                 .build());
     }

@@ -36,7 +36,7 @@ public class AIServiceTests {
 
     @Test
     public void testSimilaritySearch() {
-        var resp = aiService.similaritySearch("Lawyer");
+        var resp = aiService.similaritySearch("criminal lawyer");
         System.out.println(resp);
     }
 
