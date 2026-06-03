@@ -1,6 +1,7 @@
 package com.example.spring_ai.service;
 
 import com.example.spring_ai.dto.Joke;
+import com.openai.models.vectorstores.VectorStore;
 import lombok.RequiredArgsConstructor;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
@@ -12,20 +13,14 @@ import org.springframework.ai.embedding.EmbeddingModel;
 
 import java.util.Map;
 
-//not using lombok because doesn't handle field-level qualifier well for constructor injection.
 @Service
+@RequiredArgsConstructor
 public class AIService {
 
     private final ChatClient chatClient;
     private final EmbeddingModel embeddingModel;
+    private final VectorStore vectorStore;
 
-    public AIService(
-            @Qualifier("openAiChatClient") ChatClient chatClient,
-            @Qualifier("openAiEmbeddingModel") EmbeddingModel embeddingModel) {
-
-        this.chatClient = chatClient;
-        this.embeddingModel = embeddingModel;
-    }
 
 
 
