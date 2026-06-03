@@ -21,6 +21,16 @@ spring:
         options:
           model: text-embedding-3-small
 
+    vectorstore:
+        pgvector:
+          initialize-schema: true
+
+  datasource:
+    url: jdbc:postgresql://localhost:5434/test-vector-DB
+    username: user
+    password: pass
+    driver-class-name: org.postgresql.Driver
+
 logging:
   level:
     org.springframework.ai:
