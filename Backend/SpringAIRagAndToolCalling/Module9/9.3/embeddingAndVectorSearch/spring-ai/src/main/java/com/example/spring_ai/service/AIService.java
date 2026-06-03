@@ -1,6 +1,7 @@
 package com.example.spring_ai.service;
 
 import com.example.spring_ai.dto.Joke;
+import org.springframework.ai.vectorstore.SearchRequest;
 import org.springframework.ai.vectorstore.VectorStore;
 import lombok.RequiredArgsConstructor;
 import org.springframework.ai.chat.client.ChatClient;
@@ -83,7 +84,11 @@ public class AIService {
     }
 
     public List<Document> similaritySearch(String text) {
-        return vectorStore.similaritySearch(text);
+        return vectorStore.similaritySearch(SearchRequest.builder()
+                        .query(text)
+                        .topK(2) // the number of result
+
+                .build());
     }
 
 
