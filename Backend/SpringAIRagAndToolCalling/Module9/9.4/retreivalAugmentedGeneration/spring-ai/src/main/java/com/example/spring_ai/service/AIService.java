@@ -29,6 +29,13 @@ public class AIService {
 
     };
 
+    public String askAI(String prompt) {
+        return chatClient.prompt()
+                .user(prompt)
+                .call()
+                .content();
+    }
+
     public void ingestDataToVector(/*String text*/) {
 //        Document document = new Document(text);
 
