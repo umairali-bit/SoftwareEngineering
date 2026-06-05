@@ -27,7 +27,9 @@ public class AIService {
     public float[] getEmbedding(String text) {
         return embeddingModel.embed(text);
 
-    };
+    }
+
+    ;
 
     public String askAI(String prompt) {
         return chatClient.prompt()
@@ -41,50 +43,65 @@ public class AIService {
 
         List<Document> movies = List.of(
 
-                new Document("""
-                Title: Breaking Bad
-                Genre: Crime Drama
-                Year: 2008
+                new Document(
+                        """
+                                A high school chemistry teacher diagnosed with cancer
+                                turns to manufacturing methamphetamine with a former student.
+                                """,
+                        Map.of(
+                                "title", "Breaking Bad",
+                                "genre", "Crime Drama",
+                                "year", "2008"
+                        )
+                ),
 
-                A high school chemistry teacher diagnosed with cancer
-                turns to manufacturing methamphetamine with a former student.
-                """),
+                new Document(
+                        """
+                                The story follows Jimmy McGill's transformation into
+                                criminal lawyer Saul Goodman before the events of Breaking Bad.
+                                """,
+                        Map.of(
+                                "title", "Better Call Saul",
+                                "genre", "Legal Drama",
+                                "year", "2015"
+                        )
+                ),
 
-                new Document("""
-                Title: Better Call Saul
-                Genre: Legal Drama
-                Year: 2015
+                new Document(
+                        """
+                                Jesse Pinkman attempts to escape his past and
+                                build a new future after the events of Breaking Bad.
+                                """,
+                        Map.of(
+                                "title", "El Camino: A Breaking Bad Movie",
+                                "genre", "Crime Drama",
+                                "year", "2019"
+                        )
+                ),
 
-                The story follows Jimmy McGill's transformation into
-                criminal lawyer Saul Goodman before the events of Breaking Bad.
-                """),
+                new Document(
+                        """
+                                An animated series following Jimmy McGill's childhood
+                                adventures before becoming Saul Goodman.
+                                """,
+                        Map.of(
+                                "title", "Slippin' Jimmy",
+                                "genre", "Animated Comedy",
+                                "year", "2022"
+                        )
+                ),
 
-                new Document("""
-                Title: El Camino: A Breaking Bad Movie
-                Genre: Crime Drama
-                Year: 2019
-
-                Jesse Pinkman attempts to escape his past and
-                build a new future after the events of Breaking Bad.
-                """),
-
-                new Document("""
-                Title: Slippin' Jimmy
-                Genre: Animated Comedy
-                Year: 2022
-
-                An animated series following Jimmy McGill's childhood
-                adventures before becoming Saul Goodman.
-                """),
-
-                new Document("""
-                Title: American Greed: James McGill
-                Genre: Mockumentary Crime
-                Year: 2022
-
-                A fictional documentary examining the rise and fall
-                of Saul Goodman and his criminal connections.
-                """)
+                new Document(
+                        """
+                                A fictional documentary examining the rise and fall
+                                of Saul Goodman and his criminal connections.
+                                """,
+                        Map.of(
+                                "title", "American Greed: James McGill",
+                                "genre", "Mockumentary Crime",
+                                "year", "2022"
+                        )
+                )
         );
 
         vectorStore.add(movies);
@@ -93,46 +110,46 @@ public class AIService {
 
     public List<Document> similaritySearch(String text) {
         return vectorStore.similaritySearch(SearchRequest.builder()
-                        .query(text)
-                        .topK(2) // the number of result
-                        .similarityThreshold(0.2) // confidence on the result
+                .query(text)
+                .topK(2) // the number of result
+                .similarityThreshold(0.2) // confidence on the result
 
                 .build());
     }
 
 
-    public static List<Document> springAIDocs(){
+    public static List<Document> springAIDocs() {
 
-          return List.of (new Document(
-                    "Spring AI is a framework that integrates AI capabilities into Spring Boot applications.",
-                    Map.of("topic", "spring-ai")
-            ),
+        return List.of(new Document(
+                        "Spring AI is a framework that integrates AI capabilities into Spring Boot applications.",
+                        Map.of("topic", "spring-ai")
+                ),
 
-            new Document(
-                    "ChatClient provides a fluent API for interacting with large language models.",
-                    Map.of("topic", "chat-client")
-            ),
+                new Document(
+                        "ChatClient provides a fluent API for interacting with large language models.",
+                        Map.of("topic", "chat-client")
+                ),
 
-            new Document(
-                    "Embeddings convert text into numerical vectors that capture semantic meaning.",
-                    Map.of("topic", "embeddings")
-            ),
+                new Document(
+                        "Embeddings convert text into numerical vectors that capture semantic meaning.",
+                        Map.of("topic", "embeddings")
+                ),
 
-            new Document(
-                    "A Vector Store stores embeddings and enables semantic similarity searches.",
-                    Map.of("topic", "vector-store")
-            ),
+                new Document(
+                        "A Vector Store stores embeddings and enables semantic similarity searches.",
+                        Map.of("topic", "vector-store")
+                ),
 
-            new Document(
-                    "PGVector is a PostgreSQL extension that adds vector storage and similarity search capabilities.",
-                    Map.of("topic", "pgvector")
-            ),
+                new Document(
+                        "PGVector is a PostgreSQL extension that adds vector storage and similarity search capabilities.",
+                        Map.of("topic", "pgvector")
+                ),
 
-            new Document(
-                    "Retrieval-Augmented Generation retrieves relevant documents from a vector store and provides them to the language model.",
-                    Map.of("topic", "rag")
-            )
-          );
+                new Document(
+                        "Retrieval-Augmented Generation retrieves relevant documents from a vector store and provides them to the language model.",
+                        Map.of("topic", "rag")
+                )
+        );
 
     }
 
