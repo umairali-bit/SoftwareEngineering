@@ -100,6 +100,42 @@ public class AIService {
     }
 
 
+    public static List<Document> springAIDocs(){
+
+          return List.of (new Document(
+                    "Spring AI is a framework that integrates AI capabilities into Spring Boot applications.",
+                    Map.of("topic", "spring-ai")
+            ),
+
+            new Document(
+                    "ChatClient provides a fluent API for interacting with large language models.",
+                    Map.of("topic", "chat-client")
+            ),
+
+            new Document(
+                    "Embeddings convert text into numerical vectors that capture semantic meaning.",
+                    Map.of("topic", "embeddings")
+            ),
+
+            new Document(
+                    "A Vector Store stores embeddings and enables semantic similarity searches.",
+                    Map.of("topic", "vector-store")
+            ),
+
+            new Document(
+                    "PGVector is a PostgreSQL extension that adds vector storage and similarity search capabilities.",
+                    Map.of("topic", "pgvector")
+            ),
+
+            new Document(
+                    "Retrieval-Augmented Generation retrieves relevant documents from a vector store and provides them to the language model.",
+                    Map.of("topic", "rag")
+            )
+          );
+
+    }
+
+
     public String getJoke(String topic) {
 //    system prompt
         String systemPrompt = """
