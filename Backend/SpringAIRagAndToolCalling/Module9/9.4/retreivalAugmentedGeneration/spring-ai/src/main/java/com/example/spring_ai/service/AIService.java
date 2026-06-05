@@ -30,9 +30,6 @@ public class AIService {
         return embeddingModel.embed(text);
 
     }
-
-    ;
-
     public String askAI(String prompt) {
 
         String template = """
@@ -60,8 +57,9 @@ public class AIService {
 
         List<Document> documents = vectorStore.similaritySearch(SearchRequest.builder()
                 .query(prompt)
-                .topK(6)
-                .filterExpression("knowledgeBase == 'ai'")
+                .topK(2)
+                .similarityThreshold(0.5)
+//                .filterExpression("knowledgeBase == 'ai'")
                 .build());
 
         if (documents.isEmpty()) {
@@ -79,10 +77,20 @@ public class AIService {
 
         return chatClient.prompt()
                 .user(systemPrompt)
-//                .advisors(new SimpleLoggerAdvisor())
+                .advisors(new SimpleLoggerAdvisor())
                 .call()
                 .content();
     }
+
+    public List<Document> similaritySearch(String text) {
+        return vectorStore.similaritySearch(SearchRequest.builder()
+                .query(text)
+                .topK(2) // the number of result
+                .similarityThreshold(0.2) // confidence on the result
+
+                .build());
+    }
+
 
     public void ingestDataToVector(/*String text*/) {
 //        Document document = new Document(text);
@@ -151,18 +159,8 @@ public class AIService {
         );
 
         vectorStore.add(movies);
-        vectorStore.add(springAIDocs());
+
     }
-
-    public List<Document> similaritySearch(String text) {
-        return vectorStore.similaritySearch(SearchRequest.builder()
-                .query(text)
-                .topK(2) // the number of result
-                .similarityThreshold(0.2) // confidence on the result
-
-                .build());
-    }
-
 
     public static List<Document> springAIDocs() {
 
@@ -198,6 +196,7 @@ public class AIService {
         );
 
     }
+
 
 
     public String getJoke(String topic) {

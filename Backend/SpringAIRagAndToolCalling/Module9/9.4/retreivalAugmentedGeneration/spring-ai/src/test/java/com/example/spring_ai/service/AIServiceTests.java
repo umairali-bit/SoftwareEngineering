@@ -40,12 +40,7 @@ public class AIServiceTests {
 //        System.out.println(resp);
 //    }
 //
-    @Test
-    public void testAskAI() {
 
-        var resp = aiService.askAI("What is apple?");
-        System.out.println(resp);
-    }
 //
 //
 //
