@@ -12,8 +12,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.ai.embedding.EmbeddingModel;
 
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -32,8 +34,40 @@ public class AIService {
     ;
 
     public String askAI(String prompt) {
+
+        String template = """
+                You are an AI assistant helping a developer.
+                
+                Rules:
+                - Use ONLY the information provided in the context.
+                - You may rephrase, summarize, and explain the information in natural language.
+                - Do NOT introduce new concepts, facts, or assumptions.
+                - If multiple context sections are relevant, combine them into a single coherent explanation.
+                - If the answer cannot be found in the context, respond with: "I don't know."
+                
+                Context:
+                {context}
+                
+                Answer in a friendly and conversational tone.
+                """;
+
+
+        List<Document> documents = vectorStore.similaritySearch(SearchRequest.builder()
+                .query(prompt)
+                .topK(6)
+                .filterExpression("knowledgeBase == ai")
+                .build());
+        String context = documents.stream()
+                .map(s -> s.getText())
+                .collect(Collectors.joining("\n\n"));
+
+        PromptTemplate promptTemplate = new PromptTemplate(template);
+        String systemPrompt = promptTemplate.render(Map.of("context", context));
+
+
         return chatClient.prompt()
-                .user(prompt)
+                .user(systemPrompt)
+                .advisors(new SimpleLoggerAdvisor())
                 .call()
                 .content();
     }
@@ -122,32 +156,32 @@ public class AIService {
 
         return List.of(new Document(
                         "Spring AI is a framework that integrates AI capabilities into Spring Boot applications.",
-                        Map.of("topic", "spring-ai")
+                        Map.of("topic", "spring-ai", "knowledgeBase", "ai")
                 ),
 
                 new Document(
                         "ChatClient provides a fluent API for interacting with large language models.",
-                        Map.of("topic", "chat-client")
+                        Map.of("topic", "chat-client", "knowledgeBase", "ai")
                 ),
 
                 new Document(
                         "Embeddings convert text into numerical vectors that capture semantic meaning.",
-                        Map.of("topic", "embeddings")
+                        Map.of("topic", "embeddings", "knowledgeBase", "ai")
                 ),
 
                 new Document(
                         "A Vector Store stores embeddings and enables semantic similarity searches.",
-                        Map.of("topic", "vector-store")
+                        Map.of("topic", "vector-store", "knowledgeBase", "ai")
                 ),
 
                 new Document(
                         "PGVector is a PostgreSQL extension that adds vector storage and similarity search capabilities.",
-                        Map.of("topic", "pgvector")
+                        Map.of("topic", "pgvector", "knowledgeBase", "ai")
                 ),
 
                 new Document(
                         "Retrieval-Augmented Generation retrieves relevant documents from a vector store and provides them to the language model.",
-                        Map.of("topic", "rag")
+                        Map.of("topic", "rag", "knowledgeBase", "ai")
                 )
         );
 
