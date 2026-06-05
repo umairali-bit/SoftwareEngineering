@@ -88,6 +88,7 @@ public class AIService {
         );
 
         vectorStore.add(movies);
+        vectorStore.add(springAIDocs());
     }
 
     public List<Document> similaritySearch(String text) {
