@@ -28,26 +28,26 @@ public class AIServiceTests {
 //
 //    }
 //
-//    @Test
-//    public void testVectorStore() {
-////        aiService.ingestDataToVector("This is a test");
-//        aiService.ingestDataToVector();
-//    }
+    @Test
+    public void testVectorStore() {
+//        aiService.ingestDataToVector("This is a test");
+        aiService.ingestDataToVector();
+    }
 //
 //    @Test
 //    public void testSimilaritySearch() {
 //        var resp = aiService.similaritySearch("criminal lawyer");
 //        System.out.println(resp);
 //    }
-
-    @Test
-    public void testAskAI() {
-
-        var resp = aiService.askAI("What is apple");
-        System.out.println(resp);
+//
+//    @Test
+//    public void testAskAI() {
+//
+//        var resp = aiService.askAI("What is apple");
+//        System.out.println(resp);
+//    }
+//
+//
+//
+//
     }
-
-
-
-
-}
