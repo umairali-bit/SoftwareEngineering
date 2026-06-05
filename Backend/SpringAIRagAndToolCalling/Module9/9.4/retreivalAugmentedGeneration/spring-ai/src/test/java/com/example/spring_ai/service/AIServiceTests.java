@@ -28,11 +28,11 @@ public class AIServiceTests {
 //
 //    }
 //
-    @Test
-    public void testVectorStore() {
-//        aiService.ingestDataToVector("This is a test");
-        aiService.ingestDataToVector();
-    }
+//    @Test
+//    public void testVectorStore() {
+////        aiService.ingestDataToVector("This is a test");
+//        aiService.ingestDataToVector();
+//    }
 //
 //    @Test
 //    public void testSimilaritySearch() {
@@ -40,12 +40,12 @@ public class AIServiceTests {
 //        System.out.println(resp);
 //    }
 //
-//    @Test
-//    public void testAskAI() {
-//
-//        var resp = aiService.askAI("What is apple");
-//        System.out.println(resp);
-//    }
+    @Test
+    public void testAskAI() {
+
+        var resp = aiService.askAI("What is apple?");
+        System.out.println(resp);
+    }
 //
 //
 //

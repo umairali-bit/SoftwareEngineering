@@ -48,26 +48,38 @@ public class AIService {
                 Context:
                 {context}
                 
+                Prompt:
+                {prompt}
+                
                 Answer in a friendly and conversational tone.
                 """;
+
+
+
 
 
         List<Document> documents = vectorStore.similaritySearch(SearchRequest.builder()
                 .query(prompt)
                 .topK(6)
-                .filterExpression("knowledgeBase == ai")
+                .filterExpression("knowledgeBase == 'ai'")
                 .build());
+
+        if (documents.isEmpty()) {
+            return "I don't know.";
+        }
         String context = documents.stream()
                 .map(s -> s.getText())
                 .collect(Collectors.joining("\n\n"));
 
         PromptTemplate promptTemplate = new PromptTemplate(template);
-        String systemPrompt = promptTemplate.render(Map.of("context", context));
+        String systemPrompt = promptTemplate.render(Map.of(
+                "context", context,
+                "prompt", prompt));
 
 
         return chatClient.prompt()
                 .user(systemPrompt)
-                .advisors(new SimpleLoggerAdvisor())
+//                .advisors(new SimpleLoggerAdvisor())
                 .call()
                 .content();
     }
