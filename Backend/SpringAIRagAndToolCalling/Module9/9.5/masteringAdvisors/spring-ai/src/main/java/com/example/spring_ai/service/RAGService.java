@@ -4,6 +4,7 @@ package com.example.spring_ai.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
+import org.springframework.ai.chat.client.advisor.vectorstore.VectorStoreChatMemoryAdvisor;
 import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.ai.document.Document;
 import org.springframework.ai.reader.pdf.PagePdfDocumentReader;
@@ -27,8 +28,6 @@ public class RAGService {
 
     @Value("classpath:Spring_AI_Interview_Guide.pdf")
     Resource resource;
-
-
 
 
 //    Manual RAG  implementation
@@ -94,6 +93,27 @@ public class RAGService {
 
         List<Document> chunks = tokenTextSplitter.apply(pages);
         vectorStore.add(chunks);
+
+    }
+
+    //    Using long term memory with the advisor
+    public String askAiWithAdvisors(String prompt, String userId) {
+        return chatClient.prompt()
+                .system("""
+                        You are an AI assistant called Cody.
+                        Greet users with your name (Cody) and the user name if you know their name.
+                        Answer in a friendly and conversational tone.
+                        """)
+                .user(prompt)
+                .advisors(
+                        VectorStoreChatMemoryAdvisor.builder(vectorStore)
+                                .conversationId(userId)
+                                .defaultTopK(4)
+                                .build()
+
+                )
+                .call()
+                .content();
 
     }
 
