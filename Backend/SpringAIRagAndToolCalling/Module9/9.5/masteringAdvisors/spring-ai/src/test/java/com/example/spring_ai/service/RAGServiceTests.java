@@ -15,10 +15,17 @@ public class RAGServiceTests {
 //        ragService.ingestPdfToVectorStore();
 //    }
 
-    @Test
-    public void testAskAI() {
+//    @Test
+//    public void testAskAI() {
+//
+//        var resp = ragService.askAI("What is RAG");
+//        System.out.println(resp);
+//    }
 
-        var resp = ragService.askAI("What is RAG");
+    @Test
+    public void testAskAiWithAdvisors() {
+
+        var resp = ragService.askAiWithAdvisors("What is the capital of Malaysia? and also me name is Umair", "umair123");
         System.out.println(resp);
     }
 }
