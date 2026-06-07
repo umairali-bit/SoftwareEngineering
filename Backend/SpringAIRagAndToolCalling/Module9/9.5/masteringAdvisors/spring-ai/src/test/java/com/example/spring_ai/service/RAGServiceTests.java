@@ -25,7 +25,7 @@ public class RAGServiceTests {
     @Test
     public void testAskAiWithAdvisors() {
 
-        var resp = ragService.askAiWithAdvisors("What is the capital of Malaysia? and also me name is Umair", "umair123");
+        var resp = ragService.askAiWithAdvisors("I want to see breaking bad museum", "Hank123");
         System.out.println(resp);
     }
 }
