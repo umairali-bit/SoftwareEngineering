@@ -1,6 +1,7 @@
 package com.example.spring_ai.service;
 
 
+import com.example.spring_ai.advisors.TokenUsageAdvisor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
@@ -118,7 +119,9 @@ public class RAGService {
                 .user(prompt)
                 .advisors(
 
-                        new SafeGuardAdvisor(List.of("Politics","Gaming")),
+                        new SafeGuardAdvisor(List.of("Politics","Religion")),
+
+                        new TokenUsageAdvisor(),
 
                         MessageChatMemoryAdvisor.builder(chatMemory)
                                 .conversationId(userId)
@@ -135,6 +138,8 @@ public class RAGService {
                                         .topK(4)
                                         .build())
                                 .build()
+
+
 
                 )
                 .call()
