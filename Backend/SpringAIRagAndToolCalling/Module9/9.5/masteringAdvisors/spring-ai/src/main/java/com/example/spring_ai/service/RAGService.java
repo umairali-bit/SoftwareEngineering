@@ -4,6 +4,7 @@ package com.example.spring_ai.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
+import org.springframework.ai.chat.client.advisor.SafeGuardAdvisor;
 import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
 import org.springframework.ai.chat.client.advisor.vectorstore.QuestionAnswerAdvisor;
 import org.springframework.ai.chat.client.advisor.vectorstore.VectorStoreChatMemoryAdvisor;
@@ -103,9 +104,10 @@ public class RAGService {
 
     }
 
-//    Using long term memory advisor
-//    Using short term memory advisor
-//    Using RAG advisor
+//    Applying long term memory advisor
+//    Applying short term memory advisor
+//    Applying RAG advisor
+//    Applying SafeGuard advisor
     public String askAiWithAdvisors(String prompt, String userId) {
         return chatClient.prompt()
                 .system("""
@@ -115,6 +117,9 @@ public class RAGService {
                         """)
                 .user(prompt)
                 .advisors(
+
+                        new SafeGuardAdvisor(List.of("Politics","Gaming")),
+
                         MessageChatMemoryAdvisor.builder(chatMemory)
                                 .conversationId(userId)
                                 .build(),
