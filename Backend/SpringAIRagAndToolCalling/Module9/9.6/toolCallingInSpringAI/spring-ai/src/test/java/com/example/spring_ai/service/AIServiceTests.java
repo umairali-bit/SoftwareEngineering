@@ -1,48 +1,48 @@
-package com.example.spring_ai.service;
-
-
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-
-@SpringBootTest
-public class AIServiceTests {
-
-    @Autowired
-    private AIService aiService;
-
-//    @Test
-//    public void testGetJoke() {
+//package com.example.spring_ai.service;
 //
-//        var joke = aiService.getJoke("Dogs");
-//        System.out.println(joke);
+//
+//import org.junit.jupiter.api.Test;
+//import org.springframework.beans.factory.annotation.Autowired;
+//import org.springframework.boot.test.context.SpringBootTest;
+//
+//@SpringBootTest
+//public class AIServiceTests {
+//
+//    @Autowired
+//    private AIService aiService;
+//
+////    @Test
+////    public void testGetJoke() {
+////
+////        var joke = aiService.getJoke("Dogs");
+////        System.out.println(joke);
+////    }
+////
+////    @Test
+////    public void testEmbedText() {
+////        var embed = aiService.getEmbedding("This is a test");
+////        System.out.println(embed.length);
+////        for (float e : embed) {
+////            System.out.print(e + " ");
+////        }
+////
+////    }
+////
+////    @Test
+////    public void testVectorStore() {
+//////        aiService.ingestDataToVector("This is a test");
+////        aiService.ingestDataToVector();
+////    }
+////
+////    @Test
+////    public void testSimilaritySearch() {
+////        var resp = aiService.similaritySearch("criminal lawyer");
+////        System.out.println(resp);
+////    }
+////
+//
+////
+////
+////
+////
 //    }
-//
-//    @Test
-//    public void testEmbedText() {
-//        var embed = aiService.getEmbedding("This is a test");
-//        System.out.println(embed.length);
-//        for (float e : embed) {
-//            System.out.print(e + " ");
-//        }
-//
-//    }
-//
-//    @Test
-//    public void testVectorStore() {
-////        aiService.ingestDataToVector("This is a test");
-//        aiService.ingestDataToVector();
-//    }
-//
-//    @Test
-//    public void testSimilaritySearch() {
-//        var resp = aiService.similaritySearch("criminal lawyer");
-//        System.out.println(resp);
-//    }
-//
-
-//
-//
-//
-//
-    }
