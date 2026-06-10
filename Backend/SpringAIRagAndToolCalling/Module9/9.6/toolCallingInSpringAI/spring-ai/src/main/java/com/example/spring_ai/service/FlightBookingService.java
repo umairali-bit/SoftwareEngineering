@@ -32,6 +32,7 @@ public class FlightBookingService {
                 .userId(userId)
                 .destination(destination)
                 .departureTime(departureTime)
+                .bookingStatus(BookingStatus.CONFIRMED)
                 .build();
 
         return flightBookingRepository.save(flightBooking);
