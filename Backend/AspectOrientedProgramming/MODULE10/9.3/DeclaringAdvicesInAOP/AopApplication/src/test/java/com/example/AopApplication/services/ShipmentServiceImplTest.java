@@ -1,10 +1,12 @@
 package com.example.AopApplication.services;
 
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
+@Slf4j
 public class ShipmentServiceImplTest {
 
     @Autowired
@@ -12,7 +14,9 @@ public class ShipmentServiceImplTest {
 
     @Test
     void appTestOrderPackage() {
-        shipmentService.orderPackage(4L);
+
+        String orderInfo = shipmentService.orderPackage(4L);
+        log.info("orderInfo:{}", orderInfo);
     }
 
     @Test
