@@ -4,12 +4,14 @@ import com.example.AopApplication.services.ShipmentService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.example.AopApplication.aspects.MyLogging;
 
 @Service
 @Slf4j
 public class ShipmentServiceImpl implements ShipmentService {
 
     @Override
+    @MyLogging
     public String orderPackage(Long orderId) {
         try{
             log.info("Processing the order...");
