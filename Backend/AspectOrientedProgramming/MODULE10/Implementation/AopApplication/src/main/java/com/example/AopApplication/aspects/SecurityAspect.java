@@ -13,6 +13,8 @@ import org.springframework.security.core.Authentication;
 @Component
 public class SecurityAspect {
 
+
+//    Security Aspect
     @Around(
             "execution(* com.example.AopApplication.services..*(..)) && " +
                     "@annotation(com.example.AopApplication.aspects.RequiresAdmin)"

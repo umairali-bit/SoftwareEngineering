@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class GlobalErrorHandler {
 
+//    Global Exception handler
     @AfterThrowing(pointcut = "execution(* com.example.AopApplication.services.*.*(..))", throwing = "ex")
     public void handleException(JoinPoint joinPoint, Exception ex) {
 //        log.error(ex.getMessage(), ex);
