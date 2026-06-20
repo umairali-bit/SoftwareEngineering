@@ -1,5 +1,6 @@
 package com.example.AopApplication.services.impl;
 
+import com.example.AopApplication.aspects.RequiresAdmin;
 import com.example.AopApplication.services.ShipmentService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -12,6 +13,7 @@ public class ShipmentServiceImpl implements ShipmentService {
 
     @Override
     @MyLogging
+    @RequiresAdmin
     public String orderPackage(Long orderId) {
         try{
             log.info("Processing the order...");
