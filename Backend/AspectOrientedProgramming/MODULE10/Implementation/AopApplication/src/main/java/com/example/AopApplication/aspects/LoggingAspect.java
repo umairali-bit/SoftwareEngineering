@@ -14,7 +14,7 @@ public class LoggingAspect {
 
 //    logging using @Before and @After
 
-    @Pointcut("@annotation(com.example.AopApplication.aspects.MyLogging)")
+    @Pointcut("@annotation(com.example.AopApplication.aspects.annotations.MyLogging)")
     public void myLoggingPointcut() {
     }
 

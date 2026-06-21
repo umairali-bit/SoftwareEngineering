@@ -1,4 +1,4 @@
-package com.example.AopApplication.aspects;
+package com.example.AopApplication.aspects.annotations;
 
 
 import java.lang.annotation.ElementType;

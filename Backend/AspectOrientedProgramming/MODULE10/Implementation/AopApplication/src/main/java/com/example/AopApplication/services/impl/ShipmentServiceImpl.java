@@ -1,11 +1,13 @@
 package com.example.AopApplication.services.impl;
 
-import com.example.AopApplication.aspects.RequiresAdmin;
+import com.example.AopApplication.aspects.annotations.ValidateEmployee;
+import com.example.AopApplication.aspects.annotations.RequiresAdmin;
+import com.example.AopApplication.entity.Employee;
 import com.example.AopApplication.services.ShipmentService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import com.example.AopApplication.aspects.MyLogging;
+import com.example.AopApplication.aspects.annotations.MyLogging;
 
 @Service
 @Slf4j
@@ -34,5 +36,11 @@ public class ShipmentServiceImpl implements ShipmentService {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    @ValidateEmployee
+    public String createEmployee(Employee employee) {
+        return "Employee has been created";
     }
 }

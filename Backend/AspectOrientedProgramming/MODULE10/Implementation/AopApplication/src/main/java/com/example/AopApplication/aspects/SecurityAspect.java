@@ -17,7 +17,7 @@ public class SecurityAspect {
 //    Security Aspect
     @Around(
             "execution(* com.example.AopApplication.services..*(..)) && " +
-                    "@annotation(com.example.AopApplication.aspects.RequiresAdmin)"
+                    "@annotation(com.example.AopApplication.aspects.annotations.RequiresAdmin)"
     )
     public Object checkAccess(ProceedingJoinPoint joinPoint) throws Throwable {
 
