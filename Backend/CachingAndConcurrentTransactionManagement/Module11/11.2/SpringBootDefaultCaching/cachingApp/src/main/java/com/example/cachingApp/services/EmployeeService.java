@@ -7,6 +7,7 @@ import com.example.cachingApp.exceptions.ResourceNotFoundException;
 import com.example.cachingApp.repositories.EmployeeRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,6 +29,7 @@ public class EmployeeService {
 //        }
 //    }
 
+    @Cacheable(cacheNames = "employees", key = "#employeeId")
     public EmployeeDTO getEmployeeById(Long employeeId) {
 
 //        existsByEmployeeId(employeeId);
@@ -35,7 +37,19 @@ public class EmployeeService {
                 () -> new ResourceNotFoundException("Employee with id: " + employeeId + " not found")
         );
 
-        return modelMapper.map(employeeEntity, EmployeeDTO.class);
+//        return modelMapper.map(employeeEntity, EmployeeDTO.class);
+//        records dont fit well with model mapper cuz records are immutable
+//        they do not provide no args constructor or setters
+
+        return new EmployeeDTO(
+                employeeEntity.getId(),
+                employeeEntity.getName(),
+                employeeEntity.getEmail(),
+                employeeEntity.getAge(),
+                employeeEntity.getRole(),
+                employeeEntity.getBirthDate(),
+                employeeEntity.isActive()
+        );
 
 
     }
