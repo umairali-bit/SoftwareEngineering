@@ -1,4 +1,4 @@
-# Module 10: Aspect-Oriented Programming (AOP)
+# Aspect-Oriented Programming (AOP)
 
 This module explains Aspect-Oriented Programming in Spring Boot. AOP helps you move repeated logic, such as logging, validation, security, transaction checks, and error handling, away from your main business methods.
 
