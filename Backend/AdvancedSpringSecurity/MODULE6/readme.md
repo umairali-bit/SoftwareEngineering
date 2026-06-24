@@ -1,4 +1,4 @@
-# Module 6: Advanced Spring Security
+# Advanced Spring Security
 
 This module is about building a more realistic Spring Security system with JWT, refresh tokens, OAuth2 login, session tracking, roles, authorities, and method-level authorization.
 
