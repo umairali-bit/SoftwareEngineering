@@ -1,6 +1,7 @@
 package com.example.cachingApp.dtos;
 
 import java.time.LocalDate;
+import java.io.Serializable;
 
 public record EmployeeDTO(
         Long id,
@@ -10,5 +11,5 @@ public record EmployeeDTO(
         String role,
         LocalDate birthDate,
         boolean isActive
-) {
+) implements Serializable {
 }

@@ -26,15 +26,32 @@ public class GlobalExceptionHandler {
                 .body(response);
     }
 
+//    @ExceptionHandler(Exception.class)
+//    public ResponseEntity<ApiErrorResponse> handleException(
+//            Exception ex) {
+//
+//        ApiErrorResponse response =
+//                new ApiErrorResponse(
+//                        LocalDateTime.now(),
+//                        HttpStatus.INTERNAL_SERVER_ERROR.value(),
+//                        ex.getMessage()
+//                );
+//
+//        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+//                .body(response);
+//    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiErrorResponse> handleException(
             Exception ex) {
+
+        ex.printStackTrace();
 
         ApiErrorResponse response =
                 new ApiErrorResponse(
                         LocalDateTime.now(),
                         HttpStatus.INTERNAL_SERVER_ERROR.value(),
-                        ex.getMessage()
+                        ex.getClass().getName() + " : " + ex.getMessage()
                 );
 
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
