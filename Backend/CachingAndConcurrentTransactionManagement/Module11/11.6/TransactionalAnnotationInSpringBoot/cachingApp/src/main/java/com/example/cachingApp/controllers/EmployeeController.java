@@ -2,8 +2,7 @@ package com.example.cachingApp.controllers;
 
 
 import com.example.cachingApp.dtos.EmployeeDTO;
-import com.example.cachingApp.services.EmployeeService;
-import lombok.AllArgsConstructor;
+import com.example.cachingApp.services.impl.EmployeeServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +14,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class EmployeeController {
 
-    private final EmployeeService employeeService;
+    private final EmployeeServiceImpl employeeService;
 
 
     @GetMapping("/{employeeId}")

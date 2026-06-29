@@ -1,113 +1,16 @@
 package com.example.cachingApp.services;
 
-
 import com.example.cachingApp.dtos.EmployeeDTO;
-import com.example.cachingApp.entities.EmployeeEntity;
-import com.example.cachingApp.exceptions.ResourceNotFoundException;
-import com.example.cachingApp.repositories.EmployeeRepository;
-import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.stereotype.Service;
+
 
 import java.util.List;
-import java.util.stream.Collectors;
 
-@Service
-@RequiredArgsConstructor
-public class EmployeeService {
+public interface EmployeeService {
 
-    private final EmployeeRepository employeeRepository;
-
-    private final ModelMapper modelMapper;
-
-    private final String CACHE_NAME = "employees";
-
-//    public void existsByEmployeeId(Long employeeId) {
-//
-//        boolean exists = employeeRepository.existsById(employeeId);
-//        if (!exists) {
-//            throw new ResourceNotFoundException("Employee with id: " + employeeId + " does not exist");
-//        }
-//    }
-
-    @Cacheable(cacheNames = CACHE_NAME, key = "#employeeId")
-    public EmployeeDTO getEmployeeById(Long employeeId) {
-
-//        existsByEmployeeId(employeeId);
-        EmployeeEntity employeeEntity = employeeRepository.findById(employeeId).orElseThrow(
-                () -> new ResourceNotFoundException("Employee with id: " + employeeId + " not found")
-        );
-
-//        return modelMapper.map(employeeEntity, EmployeeDTO.class);
-//        records dont fit well with model mapper cuz records are immutable
-//        they do not provide no args constructor or setters
-
-        return new EmployeeDTO(
-                employeeEntity.getId(),
-                employeeEntity.getName(),
-                employeeEntity.getEmail(),
-                employeeEntity.getAge(),
-                employeeEntity.getRole(),
-                employeeEntity.getBirthDate(),
-                employeeEntity.isActive()
-        );
-
-
-    }
-
-
-    public List<EmployeeDTO> getAllEmployees() {
-
-        List<EmployeeEntity> employeeEntities = employeeRepository.findAll();
-        return employeeEntities
-                .stream()
-                .map(i-> modelMapper.map(i, EmployeeDTO.class))
-                .collect(Collectors.toList());
-    }
-
-    @CachePut(cacheNames = CACHE_NAME, key = "#result.id")
-    public EmployeeDTO createEmployee(EmployeeDTO employeeDTO) {
-
-
-        EmployeeEntity employee = new EmployeeEntity();
-
-        employee.setName(employeeDTO.name());
-        employee.setEmail(employeeDTO.email());
-        employee.setAge(employeeDTO.age());
-        employee.setRole(employeeDTO.role());
-        employee.setBirthDate(employeeDTO.birthDate());
-        employee.setActive(employeeDTO.isActive());
-
-        employee = employeeRepository.save(employee);
-
-        return new EmployeeDTO(
-                employee.getId(),
-                employee.getName(),
-                employee.getEmail(),
-                employee.getAge(),
-                employee.getRole(),
-                employee.getBirthDate(),
-                employee.isActive()
-        );
-
-
-    }
-
-    @CacheEvict(cacheNames = CACHE_NAME, key = "#employeeId")
-    public void deleteEmployee(Long employeeId) {
-
-        EmployeeEntity employee = employeeRepository.findById(employeeId)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException(
-                                "Employee with id: " + employeeId + " not found"));
-
-        employeeRepository.delete(employee);
-    }
-
-
+    EmployeeDTO getEmployeeById(Long employeeId);
+    List<EmployeeDTO> getAllEmployees();
+    EmployeeDTO createEmployee(EmployeeDTO employeeDTO);
+    void deleteEmployee(Long employeeId);
 
 
 }
