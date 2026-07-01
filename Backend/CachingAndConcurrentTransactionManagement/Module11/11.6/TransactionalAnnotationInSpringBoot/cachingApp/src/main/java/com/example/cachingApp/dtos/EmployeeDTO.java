@@ -10,6 +10,7 @@ public record EmployeeDTO(
         Integer age,
         String role,
         LocalDate birthDate,
-        boolean isActive
+        boolean isActive,
+        Long salary
 ) implements Serializable {
 }

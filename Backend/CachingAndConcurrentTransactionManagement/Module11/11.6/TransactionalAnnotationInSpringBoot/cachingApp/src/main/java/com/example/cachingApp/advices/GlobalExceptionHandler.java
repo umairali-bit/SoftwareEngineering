@@ -45,6 +45,8 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiErrorResponse> handleException(
             Exception ex) {
 
+
+
         ex.printStackTrace();
 
         ApiErrorResponse response =

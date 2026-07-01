@@ -7,6 +7,7 @@ import com.example.cachingApp.exceptions.ResourceNotFoundException;
 import com.example.cachingApp.repositories.EmployeeRepository;
 import com.example.cachingApp.services.EmployeeService;
 import com.example.cachingApp.services.SalaryAccountService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.cache.annotation.CacheEvict;
@@ -36,7 +37,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 //            throw new ResourceNotFoundException("Employee with id: " + employeeId + " does not exist");
 //        }
 //    }
-
+    @Override
     @Cacheable(cacheNames = CACHE_NAME, key = "#employeeId")
     public EmployeeDTO getEmployeeById(Long employeeId) {
 
@@ -57,13 +58,14 @@ public class EmployeeServiceImpl implements EmployeeService {
                 employeeEntity.getAge(),
                 employeeEntity.getRole(),
                 employeeEntity.getBirthDate(),
-                employeeEntity.isActive()
+                employeeEntity.isActive(),
+                employeeEntity.getSalary()
         );
 
 
     }
 
-
+    @Override
     public List<EmployeeDTO> getAllEmployees() {
 
         List<EmployeeEntity> employeeEntities = employeeRepository.findAll();
@@ -73,7 +75,9 @@ public class EmployeeServiceImpl implements EmployeeService {
                 .collect(Collectors.toList());
     }
 
+    @Override
     @CachePut(cacheNames = CACHE_NAME, key = "#result.id")
+    @Transactional
     public EmployeeDTO createEmployee(EmployeeDTO employeeDTO) {
 
 
@@ -85,6 +89,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         employee.setRole(employeeDTO.role());
         employee.setBirthDate(employeeDTO.birthDate());
         employee.setActive(employeeDTO.isActive());
+        employee.setSalary(employeeDTO.salary());
 
         employee = employeeRepository.save(employee);
 
@@ -97,12 +102,14 @@ public class EmployeeServiceImpl implements EmployeeService {
                 employee.getAge(),
                 employee.getRole(),
                 employee.getBirthDate(),
-                employee.isActive()
+                employee.isActive(),
+                employee.getSalary()
         );
 
 
     }
 
+    @Override
     @CacheEvict(cacheNames = CACHE_NAME, key = "#employeeId")
     public void deleteEmployee(Long employeeId) {
 

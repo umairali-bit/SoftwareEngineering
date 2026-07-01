@@ -23,6 +23,10 @@ public class EmployeeEntity {
     private String role;
     private LocalDate birthDate;
     private boolean isActive;
+    private Long salary;
+
+    @ManyToOne
+    private DepartmentEntity department;
 
 
 

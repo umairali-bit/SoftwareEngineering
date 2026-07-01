@@ -33,6 +33,7 @@ spring:
 #      password: ${REDIS_PASSWORD}
       timeout: 5s
 
+
 logging:
-  level:
-    org.springframework: DEBUG
+    level:
+      org.springframework: INFO

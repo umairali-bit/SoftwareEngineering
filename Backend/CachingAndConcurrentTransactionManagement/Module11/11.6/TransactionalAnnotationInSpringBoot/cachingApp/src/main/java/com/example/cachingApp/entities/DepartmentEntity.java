@@ -21,11 +21,8 @@ public class DepartmentEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String title;
+    private String deptName;
 
-    private boolean isActive;
-
-    private LocalDate createdAt;
 
 
 
