@@ -22,5 +22,6 @@ public class SalaryAccountEntity {
     private BigDecimal balance;
 
     @OneToOne
+    @JoinColumn(name = "employee_id", unique = true)
     private EmployeeEntity employee;
 }

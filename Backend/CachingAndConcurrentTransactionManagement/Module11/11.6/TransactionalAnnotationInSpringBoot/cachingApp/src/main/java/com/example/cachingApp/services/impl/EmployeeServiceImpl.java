@@ -80,8 +80,11 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Transactional
     public EmployeeDTO createEmployee(EmployeeDTO employeeDTO) {
 
+        if(employeeRepository.existsByEmail(employeeDTO.email()))
+            throw new RuntimeException("Employee already exists");
 
         EmployeeEntity employee = new EmployeeEntity();
+
 
         employee.setName(employeeDTO.name());
         employee.setEmail(employeeDTO.email());

@@ -1,5 +1,7 @@
 package com.example.cachingApp.dtos;
 
+import lombok.Data;
+
 import java.time.LocalDate;
 import java.io.Serializable;
 
