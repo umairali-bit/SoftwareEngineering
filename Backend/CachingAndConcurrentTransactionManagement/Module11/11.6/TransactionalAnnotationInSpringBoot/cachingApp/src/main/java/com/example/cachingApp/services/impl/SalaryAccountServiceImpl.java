@@ -8,6 +8,7 @@ import com.example.cachingApp.repositories.SalaryAccountRepository;
 import com.example.cachingApp.services.SalaryAccountService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,20 +24,33 @@ public class SalaryAccountServiceImpl implements SalaryAccountService {
 
 
     @Override
-    public void createAccount(EmployeeEntity employeeEntity) {
+    @Transactional (propagation = Propagation.REQUIRED)
+    public void createAccount(EmployeeEntity employee) {
 
-        if(employeeEntity.getName().equals("Umair") ) throw new RuntimeException("Umair is not allowed");
+        if ("Umair".equals(employee.getName())) throw new RuntimeException("Umair cannot create an account");
 
-        SalaryAccountEntity salaryAccount = SalaryAccountEntity.builder()
-                .employee(employeeEntity)
-                .balance(BigDecimal.ZERO)
-                .build();
+//        if(salaryAccountRepository.existsByEmployee(employee)) {
+//            throw new RuntimeException("Salary account already exists");
+//        }
 
-        salaryAccountRepository.save(salaryAccount);
+        salaryAccountRepository.findByEmployee(employee)
+                .ifPresent(account -> {
+                    throw new IllegalStateException("Salary account already exists");
+                });
+
+
+            SalaryAccountEntity salaryAccount = SalaryAccountEntity.builder()
+                    .employee(employee)
+                    .balance(BigDecimal.ZERO)
+                    .build();
+
+            salaryAccountRepository.save(salaryAccount);
+
 
     }
 
     @Override
+    @Transactional (isolation = Isolation.SERIALIZABLE)
     public SalaryAccountDTO implementBalance(Long accountId) {
 
 
