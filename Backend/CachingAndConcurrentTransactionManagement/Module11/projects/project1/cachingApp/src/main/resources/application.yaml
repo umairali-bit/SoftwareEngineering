@@ -1,0 +1,39 @@
+spring:
+  application:
+    name: cachingApp
+
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+    defer-datasource-initialization: true
+    properties:
+      hibernate:
+        format_sql: true
+
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+  cache:
+    type: redis
+
+  data:
+    redis:
+      host: sapphire-person-smile-58224.db.redis.io
+      port: 12722
+      username: default
+      password: NHc2lm9DEI6Sw5oKr5iw49614m0F2FxW
+      timeout: 5s
+
+
+logging:
+    level:
+      org.springframework: INFO

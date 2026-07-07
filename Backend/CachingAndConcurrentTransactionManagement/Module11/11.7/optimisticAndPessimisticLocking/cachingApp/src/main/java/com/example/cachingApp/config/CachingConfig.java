@@ -1,6 +1,7 @@
 package com.example.cachingApp.config;
 
 
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
@@ -35,5 +36,12 @@ public class CachingConfig {
         return RedisCacheManager.builder(redisConnectionFactory)
                 .cacheDefaults(config)
                 .build();
+    }
+
+    @Bean
+    public CommandLineRunner test(CacheManager cacheManager) {
+        return args -> {
+            System.out.println("CacheManager = " + cacheManager.getClass().getName());
+        };
     }
 }
