@@ -7,3 +7,10 @@ management:
     web:
       exposure:
         include: "*"
+
+weather:
+  geocoding:
+    base-url: https://geocoding-api.open-meteo.com/v1
+
+  api:
+    base-url: https://api.open-meteo.com/v1

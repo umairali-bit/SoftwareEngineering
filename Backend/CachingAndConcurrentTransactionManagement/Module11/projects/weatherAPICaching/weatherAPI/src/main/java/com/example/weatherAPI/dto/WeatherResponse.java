@@ -2,7 +2,7 @@ package com.example.weatherAPI.dto;
 
 import java.time.LocalDateTime;
 
-public record weatherResponse (
+public record WeatherResponse(
 
         String city,
         String country,
