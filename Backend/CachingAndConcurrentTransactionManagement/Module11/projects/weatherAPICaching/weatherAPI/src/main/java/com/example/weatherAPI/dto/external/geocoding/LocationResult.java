@@ -8,5 +8,5 @@ public record LocationResult(
         String country,
         double latitude,
         double longitude
-) implements Serializable {
+)  {
 }
