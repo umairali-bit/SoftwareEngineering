@@ -2,10 +2,12 @@ package com.example.weatherAPI.client;
 
 import com.example.weatherAPI.dto.external.weather.WeatherApiResponse;
 import com.example.weatherAPI.exceptions.WeatherServiceException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
 
+@Slf4j
 @Component
 public class WeatherClient {
 
@@ -22,6 +24,12 @@ public class WeatherClient {
             double latitude,
             double longitude) {
 
+        log.info(
+                "Calling weather API for latitude={}, longitude={}",
+                latitude,
+                longitude
+        );
+
         WeatherApiResponse response = restClient.get()
                 .uri(uriBuilder -> uriBuilder
                         .path("/forecast")
@@ -32,6 +40,12 @@ public class WeatherClient {
                         .build())
                 .retrieve()
                 .body(WeatherApiResponse.class);
+
+        log.debug(
+                "Weather API call completed for latitude={}, longitude={}",
+                latitude,
+                longitude
+        );
 
         if (response == null || response.current() == null) {
             throw new WeatherServiceException(

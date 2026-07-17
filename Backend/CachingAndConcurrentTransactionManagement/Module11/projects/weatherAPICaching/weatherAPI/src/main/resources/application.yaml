@@ -29,4 +29,5 @@ weather:
 
 logging:
   level:
-    org.springframework: DEBUG
+    root: INFO
+    com.example.weatherAPI: DEBUG

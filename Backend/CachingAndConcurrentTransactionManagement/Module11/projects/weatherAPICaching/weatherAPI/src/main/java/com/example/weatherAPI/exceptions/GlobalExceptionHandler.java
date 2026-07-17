@@ -2,6 +2,7 @@ package com.example.weatherAPI.exceptions;
 
 
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.time.LocalDateTime;
 
+@Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -17,7 +19,13 @@ public class GlobalExceptionHandler {
             Exception ex,
             HttpServletRequest request) {
 
-        ex.printStackTrace();
+//        ex.printStackTrace();
+        log.error(
+                "Unexpected exception. Path={}, Message={}",
+                request.getRequestURI(),
+                ex.getMessage(),
+                ex
+        );
 
         ApiErrorResponse errorResponse = new ApiErrorResponse(
                 LocalDateTime.now(),
@@ -37,6 +45,12 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiErrorResponse> handleCityNotFoundException(CityNotFoundException ex,
                                                                         HttpServletRequest request){
 
+        log.warn(
+                "City not found. Path={}, Message={}",
+                request.getRequestURI(),
+                ex.getMessage()
+        );
+
         ApiErrorResponse errorResponse = new ApiErrorResponse(
                 LocalDateTime.now(),
                 HttpStatus.NOT_FOUND.value(),
@@ -54,6 +68,13 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(WeatherServiceException.class)
     public ResponseEntity<ApiErrorResponse> handleWeatherServiceException(WeatherServiceException ex,
                                                                           HttpServletRequest request) {
+
+        log.error(
+                "Weather service failed. Path={}, Message={}",
+                request.getRequestURI(),
+                ex.getMessage(),
+                ex
+        );
         ApiErrorResponse errorResponse = new ApiErrorResponse(
                 LocalDateTime.now(),
                 HttpStatus.INTERNAL_SERVER_ERROR.value(),
