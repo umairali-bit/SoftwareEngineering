@@ -10,11 +10,16 @@ spring:
             - id: order-service
               uri: lb://order-service
               predicates:
-                - Path=/orders/**
+                - Path=/api/v1/orders/**
+              filters:
+                - StripPrefix=2
+
             - id: inventory-service
               uri: lb://inventory-service
               predicates:
-                - Path=/products/**
+                - Path=/api/v1/inventory/**
+              filters:
+                - StripPrefix=2
 
 server:
   port: 8082
