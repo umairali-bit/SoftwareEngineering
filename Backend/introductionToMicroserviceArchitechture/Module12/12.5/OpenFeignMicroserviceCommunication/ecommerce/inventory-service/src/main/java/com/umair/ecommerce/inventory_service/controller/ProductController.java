@@ -2,6 +2,7 @@ package com.umair.ecommerce.inventory_service.controller;
 
 
 import com.umair.ecommerce.inventory_service.client.OrderFeignClient;
+import com.umair.ecommerce.inventory_service.dto.OrderRequestDto;
 import com.umair.ecommerce.inventory_service.dto.ProductDto;
 import com.umair.ecommerce.inventory_service.entity.Product;
 import com.umair.ecommerce.inventory_service.service.ProductService;
@@ -10,10 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestClient;
 
 import java.util.List;
@@ -56,5 +54,13 @@ public class ProductController {
     public ResponseEntity<ProductDto> getProductById(@PathVariable Long id) {
         ProductDto product = productService.getInventoryById(id);
         return ResponseEntity.ok().body(product);
+    }
+
+    @PutMapping("/reduced-stock")
+    public ResponseEntity<Double> reducedStock(@RequestBody OrderRequestDto orderRequestDto) {
+
+        Double totalPrice = productService.reduceStocks(orderRequestDto);
+        return  ResponseEntity.ok().body(totalPrice);
+
     }
 }
