@@ -1,6 +1,7 @@
 package com.umair.ecommerce.inventory_service.controller;
 
 
+import com.umair.ecommerce.inventory_service.client.OrderFeignClient;
 import com.umair.ecommerce.inventory_service.dto.ProductDto;
 import com.umair.ecommerce.inventory_service.entity.Product;
 import com.umair.ecommerce.inventory_service.service.ProductService;
@@ -27,14 +28,18 @@ public class ProductController {
     private final DiscoveryClient discoveryClient;
     private final RestClient restClient;
 
+    private final OrderFeignClient orderFeignClient;
+
     @GetMapping("/fetchOrders")
     public String fetchOrders() {
-        ServiceInstance orders = discoveryClient.getInstances("order-service").getFirst();
+//        ServiceInstance orders = discoveryClient.getInstances("order-service").getFirst();
 
-       return restClient.get()
-                .uri(orders.getUri() + "/orders/core/hello")
-                .retrieve()
-                .body(String.class);
+//       return restClient.get()
+//                .uri(orders.getUri() + "/orders/core/hello")
+//                .retrieve()
+//                .body(String.class);
+
+        return orderFeignClient.hello();
 
 
     }
