@@ -1,8 +1,11 @@
 package com.umair.ecommerce.order_service.service;
 
 import com.umair.ecommerce.order_service.OrderRepository.OrderRepository;
+import com.umair.ecommerce.order_service.client.InventoryFeignClient;
 import com.umair.ecommerce.order_service.dto.OrderRequestDto;
 import com.umair.ecommerce.order_service.entity.Order;
+import com.umair.ecommerce.order_service.entity.OrderItem;
+import com.umair.ecommerce.order_service.entity.enums.OrderStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -17,6 +20,7 @@ public class OrderService {
 
     private final OrderRepository orderRepository;
     private final ModelMapper modelMapper;
+    private final InventoryFeignClient inventoryFeignClient;
 
     public List<OrderRequestDto> getAllOrders() {
 
@@ -34,5 +38,25 @@ public class OrderService {
         Order order = orderRepository.findById(id).orElseThrow(() -> new RuntimeException("Order not found"));
 
         return modelMapper.map(order, OrderRequestDto.class);
+    }
+
+    public OrderRequestDto createOrders(OrderRequestDto orderRequestDto) {
+
+        log.info("createOrders({})", orderRequestDto);
+        Double totalPrice = inventoryFeignClient.reduceStock(orderRequestDto);
+
+        Order orders = modelMapper.map(orderRequestDto, Order.class);
+        for(OrderItem orderItem : orders.getOrderItems()){
+            orderItem.setOrder(orders);
+        }
+        orders.setTotalPrice(totalPrice);
+        orders.setOrderStatus(OrderStatus.CONFIRMED);
+
+        Order savedOrder = orderRepository.save(orders);
+        return modelMapper.map(savedOrder, OrderRequestDto.class);
+
+
+
+
     }
 }
