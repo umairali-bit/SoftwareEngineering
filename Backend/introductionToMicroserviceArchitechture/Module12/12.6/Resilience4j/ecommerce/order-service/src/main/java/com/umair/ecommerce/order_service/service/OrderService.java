@@ -6,6 +6,7 @@ import com.umair.ecommerce.order_service.dto.OrderRequestDto;
 import com.umair.ecommerce.order_service.entity.Order;
 import com.umair.ecommerce.order_service.entity.OrderItem;
 import com.umair.ecommerce.order_service.entity.enums.OrderStatus;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import io.github.resilience4j.retry.annotation.Retry;
 import lombok.RequiredArgsConstructor;
@@ -42,8 +43,9 @@ public class OrderService {
         return modelMapper.map(order, OrderRequestDto.class);
     }
 
-    @Retry(name = "inventoryRetry", fallbackMethod = "createOrderFallback")
-    @RateLimiter(name = "inventoryRateLimiter", fallbackMethod = "createOrderFallback")
+//    @Retry(name = "inventoryRetry", fallbackMethod = "createOrderFallback")
+    @CircuitBreaker(name = "inventoryCircuitBreaker", fallbackMethod = "createOrderFallback")
+//    @RateLimiter(name = "inventoryRateLimiter", fallbackMethod = "createOrderFallback")
     public OrderRequestDto createOrders(OrderRequestDto orderRequestDto) {
 
         log.info("creating orders ({})", orderRequestDto);
