@@ -1,15 +1,17 @@
 package com.umair.ecommerce.order_service.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
-
-import java.math.BigDecimal;
+import lombok.NoArgsConstructor;
 import java.util.List;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class OrderRequestDto {
     private Long id;
     private List<OrderItemRequestDto> items;
-    private BigDecimal totalPrice;
+    private Double totalPrice;
 
 
 }

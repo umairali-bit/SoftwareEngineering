@@ -1,25 +1,26 @@
 package com.umair.ecommerce.order_service.service;
 
+import com.umair.ecommerce.order_service.OrderRepository.IdempotencyKeyRepository;
 import com.umair.ecommerce.order_service.OrderRepository.OrderRepository;
 import com.umair.ecommerce.order_service.client.InventoryFeignClient;
 import com.umair.ecommerce.order_service.client.ShipmentFeignClient;
+import com.umair.ecommerce.order_service.dto.OrderItemRequestDto;
 import com.umair.ecommerce.order_service.dto.OrderRequestDto;
 import com.umair.ecommerce.order_service.dto.ShipmentRequestDto;
 import com.umair.ecommerce.order_service.dto.ShipmentResponseDto;
+import com.umair.ecommerce.order_service.entity.IdempotencyKey;
 import com.umair.ecommerce.order_service.entity.Order;
 import com.umair.ecommerce.order_service.entity.OrderItem;
 import com.umair.ecommerce.order_service.entity.enums.OrderStatus;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
-import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
-import io.github.resilience4j.retry.annotation.Retry;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
-import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -30,6 +31,7 @@ public class OrderService {
     private final ModelMapper modelMapper;
     private final InventoryFeignClient inventoryFeignClient;
     private final ShipmentFeignClient  shipmentFeignClient;
+    private final IdempotencyKeyRepository idempotencyKeyRepository;
 
     public List<OrderRequestDto> getAllOrders() {
 
@@ -52,7 +54,34 @@ public class OrderService {
 //    @Retry(name = "inventoryRetry", fallbackMethod = "createOrderFallback")
     @CircuitBreaker(name = "inventoryCircuitBreaker", fallbackMethod = "createOrderFallback")
 //    @RateLimiter(name = "inventoryRateLimiter", fallbackMethod = "createOrderFallback")
-    public OrderRequestDto createOrders(OrderRequestDto orderRequestDto) {
+    public OrderRequestDto createOrders(OrderRequestDto orderRequestDto,
+                                        String idempotencyKey) {
+
+        Optional<IdempotencyKey> existingKey = idempotencyKeyRepository.findByIdempotencyKey(idempotencyKey);
+
+        if (existingKey.isPresent()) {
+
+            Long existingOrderId = existingKey.get().getOrderId();
+
+            Order order = orderRepository.findById(existingOrderId)
+                    .orElseThrow(() -> new RuntimeException("Order not found"));
+
+            List<OrderItemRequestDto> items = order.getOrderItems()
+                    .stream()
+                    .map(item -> new OrderItemRequestDto(
+                            item.getId(),
+                            item.getProductId(),
+                            item.getQuantity()
+                    ))
+                    .toList();
+
+            return new OrderRequestDto(
+                    order.getId(),
+                    items,
+                    order.getTotalPrice()
+            );
+        }
+
 
         log.info("creating orders ({})", orderRequestDto);
         Double totalPrice = inventoryFeignClient.reduceStock(orderRequestDto);
@@ -70,6 +99,13 @@ public class OrderService {
         ShipmentResponseDto shipmentResponseDto = shipmentFeignClient.createShipment(shipmentRequestDto);
 
         log.info("created shipment response: {}", shipmentResponseDto);
+
+        IdempotencyKey newKey = new IdempotencyKey();
+        newKey.setIdempotencyKey(idempotencyKey);
+        newKey.setOrderId(savedOrder.getId());
+
+        idempotencyKeyRepository.save(newKey);
+
         return modelMapper.map(savedOrder, OrderRequestDto.class);
 
     }
