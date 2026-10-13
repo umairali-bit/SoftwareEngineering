@@ -32,6 +32,7 @@ public class OrderService {
     private final InventoryFeignClient inventoryFeignClient;
     private final ShipmentFeignClient  shipmentFeignClient;
     private final IdempotencyKeyRepository idempotencyKeyRepository;
+    private final ShippingClientService  shippingClientService;
 
     public List<OrderRequestDto> getAllOrders() {
 
@@ -96,7 +97,7 @@ public class OrderService {
         Order savedOrder = orderRepository.save(orders);
 
         ShipmentRequestDto shipmentRequestDto = new ShipmentRequestDto(savedOrder.getId());
-        ShipmentResponseDto shipmentResponseDto = shipmentFeignClient.createShipment(shipmentRequestDto);
+        ShipmentResponseDto shipmentResponseDto = shippingClientService.createShipment(shipmentRequestDto);
 
         log.info("created shipment response: {}", shipmentResponseDto);
 
@@ -107,15 +108,6 @@ public class OrderService {
         idempotencyKeyRepository.save(newKey);
 
         return modelMapper.map(savedOrder, OrderRequestDto.class);
-
-    }
-
-    public OrderRequestDto createOrderFallback(OrderRequestDto orderRequestDto, Throwable throwable) {
-        log.error("Fallback error due to: {}", throwable.getMessage());
-
-        return new  OrderRequestDto();
-
-
 
     }
     @Transactional
@@ -143,6 +135,14 @@ public class OrderService {
 
         return modelMapper.map(order, OrderRequestDto.class);
     }
+
+    public OrderRequestDto createOrderFallback(OrderRequestDto orderRequestDto, Throwable throwable) {
+        log.error("Fallback error due to: {}", throwable.getMessage());
+
+        return new  OrderRequestDto();
+    }
+
+
 
 
 }

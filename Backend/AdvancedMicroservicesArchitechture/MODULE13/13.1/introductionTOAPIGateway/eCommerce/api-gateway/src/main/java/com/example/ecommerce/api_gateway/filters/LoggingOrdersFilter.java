@@ -1,4 +1,36 @@
 package com.example.ecommerce.api_gateway.filters;
 
-public class LoggingOrdersFilter {
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.cloud.gateway.filter.GatewayFilter;
+import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
+import org.springframework.stereotype.Component;
+
+
+@Component
+@Slf4j
+public class LoggingOrdersFilter extends AbstractGatewayFilterFactory<LoggingOrdersFilter.Config> {
+
+    public LoggingOrdersFilter(Class<Config> configClass) {
+        super(configClass);
+    }
+
+    @Override
+    public GatewayFilter apply(Config config) {
+        return ((exchange, chain) -> {
+
+            log.info("LoggingOrdersFilter before request : {} {}", exchange.getRequest().getMethod()
+                                                                 , exchange.getRequest().getURI());
+
+
+
+            return chain.filter(exchange);
+        });
+    }
+
+
+    public static class Config{
+
+    }
+
+
 }
