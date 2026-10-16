@@ -3,7 +3,7 @@ package patterns;
 public class Main {
 
     public static void main(String[] args) {
-/*
+        /*
          * * * * * * *
          * * * * * * *
          * * * * * * *
@@ -11,12 +11,12 @@ public class Main {
          * * * * * * *
          * * * * * * *
          * * * * * * *
-*/
+         */
 
+        int a = 7;
+        for (int i = 1; i <= a; i++) {
 
-        for (int i = 1; i <= 7; i++) {
-
-            for (int j = 1; j <= 7; j++) {
+            for (int j = 1; j <= a; j++) {
                 System.out.print('*' + " ");
             }
             System.out.println();
@@ -24,14 +24,14 @@ public class Main {
         }
 
         System.out.println("-".repeat(20));
-/*
-             *
-             * *
-             * * *
-             * * * *
-             * * * * *
-             * * * * * *
- */
+        /*
+         *
+         * *
+         * * *
+         * * * *
+         * * * * *
+         * * * * * *
+         */
 
         int n = 6;
         for (int i = 1; i <= n; i++) {
@@ -62,17 +62,17 @@ public class Main {
         }
 
         System.out.println("-".repeat(20));
-/*
-                 *
-                **
-               ***
-              ****
-             *****
-            ******
- */
+        /*
+         *
+         **
+         ***
+         ****
+         *****
+         ******
+         */
         int k = 6;
-        for (int i = 1; i <= k ; i++) {
-            for (int j = 1; j <= k-i; j++) {
+        for (int i = 1; i <= k; i++) {
+            for (int j = 1; j <= k - i; j++) {
                 System.out.print(" ");
             }
             for (int j = 1; j <= i; j++) {
@@ -84,17 +84,17 @@ public class Main {
         }
 
         System.out.println("-".repeat(20));
-/*
-                *
-               * *
-              * * *
-             * * * *
-            * * * * *
-           * * * * * *
- */
+        /*
+         *
+         * *
+         * * *
+         * * * *
+         * * * * *
+         * * * * * *
+         */
         int l = 6;
-        for (int i = 1; i <= l ; i++) {
-            for (int j = 1; j <= l-i; j++) {
+        for (int i = 1; i <= l; i++) {
+            for (int j = 1; j <= l - i; j++) {
                 System.out.print(" ");
             }
             for (int j = 1; j <= i; j++) {
@@ -105,6 +105,47 @@ public class Main {
 
         }
 
+        System.out.println("-".repeat(20));
 
+
+        int b = 6;
+        for (int i = 0; i < b; i++) {
+            for (int j = 1; j <= b - i; j++) {
+                System.out.print(" ");
+            }
+            System.out.print("*");
+
+            for (int j = 0; j <= (2 * i - 1); j++) {
+                if (j == (2 * i - 1)) {
+                    System.out.print("*");
+                } else {
+                    System.out.print(" ");
+                }
+
+            }
+            System.out.println();
+
+        }
+
+        for (int i = b - 2; i >= 0; i--) {
+            for (int j = 1; j <= b - i; j++) {
+                System.out.print(" ");
+            }
+            System.out.print("*");
+
+            for (int j = 0; j <= (2 * i - 1); j++) {
+                if (j == (2 * i - 1)) {
+                    System.out.print("*");
+                } else {
+                    System.out.print(" ");
+                }
+
+            }
+            System.out.println();
+
+
+        }
+
+        System.out.println("-".repeat(20));
     }
 }
