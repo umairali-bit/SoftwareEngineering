@@ -63,12 +63,12 @@ public class Main {
 
         System.out.println("-".repeat(20));
         /*
-         *
-         **
-         ***
-         ****
-         *****
-         ******
+                        *
+                       **
+                      ***
+                     ****
+                    *****
+                   ******
          */
         int k = 6;
         for (int i = 1; i <= k; i++) {
@@ -85,12 +85,12 @@ public class Main {
 
         System.out.println("-".repeat(20));
         /*
-         *
-         * *
-         * * *
-         * * * *
-         * * * * *
-         * * * * * *
+                *
+               * *
+              * * *
+             * * * *
+            * * * * *
+           * * * * * *
          */
         int l = 6;
         for (int i = 1; i <= l; i++) {
