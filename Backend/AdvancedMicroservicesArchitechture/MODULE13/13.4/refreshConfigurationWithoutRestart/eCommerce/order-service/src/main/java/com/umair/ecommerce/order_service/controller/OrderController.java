@@ -1,6 +1,7 @@
 package com.umair.ecommerce.order_service.controller;
 
 
+import com.umair.ecommerce.order_service.config.FeaturesEnableConfig;
 import com.umair.ecommerce.order_service.dto.OrderRequestDto;
 import com.umair.ecommerce.order_service.entity.Order;
 import com.umair.ecommerce.order_service.service.OrderService;
@@ -29,13 +30,20 @@ public class OrderController {
     }
 
     private final OrderService orderService;
+    private final FeaturesEnableConfig featuresEnableConfig;
 
 
 
     @GetMapping("/hello")
     public String helloFromOrders(@RequestHeader("X-User-Id") Long userId) {
 
-        return "hello from orders. The user id is " + userId;
+        if (featuresEnableConfig.isTrackingEnabled()) {
+            return "User tracking enabled";
+        } else {
+            return "User not tracking enabled";
+        }
+
+//        return "hello from orders. The user id is " + userId;
     }
 
     @PostMapping("/create-order")
