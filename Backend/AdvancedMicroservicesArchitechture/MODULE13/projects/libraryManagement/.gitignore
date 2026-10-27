@@ -1,0 +1,19 @@
+# H2 Database
+data/
+*.mv.db
+*.trace.db
+*.lock.db
+
+# Maven
+target/
+
+# IntelliJ
+.idea/
+*.iml
+
+# Logs
+*.log
+
+# Secrets
+.env
+.env.*
