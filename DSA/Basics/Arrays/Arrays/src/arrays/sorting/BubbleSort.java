@@ -13,13 +13,6 @@ public class BubbleSort {
         bSort.bubbleSort(a);
         System.out.println(Arrays.toString(a));
 
-
-
-
-
-
-
-
     }
 
     public int[] bubbleSort(int[] a) {
@@ -27,14 +20,19 @@ public class BubbleSort {
         int n = a.length;
         for (int i = 0; i< n-1; i++){
 
+            boolean didISwap = false;
+
             for (int j = 0; j < n - i -1; j++) {
                 if (a[j] > a[j+1]) {
                     int temp = a[j + 1];
                     a[j + 1] = a[j];
                     a[j] = temp;
 
+                    didISwap = true;
+
                 }
             }
+            if(!didISwap) break;
 
         }
         return a;

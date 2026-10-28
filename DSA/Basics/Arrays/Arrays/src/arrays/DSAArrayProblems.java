@@ -16,9 +16,11 @@ public class DSAArrayProblems {
         System.out.println(Arrays.toString(nums));
 
 //      swapping lastNumberInSortedPosition
-        int[] array = {2,3,4,5,7,8,6};
+        int[] array = {2,3,4,5,6,7,8,1};
         lastNumberInSortedPosition(array);
         System.out.println(Arrays.toString(array));
+
+        practiceEx();
 
 
     }
@@ -73,5 +75,25 @@ public class DSAArrayProblems {
         }
         array[swapIndex+1] = last;
 
+    }
+
+    public static void practiceEx () {
+
+        int[] a = {2,5,8,11,14,17,9};
+
+        int n = a. length;
+        int last = a[n -1];
+        int swapIndex = n - 2;
+
+        while(swapIndex >= 0 && a[swapIndex] > last) {
+            swapIndex--;
+        }
+
+        for(int i = n -1; i >= swapIndex + 2; i--) {
+            a[i] = a[i - 1];
+        }
+        a[swapIndex+1] = last;
+
+        System.out.println(Arrays.toString(a));
     }
 }
