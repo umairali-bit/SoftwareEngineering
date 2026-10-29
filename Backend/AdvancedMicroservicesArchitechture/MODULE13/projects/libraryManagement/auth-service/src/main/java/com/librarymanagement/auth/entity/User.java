@@ -38,7 +38,7 @@ public class User {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "role_id", nullable = false)
-    private Roles roles;
+    private Role roles;
 
     @Column(nullable = false, updatable = false)
     private Instant createdAt;

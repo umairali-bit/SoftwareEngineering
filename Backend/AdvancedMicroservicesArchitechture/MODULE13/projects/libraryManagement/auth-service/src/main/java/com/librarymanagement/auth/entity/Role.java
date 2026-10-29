@@ -6,7 +6,6 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import java.util.Objects;
 
@@ -15,7 +14,7 @@ import java.util.Objects;
 @Table(name = "roles")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Roles {
+public class Role {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,7 +24,7 @@ public class Roles {
     @Column(nullable = false, unique = true)
     private RoleName roleName;
 
-    public  Roles(RoleName roleName) {
+    public Role(RoleName roleName) {
         this.roleName = Objects.requireNonNull(roleName);
     }
 
