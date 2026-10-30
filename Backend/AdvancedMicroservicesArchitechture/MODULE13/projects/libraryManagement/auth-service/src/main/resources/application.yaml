@@ -8,6 +8,11 @@ spring:
     username: sa
     password: ""
 
+  security:
+    user:
+      name: user
+      password: $2a$10$8g.fLiT4UbAcFu3L1uaQS.L.CeTDHcemr72gMYSC4cff64v38FY5y
+
   jpa:
     hibernate:
       ddl-auto: update
@@ -18,3 +23,8 @@ spring:
 
 server:
   port: 8081
+
+logging:
+  level:
+    org.springframework.security: DEBUG
+    org.springframework.boot.autoconfigure.security: DEBUG
