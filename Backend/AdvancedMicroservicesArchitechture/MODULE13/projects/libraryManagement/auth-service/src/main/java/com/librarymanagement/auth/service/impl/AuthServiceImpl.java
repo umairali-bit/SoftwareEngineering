@@ -8,7 +8,6 @@ import com.librarymanagement.auth.enums.RoleName;
 import com.librarymanagement.auth.repository.RoleRepository;
 import com.librarymanagement.auth.repository.UserRepository;
 import com.librarymanagement.auth.service.AuthService;
-import com.sun.jdi.request.DuplicateRequestException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
