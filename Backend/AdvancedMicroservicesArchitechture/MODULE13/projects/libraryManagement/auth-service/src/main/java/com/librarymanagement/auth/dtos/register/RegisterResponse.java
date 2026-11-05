@@ -1,4 +1,4 @@
-package com.librarymanagement.auth.dtos;
+package com.librarymanagement.auth.dtos.register;
 
 public record RegisterResponse(
 

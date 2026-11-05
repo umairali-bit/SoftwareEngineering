@@ -1,16 +1,22 @@
 package com.librarymanagement.auth.controller;
 
-import com.librarymanagement.auth.dtos.RegisterRequest;
-import com.librarymanagement.auth.dtos.RegisterResponse;
+import com.librarymanagement.auth.dtos.login.LoginRequest;
+import com.librarymanagement.auth.dtos.login.LoginResponse;
+import com.librarymanagement.auth.dtos.register.RegisterRequest;
+import com.librarymanagement.auth.dtos.register.RegisterResponse;
 import com.librarymanagement.auth.service.AuthService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.session.SessionAuthenticationStrategy;
+import org.springframework.security.web.context.SecurityContextRepository;
+import org.springframework.security.web.csrf.CsrfToken;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("api/v1/auth")
@@ -18,6 +24,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
 
     private final AuthService authService;
+    private final SecurityContextRepository securityContextRepository;
+    private final SessionAuthenticationStrategy sessionAuthenticationStrategy;
 
     @PostMapping("/register")
     public ResponseEntity<RegisterResponse> register(@Valid @RequestBody RegisterRequest registerRequest) {
@@ -26,5 +34,39 @@ public class AuthController {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(registerResponse);
+    }
+
+    @RequestMapping("/login")
+    public ResponseEntity<LoginResponse> login(
+            @Valid @RequestBody LoginRequest loginRequest,
+            HttpServletRequest request,
+            HttpServletResponse response) {
+        LoginResponse loginResponse = authService.login(loginRequest);
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        sessionAuthenticationStrategy.onAuthentication(
+                authentication,
+                request,
+                response
+        );
+
+        securityContextRepository.saveContext(
+                SecurityContextHolder.getContext(),
+                request,
+                response
+        );
+
+
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(loginResponse);
+    }
+
+
+    @GetMapping("/csrf")
+    public CsrfToken csrf(CsrfToken csrfToken) {
+        return csrfToken;
     }
 }

@@ -1,7 +1,6 @@
 package com.librarymanagement.auth.config;
 
 
-import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -12,9 +11,16 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+
+import org.springframework.security.web.authentication.session.ChangeSessionIdAuthenticationStrategy;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
+import org.springframework.security.web.authentication.session.SessionAuthenticationStrategy;
+import org.springframework.security.web.context.SecurityContextRepository;
+
 
 @Configuration
 @EnableWebSecurity
@@ -27,27 +33,41 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-                .csrf(Customizer.withDefaults())
-                .sessionManagement(session ->
-                        session.sessionCreationPolicy(
-                                SessionCreationPolicy.IF_REQUIRED
-                        ))
-                .authorizeHttpRequests(
-                        authorize -> authorize
-                                .requestMatchers(
-                                        HttpMethod.POST,
-                                        "/api/v1/auth/register",
-                                        "/api/v1/auth/login"
+    public SecurityFilterChain securityFilterChain(
+            HttpSecurity http,
+            SecurityContextRepository securityContextRepository
+    ) throws Exception {
 
-                                ).permitAll()
-                                .anyRequest()
-                                .authenticated()
+        http
+                .csrf(csrf -> csrf
+                        .ignoringRequestMatchers("/h2-console/**")
+                )
+
+                .headers(headers -> headers
+                        .frameOptions(frame -> frame.sameOrigin())
+                )
+
+                .securityContext(context -> context
+                        .securityContextRepository(securityContextRepository)
+                )
+
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+                        .sessionFixation(fixation -> fixation.changeSessionId())
+                )
+
+                .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers(
+                                "/api/v1/auth/register",
+                                "/api/v1/auth/login",
+                                "/api/v1/auth/csrf",
+                                "/h2-console/**",
+                                "/error"
+                        ).permitAll()
+                        .anyRequest().authenticated()
                 );
 
         return http.build();
-
     }
 
     @Bean
@@ -58,5 +78,16 @@ public class SecurityConfig {
 
 
         return configuration.getAuthenticationManager();
+    }
+
+
+    @Bean
+    public SecurityContextRepository securityContextRepository() {
+        return new HttpSessionSecurityContextRepository();
+    }
+
+    @Bean
+    public SessionAuthenticationStrategy sessionAuthenticationStrategy() {
+        return new ChangeSessionIdAuthenticationStrategy();
     }
 }
