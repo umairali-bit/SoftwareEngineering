@@ -7,6 +7,7 @@ import com.librarymanagement.auth.dtos.register.RegisterResponse;
 import com.librarymanagement.auth.service.AuthService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -57,6 +58,16 @@ public class AuthController {
                 response
         );
 
+        HttpSession session = request.getSession(false);
+
+//        System.out.println("Authenticated user: " + authentication.getName());
+//
+//        System.out.println("Session exists: " + (session != null));
+//
+//        System.out.println("SecurityContext saved: " +
+//                (session != null &&
+//                        session.getAttribute("SPRING_SECURITY_CONTEXT") != null));
+
 
 
         return ResponseEntity
@@ -68,5 +79,12 @@ public class AuthController {
     @GetMapping("/csrf")
     public CsrfToken csrf(CsrfToken csrfToken) {
         return csrfToken;
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<String> me(Authentication authentication) {
+        String email = authentication.getName();
+
+        return ResponseEntity.ok(email);
     }
 }
