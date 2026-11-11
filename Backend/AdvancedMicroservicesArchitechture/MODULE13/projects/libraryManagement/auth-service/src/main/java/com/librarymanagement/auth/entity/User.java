@@ -6,6 +6,8 @@ import lombok.*;
 
 
 import java.time.Instant;
+import java.util.HashSet;
+import java.util.Set;
 
 
 @Entity
@@ -39,7 +41,7 @@ public class User {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "role_id", nullable = false)
-    private Role roles;
+    private Set<Role> roles = new HashSet<>();
 
     @Column(nullable = false, updatable = false)
     private Instant createdAt;
