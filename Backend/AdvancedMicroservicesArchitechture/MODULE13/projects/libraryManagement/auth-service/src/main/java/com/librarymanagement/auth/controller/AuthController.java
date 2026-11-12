@@ -1,9 +1,11 @@
 package com.librarymanagement.auth.controller;
 
+import com.librarymanagement.auth.dtos.assignRole.AssignRole;
 import com.librarymanagement.auth.dtos.login.LoginRequest;
 import com.librarymanagement.auth.dtos.login.LoginResponse;
 import com.librarymanagement.auth.dtos.register.RegisterRequest;
 import com.librarymanagement.auth.dtos.register.RegisterResponse;
+import com.librarymanagement.auth.enums.RoleName;
 import com.librarymanagement.auth.service.AuthService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -86,5 +88,17 @@ public class AuthController {
         String email = authentication.getName();
 
         return ResponseEntity.ok(email);
+    }
+
+
+    @PatchMapping("users/{userId}/roles")
+    public ResponseEntity<Void> assignRole(
+            @PathVariable Long userId,
+            @Valid @RequestBody AssignRole request
+
+            ) {
+        authService.AssignRole(userId, request.roleName());
+
+        return ResponseEntity.ok().build();
     }
 }

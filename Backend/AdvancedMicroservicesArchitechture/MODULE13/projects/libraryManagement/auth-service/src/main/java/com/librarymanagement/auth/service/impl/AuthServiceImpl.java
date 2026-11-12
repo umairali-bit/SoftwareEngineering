@@ -11,6 +11,7 @@ import com.librarymanagement.auth.repository.RoleRepository;
 import com.librarymanagement.auth.repository.UserRepository;
 import com.librarymanagement.auth.service.AuthService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -20,6 +21,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -56,7 +59,7 @@ public class AuthServiceImpl implements AuthService {
                 .lastName(request.lastName())
                 .email(request.email())
                 .password(passwordEncoder.encode(request.password()))
-                .roles(userRole)
+                .roles(Set.of(userRole))
                 .build();
 
         User savedUser = userRepository.save(user);
@@ -67,7 +70,7 @@ public class AuthServiceImpl implements AuthService {
                 savedUser.getFirstName(),
                 savedUser.getLastName(),
                 savedUser.getEmail(),
-                savedUser.getRoles().getRoleName().name()
+                savedUser.getRoles().iterator().next().getRoleName().name()
         );
     }
 
@@ -102,5 +105,33 @@ public class AuthServiceImpl implements AuthService {
                 user.getEmail(),
                 "Login successful"
         );
+    }
+
+    @Override
+    @Transactional
+    @PreAuthorize("hasRole('ADMIN)")
+    public void AssignRole(Long userId, RoleName roleName) {
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(()->new RuntimeException("User not found"));
+
+        Role role = roleRepository.findByRoleName(roleName)
+                .orElseThrow(()->new RuntimeException("Role not found"));
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (user.getEmail().equals(authentication.getName())) {
+            throw new IllegalArgumentException(
+                    "You cannot modify your own role"
+            );
+        }
+
+        user.getRoles().add(role);
+
+
+        userRepository.save(user);
+
+
+
     }
 }
