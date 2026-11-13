@@ -39,8 +39,13 @@ public class User {
     @Column(nullable = false)
     private boolean enabled = true;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "role_id", nullable = false)
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "user_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    @Builder.Default
     private Set<Role> roles = new HashSet<>();
 
     @Column(nullable = false, updatable = false)

@@ -29,3 +29,9 @@ logging:
   level:
     org.springframework.security: DEBUG
     org.springframework.boot.autoconfigure.security: DEBUG
+
+# Admin bootstrap configuration
+app:
+  bootstrap:
+    admin-enabled: true
+    admin-email: walter@example.com
