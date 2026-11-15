@@ -1,0 +1,102 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Beyond the Code</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+</head>
+<body>
+
+    <main class="logo-card">
+
+        <div class="logo-container">
+
+            <svg
+                viewBox="0 0 240 160"
+                class="logo"
+                role="img"
+                aria-label="Folded paper opening bracket"
+            >
+
+                <defs>
+                    <linearGradient
+                        id="paperGradient"
+                        x1="0" y1="0"
+                        x2="1" y2="1"
+                    >
+                        <stop
+                            offset="0%"
+                            stop-color="#FFFDF6"
+                        />
+                        <stop
+                            offset="100%"
+                            stop-color="#C9BCAA"
+                        />
+                    </linearGradient>
+                </defs>
+
+                <g id="paper">
+                    <path
+                        id="mainFold"
+                        fill="url(#paperGradient)"
+                    />
+
+                    <path
+                        id="shadowFold"
+                        fill="#BEAE9C"
+                    />
+                </g>
+
+            </svg>
+
+            <h1>Beyond the Code</h1>
+
+        </div>
+
+        <hr>
+
+        <div class="control">
+
+            <div class="control-label">
+                <label for="fold">Fold depth</label>
+                <span id="foldValue">32</span>
+            </div>
+
+            <input
+                type="range"
+                id="fold"
+                min="8"
+                max="35"
+                value="32"
+            />
+
+        </div>
+
+        <div class="control">
+
+            <div class="control-label">
+                <label for="rotation">Rotation</label>
+                <span id="rotationValue">3°</span>
+            </div>
+
+            <input
+                type="range"
+                id="rotation"
+                min="-15"
+                max="15"
+                value="3"
+            />
+
+        </div>
+
+        <button id="reset">Reset</button>
+
+    </main>
+
+</body>
+</html>
