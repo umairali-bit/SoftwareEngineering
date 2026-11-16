@@ -109,7 +109,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     @Transactional
-    @PreAuthorize("hasRole('ADMIN)")
+    @PreAuthorize("hasRole('ADMIN')")
     public void AssignRole(Long userId, RoleName roleName) {
 
         User user = userRepository.findById(userId)
