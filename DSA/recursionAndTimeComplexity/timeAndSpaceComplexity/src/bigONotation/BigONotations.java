@@ -10,9 +10,15 @@ public class BigONotations {
         int res = getFirstElement(arr);
         System.out.println(res);
 
+        System.out.println("-".repeat(50));
+
 
         boolean result = checkIfNumberIsPresent(arr,key);
         System.out.println(result);
+
+        System.out.println("-".repeat(50));
+
+        printPairsInArray(arr);
 
 
 
@@ -32,5 +38,16 @@ public class BigONotations {
             }
         }
         return false;
+    }
+
+
+//    0(n^2)
+    static void printPairsInArray(int[] arr) {
+        for (int i = 0; i< arr.length; i++) {
+
+            for(int j = i + 1; j < arr.length; j++) {
+                System.out.println(arr[i] + "  " + arr[j]);
+            }
+        }
     }
 }
