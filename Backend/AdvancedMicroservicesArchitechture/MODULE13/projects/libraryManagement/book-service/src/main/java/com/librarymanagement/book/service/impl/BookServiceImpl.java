@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 
 @Service
 @RequiredArgsConstructor
@@ -53,5 +55,42 @@ public class BookServiceImpl implements BookService {
                 savedBook.getAvailableCopies()
         );
 
+    }
+
+    @Override
+    public BookResponse getBookById(Long id) {
+
+        Book book = bookRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Book not found with id: " + id));
+
+        return new BookResponse(
+                book.getId(),
+                book.getIsbn(),
+                book.getTitle(),
+                book.getAuthor(),
+                book.getGenre(),
+                book.getPublisher(),
+                book.getPublicationYear(),
+                book.getTotalCopies(),
+                book.getAvailableCopies()
+        );
+    }
+
+    @Override
+    public List<BookResponse> getAllBooks() {
+
+        List<Book> books = bookRepository.findAll();
+        return books.stream()
+                .map(book -> new BookResponse(
+                        book.getId(),
+                        book.getIsbn(),
+                        book.getTitle(),
+                        book.getAuthor(),
+                        book.getGenre(),
+                        book.getPublisher(),
+                        book.getPublicationYear(),
+                        book.getTotalCopies(),
+                        book.getAvailableCopies()
+                )).toList();
     }
 }

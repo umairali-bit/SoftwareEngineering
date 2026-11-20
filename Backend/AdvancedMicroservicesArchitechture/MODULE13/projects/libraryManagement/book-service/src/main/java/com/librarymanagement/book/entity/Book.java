@@ -45,5 +45,19 @@ public class Book {
 
     private LocalDateTime createdAt;
 
+    private LocalDateTime updatedAt;
+
+    @PrePersist
+    private void onCreate() {
+        createdAt = LocalDateTime.now();
+        updatedAt = createdAt;
+    }
+
+    @PreUpdate
+    private void onUpdate() {
+        updatedAt = LocalDateTime.now();
+
+    }
+
 
 }
