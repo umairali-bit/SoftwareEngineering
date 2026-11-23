@@ -1,6 +1,7 @@
 package com.librarymanagement.book.service.impl;
 
 import com.librarymanagement.book.dto.request.CreateBookRequest;
+import com.librarymanagement.book.dto.request.UpdateBookRequest;
 import com.librarymanagement.book.dto.response.BookResponse;
 import com.librarymanagement.book.entity.Book;
 import com.librarymanagement.book.repository.BookRepository;
@@ -8,6 +9,9 @@ import com.librarymanagement.book.service.BookService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
 
 import java.util.List;
 
@@ -77,11 +81,13 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<BookResponse> getAllBooks() {
+    public Page<BookResponse> getAllBooks(int page, int size) {
 
-        List<Book> books = bookRepository.findAll();
-        return books.stream()
-                .map(book -> new BookResponse(
+        Pageable pageable = PageRequest.of(page, size);
+
+        Page<Book> books = bookRepository.findAll(pageable);
+
+        return books.map(book -> new BookResponse(
                         book.getId(),
                         book.getIsbn(),
                         book.getTitle(),
@@ -91,6 +97,44 @@ public class BookServiceImpl implements BookService {
                         book.getPublicationYear(),
                         book.getTotalCopies(),
                         book.getAvailableCopies()
-                )).toList();
+                ));
+    }
+
+    @Override
+    @Transactional
+    public BookResponse updateBook(Long id, UpdateBookRequest request) {
+
+        Book book = bookRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Book not found with id: " + id)
+                );
+
+        book.setTitle(request.title());
+        book.setAuthor(request.author());
+        book.setGenre(request.genre());
+        book.setPublisher(request.publisher());
+        book.setPublicationYear(request.publicationYear());
+        return new BookResponse(
+
+                book.getId(),
+                book.getIsbn(),
+                book.getTitle(),
+                book.getAuthor(),
+                book.getGenre(),
+                book.getPublisher(),
+                book.getPublicationYear(),
+                book.getTotalCopies(),
+                book.getAvailableCopies()
+        );
+    }
+
+    @Override
+    public void deleteBook(Long id) {
+
+        Book book = bookRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Book not found with id: " + id)
+                );
+
+        bookRepository.delete(book);
+
     }
 }
