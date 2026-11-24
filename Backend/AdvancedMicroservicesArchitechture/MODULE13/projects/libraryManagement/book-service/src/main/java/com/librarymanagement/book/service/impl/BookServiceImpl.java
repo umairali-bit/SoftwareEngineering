@@ -7,13 +7,14 @@ import com.librarymanagement.book.entity.Book;
 import com.librarymanagement.book.repository.BookRepository;
 import com.librarymanagement.book.service.BookService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.PageRequest;
 
-import java.util.List;
+
 
 
 @Service
@@ -81,9 +82,18 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public Page<BookResponse> getAllBooks(int page, int size) {
+    public Page<BookResponse> getAllBooks(
+                                    int page,
+                                    int size,
+                                    String sortBy,
+                                    String direction) {
 
-        Pageable pageable = PageRequest.of(page, size);
+//        Sort sort = Sort.by(Sort.Direction.ASC, "title");
+
+        Sort sort = Sort.by(
+                Sort.Direction.fromString(direction), sortBy).and(Sort.by("id"));
+
+        Pageable pageable = PageRequest.of(page, size, sort);
 
         Page<Book> books = bookRepository.findAll(pageable);
 
@@ -98,6 +108,52 @@ public class BookServiceImpl implements BookService {
                         book.getTotalCopies(),
                         book.getAvailableCopies()
                 ));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public BookResponse getBookByIsbn(String isbn) {
+
+        Book book = bookRepository.findByIsbn(isbn)
+                .orElseThrow(() -> new RuntimeException("Book not found with ISBN: " + isbn));
+
+
+        return new BookResponse(
+                book.getId(),
+                book.getIsbn(),
+                book.getTitle(),
+                book.getAuthor(),
+                book.getGenre(),
+                book.getPublisher(),
+                book.getPublicationYear(),
+                book.getTotalCopies(),
+                book.getAvailableCopies()
+        );
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<BookResponse> getBookByTitle(String title, int page, int size, String sortBy, String direction) {
+
+        Sort sort = Sort.by(
+                Sort.Direction.fromString(direction), sortBy).and(Sort.by("id"));
+
+        Pageable pageable = PageRequest.of(page, size, sort);
+        Page<Book> books = bookRepository.findByTitleContainingIgnoreCase(title, pageable);
+
+
+
+        return books.map(book -> new  BookResponse(
+                book.getId(),
+                book.getIsbn(),
+                book.getTitle(),
+                book.getAuthor(),
+                book.getGenre(),
+                book.getPublisher(),
+                book.getPublicationYear(),
+                book.getTotalCopies(),
+                book.getAvailableCopies()
+        ));
     }
 
     @Override

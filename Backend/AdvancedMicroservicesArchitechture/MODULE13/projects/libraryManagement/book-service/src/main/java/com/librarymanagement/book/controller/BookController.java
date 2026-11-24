@@ -46,10 +46,17 @@ public class BookController {
 
     @GetMapping
     public ResponseEntity<Page<BookResponse>> getAllBooks(
-        @RequestParam(defaultValue = "0") int page,
-                @RequestParam(defaultValue = "10") int size) {
+//        @RequestParam(defaultValue = "0") int page,
+//                @RequestParam(defaultValue = "10") int size
 
-        Page<BookResponse> response = bookService.getAllBooks(page, size);
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "id") String sortBy,
+            @RequestParam(defaultValue = "asc") String direction
+    ) {
+
+        Page<BookResponse> response = bookService.getAllBooks(
+                page, size, sortBy, direction);
 
         return ResponseEntity.ok().body(response);
     }
@@ -62,6 +69,28 @@ public class BookController {
         BookResponse response = bookService.updateBook(id, request);
         return ResponseEntity.ok().body(response);
     }
+
+    @GetMapping("/isbn/{ISBN}")
+    public ResponseEntity<BookResponse> getBookByISBN(@PathVariable String ISBN) {
+        BookResponse resp = bookService.getBookByIsbn(ISBN);
+        return ResponseEntity.ok().body(resp);
+    }
+
+    @GetMapping("/title")
+    public ResponseEntity<Page<BookResponse>> getBookByTitleContainingIgnoreCase(
+            @RequestParam String title,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "id") String sortBy,
+            @RequestParam(defaultValue = "asc") String direction) {
+
+        Page<BookResponse> resp = bookService.getBookByTitle(
+                title, page, size, sortBy, direction
+        );
+
+        return ResponseEntity.ok(resp);
+    }
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteBook(@PathVariable Long id){
